@@ -1,0 +1,350 @@
+@using WebApp
+@using Microsoft.AspNetCore.Http;
+@{
+    Layout = "~/Views/Shared/_LayoutNoHeader.cshtml";
+    var fieldModel = ViewData["fieldModel"] as WebApp.Models.FasSpekLiftModel.ViewModel;
+    ViewData["Title"] = ViewData["TitleHeader"];
+    ViewData["PageName"] = "fasspeklift";
+    ViewData["Heading"] = ViewData["TitleHeader"];
+    ViewData["Category1"] = "";
+    ViewData["Category2"] = "";
+}
+
+<form id="form_edit" method="post" class="panel-form">
+    <div class="panel">
+        <div class="panel-heading">
+            <div class="title-header">@ViewData["TitleHeader"]</div>
+        </div>
+		<div class="panel-container">
+			<div class="panel-content">
+				<div class="row">
+					<div class="col-lg-12">
+                        <div id="form_item_id" class="form-group-none">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_fas_spek_lift", "id")<span id="label_req_id" class="required"> *</span></div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_id" class="form-item-field">
+                               <input type="number" id="id" name="id" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_fas_spek_lift","id"))" style ="width:200px;" />
+                               <span class="k-invalid-msg" data-for="id"></span>
+                               <input type="hidden" id="id_old" name="id_old" value="@fieldModel.id" />
+                               <script>
+                                   $("#id").kendoNumericTextBox({ format: "{0:N0}", decimals: 0 });
+                                   $(document).ready(function () {$("#id").data('kendoNumericTextBox').value('@fieldModel.id');})
+                               </script>
+                           </div>
+                       </div>
+
+                       <div id="form_item_fasilitas_id" class="form-group-none">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_fas_spek_lift", "fasilitas_id")<span id="label_req_fasilitas_id" class="required"> *</span></div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_fasilitas_id" class="form-item-field">
+                               <input type="text" id="fasilitas_id" name="fasilitas_id" class="k-textbox" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_fas_spek_lift","fasilitas_id"))"   style="width:200px;" value="@Html.Raw(fieldModel.fasilitas_id)" title="@ResxHelper.GetValue("ta_fas_spek_lift", "fasilitas_id") @ResxHelper.GetValue("Message", "IsNotValidCharacter")." pattern="@ConfigHelper.GetValue("AllowInputCharacters")" />
+                               <span class="k-invalid-msg" data-for="fasilitas_id"></span>
+                           </div>
+                       </div>
+
+                       <div id="form_item_nomor_aset" class="form-group">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_fas_spek_lift", "nomor_aset")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_nomor_aset" class="form-item-field">
+                               <input type="text" id="nomor_aset" name="nomor_aset" class="k-textbox"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_fas_spek_lift","nomor_aset"))"  maxlength="50" style="width:350px;" value="@Html.Raw(fieldModel.nomor_aset)" title="@ResxHelper.GetValue("ta_fas_spek_lift", "nomor_aset") @ResxHelper.GetValue("Message", "IsNotValidCharacter")." pattern="@ConfigHelper.GetValue("AllowInputCharacters")" />
+                               <span class="k-invalid-msg" data-for="nomor_aset"></span>
+                           </div>
+                       </div>
+
+                       <div id="form_item_merk" class="form-group">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_fas_spek_lift", "merk")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_merk" class="form-item-field">
+                               <input type="text" id="merk" name="merk" class="k-textbox"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_fas_spek_lift","merk"))"  maxlength="50" style="width:350px;" value="@Html.Raw(fieldModel.merk)" title="@ResxHelper.GetValue("ta_fas_spek_lift", "merk") @ResxHelper.GetValue("Message", "IsNotValidCharacter")." pattern="@ConfigHelper.GetValue("AllowInputCharacters")" />
+                               <span class="k-invalid-msg" data-for="merk"></span>
+                           </div>
+                       </div>
+
+                       <div id="form_item_serial_number" class="form-group">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_fas_spek_lift", "serial_number")<span id="label_req_serial_number" class="required"> *</span></div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_serial_number" class="form-item-field">
+                               <input type="text" id="serial_number" name="serial_number" class="k-textbox" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_fas_spek_lift","serial_number"))" maxlength="50" style="width:350px;" value="@Html.Raw(fieldModel.serial_number)" title="@ResxHelper.GetValue("ta_fas_spek_lift", "serial_number") @ResxHelper.GetValue("Message", "IsNotValidCharacter")." pattern="@ConfigHelper.GetValue("AllowInputCharacters")" />
+                               <span class="k-invalid-msg" data-for="serial_number"></span>
+                           </div>
+                       </div>
+
+                       <div id="form_item_nama_pabrik_pembuatan" class="form-group">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_fas_spek_lift", "nama_pabrik_pembuatan")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_nama_pabrik_pembuatan" class="form-item-field">
+                               <input type="text" id="nama_pabrik_pembuatan" name="nama_pabrik_pembuatan" class="k-textbox"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_fas_spek_lift","nama_pabrik_pembuatan"))"  maxlength="50" style="width:350px;" value="@Html.Raw(fieldModel.nama_pabrik_pembuatan)" title="@ResxHelper.GetValue("ta_fas_spek_lift", "nama_pabrik_pembuatan") @ResxHelper.GetValue("Message", "IsNotValidCharacter")." pattern="@ConfigHelper.GetValue("AllowInputCharacters")" />
+                               <span class="k-invalid-msg" data-for="nama_pabrik_pembuatan"></span>
+                           </div>
+                       </div>
+
+                       <div id="form_item_tempat_pembuatan" class="form-group">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_fas_spek_lift", "tempat_pembuatan")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_tempat_pembuatan" class="form-item-field">
+                               <input type="text" id="tempat_pembuatan" name="tempat_pembuatan" class="k-textbox"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_fas_spek_lift","tempat_pembuatan"))"  maxlength="50" style="width:350px;" value="@Html.Raw(fieldModel.tempat_pembuatan)" title="@ResxHelper.GetValue("ta_fas_spek_lift", "tempat_pembuatan") @ResxHelper.GetValue("Message", "IsNotValidCharacter")." pattern="@ConfigHelper.GetValue("AllowInputCharacters")" />
+                               <span class="k-invalid-msg" data-for="tempat_pembuatan"></span>
+                           </div>
+                       </div>
+
+                        <div id="form_item_tahun_pembuatan" class="form-group">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_fas_spek_lift", "tahun_pembuatan")<span id="label_req_tahun_pembuatan" class="required"> *</span></div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_tahun_pembuatan" class="form-item-field">
+                               <input type="number" id="tahun_pembuatan" name="tahun_pembuatan" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_fas_spek_lift","tahun_pembuatan"))" style ="width:100px;" />
+                               <span class="k-invalid-msg" data-for="tahun_pembuatan"></span>
+                               <script>
+                                   $("#tahun_pembuatan").kendoNumericTextBox({ format: "{0:#}", decimals: 0 });
+                                   $(document).ready(function () {$("#tahun_pembuatan").data('kendoNumericTextBox').value('@fieldModel.tahun_pembuatan');})
+                               </script>
+                           </div>
+                       </div>
+
+                       <div id="form_item_model" class="form-group">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_fas_spek_lift", "model")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_model" class="form-item-field">
+                               <input type="text" id="model" name="model" class="k-textbox"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_fas_spek_lift","model"))"  maxlength="50" style="width:350px;" value="@Html.Raw(fieldModel.model)" title="@ResxHelper.GetValue("ta_fas_spek_lift", "model") @ResxHelper.GetValue("Message", "IsNotValidCharacter")." pattern="@ConfigHelper.GetValue("AllowInputCharacters")" />
+                               <span class="k-invalid-msg" data-for="model"></span>
+                           </div>
+                       </div>
+
+                        <div id="form_item_kapasitas_tertera_orang" class="form-group">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_fas_spek_lift", "kapasitas_tertera_orang")<span id="label_req_kapasitas_tertera_orang" class="required"> *</span></div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_kapasitas_tertera_orang" class="form-item-field">
+                               <input type="number" id="kapasitas_tertera_orang" name="kapasitas_tertera_orang" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_fas_spek_lift","kapasitas_tertera_orang"))" style ="width:200px;" />
+                               <span class="k-invalid-msg" data-for="kapasitas_tertera_orang"></span>
+                               <script>
+                                   $("#kapasitas_tertera_orang").kendoNumericTextBox({ format: "{0:N0}", decimals: 0 });
+                                   $(document).ready(function () {$("#kapasitas_tertera_orang").data('kendoNumericTextBox').value('@fieldModel.kapasitas_tertera_orang');})
+                               </script>
+                           </div>
+                       </div>
+
+                        <div id="form_item_kapasitas_tertera_kg" class="form-group">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_fas_spek_lift", "kapasitas_tertera_kg")<span id="label_req_kapasitas_tertera_kg" class="required"> *</span></div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_kapasitas_tertera_kg" class="form-item-field">
+                                <input type="number" id="kapasitas_tertera_kg" name="kapasitas_tertera_kg" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_fas_spek_lift","kapasitas_tertera_kg"))" style="width:200px;" />
+                                <span class="k-invalid-msg" data-for="kapasitas_tertera_kg"></span>
+                                <script>
+                                   $("#kapasitas_tertera_kg").kendoNumericTextBox({ format: "{0:N2}", decimals: 2 });
+                                   $(document).ready(function () {$("#kapasitas_tertera_kg").data('kendoNumericTextBox').value('@fieldModel.kapasitas_tertera_kg');})
+                                </script>
+                            </div>
+                        </div>
+
+                       <div id="form_item_melayani_ointu" class="form-group">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_fas_spek_lift", "melayani_ointu")<span id="label_req_melayani_ointu" class="required"> *</span></div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_melayani_ointu" class="form-item-field">
+                               <input type="text" id="melayani_ointu" name="melayani_ointu" class="k-textbox" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_fas_spek_lift","melayani_ointu"))"  maxlength="10" style="width:200px;" value="@Html.Raw(fieldModel.melayani_ointu)" title="@ResxHelper.GetValue("ta_fas_spek_lift", "melayani_ointu") @ResxHelper.GetValue("Message", "IsNotValidCharacter")." pattern="@ConfigHelper.GetValue("AllowInputCharacters")" />
+                               <span class="k-invalid-msg" data-for="melayani_ointu"></span>
+                           </div>
+                       </div>
+
+                        <div id="form_item_melayani_lantai" class="form-group">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_fas_spek_lift", "melayani_lantai")<span id="label_req_melayani_lantai" class="required"> *</span></div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_melayani_lantai" class="form-item-field">
+                               <input type="number" id="melayani_lantai" name="melayani_lantai" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_fas_spek_lift","melayani_lantai"))" style ="width:200px;" />
+                               <span class="k-invalid-msg" data-for="melayani_lantai"></span>
+                               <script>
+                                   $("#melayani_lantai").kendoNumericTextBox({ format: "{0:N0}", decimals: 0 });
+                                   $(document).ready(function () {$("#melayani_lantai").data('kendoNumericTextBox').value('@fieldModel.melayani_lantai');})
+                               </script>
+                           </div>
+                       </div>
+
+                        <div id="form_item_kecepatan" class="form-group">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_fas_spek_lift", "kecepatan")<span id="label_req_kecepatan" class="required"> *</span></div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_kecepatan" class="form-item-field">
+                               <input type="number" id="kecepatan" name="kecepatan" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_fas_spek_lift","kecepatan"))" style ="width:200px;" />
+                               <span class="k-invalid-msg" data-for="kecepatan"></span>
+                               <script>
+                                   $("#kecepatan").kendoNumericTextBox({ format: "{0:N2}", decimals: 2 });
+                                   $(document).ready(function () {$("#kecepatan").data('kendoNumericTextBox').value('@fieldModel.kecepatan');})
+                               </script>
+                           </div>
+                       </div>
+
+                    <div id="form_item_photo" class="form-group">
+                        <div class="form-item-label">@ResxHelper.GetValue("ta_fas_spek_lift", "photo")<span id="label_req_photo" class="required"> *</span></div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_photo" class="form-item-field">
+                            <input name="photo_file" id="photo_file" type="file" />
+                            <input name="photo" id="photo" type="hidden" value="@fieldModel.photo" required data-required-msg="@ResxHelper.GetValue("Message", "RequiredTextFormat").Replace("{0}", @ResxHelper.GetValue("ta_fas_spek_lift", "photo"))" />
+                            <script>
+                                var photo_init = @Html.Raw(fieldModel.photo_init);
+                                $("#photo_file").kendoUpload({multiple:true,
+                                    async: {
+                                        saveUrl: "@ViewBag.BaseUrl/FasSpekLift/save_photo",
+                                        removeUrl: "@ViewBag.BaseUrl/FasSpekLift/remove_photo",
+                                        autoUpload: true
+                                    },
+                                    validation: {allowedExtensions: [".jpg", ".jpeg", ".png"], maxFileSize: 256000},
+                                    files: photo_init,
+                                    success: onSuccessUpload,
+                                    select: OnselectUpload_photo
+                                });
+                                function OnselectUpload_photo(e) {OnselectUpload(e, 2);}
+                            </script>
+                            <span class="k-label k-text-info">Allowed Extensions: ".jpg", ".jpeg", ".png"</span>
+                            <br /><span class="k-label k-text-info">Maximum FileSize: @String.Format("{0:N0}", (256000 / 1024)) KB</span>
+                        </div>
+                    </div>
+
+                       <div id="form_item_tgl_periksa_akhir" class="form-group">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_fas_spek_lift", "tgl_periksa_akhir")<span id="label_req_tgl_periksa_akhir" class="required"> *</span></div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_tgl_periksa_akhir" class="form-item-field">
+                               <input id="dt_tgl_periksa_akhir" name="dt_tgl_periksa_akhir" data-role="datepicker" data-type="date" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_fas_spek_lift","tgl_periksa_akhir"))" style ="width:130px;" title="@ResxHelper.GetValue("ta_fas_spek_lift", "tgl_periksa_akhir") @ResxHelper.GetValue("Message", "IsNotValidDate")." />
+                               <span class="k-invalid-msg" data-for="dt_tgl_periksa_akhir"></span>
+                               <input type="hidden" id="tgl_periksa_akhir" name="tgl_periksa_akhir" value="@fieldModel.tgl_periksa_akhir" />
+                               <script>
+                                   $("#dt_tgl_periksa_akhir").kendoDatePicker({change:on_chage_tgl_periksa_akhir, value: "@fieldModel.dt_tgl_periksa_akhir", format: "{0:dd/MM/yyyy}" });
+                                   function on_chage_tgl_periksa_akhir() {
+                                       $("#tgl_periksa_akhir").val(kendo.toString($("#dt_tgl_periksa_akhir").data("kendoDatePicker").value(), "yyyy-MM-dd"));
+                                   }
+                               </script>
+                           </div>
+                       </div>
+
+                       <div id="form_item_hasil_periksa_akhir" class="form-group">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_fas_spek_lift", "hasil_periksa_akhir")<span id="label_req_hasil_periksa_akhir" class="required"> *</span></div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_hasil_periksa_akhir" class="form-item-field">
+                               <input id="hasil_periksa_akhir" name="hasil_periksa_akhir" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_fas_spek_lift","hasil_periksa_akhir"))" style="width:350px;" />
+                               <span class="k-invalid-msg" data-for="hasil_periksa_akhir"></span>
+                               <script>
+                                   var hasil_periksa_akhir_param = {item : {value:"id",text:"nama"},parent:[{ field: 'cat_id',opr:'=', value: '155' }], order:[]};
+                                   var hasil_periksa_akhir_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: hasil_periksa_akhir_param, type: "POST" } } });
+                                   var hasil_periksa_akhir = $("#hasil_periksa_akhir").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: hasil_periksa_akhir_ds, change:onChange_hasil_periksa_akhir }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#hasil_periksa_akhir").data("kendoComboBox").value('@fieldModel.hasil_periksa_akhir'); });
+                                   function onChange_hasil_periksa_akhir() {if ($("#hasil_periksa_akhir").data("kendoComboBox").value() != '' && $("#hasil_periksa_akhir").data("kendoComboBox")._oldIndex == -1) {$("#hasil_periksa_akhir").data("kendoComboBox").value('');}
+                                   }
+                               </script>
+                           </div>
+                       </div>
+                  <div class="form-group"></div>
+                    
+					</div>
+				</div>
+			</div>
+			<div class="panel-footer">
+				<a id="cancel" class="k-button k-button-icontext" href="#"><i class="far fa-times-circle"></i>&nbsp;<span id="btnCancelText">@ResxHelper.GetValue("Message", "Cancel")</span></a>
+				<a id="save" class="k-button k-button-icontext" href="#"><i class="fas fa-save"></i>&nbsp;<span id="btnSaveText">@ResxHelper.GetValue("Message", "Save")</span></a>
+			</div>
+		</div>
+    </div>
+</form>
+
+<script>
+    var form_type = '@ViewData["form_type"]';
+    function ShowHideColumn(form_type)
+    {
+        if(form_type=='Add')
+        {
+            var hiden_column = [];
+            for (i = 0; i < hiden_column.length; i++) {
+                $("#form_item_"+hiden_column[i]).hide();
+            }
+        }
+        else if(form_type=='Edit')
+        {
+            var hiden_column = [];
+            for (i = 0; i < hiden_column.length; i++) {
+                $("#form_item_"+hiden_column[i]).hide();
+            }
+        }
+    }
+    function setReadOnly(form_type,opt)
+    {
+        if(opt==true)
+        {
+            if(form_type=='Add')
+            {
+
+            }
+            else if(form_type=='Edit')
+            {
+
+            }
+        }
+        else
+        {
+            if(form_type=='Add')
+            {
+
+            }
+            else if(form_type=='Edit')
+            {
+
+            }
+        }
+    }
+    function display_by_type() {
+        $.urlParam = function (name) {
+            var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.search);
+            return (results !== null) ? results[1] || 0 : false;
+        }
+        var ski = $.urlParam('status_kepemilikan_id');
+        if (ski == '2') { //customer
+            $('#label_req_serial_number').hide();
+            $("#serial_number").removeAttr('required');
+        } else {
+            $('#label_req_serial_number').show();
+            $("#serial_number").attr('required', 'required');
+        }
+        //
+        $('#label_req_kapasitas_tertera_kg').show();
+        $("#kapasitas_tertera_kg").attr('required', 'required');
+        
+
+    }
+    $(document).ready(function () {
+        ShowHideColumn(form_type);
+        setReadOnly(form_type, true);
+        display_by_type();
+    });
+    var validatable = $("#form_edit").kendoValidator().data("kendoValidator");
+    $("#save").click(function (e) {
+        getListFileUpload("photo");
+		setReadOnly(form_type, false);
+        if (validatable.validate() === true) {
+            kendo.ui.progress($("#form_edit"), true);
+            $.ajax({
+                url: '@ViewData["UrlAction"]', data: $('#form_edit').serialize(), type: 'POST',
+                success: function (data) {
+                    kendo.ui.progress($("#form_edit"), false);
+                    if (data.status == 1) {
+                        window.parent.notification.show({title: data.title, message: kendo.toString(data.message) }, "success");
+                        if (window.parent.Reload_list_ta_fas_spek_lift) {
+                            window.parent.Reload_list_ta_fas_spek_lift();
+                        }else if (window.parent.reload_ta_fas_spek_lift) {
+                            window.parent.reload_ta_fas_spek_lift(data.pk);
+                        }
+                        close_self();
+                    } else if (data.status == 3) {
+                        windows.parent.notification.show({ title: data.title, message: data.message }, "error");
+                        setReadOnly(form_type, true);
+						close_self();
+                    } else {
+						setReadOnly(form_type, true);
+                        notification.show({ title: data.title, message: data.message }, "error");
+                    }
+                }
+            });
+        } else {
+            kendo.ui.progress($("#form_edit"), false);
+        }
+		setReadOnly(form_type, true);
+    });
+    $("#cancel").kendoButton();
+    $("#cancel").click(function (e) {
+        close_self();
+    });
+    function close_self() { if (window.parent.$("#dialog_ta_fas_spek_lift").data("kendoWindow")) { window.parent.$("#dialog_ta_fas_spek_lift").data("kendoWindow").close(); } else { window.parent.$("#dialog").data("kendoWindow").close(); } }
+</script>

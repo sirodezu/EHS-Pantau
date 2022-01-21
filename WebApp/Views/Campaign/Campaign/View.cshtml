@@ -1,0 +1,129 @@
+@using WebApp
+@using Microsoft.AspNetCore.Http;
+@{
+    Layout = "~/Views/Shared/_LayoutNoHeader.cshtml";
+    var fieldModel = ViewData["fieldModel"] as WebApp.Models.CampaignModel.ViewModel;
+	ViewData["Title"] = ViewData["TitleHeader"];
+    ViewData["PageName"] = "campaign";
+    ViewData["Heading"] = ViewData["TitleHeader"];
+    ViewData["Category1"] = "";
+    ViewData["Category2"] = "";
+}
+<div class="panel panel-form">
+	<div class="panel-container">
+		<div class="panel-heading">
+			<div class="title-header">@ViewData["TitleHeader"]</div>
+		</div>
+        <div class="panel-content">
+            <div class="row">
+                <div class="col-lg-12">
+
+                    <div id="form_item_id" class="form-group-none">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_cmp", "id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_id" class="form-item-view">@Html.Raw(fieldModel.id)</div>
+                    </div>
+
+                    <div id="form_item_ehs_area_id" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_cmp", "ehs_area_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_ehs_area_id" class="form-item-view">@Html.Raw(fieldModel.ehs_area_id_text)</div>
+                    </div>
+
+                    <div id="form_item_ba_id" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_cmp", "ba_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_ba_id" class="form-item-view">@Html.Raw(fieldModel.ba_id_text)</div>
+                    </div>
+
+                    <div id="form_item_pa_id" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_cmp", "pa_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_pa_id" class="form-item-view">@Html.Raw(fieldModel.pa_id_text)</div>
+                    </div>
+
+                    <div id="form_item_psa_id" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_cmp", "psa_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_psa_id" class="form-item-view">@Html.Raw(fieldModel.psa_id_text)</div>
+                    </div>
+
+                    <div id="form_item_customer" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_cmp", "customer")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_customer" class="form-item-view">@Html.Raw(fieldModel.customer)</div>
+                    </div>
+
+                    <div id="form_item_tgl_kegiatan" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_cmp", "tgl_kegiatan")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_tgl_kegiatan" class="form-item-view">@Html.Raw(fieldModel.tgl_kegiatan)</div>
+                    </div>
+
+                    <div id="form_item_jenis_kegiatan_id" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_cmp", "jenis_kegiatan_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_jenis_kegiatan_id" class="form-item-view">@Html.Raw(fieldModel.jenis_kegiatan_id_text)</div>
+                    </div>
+
+                    <div id="form_item_materi_acara" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_cmp", "materi_acara")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_materi_acara" class="form-item-view">@Html.Raw(fieldModel.materi_acara)</div>
+                    </div>
+
+                    <div id="form_item_keterlibatan_manajemen_id" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_cmp", "keterlibatan_manajemen_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_keterlibatan_manajemen_id" class="form-item-view">@Html.Raw(fieldModel.keterlibatan_manajemen_id_text)</div>
+                    </div>
+
+                    <div id="form_item_jumlah_peserta" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_cmp", "jumlah_peserta")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_jumlah_peserta" class="form-item-view">@Html.Raw(fieldModel.jumlah_peserta)</div>
+                    </div>
+
+                    <div id="form_item_lampiran_kegiatan" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_cmp", "lampiran_kegiatan")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_lampiran_kegiatan" class="form-item-view">@Html.Raw(fieldModel.lampiran_kegiatan)</div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    @{
+                        <br /><hr /><h4>Pengisi Materi</h4>
+                        <partial name="_list_cmp_peserta" />
+                    }
+                </div>
+            </div>
+        </div>
+		<div class="panel-footer">
+			<a id="close" class="k-button k-button-icontext" href="#"><i class="far fa-times-circle"></i>&nbsp;<span id="btnCloseText">@ResxHelper.GetValue("Message", "Close", "Tutup")</span></a>
+		</div>
+	</div>
+</div>
+<script>
+    $("#close").kendoButton();
+    $("#close").click(function (e) {
+        close_self();
+    });
+    function onCloseDialog(e) { $('#dialog').html(''); }
+    function closeDialog() { $("#dialog").data("kendoWindow").close(); }
+    function close_self() { if (window.parent.$("#dialog_ta_cmp").data("kendoWindow")) { window.parent.$("#dialog_ta_cmp").data("kendoWindow").close(); } else { window.parent.$("#dialog").data("kendoWindow").close(); } }
+
+    function display_by_type() {
+        var jk = '@Html.Raw(fieldModel.jenis_kegiatan_id)';
+        if (jk == "1") {
+            $("#form_item_materi_acara").show();
+        } else {
+            $("#form_item_materi_acara").hide();
+        }
+    }
+    $(document).ready(function () {
+        display_by_type();
+    });
+</script>

@@ -1,0 +1,173 @@
+@using WebApp
+@using Microsoft.AspNetCore.Http;
+@{
+    Layout = "~/Views/Shared/_LayoutNoHeader.cshtml";
+    var fieldModel = ViewData["fieldModel"] as WebApp.Models.Lb3Model.ViewModel;
+	ViewData["Title"] = ViewData["TitleHeader"];
+    ViewData["PageName"] = "lb3";
+    ViewData["Heading"] = ViewData["TitleHeader"];
+    ViewData["Category1"] = "";
+    ViewData["Category2"] = "";
+}
+<div class="panel panel-form">
+	<div class="panel-container">
+		<div class="panel-heading">
+			<div class="title-header">@ViewData["TitleHeader"]</div>
+		</div>
+		<div class="panel-content">
+			<div class="row">
+				<div class="col-lg-6">
+
+                    <div id="form_item_id" class="form-group-none">
+                      <div class="form-item-label220">@ResxHelper.GetValue("ta_lb3", "id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_id" class="form-item-view">@Html.Raw(fieldModel.id)</div>
+                  </div>
+
+                    <div id="form_item_ehs_area_id" class="form-group">
+                      <div class="form-item-label220">@ResxHelper.GetValue("ta_lb3", "ehs_area_id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_ehs_area_id" class="form-item-view">@Html.Raw(fieldModel.ehs_area_id_text)</div>
+                  </div>
+
+                    <div id="form_item_ba_id" class="form-group">
+                      <div class="form-item-label220">@ResxHelper.GetValue("ta_lb3", "ba_id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_ba_id" class="form-item-view">@Html.Raw(fieldModel.ba_id_text)</div>
+                  </div>
+
+                    <div id="form_item_pa_id" class="form-group">
+                      <div class="form-item-label220">@ResxHelper.GetValue("ta_lb3", "pa_id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_pa_id" class="form-item-view">@Html.Raw(fieldModel.pa_id_text)</div>
+                  </div>
+
+                    <div id="form_item_psa_id" class="form-group">
+                      <div class="form-item-label220">@ResxHelper.GetValue("ta_lb3", "psa_id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_psa_id" class="form-item-view">@Html.Raw(fieldModel.psa_id_text)</div>
+                  </div>
+
+                    <div><p>&nbsp;</p></div>
+
+                    <div id="form_item_jenis_limbah_dihasilkan_id" class="form-group-none">
+                      <div class="form-item-label220">@ResxHelper.GetValue("ta_lb3", "jenis_limbah_dihasilkan_id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_jenis_limbah_dihasilkan_id" class="form-item-view">@Html.Raw(fieldModel.jenis_limbah_dihasilkan_id_text)</div>
+                  </div>
+
+                    <div id="form_item_jenis_limbah_dihasilkan_nama" class="form-group-none">
+                      <div class="form-item-label220">@ResxHelper.GetValue("ta_lb3", "jenis_limbah_dihasilkan_nama")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_jenis_limbah_dihasilkan_nama" class="form-item-view">@Html.Raw(fieldModel.jenis_limbah_dihasilkan_nama)</div>
+                  </div>
+
+                    <div id="form_item_kode_limbah" class="form-group">
+                      <div class="form-item-label220">@ResxHelper.GetValue("ta_lb3", "kode_limbah")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_kode_limbah" class="form-item-view">@Html.Raw(fieldModel.kode_limbah)</div>
+                  </div>
+
+                    <div id="form_item_sumber_limbah_id" class="form-group">
+                      <div class="form-item-label220">@ResxHelper.GetValue("ta_lb3", "sumber_limbah_id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_sumber_limbah_id" class="form-item-view">@Html.Raw(fieldModel.sumber_limbah_id_text)</div>
+                  </div>
+
+                    <div id="form_item_kegiatan_id" class="form-group">
+                      <div class="form-item-label220">@ResxHelper.GetValue("ta_lb3", "kegiatan_id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_kegiatan_id" class="form-item-view">@Html.Raw(fieldModel.kegiatan_id_text)</div>
+                  </div>
+
+                    <div id="form_item_tgl_dihasilkan" class="form-group">
+                      <div class="form-item-label220">@ResxHelper.GetValue("ta_lb3", "tgl_dihasilkan")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_tgl_dihasilkan" class="form-item-view">@Html.Raw(fieldModel.tgl_dihasilkan)</div>
+                  </div>
+
+                    <div id="form_item_jenis_limbah_dihasilkan" class="form-group">
+                      <div class="form-item-label220">@ResxHelper.GetValue("ta_lb3", "jenis_limbah_dihasilkan")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_jenis_limbah_dihasilkan" class="form-item-view">@Html.Raw(fieldModel.jenis_limbah_dihasilkan)</div>
+                  </div>
+
+
+                </div>
+                <div class="col-lg-6">
+
+                    <div id="form_item_pengelolaan_oleh_id" class="form-group">
+                      <div class="form-item-label220">@ResxHelper.GetValue("ta_lb3", "pengelolaan_oleh_id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_pengelolaan_oleh_id" class="form-item-view">@Html.Raw(fieldModel.pengelolaan_oleh_id_text)</div>
+                  </div>
+
+                    <div id="form_item_masa_simpan_limbah_id" class="form-group">
+                      <div class="form-item-label220">@ResxHelper.GetValue("ta_lb3", "masa_simpan_limbah_id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_masa_simpan_limbah_id" class="form-item-view">@Html.Raw(fieldModel.masa_simpan_limbah_id_text)</div>
+                  </div>
+
+                    <div id="form_item_tgl_dikeluarkan" class="form-group">
+                      <div class="form-item-label220">@ResxHelper.GetValue("ta_lb3", "tgl_dikeluarkan")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_tgl_dikeluarkan" class="form-item-view">@Html.Raw(fieldModel.tgl_dikeluarkan)</div>
+                  </div>
+
+                    <div id="form_item_jumlah_limbah_dikelola" class="form-group">
+                      <div class="form-item-label220">@ResxHelper.GetValue("ta_lb3", "jumlah_limbah_dikelola")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_jumlah_limbah_dikelola" class="form-item-view">@Html.Raw(fieldModel.jumlah_limbah_dikelola)</div>
+                  </div>
+
+                    <div id="form_item_kode_manifest" class="form-group">
+                      <div class="form-item-label220">@ResxHelper.GetValue("ta_lb3", "kode_manifest")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_kode_manifest" class="form-item-view">@Html.Raw(fieldModel.kode_manifest)</div>
+                  </div>
+
+
+                    <div><p>&nbsp;</p></div>
+
+
+                    <div id="form_item_perusahaan_angkut_id" class="form-group">
+                      <div class="form-item-label220">@ResxHelper.GetValue("ta_lb3", "perusahaan_angkut_id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_perusahaan_angkut_id" class="form-item-view">@Html.Raw(fieldModel.perusahaan_angkut_id_text)</div>
+                  </div>
+
+                    <div id="form_item_diserahkan_ke_id" class="form-group">
+                      <div class="form-item-label220">@ResxHelper.GetValue("ta_lb3", "diserahkan_ke_id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_diserahkan_ke_id" class="form-item-view">@Html.Raw(fieldModel.diserahkan_ke_id_text)</div>
+                  </div>
+
+                    <div id="form_item_perusahaan_serah_id" class="form-group">
+                      <div class="form-item-label220">@ResxHelper.GetValue("ta_lb3", "perusahaan_serah_id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_perusahaan_serah_id" class="form-item-view">@Html.Raw(fieldModel.perusahaan_serah_id_text)</div>
+                  </div>
+
+                    <div id="form_item_sisa_di_tps" class="form-group">
+                      <div class="form-item-label220">@ResxHelper.GetValue("ta_lb3", "sisa_di_tps")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_sisa_di_tps" class="form-item-view">@Html.Raw(fieldModel.sisa_di_tps)</div>
+                  </div>
+
+				</div>
+			</div>
+		</div>
+		<div class="panel-footer">
+			<a id="close" class="k-button k-button-icontext" href="#"><i class="far fa-times-circle"></i>&nbsp;<span id="btnCloseText">@ResxHelper.GetValue("Message", "Close", "Tutup")</span></a>
+		</div>
+	</div>
+</div>
+<script>
+    $("#close").kendoButton();
+    $("#close").click(function (e) {
+        close_self();
+    });
+    function onCloseDialog(e) { $('#dialog').html(''); }
+    function closeDialog() { $("#dialog").data("kendoWindow").close(); }
+    function close_self() { if (window.parent.$("#dialog_ta_lb3").data("kendoWindow")) { window.parent.$("#dialog_ta_lb3").data("kendoWindow").close(); } else { window.parent.$("#dialog").data("kendoWindow").close(); } }
+</script>

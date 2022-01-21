@@ -1,0 +1,138 @@
+﻿@using WebApp;
+@using Microsoft.AspNetCore.Http;
+@{
+    Layout = "~/Views/Shared/_LayoutNoHeader.cshtml";
+    var fieldModel = ViewData["fieldModel"] as WebApp.Areas.Sys.Models.ResourcesModel.ViewModel;
+    var baseUrl = ViewData["baseUrl"];
+}
+
+<form id="form_edit" method="post">
+    <div class="card">
+        <div class="card-header">
+            <div class="title-header">@ViewData["TitleHeader"]</div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12">
+                    <div id="form_item_lang_code" class="form-item-none">
+                        <div class="form-item-label">@ResxHelper.GetValue("sys_resources", "lang_code")<span class="required"> *</span></div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_lang_code" class="form-item-field">
+                            <input type="text" id="lang_code" name="lang_code" readonly class="k-textbox" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("sys_resources","lang_code"))" maxlength="50" style="width:350px;" value="@fieldModel.lang_code" />
+                            <span class="k-invalid-msg" data-for="lang_code"></span>
+                            <input type="hidden" id="lang_code_old" name="lang_code_old" value="@fieldModel.lang_code" />
+                        </div>
+                    </div>
+                    <div id="form_item_class_name" class="form-item">
+                        <div class="form-item-label">@ResxHelper.GetValue("sys_resources", "class_name")<span class="required"> *</span></div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_class_name" class="form-item-field">
+                            <input type="text" id="class_name" name="class_name" readonly class="k-textbox" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("sys_resources","class_name"))" maxlength="50" style="width:500px;" value="@fieldModel.class_name" />
+                            <span class="k-invalid-msg" data-for="class_name"></span>
+                            <input type="hidden" id="class_name_old" name="class_name_old" value="@fieldModel.class_name" />
+                        </div>
+                    </div>
+                    <div id="form_item_key_name" class="form-item">
+                        <div class="form-item-label">@ResxHelper.GetValue("sys_resources", "key_name")<span class="required"> *</span></div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_key_name" class="form-item-field">
+                            <input type="text" id="key_name" name="key_name" readonly class="k-textbox" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("sys_resources","key_name"))" maxlength="50" style="width:500px;" value="@fieldModel.key_name" />
+                            <span class="k-invalid-msg" data-for="key_name"></span>
+                            <input type="hidden" id="key_name_old" name="key_name_old" value="@fieldModel.key_name" />
+                        </div>
+                    </div>
+                    <div id="form_item_key_value" class="form-item">
+                        <div class="form-item-label">@ResxHelper.GetValue("sys_resources", "key_value", "Keterangan")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_key_value" class="form-item-field">
+                            <textarea type="text" title="@ResxHelper.GetValue("sys_resources", "key_value") @ResxHelper.GetValue("Message", "IsNotValidCharacter","is not valid character input")." pattern="@ConfigHelper.GetValue("AllowInputCharacters")" id="key_value" name="key_value" class="k-textbox" maxlength="500" style="width:500px;">@Html.Raw(fieldModel.key_value)</textarea>
+                            <span class="k-invalid-msg" data-for="key_value"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer" style="text-align:center">
+            <a id="cancel" class="k-button k-button-icontext" href="#"><i class="far fa-times-circle"></i>&nbsp;<span id="btnCancelText">@ResxHelper.GetValue("Message", "Cancel", "Batal")</span></a>
+            <a id="save" class="k-button k-button-icontext" href="#"><i class="fas fa-save"></i>&nbsp;<span id="btnSaveText">@ResxHelper.GetValue("Message", "Save", "Simpan")</span></a>
+        </div>
+    </div>
+</form>
+
+<script>
+    var form_type = '@ViewData["form_type"]';
+    function setReadOnly(form_type,opt)
+    {
+        if(opt==true)
+        {
+            if(form_type=='add')
+            {
+
+            }
+            else if(form_type=='edit')
+            {
+                $("#lang_code").prop("readonly", "readonly");
+                $("#class_name").prop("readonly", "readonly");
+                $("#key_name").prop("readonly", "readonly");
+            }    
+        }
+        else
+        {
+            if(form_type=='add')
+            {
+
+            }
+            else if(form_type=='edit')
+            {
+                $("#lang_code").removeProp("readonly");
+                $("#class_name").removeProp("readonly");
+                $("#key_name").removeProp("readonly");
+            }    
+        }    
+    }
+    $(document).ready(function() {
+        setReadOnly(form_type,true);
+    });
+
+    var validatable = $("#form_edit").kendoValidator().data("kendoValidator");
+    $("#save").click(function (e) {
+        setReadOnly(form_type,false);
+        if (validatable.validate() === true) {
+            kendo.ui.progress($("#form_edit"), true);
+            $.ajax({
+                url: '@ViewData["UrlAction"]', data: $('#form_edit').serialize(), type: 'POST',
+                success: function (data) {
+                    kendo.ui.progress($("#form_edit"), false);
+                    console.log(data);
+                    if (data.status == 1) {
+                        notification.show({title: data.title, message: kendo.toString(data.message) }, "success");
+                        if (window.parent.Reload_list_sys_resources) {
+                            window.parent.Reload_list_sys_resources();
+                        }else if (window.parent.reload_sys_resources) {
+                            window.parent.reload_sys_resources(data.pk);
+                        }
+                        close_self();
+                    } else if (data.status == 3) {
+                        notification.show({ title: data.title, message: data.message }, "error");
+                        //if (window.parent.Reload_list_sys_resources) {
+                        //    window.parent.Reload_list_sys_resources();
+                        //} else if (window.parent.reload_sys_resources) {
+                        //    window.parent.reload_sys_resources('');
+                        //}
+                        //close_self();
+                    } else {
+                        notification.show({ title: data.title, message: data.message }, "error");
+                        setReadOnly(form_type,true);
+                    }
+                }
+            });
+        } else{setReadOnly(form_type,true);}
+
+    });
+    $("#cancel").kendoButton();
+    $("#cancel").click(function (e) {
+        close_self();
+    });
+    function close_self() { if (window.parent.$("#dialog_sys_resources").data("kendoWindow")) { window.parent.$("#dialog_sys_resources").data("kendoWindow").close(); } else { window.parent.$("#dialog").data("kendoWindow").close(); } }
+</script>
+

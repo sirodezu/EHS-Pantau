@@ -1,0 +1,238 @@
+@using WebApp
+@using Microsoft.AspNetCore.Http;
+@{
+    Layout = "~/Views/Shared/_LayoutNoHeader.cshtml";
+    var fieldModel = ViewData["fieldModel"] as WebApp.Models.LegalJenisIzinEhsLb3Model.ViewModel;
+    ViewData["Title"] = ViewData["TitleHeader"];
+    ViewData["PageName"] = "legaljenisizinehslb3";
+    ViewData["Heading"] = ViewData["TitleHeader"];
+    ViewData["Category1"] = "";
+    ViewData["Category2"] = "";
+}
+
+<form id="form_edit" method="post" class="panel-form">
+    <div class="panel">
+        <div class="panel-heading">
+            <div class="title-header">@ViewData["TitleHeader"]</div>
+        </div>
+		<div class="panel-container">
+			<div class="panel-content">
+				<div class="row">
+					<div class="col-lg-12">
+                        <div id="form_item_id" class="form-group-none">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_legal_jenis_izin_ehs_lb3", "id")<span id="label_req_id" class="required"> *</span></div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_id" class="form-item-field">
+                               <input type="number" id="id" name="id"  min="0" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_legal_jenis_izin_ehs_lb3","id"))" style ="width:200px;" />
+                               <span class="k-invalid-msg" data-for="id"></span>
+                               <input type="hidden" id="id_old" name="id_old" value="@fieldModel.id" />
+                               <script>
+                                   $("#id").kendoNumericTextBox({ format: "{0:N0}", decimals: 0 });
+                                   $(document).ready(function () {$("#id").data('kendoNumericTextBox').value('@fieldModel.id');})
+                               </script>
+                           </div>
+                       </div>
+
+                       <div id="form_item_legal_id" class="form-group">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_legal_jenis_izin_ehs_lb3", "legal_id")<span id="label_req_legal_id" class="required"> *</span></div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_legal_id" class="form-item-field">
+                               <input id="legal_id" name="legal_id" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_legal_jenis_izin_ehs_lb3","legal_id"))" style="width:400px;" />
+                               <span class="k-invalid-msg" data-for="legal_id"></span>
+                               <script>
+                                   var legal_id_param = {item : {value:"id",text:"lokasi_perusahaan_nama,jenis_perizinan_nama"},parent:[], order:[]};
+                                   var legal_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Legal/LookupData", dataType: "json", data: legal_id_param, type: "POST" } } });
+                                   var legal_id = $("#legal_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: legal_id_ds, change:onChange_legal_id }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#legal_id").data("kendoComboBox").value('@fieldModel.legal_id'); });
+                                   function onChange_legal_id() {if ($("#legal_id").data("kendoComboBox").value() != '' && $("#legal_id").data("kendoComboBox")._oldIndex == -1) {$("#legal_id").data("kendoComboBox").value('');}
+                                   }
+                               </script>
+                           </div>
+                       </div>
+
+                       <div id="form_item_jenis_limbah_tersimpan_id" class="form-group">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_legal_jenis_izin_ehs_lb3", "jenis_limbah_tersimpan_id")<span id="label_req_jenis_limbah_tersimpan_id" class="required"> *</span></div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_jenis_limbah_tersimpan_id" class="form-item-field">
+                               <input id="jenis_limbah_tersimpan_id" name="jenis_limbah_tersimpan_id" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_legal_jenis_izin_ehs_lb3","jenis_limbah_tersimpan_id"))" style="width:400px;" />
+                               <span class="k-invalid-msg" data-for="jenis_limbah_tersimpan_id"></span>
+                               <script>
+                                   var jenis_limbah_tersimpan_id_param = {item : {value:"id",text:"nama"},parent:[{ field: 'cat_id',opr:'=', value: '101' }], order:[]};
+                                   var jenis_limbah_tersimpan_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: jenis_limbah_tersimpan_id_param, type: "POST" } } });
+                                   var jenis_limbah_tersimpan_id = $("#jenis_limbah_tersimpan_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: jenis_limbah_tersimpan_id_ds, change:onChange_jenis_limbah_tersimpan_id }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#jenis_limbah_tersimpan_id").data("kendoComboBox").value('@fieldModel.jenis_limbah_tersimpan_id'); });
+                                   function onChange_jenis_limbah_tersimpan_id() {if ($("#jenis_limbah_tersimpan_id").data("kendoComboBox").value() != '' && $("#jenis_limbah_tersimpan_id").data("kendoComboBox")._oldIndex == -1) {$("#jenis_limbah_tersimpan_id").data("kendoComboBox").value('');}
+                                   }
+                               </script>
+                           </div>
+                       </div>
+
+                       <div id="form_item_kode_limbah" class="form-group">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_legal_jenis_izin_ehs_lb3", "kode_limbah")<span id="label_req_kode_limbah" class="required"> *</span></div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_kode_limbah" class="form-item-field">
+                               <input type="text" id="kode_limbah" name="kode_limbah" class="k-textbox" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_legal_jenis_izin_ehs_lb3","kode_limbah"))"  maxlength="50" style="width:350px;" value="@Html.Raw(fieldModel.kode_limbah)" title="@ResxHelper.GetValue("ta_legal_jenis_izin_ehs_lb3", "kode_limbah") @ResxHelper.GetValue("Message", "IsNotValidCharacter")." pattern="@ConfigHelper.GetValue("AllowInputCharacters")" />
+                               <span class="k-invalid-msg" data-for="kode_limbah"></span>
+                           </div>
+                       </div>
+
+                        <div id="form_item_periode_telah_dilaporkan_id" class="form-group">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_legal_jenis_izin_ehs_lb3", "periode_telah_dilaporkan_id")<span id="label_req_periode_telah_dilaporkan_id" class="required"> *</span></div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_periode_telah_dilaporkan_id" class="form-item-field">
+                               <input type="number" id="periode_telah_dilaporkan_id" name="periode_telah_dilaporkan_id"  min="0" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_legal_jenis_izin_ehs_lb3","periode_telah_dilaporkan_id"))" style ="width:200px;" />
+                               <span class="k-invalid-msg" data-for="periode_telah_dilaporkan_id"></span>
+                               <script>
+                                   $("#periode_telah_dilaporkan_id").kendoNumericTextBox({ format: "{0:N0}", decimals: 0 });
+                                   $(document).ready(function () {$("#periode_telah_dilaporkan_id").data('kendoNumericTextBox').value('@fieldModel.periode_telah_dilaporkan_id');})
+                               </script>
+                           </div>
+                       </div>
+
+                       <div id="form_item_tanggal_pelaporan" class="form-group">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_legal_jenis_izin_ehs_lb3", "tanggal_pelaporan")<span id="label_req_tanggal_pelaporan" class="required"> *</span></div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_tanggal_pelaporan" class="form-item-field">
+                               <input id="dt_tanggal_pelaporan" name="dt_tanggal_pelaporan" data-role="datepicker" data-type="date" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_legal_jenis_izin_ehs_lb3","tanggal_pelaporan"))" style ="width:130px;" title="@ResxHelper.GetValue("ta_legal_jenis_izin_ehs_lb3", "tanggal_pelaporan") @ResxHelper.GetValue("Message", "IsNotValidDate")." />
+                               <span class="k-invalid-msg" data-for="dt_tanggal_pelaporan"></span>
+                               <input type="hidden" id="tanggal_pelaporan" name="tanggal_pelaporan" value="@fieldModel.tanggal_pelaporan" />
+                               <script>
+                                   $("#dt_tanggal_pelaporan").kendoDatePicker({change:on_chage_tanggal_pelaporan, value: "@fieldModel.dt_tanggal_pelaporan", format: "{0:dd/MM/yyyy}" });
+                                   function on_chage_tanggal_pelaporan() {
+                                       $("#tanggal_pelaporan").val(kendo.toString($("#dt_tanggal_pelaporan").data("kendoDatePicker").value(), "yyyy-MM-dd"));
+                                   }
+                               </script>
+                           </div>
+                       </div>
+
+                       <div id="form_item_file_name_bukti_lapor" class="form-group">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_legal_jenis_izin_ehs_lb3", "file_name_bukti_lapor")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_file_name_bukti_lapor" class="form-item-field">
+                               <input type="text" id="file_name_bukti_lapor" name="file_name_bukti_lapor" class="k-textbox"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_legal_jenis_izin_ehs_lb3","file_name_bukti_lapor"))"  maxlength="50" style="width:350px;" value="@Html.Raw(fieldModel.file_name_bukti_lapor)" title="@ResxHelper.GetValue("ta_legal_jenis_izin_ehs_lb3", "file_name_bukti_lapor") @ResxHelper.GetValue("Message", "IsNotValidCharacter")." pattern="@ConfigHelper.GetValue("AllowInputCharacters")" />
+                               <span class="k-invalid-msg" data-for="file_name_bukti_lapor"></span>
+                           </div>
+                       </div>
+
+                    <div id="form_item_file_path_bukti_lapor" class="form-group">
+                        <div class="form-item-label">@ResxHelper.GetValue("ta_legal_jenis_izin_ehs_lb3", "file_path_bukti_lapor")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_file_path_bukti_lapor" class="form-item-field">
+                            <input name="file_path_bukti_lapor_file" id="file_path_bukti_lapor_file" type="file" />
+                            <input name="file_path_bukti_lapor" id="file_path_bukti_lapor" type="hidden" value="@fieldModel.file_path_bukti_lapor" data-required-msg="@ResxHelper.GetValue("Message", "RequiredTextFormat").Replace("{0}", @ResxHelper.GetValue("ta_legal_jenis_izin_ehs_lb3", "file_path_bukti_lapor"))" />
+                            <script>
+                                var file_path_bukti_lapor_init = @Html.Raw(fieldModel.file_path_bukti_lapor_init);
+                                $("#file_path_bukti_lapor_file").kendoUpload({multiple:false,
+                                    async: {
+                                        saveUrl: "@ViewBag.BaseUrl/LegalJenisIzinEhsLb3/save_file_path_bukti_lapor",
+                                        removeUrl: "@ViewBag.BaseUrl/LegalJenisIzinEhsLb3/remove_file_path_bukti_lapor",
+                                        autoUpload: true
+                                    },
+                                    validation: {allowedExtensions: [".jpg", ".jpeg", ".png", ".pdf", ".xls", ".xlsx"], maxFileSize: 2097152},
+                                    files: file_path_bukti_lapor_init,
+                                    success: onSuccessUpload,
+                                    select: OnselectUpload_file_path_bukti_lapor
+                                });
+                                function OnselectUpload_file_path_bukti_lapor(e) {OnselectUpload(e, 1);}
+                            </script>
+                            <span class="k-label k-text-info">Allowed Extensions: ".jpg", ".jpeg", ".png", ".pdf", ".xls", ".xlsx"</span>
+                            <br /><span class="k-label k-text-info">Maximum FileSize: @String.Format("{0:N0}", (2097152 / 1024)) KB</span>
+                        </div>
+                    </div>
+                  <div class="form-group"></div>
+                    
+					</div>
+				</div>
+			</div>
+			<div class="panel-footer">
+				<a id="cancel" class="k-button k-button-icontext" href="#"><i class="far fa-times-circle"></i>&nbsp;<span id="btnCancelText">@ResxHelper.GetValue("Message", "Cancel")</span></a>
+				<a id="save" class="k-button k-button-icontext" href="#"><i class="fas fa-save"></i>&nbsp;<span id="btnSaveText">@ResxHelper.GetValue("Message", "Save")</span></a>
+			</div>
+		</div>
+    </div>
+</form>
+
+<script>
+    var form_type = '@ViewData["form_type"]';
+    function ShowHideColumn(form_type)
+    {
+        if(form_type=='Add')
+        {
+            var hiden_column = [];
+            for (i = 0; i < hiden_column.length; i++) {
+                $("#form_item_"+hiden_column[i]).hide();
+            }
+        }
+        else if(form_type=='Edit')
+        {
+            var hiden_column = [];
+            for (i = 0; i < hiden_column.length; i++) {
+                $("#form_item_"+hiden_column[i]).hide();
+            }
+        }
+    }
+    function setReadOnly(form_type,opt)
+    {
+        if(opt==true)
+        {
+            if(form_type=='Add')
+            {
+
+            }
+            else if(form_type=='Edit')
+            {
+
+            }
+        }
+        else
+        {
+            if(form_type=='Add')
+            {
+
+            }
+            else if(form_type=='Edit')
+            {
+
+            }
+        }
+    }
+    $(document).ready(function () {
+        ShowHideColumn(form_type);
+        setReadOnly(form_type, true);
+    });
+    var validatable = $("#form_edit").kendoValidator().data("kendoValidator");
+    $("#save").click(function (e) {
+        getListFileUpload("file_path_bukti_lapor");
+        if (validatable.validate() === true) {
+            kendo.ui.progress($("#form_edit"), true);
+            $.ajax({
+                url: '@ViewData["UrlAction"]', data: $('#form_edit').serialize(), type: 'POST',
+                success: function (data) {
+                    kendo.ui.progress($("#form_edit"), false);
+                    if (data.status == 1) {
+                        window.parent.notification.show({title: data.title, message: kendo.toString(data.message) }, "success");
+                        if (window.parent.Reload_list_ta_legal_jenis_izin_ehs_lb3) {
+                            window.parent.Reload_list_ta_legal_jenis_izin_ehs_lb3();
+                        }else if (window.parent.reload_ta_legal_jenis_izin_ehs_lb3) {
+                            window.parent.reload_ta_legal_jenis_izin_ehs_lb3(data.pk);
+                        }
+                        close_self();
+                    } else if (data.status == 3) {
+                        windows.parent.notification.show({ title: data.title, message: data.message }, "error");
+                        close_self();
+                    } else {
+                        notification.show({ title: data.title, message: data.message }, "error");
+                    }
+                }
+            });
+        } else {
+            kendo.ui.progress($("#form_edit"), false);
+        }
+		setReadOnly(form_type, true);
+    });
+    $("#cancel").kendoButton();
+    $("#cancel").click(function (e) {
+        close_self();
+    });
+    function close_self() { if (window.parent.$("#dialog_ta_legal_jenis_izin_ehs_lb3").data("kendoWindow")) { window.parent.$("#dialog_ta_legal_jenis_izin_ehs_lb3").data("kendoWindow").close(); } else { window.parent.$("#dialog").data("kendoWindow").close(); } }
+</script>

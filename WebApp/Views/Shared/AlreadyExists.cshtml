@@ -1,0 +1,23 @@
+﻿@{
+    ViewData["Title"] = @ResxHelper.GetValue("Message", "TitleAlreadyExists", "Data Sudah ada");
+    Layout = "~/Views/Shared/_LayoutNoHeader.cshtml";
+}
+
+    <div style="text-align:center;margin-top;100px">
+        <h1 class="text-danger">@ResxHelper.GetValue("Message", "TitleAlreadyExists", "Data Sudah ada")</h1>
+        <div class="card-footer" style="text-align:center">
+            <a id="close" class="k-button k-button-icontext" href="#"><i class="far fa-times-circle"></i>&nbsp;<span id="btnCloseText">@ResxHelper.GetValue("Message", "Close", "Tutup")</span></a>
+        </div>
+    </div>
+
+    <script>
+    $("#close").kendoButton();
+    $("#close").click(function (e) {
+        close_self();
+    });
+    function onCloseDialog(e) { $('#dialog').html(''); }
+    function closeDialog() { $("#dialog").data("kendoWindow").close(); }
+    function close_self() { if (window.parent.$("#dialog_ta_idp").data("kendoWindow")) { window.parent.$("#dialog_ta_idp").data("kendoWindow").close(); } else { window.parent.$("#dialog").data("kendoWindow").close(); } }
+    </script>
+    
+

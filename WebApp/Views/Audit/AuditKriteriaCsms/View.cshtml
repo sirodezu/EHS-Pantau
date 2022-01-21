@@ -1,0 +1,180 @@
+@using WebApp
+@using Microsoft.AspNetCore.Http;
+@{
+    Layout = "~/Views/Shared/_LayoutNoHeader.cshtml";
+    var fieldModel = ViewData["fieldModel"] as WebApp.Models.AuditKriteriaCsmsModel.ViewModel;
+	ViewData["Title"] = ViewData["TitleHeader"];
+    ViewData["PageName"] = "auditkriteriacsms";
+    ViewData["Heading"] = ViewData["TitleHeader"];
+    ViewData["Category1"] = "";
+    ViewData["Category2"] = "";
+}
+<div class="panel panel-form">
+	<div class="panel-container">
+		<div class="panel-heading">
+			<div class="title-header">@ViewData["TitleHeader"]</div>
+		</div>
+		<div class="panel-content">
+			<div class="row">
+                <div class="col-lg-5">
+
+                    <div id="form_item_id" class="form-group-none">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_csms", "id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_id" class="form-item-view">@Html.Raw(fieldModel.id)</div>
+                    </div>
+
+                    <div id="form_item_audit_id" class="form-group-none">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_csms", "audit_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_audit_id" class="form-item-view">@Html.Raw(fieldModel.audit_id)</div>
+                    </div>
+
+                    <div id="form_item_kriteria_audit_id" class="form-group-none">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_csms", "kriteria_audit_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_kriteria_audit_id" class="form-item-view">@Html.Raw(fieldModel.kriteria_audit_id)</div>
+                    </div>
+
+                    <div id="form_item_csms_kategori_id" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_csms", "csms_kategori_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_csms_kategori_id" class="form-item-view">@Html.Raw(fieldModel.csms_kategori_id_text)</div>
+                    </div>
+
+                    <div id="form_item_csms_tahapan_id" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_csms", "csms_tahapan_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_csms_tahapan_id" class="form-item-view">@Html.Raw(fieldModel.csms_tahapan_id_text)</div>
+                    </div>
+
+                    <div id="form_item_nama_vendor" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_csms", "nama_vendor")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_nama_vendor" class="form-item-view">@Html.Raw(fieldModel.nama_vendor)</div>
+                    </div>
+
+                    <div id="form_item_csms_resiko_id" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_csms", "csms_resiko_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_csms_resiko_id" class="form-item-view">@Html.Raw(fieldModel.csms_resiko_id_text)</div>
+                    </div>
+
+
+
+
+                    <div><p>&nbsp;</p></div>
+
+
+                    <table class="table" width="80%">
+                        <thead>
+                            <tr>
+                                <th nowrap scope="col">Title</th>
+                                <th scope="col">Actual</th>
+                                <th scope="col">Bobot (%)</th>
+                                <th scope="col">Pemenuhan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td scope="row"><b>@ResxHelper.GetValue("ta_audit_kriteria_csms", "green_strategy")</b></td>
+                                <td>
+                                    <div id="view_item_green_strategy_actual" class="form-item-view">@Html.Raw(fieldModel.green_strategy_actual)</div>
+                                </td>
+                                <td>
+                                    <div id="view_item_green_strategy_bobot" class="form-item-view">@Html.Raw(fieldModel.green_strategy_bobot)</div>
+                                </td>
+                                <td>
+                                    <div id="view_item_green_strategy_penuh" class="form-item-view">@Html.Raw(fieldModel.green_strategy_penuh)</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td scope="row"><b>@ResxHelper.GetValue("ta_audit_kriteria_csms", "green_process")</b></td>
+                                <td>
+                                    <div id="view_item_green_process_actual" class="form-item-view">@Html.Raw(fieldModel.green_process_actual)</div>
+                                </td>
+                                <td>
+                                    <div id="view_item_green_process_bobot" class="form-item-view">@Html.Raw(fieldModel.green_process_bobot)</div>
+                                </td>
+                                <td>
+                                    <div id="view_item_green_process_penuh" class="form-item-view">@Html.Raw(fieldModel.green_process_penuh)</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td scope="row"><b>@ResxHelper.GetValue("ta_audit_kriteria_csms", "green_product")</b></td>
+                                <td>
+                                    <div id="view_item_green_product_actual" class="form-item-view">@Html.Raw(fieldModel.green_product_actual)</div>
+                                </td>
+                                <td>
+                                    <div id="view_item_green_product_bobot" class="form-item-view">@Html.Raw(fieldModel.green_product_bobot)</div>
+                                </td>
+                                <td>
+                                    <div id="view_item_green_product_penuh" class="form-item-view">@Html.Raw(fieldModel.green_product_penuh)</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td scope="row"><b>@ResxHelper.GetValue("ta_audit_kriteria_csms", "green_employee")</b></td>
+                                <td>
+                                    <div id="view_item_green_employee_actual" class="form-item-view">@Html.Raw(fieldModel.green_employee_actual)</div>
+                                </td>
+                                <td>
+                                    <div id="view_item_green_employee_bobot" class="form-item-view">@Html.Raw(fieldModel.green_employee_bobot)</div>
+                                </td>
+                                <td>
+                                    <div id="view_item_green_employee_penuh" class="form-item-view">@Html.Raw(fieldModel.green_employee_penuh)</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td scope="row"><b>@ResxHelper.GetValue("ta_audit_kriteria_csms", "legal")</b></td>
+                                <td>
+                                    <div id="view_item_legal_actual" class="form-item-view">@Html.Raw(fieldModel.legal_actual)</div>
+                                </td>
+                                <td>
+                                    <div id="view_item_legal_bobot" class="form-item-view">@Html.Raw(fieldModel.legal_bobot)</div>
+                                </td>
+                                <td>
+                                    <div id="view_item_legal_penuh" class="form-item-view">@Html.Raw(fieldModel.legal_penuh)</div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div><p>&nbsp;</p></div>
+
+
+
+                    <div id="form_item_presentasi_pencapaian" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_csms", "presentasi_pencapaian")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_presentasi_pencapaian" class="form-item-view">@Html.Raw(fieldModel.presentasi_pencapaian)</div>
+                    </div>
+
+                    <div id="form_item_nilai_bendera_id" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_csms", "nilai_bendera_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_nilai_bendera_id" class="form-item-view">@Html.Raw(fieldModel.nilai_bendera_id_text)</div>
+                    </div>
+
+                    <div id="form_item_lampiran_file_path" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_csms", "lampiran_file_path")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_lampiran_file_path" class="form-item-view">@Html.Raw(fieldModel.lampiran_file_path)</div>
+                    </div>
+
+                </div>
+			</div>
+		</div>
+		<div class="panel-footer">
+			<a id="close" class="k-button k-button-icontext" href="#"><i class="far fa-times-circle"></i>&nbsp;<span id="btnCloseText">@ResxHelper.GetValue("Message", "Close", "Tutup")</span></a>
+		</div>
+	</div>
+</div>
+<script>
+    $("#close").kendoButton();
+    $("#close").click(function (e) {
+        close_self();
+    });
+    function onCloseDialog(e) { $('#dialog').html(''); }
+    function closeDialog() { $("#dialog").data("kendoWindow").close(); }
+    function close_self() { if (window.parent.$("#dialog_ta_audit_kriteria_csms").data("kendoWindow")) { window.parent.$("#dialog_ta_audit_kriteria_csms").data("kendoWindow").close(); } else { window.parent.$("#dialog").data("kendoWindow").close(); } }
+</script>

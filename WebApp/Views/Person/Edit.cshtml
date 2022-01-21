@@ -1,0 +1,556 @@
+@using WebApp
+@using Microsoft.AspNetCore.Http;
+@{
+    Layout = "~/Views/Shared/_LayoutNoHeader.cshtml";
+    var fieldModel = ViewData["fieldModel"] as WebApp.Models.PersonModel.ViewModel;
+    ViewData["Title"] = ViewData["TitleHeader"];
+    ViewData["PageName"] = "person";
+    ViewData["Heading"] = ViewData["TitleHeader"];
+    ViewData["Category1"] = "";
+    ViewData["Category2"] = "";
+}
+
+<form id="form_edit" method="post" class="panel-form">
+    <div class="panel">
+        <div class="panel-heading">
+            <div class="title-header">@ViewData["TitleHeader"]</div>
+        </div>
+		<div class="panel-container">
+			<div class="panel-content">
+				<div class="row">
+					<div class="col-lg-12">
+                        <div id="form_item_id" class="form-group-none">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_person", "id")<span id="label_req_id" class="required"> *</span></div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_id" class="form-item-field">
+                               <input type="number" id="id" name="id"  min="0" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_person","id"))" style ="width:200px;" />
+                               <span class="k-invalid-msg" data-for="id"></span>
+                               <input type="hidden" id="id_old" name="id_old" value="@fieldModel.id" />
+                               <script>
+                                   $("#id").kendoNumericTextBox({ format: "{0:N0}", decimals: 0 });
+                                   $(document).ready(function () {$("#id").data('kendoNumericTextBox').value('@fieldModel.id');})
+                               </script>
+                           </div>
+                       </div>
+
+                       <div id="form_item_person_type_id" class="form-group">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_person", "person_type_id")<span id="label_req_person_type_id" class="required"> *</span></div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_person_type_id" class="form-item-field">
+                               <input id="person_type_id" name="person_type_id" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_person","person_type_id"))" style="width:200px;" />
+                               <span class="k-invalid-msg" data-for="person_type_id"></span>
+                               <script>
+                                   var person_type_id_param = {item : {value:"id",text:"nama"},parent:[{ field: 'cat_id',opr:'=', value: '7' }], order:[]};
+                                   var person_type_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: person_type_id_param, type: "POST" } } });
+                                   var person_type_id = $("#person_type_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: person_type_id_ds, change:onChange_person_type_id }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#person_type_id").data("kendoComboBox").value('@fieldModel.person_type_id'); });
+                                   function onChange_person_type_id() {if ($("#person_type_id").data("kendoComboBox").value() != '' && $("#person_type_id").data("kendoComboBox")._oldIndex == -1) {$("#person_type_id").data("kendoComboBox").value('');}
+                                       reload_company_id();
+                                   }
+                               </script>
+                           </div>
+                       </div>
+
+                       <div id="form_item_company_id" class="form-group">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_person", "company_id")<span id="label_req_company_id" class="required"> *</span></div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_company_id" class="form-item-field">
+                               <input id="company_id" name="company_id" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_person","company_id"))" style="width:200px;" />
+                               <span class="k-invalid-msg" data-for="company_id"></span>
+                               <script>
+                                   var company_id_param = {item : {value:"id",text:"nama"},parent:[{ field: 'comtype_id',opr:'=', value: '@fieldModel.person_type_id' }], order:[{ field: 'comtype_id', dir: 'asc' },{ field: 'nama', dir: 'asc' }]};
+                                   var company_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/Company/LookupData", dataType: "json", data: company_id_param, type: "POST" } } });
+                                   var company_id = $("#company_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: company_id_ds, change:onChange_company_id }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#company_id").data("kendoComboBox").value('@fieldModel.company_id'); });
+                                   function onChange_company_id() {if ($("#company_id").data("kendoComboBox").value() != '' && $("#company_id").data("kendoComboBox")._oldIndex == -1) {$("#company_id").data("kendoComboBox").value('');}
+                                   }
+                                  function reload_company_id(){
+                                      $("#company_id").data("kendoComboBox").value('');
+                                      var person_type_id = $("#person_type_id").data("kendoComboBox").value();
+                                      var company_id_param = { item: { value: 'id', text: 'nama' }, parent: [{ field: 'comtype_id',opr:'=', value: person_type_id }], order: [{ field: 'comtype_id', dir: 'asc' },{ field: 'nama', dir: 'asc' }] };
+                                      $("#company_id").data("kendoComboBox").dataSource.read(company_id_param);
+                                  }
+                               </script>
+                           </div>
+                       </div>
+
+                        <div id="form_item_nrp" class="form-group">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_person", "nrp")<span id="label_req_nrp" class="required"> *</span></div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_nrp" class="form-item-field">
+                               <input type="number" id="nrp" name="nrp"  min="0" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_person","nrp"))" style ="width:200px;" />
+                               <span class="k-invalid-msg" data-for="nrp"></span>
+                               <script>
+                                   $("#nrp").kendoNumericTextBox({ format: "{0:#}", decimals: 0 });
+                                   $(document).ready(function () {$("#nrp").data('kendoNumericTextBox').value('@fieldModel.nrp');})
+                               </script>
+                           </div>
+                       </div>
+
+                       <div id="form_item_nama" class="form-group">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_person", "nama")<span id="label_req_nama" class="required"> *</span></div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_nama" class="form-item-field">
+                               <input type="text" id="nama" name="nama" class="k-textbox" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_person","nama"))"  maxlength="50" style="width:350px;" value="@Html.Raw(fieldModel.nama)" title="@ResxHelper.GetValue("ta_person", "nama") @ResxHelper.GetValue("Message", "IsNotValidCharacter")." pattern="@ConfigHelper.GetValue("AllowInputCharacters")" />
+                               <span class="k-invalid-msg" data-for="nama"></span>
+                           </div>
+                       </div>
+
+                       <div id="form_item_jenis_kelamin_id" class="form-group">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_person", "jenis_kelamin_id")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_jenis_kelamin_id" class="form-item-field">
+                               <input id="jenis_kelamin_id" name="jenis_kelamin_id"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_person","jenis_kelamin_id"))" style="width:200px;" />
+                               <span class="k-invalid-msg" data-for="jenis_kelamin_id"></span>
+                               <script>
+                                   var jenis_kelamin_id_param = {item : {value:"id",text:"nama"},parent:[{ field: 'cat_id',opr:'=', value: '5' }], order:[]};
+                                   var jenis_kelamin_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: jenis_kelamin_id_param, type: "POST" } } });
+                                   var jenis_kelamin_id = $("#jenis_kelamin_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: jenis_kelamin_id_ds, change:onChange_jenis_kelamin_id }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#jenis_kelamin_id").data("kendoComboBox").value('@fieldModel.jenis_kelamin_id'); });
+                                   function onChange_jenis_kelamin_id() {if ($("#jenis_kelamin_id").data("kendoComboBox").value() != '' && $("#jenis_kelamin_id").data("kendoComboBox")._oldIndex == -1) {$("#jenis_kelamin_id").data("kendoComboBox").value('');}
+                                   }
+                               </script>
+                           </div>
+                       </div>
+
+                       <div id="form_item_tempat_lahir" class="form-group">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_person", "tempat_lahir")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_tempat_lahir" class="form-item-field">
+                               <input type="text" id="tempat_lahir" name="tempat_lahir" class="k-textbox"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_person","tempat_lahir"))"  maxlength="50" style="width:350px;" value="@Html.Raw(fieldModel.tempat_lahir)" title="@ResxHelper.GetValue("ta_person", "tempat_lahir") @ResxHelper.GetValue("Message", "IsNotValidCharacter")." pattern="@ConfigHelper.GetValue("AllowInputCharacters")" />
+                               <span class="k-invalid-msg" data-for="tempat_lahir"></span>
+                           </div>
+                       </div>
+
+                       <div id="form_item_tgl_lahir" class="form-group">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_person", "tgl_lahir")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_tgl_lahir" class="form-item-field">
+                               <input id="dt_tgl_lahir" name="dt_tgl_lahir" data-role="datepicker" data-type="date"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_person","tgl_lahir"))" style ="width:130px;" title="@ResxHelper.GetValue("ta_person", "tgl_lahir") @ResxHelper.GetValue("Message", "IsNotValidDate")." />
+                               <span class="k-invalid-msg" data-for="dt_tgl_lahir"></span>
+                               <input type="hidden" id="tgl_lahir" name="tgl_lahir" value="@fieldModel.tgl_lahir" />
+                               <script>
+                                   $("#dt_tgl_lahir").kendoDatePicker({change:on_chage_tgl_lahir, value: "@fieldModel.dt_tgl_lahir", format: "{0:dd/MM/yyyy}" });
+                                   function on_chage_tgl_lahir() {
+                                       $("#tgl_lahir").val(kendo.toString($("#dt_tgl_lahir").data("kendoDatePicker").value(), "yyyy-MM-dd"));
+                                   }
+                               </script>
+                           </div>
+                       </div>
+
+                       <div id="form_item_ba_id" class="form-group">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_person", "ba_id")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_ba_id" class="form-item-field">
+                               <input id="ba_id" name="ba_id"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_person","ba_id"))" style="width:200px;" />
+                               <span class="k-invalid-msg" data-for="ba_id"></span>
+                               <script>
+                                   var ba_id_param = {item : {value:"id",text:"kode,nama"},parent:[], order:[]};
+                                   var ba_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/BusinessArea/LookupData", dataType: "json", data: ba_id_param, type: "POST" } } });
+                                   var ba_id = $("#ba_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: ba_id_ds, change:onChange_ba_id }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#ba_id").data("kendoComboBox").value('@fieldModel.ba_id'); });
+                                   function onChange_ba_id() {if ($("#ba_id").data("kendoComboBox").value() != '' && $("#ba_id").data("kendoComboBox")._oldIndex == -1) {$("#ba_id").data("kendoComboBox").value('');}
+                                       reload_pa_id();
+                                       reload_psa_id();
+                                   }
+                               </script>
+                           </div>
+                       </div>
+
+                       <div id="form_item_pa_id" class="form-group">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_person", "pa_id")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_pa_id" class="form-item-field">
+                               <input id="pa_id" name="pa_id"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_person","pa_id"))" style="width:200px;" />
+                               <span class="k-invalid-msg" data-for="pa_id"></span>
+                               <script>
+                                   var pa_id_param = {item : {value:"id",text:"kode,nama"},parent:[{ field: 'ba_id',opr:'=', value: '@fieldModel.ba_id' }], order:[]};
+                                   var pa_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/PersonalArea/LookupData", dataType: "json", data: pa_id_param, type: "POST" } } });
+                                   var pa_id = $("#pa_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: pa_id_ds, change:onChange_pa_id }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#pa_id").data("kendoComboBox").value('@fieldModel.pa_id'); });
+                                   function onChange_pa_id() {if ($("#pa_id").data("kendoComboBox").value() != '' && $("#pa_id").data("kendoComboBox")._oldIndex == -1) {$("#pa_id").data("kendoComboBox").value('');}
+                                       reload_psa_id();
+                                   }
+                                  function reload_pa_id(){
+                                      $("#pa_id").data("kendoComboBox").value('');
+                                      var ba_id = $("#ba_id").data("kendoComboBox").value();
+                                      var pa_id_param = { item: { value: 'id', text: 'kode,nama' }, parent: [{ field: 'ba_id',opr:'=', value: ba_id }], order: [] };
+                                      $("#pa_id").data("kendoComboBox").dataSource.read(pa_id_param);
+                                  }
+                               </script>
+                           </div>
+                       </div>
+
+                       <div id="form_item_psa_id" class="form-group">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_person", "psa_id")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_psa_id" class="form-item-field">
+                               <input id="psa_id" name="psa_id"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_person","psa_id"))" style="width:200px;" />
+                               <span class="k-invalid-msg" data-for="psa_id"></span>
+                               <script>
+                                   var psa_id_param = {item : {value:"id",text:"kode,nama"},parent:[{ field: 'ba_id',opr:'=', value: '@fieldModel.ba_id' }, { field: 'pa_id',opr:'=', value: '@fieldModel.pa_id' }], order:[]};
+                                   var psa_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/PersonalSubArea/LookupData", dataType: "json", data: psa_id_param, type: "POST" } } });
+                                   var psa_id = $("#psa_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: psa_id_ds, change:onChange_psa_id }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#psa_id").data("kendoComboBox").value('@fieldModel.psa_id'); });
+                                   function onChange_psa_id() {if ($("#psa_id").data("kendoComboBox").value() != '' && $("#psa_id").data("kendoComboBox")._oldIndex == -1) {$("#psa_id").data("kendoComboBox").value('');}
+                                   }
+                                  function reload_psa_id(){
+                                      $("#psa_id").data("kendoComboBox").value('');
+                                      var ba_id = $("#ba_id").data("kendoComboBox").value();
+                                      var pa_id = $("#pa_id").data("kendoComboBox").value();
+                                      var psa_id_param = { item: { value: 'id', text: 'kode,nama' }, parent: [{ field: 'ba_id',opr:'=', value: ba_id }, { field: 'pa_id',opr:'=', value: pa_id }], order: [] };
+                                      $("#psa_id").data("kendoComboBox").dataSource.read(psa_id_param);
+                                  }
+                               </script>
+                           </div>
+                       </div>
+
+                       <div id="form_item_jabatan_id" class="form-group">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_person", "jabatan_id")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_jabatan_id" class="form-item-field">
+                               <input id="jabatan_id" name="jabatan_id"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_person","jabatan_id"))" style="width:200px;" />
+                               <span class="k-invalid-msg" data-for="jabatan_id"></span>
+                               <script>
+                                   var jabatan_id_param = {item : {value:"id",text:"kode"},parent:[], order:[]};
+                                   var jabatan_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/Jabatan/LookupData", dataType: "json", data: jabatan_id_param, type: "POST" } } });
+                                   var jabatan_id = $("#jabatan_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: jabatan_id_ds, change:onChange_jabatan_id }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#jabatan_id").data("kendoComboBox").value('@fieldModel.jabatan_id'); });
+                                   function onChange_jabatan_id() {if ($("#jabatan_id").data("kendoComboBox").value() != '' && $("#jabatan_id").data("kendoComboBox")._oldIndex == -1) {$("#jabatan_id").data("kendoComboBox").value('');}
+                                   }
+                               </script>
+                           </div>
+                       </div>
+
+                       <div id="form_item_jabatan" class="form-group">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_person", "jabatan")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_jabatan" class="form-item-field">
+                               <input type="text" id="jabatan" name="jabatan" class="k-textbox"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_person","jabatan"))"  maxlength="50" style="width:350px;" value="@Html.Raw(fieldModel.jabatan)" title="@ResxHelper.GetValue("ta_person", "jabatan") @ResxHelper.GetValue("Message", "IsNotValidCharacter")." pattern="@ConfigHelper.GetValue("AllowInputCharacters")" />
+                               <span class="k-invalid-msg" data-for="jabatan"></span>
+                           </div>
+                       </div>
+
+                       <div id="form_item_grade" class="form-group">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_person", "grade")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_grade" class="form-item-field">
+                               <input type="text" id="grade" name="grade" class="k-textbox"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_person","grade"))"  maxlength="50" style="width:350px;" value="@Html.Raw(fieldModel.grade)" title="@ResxHelper.GetValue("ta_person", "grade") @ResxHelper.GetValue("Message", "IsNotValidCharacter")." pattern="@ConfigHelper.GetValue("AllowInputCharacters")" />
+                               <span class="k-invalid-msg" data-for="grade"></span>
+                           </div>
+                       </div>
+
+                       <div id="form_item_job" class="form-group">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_person", "job")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_job" class="form-item-field">
+                               <input type="text" id="job" name="job" class="k-textbox"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_person","job"))"  maxlength="50" style="width:350px;" value="@Html.Raw(fieldModel.job)" title="@ResxHelper.GetValue("ta_person", "job") @ResxHelper.GetValue("Message", "IsNotValidCharacter")." pattern="@ConfigHelper.GetValue("AllowInputCharacters")" />
+                               <span class="k-invalid-msg" data-for="job"></span>
+                           </div>
+                       </div>
+
+                       <div id="form_item_job_start" class="form-group">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_person", "job_start")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_job_start" class="form-item-field">
+                               <input id="dt_job_start" name="dt_job_start" data-role="datepicker" data-type="date"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_person","job_start"))" style ="width:130px;" title="@ResxHelper.GetValue("ta_person", "job_start") @ResxHelper.GetValue("Message", "IsNotValidDate")." />
+                               <span class="k-invalid-msg" data-for="dt_job_start"></span>
+                               <input type="hidden" id="job_start" name="job_start" value="@fieldModel.job_start" />
+                               <script>
+                                   $("#dt_job_start").kendoDatePicker({change:on_chage_job_start, value: "@fieldModel.dt_job_start", format: "{0:dd/MM/yyyy}" });
+                                   function on_chage_job_start() {
+                                       $("#job_start").val(kendo.toString($("#dt_job_start").data("kendoDatePicker").value(), "yyyy-MM-dd"));
+                                   }
+                               </script>
+                           </div>
+                       </div>
+
+                       <div id="form_item_position" class="form-group">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_person", "position")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_position" class="form-item-field">
+                               <input type="text" id="position" name="position" class="k-textbox"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_person","position"))"  maxlength="50" style="width:350px;" value="@Html.Raw(fieldModel.position)" title="@ResxHelper.GetValue("ta_person", "position") @ResxHelper.GetValue("Message", "IsNotValidCharacter")." pattern="@ConfigHelper.GetValue("AllowInputCharacters")" />
+                               <span class="k-invalid-msg" data-for="position"></span>
+                           </div>
+                       </div>
+
+                       <div id="form_item_position_start" class="form-group">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_person", "position_start")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_position_start" class="form-item-field">
+                               <input id="dt_position_start" name="dt_position_start" data-role="datepicker" data-type="date"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_person","position_start"))" style ="width:130px;" title="@ResxHelper.GetValue("ta_person", "position_start") @ResxHelper.GetValue("Message", "IsNotValidDate")." />
+                               <span class="k-invalid-msg" data-for="dt_position_start"></span>
+                               <input type="hidden" id="position_start" name="position_start" value="@fieldModel.position_start" />
+                               <script>
+                                   $("#dt_position_start").kendoDatePicker({change:on_chage_position_start, value: "@fieldModel.dt_position_start", format: "{0:dd/MM/yyyy}" });
+                                   function on_chage_position_start() {
+                                       $("#position_start").val(kendo.toString($("#dt_position_start").data("kendoDatePicker").value(), "yyyy-MM-dd"));
+                                   }
+                               </script>
+                           </div>
+                       </div>
+
+                       <div id="form_item_photo" class="form-group">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_person", "photo")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_photo" class="form-item-field">
+                               <input type="text" id="photo" name="photo" class="k-textbox"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_person","photo"))"  maxlength="50" style="width:350px;" value="@Html.Raw(fieldModel.photo)" title="@ResxHelper.GetValue("ta_person", "photo") @ResxHelper.GetValue("Message", "IsNotValidCharacter")." pattern="@ConfigHelper.GetValue("AllowInputCharacters")" />
+                               <span class="k-invalid-msg" data-for="photo"></span>
+                           </div>
+                       </div>
+
+                       <div id="form_item_status_id" class="form-group">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_person", "status_id")<span id="label_req_status_id" class="required"> *</span></div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_status_id" class="form-item-field">
+                               <input id="status_id" name="status_id" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_person","status_id"))" style="width:200px;" />
+                               <span class="k-invalid-msg" data-for="status_id"></span>
+                               <script>
+                                   var status_id_param = {item : {value:"id",text:"nama"},parent:[{ field: 'cat_id',opr:'=', value: '3' }], order:[]};
+                                   var status_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: status_id_param, type: "POST" } } });
+                                   var status_id = $("#status_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: status_id_ds, change:onChange_status_id }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#status_id").data("kendoComboBox").value('@fieldModel.status_id'); });
+                                   function onChange_status_id() {if ($("#status_id").data("kendoComboBox").value() != '' && $("#status_id").data("kendoComboBox")._oldIndex == -1) {$("#status_id").data("kendoComboBox").value('');}
+                                   }
+                               </script>
+                           </div>
+                       </div>
+
+                       <div id="form_item_mulai_bekerja" class="form-group">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_person", "mulai_bekerja")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_mulai_bekerja" class="form-item-field">
+                               <input id="dt_mulai_bekerja" name="dt_mulai_bekerja" data-role="datepicker" data-type="date"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_person","mulai_bekerja"))" style ="width:130px;" title="@ResxHelper.GetValue("ta_person", "mulai_bekerja") @ResxHelper.GetValue("Message", "IsNotValidDate")." />
+                               <span class="k-invalid-msg" data-for="dt_mulai_bekerja"></span>
+                               <input type="hidden" id="mulai_bekerja" name="mulai_bekerja" value="@fieldModel.mulai_bekerja" />
+                               <script>
+                                   $("#dt_mulai_bekerja").kendoDatePicker({change:on_chage_mulai_bekerja, value: "@fieldModel.dt_mulai_bekerja", format: "{0:dd/MM/yyyy}" });
+                                   function on_chage_mulai_bekerja() {
+                                       $("#mulai_bekerja").val(kendo.toString($("#dt_mulai_bekerja").data("kendoDatePicker").value(), "yyyy-MM-dd"));
+                                   }
+                               </script>
+                           </div>
+                       </div>
+
+                       <div id="form_item_akhir_bekerja" class="form-group">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_person", "akhir_bekerja")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_akhir_bekerja" class="form-item-field">
+                               <input id="dt_akhir_bekerja" name="dt_akhir_bekerja" data-role="datepicker" data-type="date"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_person","akhir_bekerja"))" style ="width:130px;" title="@ResxHelper.GetValue("ta_person", "akhir_bekerja") @ResxHelper.GetValue("Message", "IsNotValidDate")." />
+                               <span class="k-invalid-msg" data-for="dt_akhir_bekerja"></span>
+                               <input type="hidden" id="akhir_bekerja" name="akhir_bekerja" value="@fieldModel.akhir_bekerja" />
+                               <script>
+                                   $("#dt_akhir_bekerja").kendoDatePicker({change:on_chage_akhir_bekerja, value: "@fieldModel.dt_akhir_bekerja", format: "{0:dd/MM/yyyy}" });
+                                   function on_chage_akhir_bekerja() {
+                                       $("#akhir_bekerja").val(kendo.toString($("#dt_akhir_bekerja").data("kendoDatePicker").value(), "yyyy-MM-dd"));
+                                   }
+                               </script>
+                           </div>
+                       </div>
+
+                       <div id="form_item_superior_id" class="form-group">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_person", "superior_id")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_superior_id" class="form-item-field">
+                               <input id="superior_id" name="superior_id"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_person","superior_id"))" style="width:200px;" />
+                               <span class="k-invalid-msg" data-for="superior_id"></span>
+                               <script>
+                                   var superior_id_param = {item : {value:"id",text:"nrp,nama"},parent:[], order:[]};
+                                   var superior_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Person/LookupData", dataType: "json", data: superior_id_param, type: "POST" } } });
+                                   var superior_id = $("#superior_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: superior_id_ds, change:onChange_superior_id }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#superior_id").data("kendoComboBox").value('@fieldModel.superior_id'); });
+                                   function onChange_superior_id() {if ($("#superior_id").data("kendoComboBox").value() != '' && $("#superior_id").data("kendoComboBox")._oldIndex == -1) {$("#superior_id").data("kendoComboBox").value('');}
+                                   }
+                               </script>
+                           </div>
+                       </div>
+
+                       <div id="form_item_alamat" class="form-group">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_person", "alamat")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_alamat" class="form-item-field">
+                               <textarea type="text" id="alamat" name="alamat" class="k-textbox"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_person","alamat"))" maxlength="500" style="width:350px;" title="@ResxHelper.GetValue("ta_person", "alamat") @ResxHelper.GetValue("Message", "IsNotValidCharacter")." pattern="@ConfigHelper.GetValue("AllowInputCharacters")">@Html.Raw(fieldModel.alamat)</textarea>
+                               <span class="k-invalid-msg" data-for="alamat"></span>
+                           </div>
+                       </div>
+
+                       <div id="form_item_tlp" class="form-group">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_person", "tlp")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_tlp" class="form-item-field">
+                               <input type="text" id="tlp" name="tlp" class="k-textbox"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_person","tlp"))"  maxlength="50" style="width:350px;" value="@Html.Raw(fieldModel.tlp)" title="@ResxHelper.GetValue("ta_person", "tlp") @ResxHelper.GetValue("Message", "IsNotValidCharacter")." pattern="@ConfigHelper.GetValue("AllowInputCharacters")" />
+                               <span class="k-invalid-msg" data-for="tlp"></span>
+                           </div>
+                       </div>
+
+                       <div id="form_item_pendidikan_id" class="form-group">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_person", "pendidikan_id")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_pendidikan_id" class="form-item-field">
+                               <input id="pendidikan_id" name="pendidikan_id"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_person","pendidikan_id"))" style="width:100px;" />
+                               <span class="k-invalid-msg" data-for="pendidikan_id"></span>
+                               <script>
+                                   var pendidikan_id_param = {item : {value:"id",text:"kode"},parent:[{ field: 'cat_id',opr:'=', value: '6' }], order:[{ field: 'id', dir: 'asc' }]};
+                                   var pendidikan_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: pendidikan_id_param, type: "POST" } } });
+                                   var pendidikan_id = $("#pendidikan_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: pendidikan_id_ds, change:onChange_pendidikan_id }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#pendidikan_id").data("kendoComboBox").value('@fieldModel.pendidikan_id'); });
+                                   function onChange_pendidikan_id() {if ($("#pendidikan_id").data("kendoComboBox").value() != '' && $("#pendidikan_id").data("kendoComboBox")._oldIndex == -1) {$("#pendidikan_id").data("kendoComboBox").value('');}
+                                   }
+                               </script>
+                           </div>
+                       </div>
+
+                       <div id="form_item_jurusan" class="form-group">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_person", "jurusan")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_jurusan" class="form-item-field">
+                               <input type="text" id="jurusan" name="jurusan" class="k-textbox"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_person","jurusan"))"  maxlength="50" style="width:350px;" value="@Html.Raw(fieldModel.jurusan)" title="@ResxHelper.GetValue("ta_person", "jurusan") @ResxHelper.GetValue("Message", "IsNotValidCharacter")." pattern="@ConfigHelper.GetValue("AllowInputCharacters")" />
+                               <span class="k-invalid-msg" data-for="jurusan"></span>
+                           </div>
+                       </div>
+
+                       <div id="form_item_sap_ba_id" class="form-group">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_person", "sap_ba_id")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_sap_ba_id" class="form-item-field">
+                               <input id="sap_ba_id" name="sap_ba_id"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_person","sap_ba_id"))" style="width:200px;" />
+                               <span class="k-invalid-msg" data-for="sap_ba_id"></span>
+                               <script>
+                                   var sap_ba_id_param = {item : {value:"id",text:"kode"},parent:[], order:[]};
+                                   var sap_ba_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/BusinessArea/LookupData", dataType: "json", data: sap_ba_id_param, type: "POST" } } });
+                                   var sap_ba_id = $("#sap_ba_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: sap_ba_id_ds, change:onChange_sap_ba_id }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#sap_ba_id").data("kendoComboBox").value('@fieldModel.sap_ba_id'); });
+                                   function onChange_sap_ba_id() {if ($("#sap_ba_id").data("kendoComboBox").value() != '' && $("#sap_ba_id").data("kendoComboBox")._oldIndex == -1) {$("#sap_ba_id").data("kendoComboBox").value('');}
+                                   }
+                               </script>
+                           </div>
+                       </div>
+
+                       <div id="form_item_sap_pa_id" class="form-group">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_person", "sap_pa_id")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_sap_pa_id" class="form-item-field">
+                               <input id="sap_pa_id" name="sap_pa_id"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_person","sap_pa_id"))" style="width:200px;" />
+                               <span class="k-invalid-msg" data-for="sap_pa_id"></span>
+                               <script>
+                                   var sap_pa_id_param = {item : {value:"id",text:"kode"},parent:[], order:[]};
+                                   var sap_pa_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/PersonalArea/LookupData", dataType: "json", data: sap_pa_id_param, type: "POST" } } });
+                                   var sap_pa_id = $("#sap_pa_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: sap_pa_id_ds, change:onChange_sap_pa_id }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#sap_pa_id").data("kendoComboBox").value('@fieldModel.sap_pa_id'); });
+                                   function onChange_sap_pa_id() {if ($("#sap_pa_id").data("kendoComboBox").value() != '' && $("#sap_pa_id").data("kendoComboBox")._oldIndex == -1) {$("#sap_pa_id").data("kendoComboBox").value('');}
+                                   }
+                               </script>
+                           </div>
+                       </div>
+
+                       <div id="form_item_sap_psa_id" class="form-group">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_person", "sap_psa_id")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_sap_psa_id" class="form-item-field">
+                               <input id="sap_psa_id" name="sap_psa_id"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_person","sap_psa_id"))" style="width:200px;" />
+                               <span class="k-invalid-msg" data-for="sap_psa_id"></span>
+                               <script>
+                                   var sap_psa_id_param = {item : {value:"id",text:"kode"},parent:[], order:[]};
+                                   var sap_psa_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/PersonalSubArea/LookupData", dataType: "json", data: sap_psa_id_param, type: "POST" } } });
+                                   var sap_psa_id = $("#sap_psa_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: sap_psa_id_ds, change:onChange_sap_psa_id }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#sap_psa_id").data("kendoComboBox").value('@fieldModel.sap_psa_id'); });
+                                   function onChange_sap_psa_id() {if ($("#sap_psa_id").data("kendoComboBox").value() != '' && $("#sap_psa_id").data("kendoComboBox")._oldIndex == -1) {$("#sap_psa_id").data("kendoComboBox").value('');}
+                                   }
+                               </script>
+                           </div>
+                       </div>
+                    
+					</div>
+				</div>
+			</div>
+			<div class="panel-footer">
+				<a id="cancel" class="k-button k-button-icontext" href="#"><i class="far fa-times-circle"></i>&nbsp;<span id="btnCancelText">@ResxHelper.GetValue("Message", "Cancel")</span></a>
+				<a id="save" class="k-button k-button-icontext" href="#"><i class="fas fa-save"></i>&nbsp;<span id="btnSaveText">@ResxHelper.GetValue("Message", "Save")</span></a>
+			</div>
+		</div
+    </div>
+</form>
+
+<script>
+    var form_type = '@ViewData["form_type"]';
+    function ShowHideColumn(form_type)
+    {
+        if(form_type=='Add')
+        {
+            var hiden_column = [];
+            for (i = 0; i < hiden_column.length; i++) {
+                $("#form_item_"+hiden_column[i]).hide();
+            }
+        }
+        else if(form_type=='Edit')
+        {
+            var hiden_column = [];
+            for (i = 0; i < hiden_column.length; i++) {
+                $("#form_item_"+hiden_column[i]).hide();
+            }
+        }
+    }
+    function setReadOnly(form_type,opt)
+    {
+        if(opt==true)
+        {
+            if(form_type=='Add')
+            {
+
+            }
+            else if(form_type=='Edit')
+            {
+
+            }
+        }
+        else
+        {
+            if(form_type=='Add')
+            {
+
+            }
+            else if(form_type=='Edit')
+            {
+
+            }
+        }
+    }
+    $(document).ready(function () {
+        ShowHideColumn(form_type);
+        setReadOnly(form_type, true);
+    });
+    var validatable = $("#form_edit").kendoValidator().data("kendoValidator");
+    $("#save").click(function (e) {
+        if (validatable.validate() === true) {
+            kendo.ui.progress($("#form_edit"), true);
+            $.ajax({
+                url: '@ViewData["UrlAction"]', data: $('#form_edit').serialize(), type: 'POST',
+                success: function (data) {
+                    kendo.ui.progress($("#form_edit"), false);
+                    if (data.status == 1) {
+                        window.parent.notification.show({title: data.title, message: kendo.toString(data.message) }, "success");
+                        if (window.parent.Reload_list_ta_person) {
+                            window.parent.Reload_list_ta_person();
+                        }else if (window.parent.reload_ta_person) {
+                            window.parent.reload_ta_person(data.pk);
+                        }
+                        close_self();
+                    } else if (data.status == 3) {
+                        windows.parent.notification.show({ title: data.title, message: data.message }, "error");
+                        close_self();
+                    } else {
+                        notification.show({ title: data.title, message: data.message }, "error");
+                    }
+                }
+            });
+        } else {
+            kendo.ui.progress($("#form_edit"), false);
+        }
+
+    });
+    $("#cancel").kendoButton();
+    $("#cancel").click(function (e) {
+        close_self();
+    });
+    function close_self() { if (window.parent.$("#dialog_ta_person").data("kendoWindow")) { window.parent.$("#dialog_ta_person").data("kendoWindow").close(); } else { window.parent.$("#dialog").data("kendoWindow").close(); } }
+</script>

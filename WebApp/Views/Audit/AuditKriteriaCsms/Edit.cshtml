@@ -1,0 +1,494 @@
+@using WebApp
+@using Microsoft.AspNetCore.Http;
+@{
+    Layout = "~/Views/Shared/_LayoutNoHeader.cshtml";
+    var fieldModel = ViewData["fieldModel"] as WebApp.Models.AuditKriteriaCsmsModel.ViewModel;
+    ViewData["Title"] = ViewData["TitleHeader"];
+    ViewData["PageName"] = "auditkriteriacsms";
+    ViewData["Heading"] = ViewData["TitleHeader"];
+    ViewData["Category1"] = "";
+    ViewData["Category2"] = "";
+}
+
+<form id="form_edit" method="post" class="panel-form">
+    <div class="panel">
+        <div class="panel-heading">
+            <div class="title-header">@ViewData["TitleHeader"]</div>
+        </div>
+		<div class="panel-container">
+			<div class="panel-content">
+				<div class="row">
+					<div class="col-lg-5">
+                        <div id="form_item_id" class="form-group-none">
+                           <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_csms", "id")<span id="label_req_id" class="required"> *</span></div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_id" class="form-item-field">
+                               <input type="number" id="id" name="id"  min="0" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_csms","id"))" style ="width:200px;" />
+                               <span class="k-invalid-msg" data-for="id"></span>
+                               <input type="hidden" id="id_old" name="id_old" value="@fieldModel.id" />
+                               <script>
+                                   $("#id").kendoNumericTextBox({ format: "{0:N0}", decimals: 0 });
+                                   $(document).ready(function () {$("#id").data('kendoNumericTextBox').value('@fieldModel.id');})
+                               </script>
+                           </div>
+                       </div>
+
+                        <div id="form_item_audit_id" class="form-group-none">
+                           <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_csms", "audit_id")<span id="label_req_audit_id" class="required"> *</span></div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_audit_id" class="form-item-field">
+                               <input type="number" id="audit_id" name="audit_id"  min="0" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_csms","audit_id"))" style ="width:200px;" />
+                               <span class="k-invalid-msg" data-for="audit_id"></span>
+                               <script>
+                                   $("#audit_id").kendoNumericTextBox({ format: "{0:N0}", decimals: 0 });
+                                   $(document).ready(function () {$("#audit_id").data('kendoNumericTextBox').value('@fieldModel.audit_id');})
+                               </script>
+                           </div>
+                       </div>
+
+                        <div id="form_item_kriteria_audit_id" class="form-group-none">
+                           <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_csms", "kriteria_audit_id")<span id="label_req_kriteria_audit_id" class="required"> *</span></div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_kriteria_audit_id" class="form-item-field">
+                               <input type="number" id="kriteria_audit_id" name="kriteria_audit_id"  min="0" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_csms","kriteria_audit_id"))" style ="width:200px;" />
+                               <span class="k-invalid-msg" data-for="kriteria_audit_id"></span>
+                               <script>
+                                   $("#kriteria_audit_id").kendoNumericTextBox({ format: "{0:N0}", decimals: 0 });
+                                   $(document).ready(function () {$("#kriteria_audit_id").data('kendoNumericTextBox').value('@fieldModel.kriteria_audit_id');})
+                               </script>
+                           </div>
+                       </div>
+
+                       <div id="form_item_csms_kategori_id" class="form-group">
+                           <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_csms", "csms_kategori_id")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_csms_kategori_id" class="form-item-field">
+                               <input id="csms_kategori_id" name="csms_kategori_id"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_csms","csms_kategori_id"))" style="width:350px;" />
+                               <span class="k-invalid-msg" data-for="csms_kategori_id"></span>
+                               <script>
+                                   var csms_kategori_id_param = {item : {value:"id",text:"nama"},parent:[{ field: 'cat_id',opr:'=', value: '42' }], order:[]};
+                                   var csms_kategori_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: csms_kategori_id_param, type: "POST" } } });
+                                   var csms_kategori_id = $("#csms_kategori_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: csms_kategori_id_ds, change:onChange_csms_kategori_id }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#csms_kategori_id").data("kendoComboBox").value('@fieldModel.csms_kategori_id'); });
+                                   function onChange_csms_kategori_id() {if ($("#csms_kategori_id").data("kendoComboBox").value() != '' && $("#csms_kategori_id").data("kendoComboBox")._oldIndex == -1) {$("#csms_kategori_id").data("kendoComboBox").value('');}
+                                   }
+                               </script>
+                           </div>
+                       </div>
+
+                       <div id="form_item_csms_tahapan_id" class="form-group">
+                           <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_csms", "csms_tahapan_id")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_csms_tahapan_id" class="form-item-field">
+                               <input id="csms_tahapan_id" name="csms_tahapan_id"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_csms","csms_tahapan_id"))" style="width:350px;" />
+                               <span class="k-invalid-msg" data-for="csms_tahapan_id"></span>
+                               <script>
+                                   var csms_tahapan_id_param = {item : {value:"id",text:"nama"},parent:[{ field: 'cat_id',opr:'=', value: '43' }], order:[]};
+                                   var csms_tahapan_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: csms_tahapan_id_param, type: "POST" } } });
+                                   var csms_tahapan_id = $("#csms_tahapan_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: csms_tahapan_id_ds, change:onChange_csms_tahapan_id }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#csms_tahapan_id").data("kendoComboBox").value('@fieldModel.csms_tahapan_id'); });
+                                   function onChange_csms_tahapan_id() {if ($("#csms_tahapan_id").data("kendoComboBox").value() != '' && $("#csms_tahapan_id").data("kendoComboBox")._oldIndex == -1) {$("#csms_tahapan_id").data("kendoComboBox").value('');}
+                                   }
+                               </script>
+                           </div>
+                       </div>
+
+                       <div id="form_item_nama_vendor" class="form-group">
+                           <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_csms", "nama_vendor")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_nama_vendor" class="form-item-field">
+                               <input type="text" id="nama_vendor" name="nama_vendor" class="k-textbox"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_csms","nama_vendor"))"  maxlength="50" style="width:350px;" value="@Html.Raw(fieldModel.nama_vendor)" title="@ResxHelper.GetValue("ta_audit_kriteria_csms", "nama_vendor") @ResxHelper.GetValue("Message", "IsNotValidCharacter")." pattern="@ConfigHelper.GetValue("AllowInputCharacters")" />
+                               <span class="k-invalid-msg" data-for="nama_vendor"></span>
+                           </div>
+                       </div>
+
+                       <div id="form_item_csms_resiko_id" class="form-group">
+                           <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_csms", "csms_resiko_id")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_csms_resiko_id" class="form-item-field">
+                               <input id="csms_resiko_id" name="csms_resiko_id"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_csms","csms_resiko_id"))" style="width:350px;" />
+                               <span class="k-invalid-msg" data-for="csms_resiko_id"></span>
+                               <script>
+                                   var csms_resiko_id_param = {item : {value:"id",text:"nama"},parent:[{ field: 'cat_id',opr:'=', value: '41' }], order:[]};
+                                   var csms_resiko_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: csms_resiko_id_param, type: "POST" } } });
+                                   var csms_resiko_id = $("#csms_resiko_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: csms_resiko_id_ds, change:onChange_csms_resiko_id }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#csms_resiko_id").data("kendoComboBox").value('@fieldModel.csms_resiko_id'); });
+                                   function onChange_csms_resiko_id() {if ($("#csms_resiko_id").data("kendoComboBox").value() != '' && $("#csms_resiko_id").data("kendoComboBox")._oldIndex == -1) {$("#csms_resiko_id").data("kendoComboBox").value('');}
+                                   }
+                               </script>
+                           </div>
+                       </div>
+
+                        <div><p>&nbsp;</p></div>
+
+
+                        <table class="table" width="80%">
+                            <thead>
+                                <tr>
+                                    <th nowrap scope="col">Title</th>
+                                    <th scope="col">Actual</th>
+                                    <th scope="col">Bobot (%)</th>
+                                    <th scope="col">Pemenuhan</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td scope="row"><b>@ResxHelper.GetValue("ta_audit_kriteria_csms", "green_strategy")</b></td>
+                                    <td>
+                                        <div id="field_item_green_strategy_actual" class="form-item-field">
+                                            <input type="number" id="green_strategy_actual" name="green_strategy_actual" min="0" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_csms","green_strategy_actual"))" style="width:100px;" />
+                                            <span class="k-invalid-msg" data-for="green_strategy_actual"></span>
+                                            <script>
+                                                $("#green_strategy_actual").kendoNumericTextBox({ format: "{0:N2}", decimals: 2 });
+                                                $(document).ready(function () {$("#green_strategy_actual").data('kendoNumericTextBox').value('@fieldModel.green_strategy_actual');})
+                                            </script>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div id="field_item_green_strategy_bobot" class="form-item-field">
+                                            <input type="number" id="green_strategy_bobot" name="green_strategy_bobot" min="0" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_csms","green_strategy_bobot"))" style="width:100px;" />
+                                            <span class="k-invalid-msg" data-for="green_strategy_bobot"></span>
+                                            <script>
+                                                $("#green_strategy_bobot").kendoNumericTextBox({ format: "{0:N2}", decimals: 2 });
+                                                $(document).ready(function () {$("#green_strategy_bobot").data('kendoNumericTextBox').value('@fieldModel.green_strategy_bobot');})
+                                            </script>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div id="field_item_green_strategy_penuh" class="form-item-field">
+                                            <input type="number" id="green_strategy_penuh" name="green_strategy_penuh" min="0" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_csms","green_strategy_penuh"))" style="width:100px;" />
+                                            <span class="k-invalid-msg" data-for="green_strategy_penuh"></span>
+                                            <script>
+                                                $("#green_strategy_penuh").kendoNumericTextBox({ format: "{0:N2}", decimals: 2 });
+                                                $(document).ready(function () {$("#green_strategy_penuh").data('kendoNumericTextBox').value('@fieldModel.green_strategy_penuh');})
+                                            </script>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td scope="row"><b>@ResxHelper.GetValue("ta_audit_kriteria_csms", "green_process")</b></td>
+                                    <td>
+                                        <div id="field_item_green_process_actual" class="form-item-field">
+                                            <input type="number" id="green_process_actual" name="green_process_actual" min="0" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_csms","green_process_actual"))" style="width:100px;" />
+                                            <span class="k-invalid-msg" data-for="green_process_actual"></span>
+                                            <script>
+                                                $("#green_process_actual").kendoNumericTextBox({ format: "{0:N2}", decimals: 2 });
+                                                $(document).ready(function () {$("#green_process_actual").data('kendoNumericTextBox').value('@fieldModel.green_process_actual');})
+                                            </script>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div id="field_item_green_process_bobot" class="form-item-field">
+                                            <input type="number" id="green_process_bobot" name="green_process_bobot" min="0" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_csms","green_process_bobot"))" style="width:100px;" />
+                                            <span class="k-invalid-msg" data-for="green_process_bobot"></span>
+                                            <script>
+                                                $("#green_process_bobot").kendoNumericTextBox({ format: "{0:N2}", decimals: 2 });
+                                                $(document).ready(function () {$("#green_process_bobot").data('kendoNumericTextBox').value('@fieldModel.green_process_bobot');})
+                                            </script>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div id="field_item_green_process_penuh" class="form-item-field">
+                                            <input type="number" id="green_process_penuh" name="green_process_penuh" min="0" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_csms","green_process_penuh"))" style="width:100px;" />
+                                            <span class="k-invalid-msg" data-for="green_process_penuh"></span>
+                                            <script>
+                                                $("#green_process_penuh").kendoNumericTextBox({ format: "{0:N2}", decimals: 2 });
+                                                $(document).ready(function () {$("#green_process_penuh").data('kendoNumericTextBox').value('@fieldModel.green_process_penuh');})
+                                            </script>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td scope="row"><b>@ResxHelper.GetValue("ta_audit_kriteria_csms", "green_product")</b></td>
+                                    <td>
+                                        <div id="field_item_green_product_actual" class="form-item-field">
+                                            <input type="number" id="green_product_actual" name="green_product_actual" min="0" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_csms","green_product_actual"))" style="width:100px;" />
+                                            <span class="k-invalid-msg" data-for="green_product_actual"></span>
+                                            <script>
+                                                $("#green_product_actual").kendoNumericTextBox({ format: "{0:N2}", decimals: 2 });
+                                                $(document).ready(function () {$("#green_product_actual").data('kendoNumericTextBox').value('@fieldModel.green_product_actual');})
+                                            </script>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div id="field_item_green_product_bobot" class="form-item-field">
+                                            <input type="number" id="green_product_bobot" name="green_product_bobot" min="0" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_csms","green_product_bobot"))" style="width:100px;" />
+                                            <span class="k-invalid-msg" data-for="green_product_bobot"></span>
+                                            <script>
+                                                $("#green_product_bobot").kendoNumericTextBox({ format: "{0:N2}", decimals: 2 });
+                                                $(document).ready(function () {$("#green_product_bobot").data('kendoNumericTextBox').value('@fieldModel.green_product_bobot');})
+                                            </script>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div id="field_item_green_product_penuh" class="form-item-field">
+                                            <input type="number" id="green_product_penuh" name="green_product_penuh" min="0" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_csms","green_product_penuh"))" style="width:100px;" />
+                                            <span class="k-invalid-msg" data-for="green_product_penuh"></span>
+                                            <script>
+                                                $("#green_product_penuh").kendoNumericTextBox({ format: "{0:N2}", decimals: 2 });
+                                                $(document).ready(function () {$("#green_product_penuh").data('kendoNumericTextBox').value('@fieldModel.green_product_penuh');})
+                                            </script>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td scope="row"><b>@ResxHelper.GetValue("ta_audit_kriteria_csms", "green_employee")</b></td>
+                                    <td>
+                                        <div id="field_item_green_employee_actual" class="form-item-field">
+                                            <input type="number" id="green_employee_actual" name="green_employee_actual" min="0" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_csms","green_employee_actual"))" style="width:100px;" />
+                                            <span class="k-invalid-msg" data-for="green_employee_actual"></span>
+                                            <script>
+                                                $("#green_employee_actual").kendoNumericTextBox({ format: "{0:N2}", decimals: 2 });
+                                                $(document).ready(function () {$("#green_employee_actual").data('kendoNumericTextBox').value('@fieldModel.green_employee_actual');})
+                                            </script>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div id="field_item_green_employee_bobot" class="form-item-field">
+                                            <input type="number" id="green_employee_bobot" name="green_employee_bobot" min="0" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_csms","green_employee_bobot"))" style="width:100px;" />
+                                            <span class="k-invalid-msg" data-for="green_employee_bobot"></span>
+                                            <script>
+                                                $("#green_employee_bobot").kendoNumericTextBox({ format: "{0:N2}", decimals: 2 });
+                                                $(document).ready(function () {$("#green_employee_bobot").data('kendoNumericTextBox').value('@fieldModel.green_employee_bobot');})
+                                            </script>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div id="field_item_green_employee_penuh" class="form-item-field">
+                                            <input type="number" id="green_employee_penuh" name="green_employee_penuh" min="0" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_csms","green_employee_penuh"))" style="width:100px;" />
+                                            <span class="k-invalid-msg" data-for="green_employee_penuh"></span>
+                                            <script>
+                                                $("#green_employee_penuh").kendoNumericTextBox({ format: "{0:N2}", decimals: 2 });
+                                            $(document).ready(function () {$("#green_employee_penuh").data('kendoNumericTextBox').value('@fieldModel.green_employee_penuh');})
+                                            </script>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td scope="row"><b>@ResxHelper.GetValue("ta_audit_kriteria_csms", "legal")</b></td>
+                                    <td>
+                                        <div id="field_item_legal_actual" class="form-item-field">
+                                            <input type="number" id="legal_actual" name="legal_actual" min="0" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_csms","legal_actual"))" style="width:100px;" />
+                                            <span class="k-invalid-msg" data-for="legal_actual"></span>
+                                            <script>
+                                                $("#legal_actual").kendoNumericTextBox({ format: "{0:N2}", decimals: 2 });
+                                                $(document).ready(function () {$("#legal_actual").data('kendoNumericTextBox').value('@fieldModel.legal_actual');})
+                                            </script>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div id="field_item_legal_bobot" class="form-item-field">
+                                            <input type="number" id="legal_bobot" name="legal_bobot" min="0" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_csms","legal_bobot"))" style="width:100px;" />
+                                            <span class="k-invalid-msg" data-for="legal_bobot"></span>
+                                            <script>
+                                                $("#legal_bobot").kendoNumericTextBox({ format: "{0:N2}", decimals: 2 });
+                                                $(document).ready(function () {$("#legal_bobot").data('kendoNumericTextBox').value('@fieldModel.legal_bobot');})
+                                            </script>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div id="field_item_legal_penuh" class="form-item-field">
+                                            <input type="number" id="legal_penuh" name="legal_penuh" min="0" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_csms","legal_penuh"))" style="width:100px;" />
+                                            <span class="k-invalid-msg" data-for="legal_penuh"></span>
+                                            <script>
+                                                $("#legal_penuh").kendoNumericTextBox({ format: "{0:N2}", decimals: 2 });
+                                                $(document).ready(function () {$("#legal_penuh").data('kendoNumericTextBox').value('@fieldModel.legal_penuh');})
+                                            </script>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div><p>&nbsp;</p></div>
+
+
+                        <div id="form_item_presentasi_pencapaian" class="form-group">
+                           <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_csms", "presentasi_pencapaian")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_presentasi_pencapaian" class="form-item-field">
+                               <input type="number" id="presentasi_pencapaian" name="presentasi_pencapaian"  min="0"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_csms","presentasi_pencapaian"))" style ="width:200px;" />
+                               <span class="k-invalid-msg" data-for="presentasi_pencapaian"></span>
+                               <script>
+                                   $("#presentasi_pencapaian").kendoNumericTextBox({ format: "{0:N2}", decimals: 2 });
+                                   $(document).ready(function () {$("#presentasi_pencapaian").data('kendoNumericTextBox').value('@fieldModel.presentasi_pencapaian');})
+                               </script>
+                           </div>
+                       </div>
+
+                       <div id="form_item_nilai_bendera_id" class="form-group">
+                           <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_csms", "nilai_bendera_id")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_nilai_bendera_id" class="form-item-field">
+                               <input id="nilai_bendera_id" name="nilai_bendera_id"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_csms","nilai_bendera_id"))" style="width:350px;" />
+                               <span class="k-invalid-msg" data-for="nilai_bendera_id"></span>
+                               <script>
+                                   var nilai_bendera_id_param = {item : {value:"id",text:"nama"},parent:[{ field: 'cat_id',opr:'=', value: '165' }], order:[]};
+                                   var nilai_bendera_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: nilai_bendera_id_param, type: "POST" } } });
+                                   var nilai_bendera_id = $("#nilai_bendera_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: nilai_bendera_id_ds, change:onChange_nilai_bendera_id }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#nilai_bendera_id").data("kendoComboBox").value('@fieldModel.nilai_bendera_id'); });
+                                   function onChange_nilai_bendera_id() {if ($("#nilai_bendera_id").data("kendoComboBox").value() != '' && $("#nilai_bendera_id").data("kendoComboBox")._oldIndex == -1) {$("#nilai_bendera_id").data("kendoComboBox").value('');}
+                                   }
+                               </script>
+                           </div>
+                       </div>
+
+                    <div id="form_item_lampiran_file_path" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_csms", "lampiran_file_path")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_lampiran_file_path" class="form-item-field">
+                            <input name="lampiran_file_path_file" id="lampiran_file_path_file" type="file" />
+                            <input name="lampiran_file_path" id="lampiran_file_path" type="hidden" value="@fieldModel.lampiran_file_path" data-required-msg="@ResxHelper.GetValue("Message", "RequiredTextFormat").Replace("{0}", @ResxHelper.GetValue("ta_audit_kriteria_csms", "lampiran_file_path"))" />
+                            <script>
+                                var lampiran_file_path_init = @Html.Raw(fieldModel.lampiran_file_path_init);
+                                $("#lampiran_file_path_file").kendoUpload({multiple:true,
+                                    async: {
+                                        saveUrl: "@ViewBag.BaseUrl/AuditKriteriaCsms/save_lampiran_file_path",
+                                        removeUrl: "@ViewBag.BaseUrl/AuditKriteriaCsms/remove_lampiran_file_path",
+                                        autoUpload: true
+                                    },
+                                    validation: {allowedExtensions: [".jpg", ".jpeg", ".png", ".pdf", ".xls", ".xlsx"], maxFileSize: 2097152},
+                                    files: lampiran_file_path_init,
+                                    success: onSuccessUpload,
+                                    select: OnselectUpload_lampiran_file_path
+                                });
+                                function OnselectUpload_lampiran_file_path(e) {OnselectUpload(e, 2);}
+                            </script>
+                            <span class="k-label k-text-info">Allowed Extensions: ".jpg", ".jpeg", ".png", ".pdf", ".xls", ".xlsx"</span>
+                            <br /><span class="k-label k-text-info">Maximum FileSize: @String.Format("{0:N0}", (2097152 / 1024)) KB</span>
+                        </div>
+                    </div>
+                    
+					</div>
+				</div>
+			</div>
+			<div class="panel-footer">
+				<a id="cancel" class="k-button k-button-icontext" href="#"><i class="far fa-times-circle"></i>&nbsp;<span id="btnCancelText">@ResxHelper.GetValue("Message", "Cancel")</span></a>
+				<a id="save" class="k-button k-button-icontext" href="#"><i class="fas fa-save"></i>&nbsp;<span id="btnSaveText">@ResxHelper.GetValue("Message", "Save")</span></a>
+			</div>
+		</div>
+    </div>
+</form>
+
+<script>
+    var form_type = '@ViewData["form_type"]';
+    function ShowHideColumn(form_type)
+    {
+        if(form_type=='Add')
+        {
+            var hiden_column = [];
+            for (i = 0; i < hiden_column.length; i++) {
+                $("#form_item_"+hiden_column[i]).hide();
+            }
+        }
+        else if(form_type=='Edit')
+        {
+            var hiden_column = [];
+            for (i = 0; i < hiden_column.length; i++) {
+                $("#form_item_"+hiden_column[i]).hide();
+            }
+        }
+    }
+    function setReadOnly(form_type,opt)
+    {
+        if(opt==true)
+        {
+            if(form_type=='Add')
+            {
+
+            }
+            else if(form_type=='Edit')
+            {
+
+            }
+        }
+        else
+        {
+            if(form_type=='Add')
+            {
+
+            }
+            else if(form_type=='Edit')
+            {
+
+            }
+        }
+
+        $("#green_strategy_bobot").data("kendoNumericTextBox").enable(!opt);
+        $("#green_process_bobot").data("kendoNumericTextBox").enable(!opt);
+        $("#green_product_bobot").data("kendoNumericTextBox").enable(!opt);
+        $("#green_employee_bobot").data("kendoNumericTextBox").enable(!opt);
+        $("#legal_bobot").data("kendoNumericTextBox").enable(!opt);
+
+        $("#green_strategy_penuh").data("kendoNumericTextBox").enable(!opt);
+        $("#green_process_penuh").data("kendoNumericTextBox").enable(!opt);
+        $("#green_product_penuh").data("kendoNumericTextBox").enable(!opt);
+        $("#green_employee_penuh").data("kendoNumericTextBox").enable(!opt);
+        $("#legal_penuh").data("kendoNumericTextBox").enable(!opt);
+
+        if ('@fieldModel.green_strategy_penuh' == '') { $("#green_strategy_penuh").data('kendoNumericTextBox').value('0'); }
+        if ('@fieldModel.green_process_penuh' == '') { $("#green_process_penuh").data('kendoNumericTextBox').value('0'); }
+        if ('@fieldModel.green_product_penuh' == '') { $("#green_product_penuh").data('kendoNumericTextBox').value('0'); }
+        if ('@fieldModel.green_employee_penuh' == '') { $("#green_employee_penuh").data('kendoNumericTextBox').value('0'); }
+        if ('@fieldModel.legal_penuh' == '') { $("#legal_penuh").data('kendoNumericTextBox').value('0'); }
+    }
+    function display_by_type() {
+        $("#green_strategy_bobot").data("kendoNumericTextBox").enable(false);
+        $("#green_process_bobot").data("kendoNumericTextBox").enable(false);
+        $("#green_product_bobot").data("kendoNumericTextBox").enable(false);
+        $("#green_employee_bobot").data("kendoNumericTextBox").enable(false);
+        $("#legal_bobot").data("kendoNumericTextBox").enable(false);
+
+        $("#green_strategy_penuh").data("kendoNumericTextBox").enable(false);
+        $("#green_process_penuh").data("kendoNumericTextBox").enable(false);
+        $("#green_product_penuh").data("kendoNumericTextBox").enable(false);
+        $("#green_employee_penuh").data("kendoNumericTextBox").enable(false);
+        $("#legal_penuh").data("kendoNumericTextBox").enable(false);
+
+        $("#presentasi_pencapaian").data("kendoNumericTextBox").enable(false);
+        $("#nilai_bendera_id").data("kendoComboBox").enable(false);
+    }
+    $(document).ready(function () {
+        ShowHideColumn(form_type);
+        setReadOnly(form_type, true);
+        display_by_type();
+    });
+    var validatable = $("#form_edit").kendoValidator().data("kendoValidator");
+    $("#save").click(function (e) {
+        getListFileUpload("lampiran_file_path");
+		setReadOnly(form_type, false);
+        if (validatable.validate() === true) {
+            kendo.ui.progress($("#form_edit"), true);
+            $.ajax({
+                url: '@ViewData["UrlAction"]', data: $('#form_edit').serialize(), type: 'POST',
+                success: function (data) {
+                    kendo.ui.progress($("#form_edit"), false);
+                    if (data.status == 1) {
+                        window.parent.notification.show({title: data.title, message: kendo.toString(data.message) }, "success");
+                        if (window.parent.Reload_list_ta_audit_kriteria_csms) {
+                            window.parent.Reload_list_ta_audit_kriteria_csms();
+                        }else if (window.parent.reload_ta_audit_kriteria_csms) {
+                            window.parent.reload_ta_audit_kriteria_csms(data.pk);
+                        }
+                        close_self();
+                    } else if (data.status == 3) {
+                        windows.parent.notification.show({ title: data.title, message: data.message }, "error");
+                        setReadOnly(form_type, true);
+						close_self();
+                    } else {
+						setReadOnly(form_type, true);
+                        notification.show({ title: data.title, message: data.message }, "error");
+                    }
+                }
+            });
+        } else {
+            kendo.ui.progress($("#form_edit"), false);
+        }
+		setReadOnly(form_type, true);
+    });
+    $("#cancel").kendoButton();
+    $("#cancel").click(function (e) {
+        close_self();
+    });
+    function close_self() { if (window.parent.$("#dialog_ta_audit_kriteria_csms").data("kendoWindow")) { window.parent.$("#dialog_ta_audit_kriteria_csms").data("kendoWindow").close(); } else { window.parent.$("#dialog").data("kendoWindow").close(); } }
+</script>

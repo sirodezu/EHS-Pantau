@@ -1,0 +1,232 @@
+@using WebApp
+@using Microsoft.AspNetCore.Http;
+@{
+    Layout = "~/Views/Shared/_LayoutNoHeader.cshtml";
+    var fieldModel = ViewData["fieldModel"] as WebApp.Areas.Ref.Models.ProsesModel.ViewModel;
+    var baseUrl = ViewData["baseUrl"];
+}
+
+<form id="form_edit" method="post">
+    <div class="card">
+        <div class="card-header">
+            <div class="title-header">@ViewData["TitleHeader"]</div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12">
+                    <div id="form_item_id" class="form-item-none">
+                        <div class="form-item-label">@ResxHelper.GetValue("ref_proses", "id")<span id="label_req_id" class="required"> *</span></div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_id" class="form-item-field">
+                            <input type="number" id="id" name="id" min="0"  required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ref_proses","id"))" style="width:200px;" />
+                            <span class="k-invalid-msg" data-for="id"></span>
+                            <input type="hidden" id="id_old" name="id_old" value="@fieldModel.id" />
+                            <script>
+                                $("#id").kendoNumericTextBox({ format: "{0:N0}", decimals: 0 });
+                                $(document).ready(function () {$("#id").data('kendoNumericTextBox').value('@fieldModel.id');})
+                            </script>
+                        </div>
+                    </div>
+
+                    <div id="form_item_kode" class="form-item">
+                        <div class="form-item-label">@ResxHelper.GetValue("ref_proses", "kode")<span id="label_req_kode" class="required"> *</span></div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_kode" class="form-item-field">
+                            <input type="text" title="@ResxHelper.GetValue("ref_proses", "kode") @ResxHelper.GetValue("Message", "IsNotValidCharacter","is not valid character input")." pattern="@ConfigHelper.GetValue("AllowInputCharacters")" id="kode" name="kode" class="k-textbox" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ref_proses","kode"))" maxlength="50" style="width:350px;" value="@Html.Raw(fieldModel.kode)" />
+                            <span class="k-invalid-msg" data-for="kode"></span>
+                        </div>
+                    </div>
+
+                    <div id="form_item_nama" class="form-item">
+                        <div class="form-item-label">@ResxHelper.GetValue("ref_proses", "nama")<span id="label_req_nama" class="required"> *</span></div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_nama" class="form-item-field">
+                            <input type="text" title="@ResxHelper.GetValue("ref_proses", "nama") @ResxHelper.GetValue("Message", "IsNotValidCharacter","is not valid character input")." pattern="@ConfigHelper.GetValue("AllowInputCharacters")" id="nama" name="nama" class="k-textbox" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ref_proses","nama"))" maxlength="50" style="width:350px;" value="@Html.Raw(fieldModel.nama)" />
+                            <span class="k-invalid-msg" data-for="nama"></span>
+                        </div>
+                    </div>
+                    <div id="form_item_start_month" class="form-item">
+                        <div class="form-item-label">@ResxHelper.GetValue("ref_proses", "start", "Mulai")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_start_month" class="form-item-field">
+                            <input id="start_year" name="start_year" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ref_proses","start_year"))" style="width:150px;" />
+                            <span class="k-invalid-msg" data-for="start_year"></span>
+                            <input id="start_month" name="start_month" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ref_proses","start_month"))" style="width:150px;" />
+                            <span class="k-invalid-msg" data-for="start_month"></span>
+                            <input type="number" id="start_date" name="start_date" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ref_proses","start_date"))" style="width:80px;" />
+                            <span class="k-invalid-msg" data-for="start_date"></span>
+                            <script>
+                                var start_month_param = {item : {value:"id",text:"nama"},parent:[], order:[{ field: 'id', dir: 'asc' }]};
+                                var start_month_ds = new kendo.data.DataSource({ transport: { read: { url: "@baseUrl/Sys/Months/LookupData", dataType: "json", data: start_month_param, type: "POST" } } });
+                                var start_month = $("#start_month").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: start_month_ds, change:onChange_start_month }).data("kendoComboBox");
+                                $(document).ready(function () { $("#start_month").data("kendoComboBox").value('@fieldModel.start_month'); });
+                                function onChange_start_month() {
+                                    if ($("#start_month").data("kendoComboBox").value() != '' && $("#start_month").data("kendoComboBox")._oldIndex == -1) { $("#start_month").data("kendoComboBox").value(''); }
+                                    reload_start_date();
+                                }
+                                var start_date_param = { item: { value: "id", text: "nama" }, parent: [{field:'bulan',value:'@fieldModel.start_month'}], order:[]};
+                                var start_date_ds = new kendo.data.DataSource({ transport: { read: { url: "@baseUrl/Sys/Months/LookupDate", dataType: "json", data: start_date_param, type: "POST" } } });
+                                var start_date = $("#start_date").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: start_date_ds, change:onChange_start_date }).data("kendoComboBox");
+                                $(document).ready(function () { $("#start_date").data("kendoComboBox").value('@fieldModel.start_date'); });
+                                function onChange_start_date() {
+                                    if ($("#start_date").data("kendoComboBox").value() != '' && $("#start_date").data("kendoComboBox")._oldIndex == -1) { $("#start_date").data("kendoComboBox").value(''); }
+                                }
+                                function reload_start_date(){
+                                    $("#start_date").data("kendoComboBox").value('');
+                                    var start_month = $("#start_month").data("kendoComboBox").value();
+                                    var start_date_param = { item: { value: 'id', text: 'nama' }, parent: [{ field: 'bulan',opr:'=', value: start_month }], order: [] };
+                                    $("#start_date").data("kendoComboBox").dataSource.read(start_date_param);
+                                }
+                                var start_year_ds = [{value:"-1", text:"XXXX - 1"},{value:"0", text:"XXXX"}];
+                                var start_year = $("#start_year").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: start_year_ds, change:onChange_start_year }).data("kendoComboBox");
+                                $(document).ready(function () { $("#start_year").data("kendoComboBox").value('@fieldModel.start_year'); });
+                                function onChange_start_year() {
+                                    if ($("#start_year").data("kendoComboBox").value() != '' && $("#start_year").data("kendoComboBox")._oldIndex == -1) { $("#start_year").data("kendoComboBox").value(''); }
+                                }
+                            </script>
+                        </div>
+                    </div>
+
+                    <div id="form_item_end_month" class="form-item">
+                        <div class="form-item-label">@ResxHelper.GetValue("ref_proses", "end", "Sampai")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_end_month" class="form-item-field">
+                            <input id="end_year" name="end_year" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ref_proses","end_year"))" style="width:150px;" />
+                            <span class="k-invalid-msg" data-for="end_year"></span>
+                            <input id="end_month" name="end_month" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ref_proses","end_month"))" style="width:150px;" />
+                            <span class="k-invalid-msg" data-for="end_month"></span>
+                            <input type="number" id="end_date" name="end_date" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ref_proses","end_date"))" style="width:80px;" />
+                            <span class="k-invalid-msg" data-for="end_date"></span>
+                            <script>
+                                var end_month_param = {item : {value:"id",text:"nama"},parent:[], order:[{ field: 'id', dir: 'asc' }]};
+                                var end_month_ds = new kendo.data.DataSource({ transport: { read: { url: "@baseUrl/Sys/Months/LookupData", dataType: "json", data: end_month_param, type: "POST" } } });
+                                var end_month = $("#end_month").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: end_month_ds, change:onChange_end_month }).data("kendoComboBox");
+                                $(document).ready(function () { $("#end_month").data("kendoComboBox").value('@fieldModel.end_month'); });
+                                function onChange_end_month() {
+                                    if ($("#end_month").data("kendoComboBox").value() != '' && $("#end_month").data("kendoComboBox")._oldIndex == -1) { $("#end_month").data("kendoComboBox").value(''); }
+                                    reload_end_date();
+                                }
+                                var end_date_param = { item: { value: "id", text: "nama" }, parent: [{field:'bulan',value:'@fieldModel.end_month'}], order:[]};
+                                var end_date_ds = new kendo.data.DataSource({ transport: { read: { url: "@baseUrl/Sys/Months/LookupDate", dataType: "json", data: end_date_param, type: "POST" } } });
+                                var end_date = $("#end_date").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: end_date_ds, change:onChange_end_date }).data("kendoComboBox");
+                                $(document).ready(function () { $("#end_date").data("kendoComboBox").value('@fieldModel.end_date'); });
+                                function onChange_end_date() {
+                                    if ($("#end_date").data("kendoComboBox").value() != '' && $("#end_date").data("kendoComboBox")._oldIndex == -1) { $("#end_date").data("kendoComboBox").value(''); }
+                                }
+                                function reload_end_date(){
+                                    $("#end_date").data("kendoComboBox").value('');
+                                    var end_month = $("#end_month").data("kendoComboBox").value();
+                                    var end_date_param = { item: { value: 'id', text: 'nama' }, parent: [{ field: 'bulan',opr:'=', value: end_month }], order: [] };
+                                    $("#end_date").data("kendoComboBox").dataSource.read(end_date_param);
+                                }
+                                var end_year_ds = [{value:"-1", text:"XXXX - 1"},{value:"0", text:"XXXX"}];
+                                var end_year = $("#end_year").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: end_year_ds, change:onChange_end_year }).data("kendoComboBox");
+                                $(document).ready(function () { $("#end_year").data("kendoComboBox").value('@fieldModel.end_year'); });
+                                function onChange_end_year() {
+                                    if ($("#end_year").data("kendoComboBox").value() != '' && $("#end_year").data("kendoComboBox")._oldIndex == -1) { $("#end_year").data("kendoComboBox").value(''); }
+                                }
+                            </script>
+                        </div>
+                    </div>
+
+                    <div id="form_item_keterangan" class="form-item">
+                        <div class="form-item-label">@ResxHelper.GetValue("ref_proses", "keterangan")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_keterangan" class="form-item-field">
+                            <textarea type="text" title="@ResxHelper.GetValue("ref_proses", "keterangan") @ResxHelper.GetValue("Message", "IsNotValidCharacter","is not valid character input")." pattern="@ConfigHelper.GetValue("AllowInputCharacters")" id="keterangan" name="keterangan" class="k-textbox" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ref_proses","keterangan"))" maxlength="500" style="width:350px;">@Html.Raw(fieldModel.keterangan)</textarea>
+                            <span class="k-invalid-msg" data-for="keterangan"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer" style="text-align:center">
+            <a id="cancel" class="k-button k-button-icontext" href="#"><i class="far fa-times-circle"></i>&nbsp;<span id="btnCancelText">@ResxHelper.GetValue("Message", "Cancel")</span></a>
+            <a id="save" class="k-button k-button-icontext" href="#"><i class="fas fa-save"></i>&nbsp;<span id="btnSaveText">@ResxHelper.GetValue("Message", "Save")</span></a>
+        </div>
+    </div>
+</form>
+
+<script>
+    var form_type = '@ViewData["form_type"]';
+    function ShowHideColumn(form_type)
+    {
+        if(form_type=='Add')
+        {
+            var hiden_column = [];
+            for (i = 0; i < hiden_column.length; i++) {
+                $("#form_item_"+hiden_column[i]).hide();
+            }
+        }
+        else if(form_type=='Edit')
+        {
+            var hiden_column = [];
+            for (i = 0; i < hiden_column.length; i++) {
+                $("#form_item_"+hiden_column[i]).hide();
+            }
+        }
+    }
+    function setReadOnly(form_type,opt)
+    {
+        if(opt==true)
+        {
+            if(form_type=='Add')
+            {
+
+            }
+            else if(form_type=='Edit')
+            {
+
+            }
+        }
+        else
+        {
+            if(form_type=='Add')
+            {
+
+            }
+            else if(form_type=='Edit')
+            {
+
+            }
+        }
+    }
+    $(document).ready(function () {
+        ShowHideColumn(form_type);
+        setReadOnly(form_type, true);
+    });
+    var validatable = $("#form_edit").kendoValidator().data("kendoValidator");
+    $("#save").click(function (e) {
+        if (validatable.validate() === true) {
+            kendo.ui.progress($("#form_edit"), true);
+            $.ajax({
+                url: '@ViewData["UrlAction"]', data: $('#form_edit').serialize(), type: 'POST',
+                success: function (data) {
+                    kendo.ui.progress($("#form_edit"), false);
+                    if (data.status == 1) {
+                        window.parent.notification.show({title: data.title, message: kendo.toString(data.message) }, "success");
+                        if (window.parent.Reload_list_ref_proses) {
+                            window.parent.Reload_list_ref_proses();
+                        }else if (window.parent.reload_ref_proses) {
+                            window.parent.reload_ref_proses(data.pk);
+                        }
+                        close_self();
+                    } else if (data.status == 3) {
+                        windows.parent.notification.show({ title: data.title, message: data.message }, "error");
+                        close_self();
+                    } else {
+                        notification.show({ title: data.title, message: data.message }, "error");
+                    }
+                }
+            });
+        } else {
+            kendo.ui.progress($("#form_edit"), false);
+        }
+
+    });
+    $("#cancel").kendoButton();
+    $("#cancel").click(function (e) {
+        close_self();
+    });
+    function close_self() { if (window.parent.$("#dialog_ref_proses").data("kendoWindow")) { window.parent.$("#dialog_ref_proses").data("kendoWindow").close(); } else { window.parent.$("#dialog").data("kendoWindow").close(); } }
+</script>

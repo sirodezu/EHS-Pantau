@@ -1,0 +1,354 @@
+@using WebApp
+@using Microsoft.AspNetCore.Http;
+@{
+    Layout = "~/Views/Shared/_LayoutNoHeader.cshtml";
+    var fieldModel = ViewData["fieldModel"] as WebApp.Areas.Ref.Models.PersonalSubAreaHeadModel.ViewModel;
+    ViewData["Title"] = ViewData["TitleHeader"];
+    ViewData["PageName"] = "personalsubareahead";
+    ViewData["Heading"] = ViewData["TitleHeader"];
+    ViewData["Category1"] = "";
+    ViewData["Category2"] = "";
+}
+
+<form id="form_edit" method="post" class="panel-form">
+    <div class="panel">
+        <div class="panel-heading">
+            <div class="title-header">@ViewData["TitleHeader"]</div>
+        </div>
+		<div class="panel-container">
+			<div class="panel-content">
+				<div class="row">
+                    <div class="col-lg-12">
+                        <div id="form_item_id" class="form-group-none">
+                            <div class="form-item-label">@ResxHelper.GetValue("ref_personal_sub_area_head", "id")<span id="label_req_id" class="required"> *</span></div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_id" class="form-item-field">
+                                <input type="number" id="id" name="id"  min="0" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ref_personal_sub_area_head","id"))" style="width:200px;" />
+                                <span class="k-invalid-msg" data-for="id"></span>
+                                <input type="hidden" id="id_old" name="id_old" value="@fieldModel.id" />
+                                <script>
+                                   $("#id").kendoNumericTextBox({ format: "{0:N0}", decimals: 0 });
+                                   $(document).ready(function () {$("#id").data('kendoNumericTextBox').value('@fieldModel.id');})
+                                </script>
+                            </div>
+                        </div>
+
+                        <div id="form_item_psa_id" class="form-group">
+                            <div class="form-item-label">@ResxHelper.GetValue("ref_personal_sub_area_head", "psa_id")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_psa_id" class="form-item-field">
+                                @fieldModel.psa_id_text
+                                <input type="hidden" id="psa_id" name="psa_id" value="@fieldModel.psa_id" />
+                                <span class="k-invalid-msg" data-for="psa_id"></span>
+                            </div>
+                        </div>
+
+                        <div id="form_item_head_type_id" class="form-group-none">
+                            <div class="form-item-label">@ResxHelper.GetValue("ref_personal_sub_area_head", "head_type_id")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_head_type_id" class="form-item-field">
+                                <input id="head_type_id" name="head_type_id" value="@fieldModel.head_type_id" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ref_personal_sub_area_head","head_type_id"))" style="width:200px;" />
+                                <span class="k-invalid-msg" data-for="head_type_id"></span>
+                            </div>
+                        </div>
+
+                        @*<div id="form_item_head_id" class="form-group">
+            <div class="form-item-label">@ResxHelper.GetValue("ref_personal_sub_area_head", "head_id")<span id="label_req_head_id" class="required"> *</span></div>
+            <div class="form-item-separator">:</div>
+            <div id="field_item_head_id" class="form-item-field">
+                <input id="head_id" name="head_id" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ref_personal_sub_area_head","head_id"))" style="width:350px;" />
+                <span class="k-invalid-msg" data-for="head_id"></span>
+                <script>
+                    var head_id_param = {item : {value:"id",text:"nrp,nama_lengkap", attribute: ['nrp', 'nama_lengkap']},parent:[{ field: 'karyawan_nonkaryawan_id',opr:'=', value: '@fieldModel.head_type_id' },{ field: 'nrp',opr:'is not null'}], order:[]};
+                    var head_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/ManPower/LookupData", dataType: "json", data: head_id_param, type: "POST" } } });
+                    var head_id = $("#head_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: head_id_ds, change:onChange_head_id }).data("kendoComboBox");
+                    $(document).ready(function () { $("#head_id").data("kendoComboBox").value('@fieldModel.head_id'); });
+                    function onChange_head_id() {
+                        if ($("#head_id").data("kendoComboBox").value() != '' && $("#head_id").data("kendoComboBox")._oldIndex == -1) { $("#head_id").data("kendoComboBox").value(''); }
+                        var dataItem = $("#head_id").data("kendoComboBox").dataItem();
+                        var nrp = '';
+                        var nama_lengkap = '';
+                        if (dataItem != null && dataItem != undefined) {
+                             nrp = dataItem.nrp != null && dataItem.nrp != undefined ? dataItem.nrp : '';
+                             nama_lengkap = dataItem.nama_lengkap != null && dataItem.nama_lengkap != undefined ? dataItem.nama_lengkap : '';
+                             $("#head_nrp").val(nrp);
+                             $("#head_nama").val(nama_lengkap);
+                        }
+                        $("#head_nrp").val(nrp);
+                        $("#head_nama").val(nama_lengkap);
+                    }
+                   function reload_head_id(){
+                       $("#head_id").data("kendoComboBox").value('');
+                       var head_type_id = $("#head_type_id").data("kendoComboBox").value();
+                       var head_id_param = { item: { value: 'id', text: 'nrp,nama_lengkap', attribute: ['nrp', 'nama_lengkap'] }, parent: [{ field: 'karyawan_nonkaryawan_id',opr:'=', value: head_type_id },{ field: 'nrp',opr:'is not null'}], order: [] };
+                       $("#head_id").data("kendoComboBox").dataSource.read(head_id_param);
+
+                        var dataItem = $("#head_id").data("kendoComboBox").dataItem();
+                        var nrp = '';
+                        var nama_lengkap = '';
+                        if (dataItem != null && dataItem != undefined) {
+                             nrp = dataItem.nrp != null && dataItem.nrp != undefined ? dataItem.nrp : '';
+                             nama_lengkap = dataItem.nama_lengkap != null && dataItem.nama_lengkap != undefined ? dataItem.nama_lengkap : '';
+                             $("#head_nrp").val(nrp);
+                             $("#head_nama").val(nama_lengkap);
+                        }
+                        $("#head_nrp").val(nrp);
+                        $("#head_nama").val(nama_lengkap);
+                   }
+                </script>
+            </div>
+        </div>*@
+                        <div id="form_item_head_id" class="form-group">
+                            <div class="form-item-label">@ResxHelper.GetValue("ref_personal_sub_area_head", "head_id")<span id="label_req_head_id" class="required"> *</span></div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_head_id" class="form-item-field">
+                                <input type="text" readonly id="head_id_text" name="head_id_text" class="k-textbox" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ref_personal_sub_area_head","head_id"))" value="@fieldModel.head_id_text" style="width:350px;" />
+                                <input type="hidden" id="head_id" name="head_id" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ref_personal_sub_area_head","head_id"))" value="@fieldModel.head_id" />
+                                <a id="hapus_mp" class="k-button" href="#"><img src="@ViewBag.BaseUrl/img/delete16.png" title="Hapus @ResxHelper.GetValue("ref_personal_sub_area_head", "head_id")" width="16"></a>
+                                <a id="pilih_mp" class="k-button" href="#"><img src="@ViewBag.BaseUrl/img/search.png" title="Pilih @ResxHelper.GetValue("ref_personal_sub_area_head", "head_id")" width="16"></a>
+                                <span class="k-invalid-msg" data-for="head_id"></span>
+                                <script>
+                                    $("#pilih_mp").click(function(e) {
+                                        var contentUrl='@ViewBag.BaseUrl/ManPower/LookupList?fn=get_mp';
+                                        var form_edit = $("#dialog").kendoWindow({iframe: true,content: {url:contentUrl},actions: [ "Minimize", "Maximize", "Close" ],close: onCloseDialog});form_edit.data("kendoWindow").setOptions({title: "",modal: true,resizable: true,width: 700,height: 500,minHeight: 300,});form_edit.data("kendoWindow").center().open().maximize();
+                                    });
+                                    $("#hapus_mp").click(function(e) {
+                                        $("#head_id_text").val("");
+                                        $("#head_type_id").val("");
+                                        $("#head_id").val("");
+                                        $("#head_nama").val("");
+                                        $("#head_nrp").val("");
+                                        $("#hapus_person").hide();
+                                    });
+                                    function get_mp(id) {
+                                        if (id != "") {
+                                            var param_data = {id:id};
+                                            $.ajax({
+                                                url: '@ViewBag.BaseUrl/ManPower/GetData',data: param_data,type: 'POST',
+                                                success: function (data) { 
+                                                    if (data != null && data != undefined) {
+                                                        var dr = data[0];
+                                                        var id = dr.id!=null ? dr.id:'';
+                                                        var nama_lengkap = dr.nama_lengkap!=null ? dr.nama_lengkap:'';
+                                                        var nrp = dr.nrp!=null ? dr.nrp:'';
+                                                        var karyawan_nonkaryawan_id = dr.karyawan_nonkaryawan_id!=null ? dr.karyawan_nonkaryawan_id:'';
+                                                        //
+                                                        $("#head_id_text").val(nrp+" - "+nama_lengkap);
+                                                        $("#head_type_id").val(karyawan_nonkaryawan_id);
+                                                        $("#head_id").val(id);
+                                                        $("#head_nama").val(nama_lengkap);
+                                                        $("#head_nrp").val(nrp);
+                                                        $("#hapus_mp").show();
+                                                    }else {
+                                                        $("#head_id_text").val("");
+                                                        $("#head_type_id").val("");
+                                                        $("#head_id").val("");
+                                                        $("#head_nama").val("");
+                                                        $("#head_nrp").val("");
+                                                        $("#hapus_mp").hide();
+                                                    }
+                                                    
+                                                }
+                                            });
+                    
+                                        } else {
+                                            $("#head_id_text").val("");
+                                            $("#head_type_id").val("");
+                                            $("#head_id").val("");
+                                            $("#head_nama").val("");
+                                            $("#head_nrp").val("");
+                                            $("#hapus_mp").hide();
+                                        }
+                                    }
+                                    $(document).ready(function () {
+                                        if ($("#head_id").val() != "") {
+                                            $("#hapus_mp").show();
+                                        } else {
+                                            $("#hapus_mp").hide();
+                                        }
+                                    });
+                                </script>
+                            </div>
+                        </div>
+                        <div id="form_item_head_nrp" class="form-group-none">
+                            <div class="form-item-label">@ResxHelper.GetValue("ref_personal_sub_area_head", "head_nrp")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_head_nrp" class="form-item-field">
+                                <input type="text" id="head_nrp" name="head_nrp" class="k-textbox" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ref_personal_sub_area_head","head_nrp"))" maxlength="20" style="width:200px;" value="@Html.Raw(fieldModel.head_nrp)" title="@ResxHelper.GetValue("ref_personal_sub_area_head", "head_nrp") @ResxHelper.GetValue("Message", "IsNotValidCharacter")." pattern="@ConfigHelper.GetValue("AllowInputCharacters")" />
+                                <span class="k-invalid-msg" data-for="head_nrp"></span>
+                            </div>
+                        </div>
+
+                        <div id="form_item_head_nama" class="form-group-none">
+                            <div class="form-item-label">@ResxHelper.GetValue("ref_personal_sub_area_head", "head_nama")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_head_nama" class="form-item-field">
+                                <input type="text" id="head_nama" name="head_nama" class="k-textbox" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ref_personal_sub_area_head","head_nama"))" maxlength="50" style="width:350px;" value="@Html.Raw(fieldModel.head_nama)" title="@ResxHelper.GetValue("ref_personal_sub_area_head", "head_nama") @ResxHelper.GetValue("Message", "IsNotValidCharacter")." pattern="@ConfigHelper.GetValue("AllowInputCharacters")" />
+                                <span class="k-invalid-msg" data-for="head_nama"></span>
+                            </div>
+                        </div>
+
+                        <div id="form_item_status_id" class="form-group-none">
+                            <div class="form-item-label">@ResxHelper.GetValue("ref_personal_sub_area_head", "status_id")<span id="label_req_status_id" class="required"> *</span></div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_status_id" class="form-item-field">
+                                <input id="status_id" name="status_id" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ref_personal_sub_area_head","status_id"))" style="width:200px;" />
+                                <span class="k-invalid-msg" data-for="status_id"></span>
+                                <script>
+                                   var status_id_param = {item : {value:"id",text:"nama"},parent:[{ field: 'cat_id',opr:'=', value: '3' }], order:[]};
+                                   var status_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: status_id_param, type: "POST" } } });
+                                   var status_id = $("#status_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: status_id_ds, change:onChange_status_id }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#status_id").data("kendoComboBox").value('@fieldModel.status_id'); });
+                                   function onChange_status_id() {if ($("#status_id").data("kendoComboBox").value() != '' && $("#status_id").data("kendoComboBox")._oldIndex == -1) {$("#status_id").data("kendoComboBox").value('');}
+                                   }
+                                </script>
+                            </div>
+                        </div>
+
+                        <div id="form_item_start_date" class="form-group">
+                            <div class="form-item-label">@ResxHelper.GetValue("ref_personal_sub_area_head", "start_date")<span id="label_req_start_date" class="required"> *</span></div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_start_date" class="form-item-field">
+                                <input id="dt_start_date" name="dt_start_date" data-role="datepicker" data-type="date" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ref_personal_sub_area_head","start_date"))" style="width:130px;" title="@ResxHelper.GetValue("ref_personal_sub_area_head", "start_date") @ResxHelper.GetValue("Message", "IsNotValidDate")." />
+                                <span class="k-invalid-msg" data-for="dt_start_date"></span>
+                                <input type="hidden" id="start_date" name="start_date" value="@fieldModel.start_date" />
+                                <script>
+                                   $("#dt_start_date").kendoDatePicker({change:on_chage_start_date, value: "@fieldModel.dt_start_date", format: "{0:dd/MM/yyyy}" });
+                                   function on_chage_start_date() {
+                                       $("#start_date").val(kendo.toString($("#dt_start_date").data("kendoDatePicker").value(), "yyyy-MM-dd"));
+                                   }
+                                </script>
+                            </div>
+                        </div>
+
+                        <div id="form_item_end_date" class="form-group-none">
+                            <div class="form-item-label">@ResxHelper.GetValue("ref_personal_sub_area_head", "end_date")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_end_date" class="form-item-field">
+                                <input id="dt_end_date" name="dt_end_date" data-role="datepicker" data-type="date" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ref_personal_sub_area_head","end_date"))" style="width:130px;" title="@ResxHelper.GetValue("ref_personal_sub_area_head", "end_date") @ResxHelper.GetValue("Message", "IsNotValidDate")." />
+                                <span class="k-invalid-msg" data-for="dt_end_date"></span>
+                                <input type="hidden" id="end_date" name="end_date" value="@fieldModel.end_date" />
+                                <script>
+                                   $("#dt_end_date").kendoDatePicker({change:on_chage_end_date, value: "@fieldModel.dt_end_date", format: "{0:dd/MM/yyyy}" });
+                                   function on_chage_end_date() {
+                                       $("#end_date").val(kendo.toString($("#dt_end_date").data("kendoDatePicker").value(), "yyyy-MM-dd"));
+                                   }
+                                </script>
+                            </div>
+                        </div>
+
+                        <div id="form_item_keterangan" class="form-group">
+                            <div class="form-item-label">@ResxHelper.GetValue("ref_personal_sub_area_head", "keterangan")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_keterangan" class="form-item-field">
+                                <textarea type="text" id="keterangan" name="keterangan" class="k-textbox" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ref_personal_sub_area_head","keterangan"))" maxlength="500" style="width:350px;" title="@ResxHelper.GetValue("ref_personal_sub_area_head", "keterangan") @ResxHelper.GetValue("Message", "IsNotValidCharacter")." pattern="@ConfigHelper.GetValue("AllowInputCharacters")">@Html.Raw(fieldModel.keterangan)</textarea>
+                                <span class="k-invalid-msg" data-for="keterangan"></span>
+                            </div>
+                        </div>
+                        <div class="form-group"></div>
+
+                    </div>
+				</div>
+			</div>
+			<div class="panel-footer">
+				<a id="cancel" class="k-button k-button-icontext" href="#"><i class="far fa-times-circle"></i>&nbsp;<span id="btnCancelText">@ResxHelper.GetValue("Message", "Cancel")</span></a>
+				<a id="save" class="k-button k-button-icontext" href="#"><i class="fas fa-save"></i>&nbsp;<span id="btnSaveText">@ResxHelper.GetValue("Message", "Save")</span></a>
+			</div>
+		</div>
+    </div>
+</form>
+
+<script>
+    var form_type = '@ViewData["form_type"]';
+    function ShowHideColumn(form_type)
+    {
+        if(form_type=='Add')
+        {
+            var hiden_column = [];
+            for (i = 0; i < hiden_column.length; i++) {
+                $("#form_item_"+hiden_column[i]).hide();
+            }
+        }
+        else if(form_type=='Edit')
+        {
+            var hiden_column = [];
+            for (i = 0; i < hiden_column.length; i++) {
+                $("#form_item_"+hiden_column[i]).hide();
+            }
+        }
+    }
+    function setReadOnly(form_type,opt)
+    {
+        if(opt==true)
+        {
+            if(form_type=='Add')
+            {
+
+            }
+            else if(form_type=='Edit')
+            {
+
+            }
+        }
+        else
+        {
+            if(form_type=='Add')
+            {
+
+            }
+            else if(form_type=='Edit')
+            {
+
+            }
+        }
+    }
+    $(document).ready(function () {
+        ShowHideColumn(form_type);
+        setReadOnly(form_type, true);
+    });
+    var validatable = $("#form_edit").kendoValidator().data("kendoValidator");
+    $("#save").click(function (e) {
+		setReadOnly(form_type, false);
+        if (validatable.validate() === true) {
+            kendo.ui.progress($("#form_edit"), true);
+            $.ajax({
+                url: '@ViewData["UrlAction"]', data: $('#form_edit').serialize(), type: 'POST',
+                success: function (data) {
+                    kendo.ui.progress($("#form_edit"), false);
+                    if (data.status == 1) {
+                        window.parent.notification.show({title: data.title, message: kendo.toString(data.message) }, "success");
+                        if (window.parent.Reload_list_ref_personal_sub_area_head) {
+                            window.parent.Reload_list_ref_personal_sub_area_head();
+                        }else if (window.parent.reload_ref_personal_sub_area_head) {
+                            window.parent.reload_ref_personal_sub_area_head(data.pk);
+                        }
+                        if (!window.parent.Reload_list_ref_personal_sub_area_head) {
+                            window.parent.location.href = window.parent.location.href;
+                            window.parent.location.reload();
+                        }
+                        if (window.parent.parent.Reload_list_ref_personal_sub_area) {
+                            window.parent.parent.Reload_list_ref_personal_sub_area();
+                        }
+                        close_self();
+                    } else if (data.status == 3) {
+                        windows.parent.notification.show({ title: data.title, message: data.message }, "error");
+                        setReadOnly(form_type, true);
+						close_self();
+                    } else {
+						setReadOnly(form_type, true);
+                        notification.show({ title: data.title, message: data.message }, "error");
+                    }
+                }
+            });
+        } else {
+            kendo.ui.progress($("#form_edit"), false);
+        }
+		setReadOnly(form_type, true);
+    });
+    $("#cancel").kendoButton();
+    $("#cancel").click(function (e) {
+        close_self();
+    });
+    function onCloseDialog(e) { $('#dialog').html(''); }
+    function close_self() { if (window.parent.$("#dialog_ref_personal_sub_area_head").data("kendoWindow")) { window.parent.$("#dialog_ref_personal_sub_area_head").data("kendoWindow").close(); } else { window.parent.$("#dialog").data("kendoWindow").close(); } }
+</script>

@@ -1,0 +1,216 @@
+@using WebApp
+@using Microsoft.AspNetCore.Http;
+@{
+    Layout = "~/Views/Shared/_LayoutNoHeader.cshtml";
+    var fieldModel = ViewData["fieldModel"] as WebApp.Areas.Ref.Models.HariLiburModel.ViewModel;
+    var baseUrl = ViewData["baseUrl"];
+}
+
+<form id="form_edit" method="post">
+    <div class="card">
+        <div class="card-header">
+            <div class="title-header">@ViewData["TitleHeader"]</div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12">
+                    <div id="form_item_id" class="form-item-none">
+                        <div class="form-item-label">@ResxHelper.GetValue("ref_hari_libur", "id")<span id="label_req_id" class="required"> *</span></div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_id" class="form-item-field">
+                            <input type="number" id="id" name="id"  min="0" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ref_hari_libur","id"))" style ="width:200px;" />
+                            <span class="k-invalid-msg" data-for="id"></span>
+                            <input type="hidden" id="id_old" name="id_old" value="@fieldModel.id" />
+                            <script>
+                                $("#id").kendoNumericTextBox({ format: "{0:N0}", decimals: 0 });
+                                $(document).ready(function () {$("#id").data('kendoNumericTextBox').value('@fieldModel.id');})
+                            </script>
+                        </div>
+                    </div>
+
+                    <div id="form_item_tahun" class="form-item-none">
+                        <div class="form-item-label">@ResxHelper.GetValue("ref_hari_libur", "tahun")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_tahun" class="form-item-field">
+                            <input type="number" id="tahun" name="tahun"  min="0" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ref_hari_libur","tahun"))" style ="width:200px;" />
+                            <span class="k-invalid-msg" data-for="tahun"></span>
+                            <script>
+                                $("#tahun").kendoNumericTextBox({ format: "{0:N0}", decimals: 0 });
+                                $(document).ready(function () {$("#tahun").data('kendoNumericTextBox').value('@fieldModel.tahun');})
+                            </script>
+                        </div>
+                    </div>
+
+                    <div id="form_item_from_date" class="form-item">
+                        <div class="form-item-label">@ResxHelper.GetValue("ref_hari_libur", "tanggal")<span id="label_req_from_date" class="required"> *</span></div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_from_date" class="form-item-field">
+                            <div style="display:inline-block">
+                                <input id="dt_from_date" name="dt_from_date" data-role="datepicker" data-type="date" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ref_hari_libur","from_date"))" style="width:130px;" title="@ResxHelper.GetValue("ref_hari_libur", "from_date") @ResxHelper.GetValue("Message", "IsNotValidDate")." />
+                                <span class="k-invalfrom_action_timeid-msg" data-for="dt_from_date"></span>
+                                <input type="hidden" id="from_date" name="from_date" value="@fieldModel.from_date" />
+                            </div>
+                            <div style="display:inline-block"> s.d </div>
+                            <div style="display:inline-block">
+                                <input id="dt_to_date" name="dt_to_date" data-role="datepicker" data-type="date" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ref_hari_libur","to_date"))" style="width:130px;" title="@ResxHelper.GetValue("ref_hari_libur", "to_date") @ResxHelper.GetValue("Message", "IsNotValidDate")." />
+                                <span class="k-invalid-msg" data-for="dt_to_date"></span>
+                                <input type="hidden" id="to_date" name="to_date" value="@fieldModel.to_date" />
+                            </div>
+
+                            <script>
+                                var from_date = $("#dt_from_date").kendoDatePicker({change: from_date_Change, value: "@fieldModel.dt_from_date", format: "{0:dd/MM/yyyy}"}).data("kendoDatePicker");
+                                var to_date = $("#dt_to_date").kendoDatePicker({change: to_date_Change, value: "@fieldModel.dt_to_date", format: "{0:dd/MM/yyyy}"}).data("kendoDatePicker");
+                                from_date.max(to_date.value());
+                                to_date.min(from_date.value());
+                                function from_date_Change() {
+                                    $("#from_date").val(kendo.toString($("#dt_from_date").data("kendoDatePicker").value(), "yyyy-MM-dd"));
+                                    var par_from_date = from_date.value(),
+                                        par_to_date = to_date.value();
+
+                                    if (par_from_date) {
+                                        par_from_date = new Date(par_from_date);
+                                        par_from_date.setDate(par_from_date.getDate());
+                                        to_date.min(par_from_date);
+                                    } else if (par_to_date) {
+                                        from_date.max(new Date(par_to_date));
+                                    } else {
+                                        par_to_date = new Date();
+                                        from_date.max(par_to_date);
+                                        to_date.min(par_to_date);
+                                    }
+                                    if (from_date.value() == null) {
+                                        from_date.value('');
+                                    }
+                                }
+
+                                function to_date_Change() {
+                                    $("#to_date").val(kendo.toString($("#dt_to_date").data("kendoDatePicker").value(), "yyyy-MM-dd"));
+                                    var par_to_date = to_date.value(),
+                                        par_from_date = from_date.value();
+
+                                    if (par_to_date) {
+                                        par_to_date = new Date(par_to_date);
+                                        par_to_date.setDate(par_to_date.getDate());
+                                        from_date.max(par_to_date);
+                                    } else if (par_from_date) {
+                                        to_date.min(new Date(par_from_date));
+                                    } else {
+                                        par_to_date = new Date();
+                                        from_date.max(par_to_date);
+                                        to_date.min(par_to_date);
+                                    }
+                                }
+                            </script>
+                        </div>
+                    </div>
+                   <div id="form_item_tanggal" class="form-item-none">
+                       <div class="form-item-label">@ResxHelper.GetValue("ref_hari_libur", "tanggal")</div>
+                       <div class="form-item-separator">:</div>
+                       <div id="field_item_tanggal" class="form-item-field">
+                           <input type="text" id="tanggal" name="tanggal" class="k-textbox"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ref_hari_libur","tanggal"))"  maxlength="50" style="width:350px;" value="@Html.Raw(fieldModel.tanggal)" title="@ResxHelper.GetValue("ref_hari_libur", "tanggal") @ResxHelper.GetValue("Message", "IsNotValidCharacter")." pattern="@ConfigHelper.GetValue("AllowInputCharacters")" />
+                           <span class="k-invalid-msg" data-for="tanggal"></span>
+                       </div>
+                   </div>
+
+                   <div id="form_item_keterangan" class="form-item">
+                       <div class="form-item-label">@ResxHelper.GetValue("ref_hari_libur", "keterangan")<span id="label_req_tanggal" class="required"> *</span></div>
+                       <div class="form-item-separator">:</div>
+                       <div id="field_item_keterangan" class="form-item-field">
+                           <textarea type="text" title="@ResxHelper.GetValue("ref_hari_libur", "keterangan") @ResxHelper.GetValue("Message", "IsNotValidCharacter","is not valid character input")." pattern="@ConfigHelper.GetValue("AllowInputCharacters")" id="keterangan" name="keterangan" class="k-textbox" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ref_hari_libur_tetap","keterangan"))" maxlength="500" style="width:350px;">@Html.Raw(fieldModel.keterangan)</textarea>
+                           <span class="k-invalid-msg" data-for="keterangan"></span>
+                       </div>
+                   </div>
+                    
+                </div>
+            </div>
+        </div>
+        <div class="card-footer" style="text-align:center">
+            <a id="cancel" class="k-button k-button-icontext" href="#"><i class="far fa-times-circle"></i>&nbsp;<span id="btnCancelText">@ResxHelper.GetValue("Message", "Cancel")</span></a>
+            <a id="save" class="k-button k-button-icontext" href="#"><i class="fas fa-save"></i>&nbsp;<span id="btnSaveText">@ResxHelper.GetValue("Message", "Save")</span></a>
+        </div>
+    </div>
+</form>
+
+<script>
+    var form_type = '@ViewData["form_type"]';
+    function ShowHideColumn(form_type)
+    {
+        if(form_type=='Add')
+        {
+            var hiden_column = [];
+            for (i = 0; i < hiden_column.length; i++) {
+                $("#form_item_"+hiden_column[i]).hide();
+            }
+        }
+        else if(form_type=='Edit')
+        {
+            var hiden_column = [];
+            for (i = 0; i < hiden_column.length; i++) {
+                $("#form_item_"+hiden_column[i]).hide();
+            }
+        }
+    }
+    function setReadOnly(form_type,opt)
+    {
+        if(opt==true)
+        {
+            if(form_type=='Add')
+            {
+
+            }
+            else if(form_type=='Edit')
+            {
+
+            }
+        }
+        else
+        {
+            if(form_type=='Add')
+            {
+
+            }
+            else if(form_type=='Edit')
+            {
+
+            }
+        }
+    }
+    $(document).ready(function () {
+        ShowHideColumn(form_type);
+        setReadOnly(form_type, true);
+    });
+    var validatable = $("#form_edit").kendoValidator().data("kendoValidator");
+    $("#save").click(function (e) {
+        if (validatable.validate() === true) {
+            kendo.ui.progress($("#form_edit"), true);
+            $.ajax({
+                url: '@ViewData["UrlAction"]', data: $('#form_edit').serialize(), type: 'POST',
+                success: function (data) {
+                    kendo.ui.progress($("#form_edit"), false);
+                    if (data.status == 1) {
+                        window.parent.notification.show({title: data.title, message: kendo.toString(data.message) }, "success");
+                        if (window.parent.Reload_list_ref_hari_libur) {
+                            window.parent.Reload_list_ref_hari_libur();
+                        }else if (window.parent.reload_ref_hari_libur) {
+                            window.parent.reload_ref_hari_libur(data.pk);
+                        }
+                        close_self();
+                    } else if (data.status == 3) {
+                        windows.parent.notification.show({ title: data.title, message: data.message }, "error");
+                        close_self();
+                    } else {
+                        notification.show({ title: data.title, message: data.message }, "error");
+                    }
+                }
+            });
+        } else {
+            kendo.ui.progress($("#form_edit"), false);
+        }
+
+    });
+    $("#cancel").kendoButton();
+    $("#cancel").click(function (e) {
+        close_self();
+    });
+    function close_self() { if (window.parent.$("#dialog_ref_hari_libur").data("kendoWindow")) { window.parent.$("#dialog_ref_hari_libur").data("kendoWindow").close(); } else { window.parent.$("#dialog").data("kendoWindow").close(); } }
+</script>

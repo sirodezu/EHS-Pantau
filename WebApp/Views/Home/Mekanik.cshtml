@@ -1,0 +1,30 @@
+﻿@using System.Data;
+@{
+    Layout = "~/Views/Shared/_LayoutMekanik.cshtml";
+    ViewData["Title"] = ResxHelper.GetValue("Home", "Title", "Dashboard");
+    var baseUrl = ViewData["baseUrl"];
+    var curPersonData = ViewData["PersonData"] as PersonData;
+}
+<style>
+    .label_nama {
+        font-weight:bold;
+    }
+    .label_nrp {
+        
+    }
+</style>    
+<div class="text-center">
+    <div id="form_profil" class="profil_area">
+        <div class="label_nama">@Html.Raw(curPersonData.nama)</div>
+        <div class="label_nrp">@Html.Raw(curPersonData.nrp)</div>
+        <div class="label_position">@Html.Raw(curPersonData.position)</div>
+        <div class="label_spearator" style="border-bottom:1px solid #FFCD00"></div>
+    </div>
+    <div style="padding-top:100px;">
+        <a asp-controller="Idp" asp-action="MyIDP"><div class="k-button box-menu">IDP</div></a>
+        <div class="k-button box-menu">TRAINING</div>
+    </div>
+</div>
+<script type="text/javascript">
+    
+</script>

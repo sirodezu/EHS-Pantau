@@ -1,0 +1,501 @@
+@using WebApp
+@using Newtonsoft.Json
+@using Microsoft.AspNetCore.Http;
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var filterColumn = ViewData["filterColumn"] as WebApp.Models.FreeManHoursModel.ViewModel;
+    ViewData["Title"] = ViewData["TitleHeader"];
+    ViewData["PageName"] = "freemanhours";
+    ViewData["Heading"] = ViewData["TitleHeader"];
+    ViewData["Category1"] = "";
+    ViewData["Category2"] = "";
+}
+<style>
+    .curent-data th {
+        padding: 6px;
+        text-align: center;
+        background-color: #7D7D7D;
+        color: #ffffff;
+    }
+
+    .table th {
+        padding: 6px;
+        text-align: center;
+    }
+
+    .table td {
+        padding: 6px;
+    }
+</style>
+<div class="panel">
+    <div class="panel-heading">
+        <div class="title-header">@ResxHelper.GetValue("Message", "FilterDataHeader", "Filter Data")</div>
+    </div>
+    <div class="panel-container">
+        <form id="form_edit" method="post" class="panel-form">
+            <div class="panel-content">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div id="form_item_ehs_area_id" class="form-group">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_profile", "ehs_area_id")<span id="req_ehs_area_id" class="required"> *</span></div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_ehs_area_id" class="form-item-field">
+                                <input id="ehs_area_id" name="ehs_area_id" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_profile","ehs_area_id"))" style="width:200px;" />
+                                <span class="k-invalid-msg" data-for="ehs_area_id"></span>
+                            </div>
+                        </div>
+
+                        <div id="form_item_ba_id" class="form-group">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_profile", "ba_id")<span id="req_ba_id" class="required"> *</span></div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_ba_id" class="form-item-field">
+                                <input id="ba_id" name="ba_id" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_profile","ba_id"))" style="width:200px;" />
+                                <span class="k-invalid-msg" data-for="ba_id"></span>
+                            </div>
+                        </div>
+
+                        <div id="form_item_pa_id" class="form-group">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_profile", "pa_id")<span id="req_pa_id" class="required"> *</span></div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_pa_id" class="form-item-field">
+                                <input id="pa_id" name="pa_id" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_profile","pa_id"))" style="width:200px;" />
+                                <span class="k-invalid-msg" data-for="pa_id"></span>
+                            </div>
+                        </div>
+
+                        <div id="form_item_psa_id" class="form-group">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_profile", "psa_id")<span id="req_psa_id" class="required"> *</span></div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_psa_id" class="form-item-field">
+                                <input id="psa_id" name="psa_id" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_profile","psa_id"))" style="width:200px;" />
+                                <span class="k-invalid-msg" data-for="psa_id"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div id="form_item_id_bulan" class="form-group">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_manhour", "bulan")<span class="required"> *</span></div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_id" class="form-item-field">
+                                <input id="bulan" name="bulan" style="width: 150px;" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_manhour","bulan"))" />
+                            </div>
+                        </div>
+                        <div id="form_item_id_tahun" class="form-group">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_manhour", "tahun")<span class="required"> *</span></div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_id" class="form-item-field">
+                                <input id="tahun" name="tahun" style="width: 120px;" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_manhour","tahun"))" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-footer">
+                <a id="ok" class="k-button k-button-icontext" href="#"><span id="btnSaveText">@ResxHelper.GetValue("Message", "Ok")</span></a>
+            </div>
+        </form>
+        
+        <div class="panel-content">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div id="man_power"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div id="total_off"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div id="man_hour"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div id="achievement"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div id="fr"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div id="sr"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section ScriptsBlock {
+    <script>
+        var validatable = $("#form_edit").kendoValidator().data("kendoValidator");
+        //=== filter ehs_area_id
+        var ehs_area_id_param = {item : {value:"id",text:"kode"},parent:[{field:"obj_data",value:"Profile"}], order:[]};
+        var ehs_area_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/EHSArea/LookupDataEA", dataType: "json", data: ehs_area_id_param, type: "POST" } } });
+        var ehs_area_id = $("#ehs_area_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: ehs_area_id_ds, change:onChange_ehs_area_id }).data("kendoComboBox");
+        $(document).ready(function () { $("#ehs_area_id").data("kendoComboBox").value('@filterColumn.ehs_area_id'); });
+        function onChange_ehs_area_id() {if ($("#ehs_area_id").data("kendoComboBox").value() != '' && $("#ehs_area_id").data("kendoComboBox")._oldIndex == -1) {$("#ehs_area_id").data("kendoComboBox").value('');}
+            reload_ba_id();
+            reload_pa_id();
+            reload_psa_id();
+        }
+        //=== filter ba_id
+        var ba_id_param = {item : {value:"id",text:"kode"},parent:[{ field: 'ehs_area_id',opr:'=', value: '@filterColumn.ehs_area_id' },{field:"obj_data",value:"Profile"}], order:[]};
+        var ba_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/BusinessArea/LookupDataBA", dataType: "json", data: ba_id_param, type: "POST" } } });
+        var ba_id = $("#ba_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: ba_id_ds, change:onChange_ba_id }).data("kendoComboBox");
+        $(document).ready(function () { $("#ba_id").data("kendoComboBox").value('@filterColumn.ba_id'); });
+        function onChange_ba_id() {if ($("#ba_id").data("kendoComboBox").value() != '' && $("#ba_id").data("kendoComboBox")._oldIndex == -1) {$("#ba_id").data("kendoComboBox").value('');}
+            reload_pa_id();
+            reload_psa_id();
+        }
+        function reload_ba_id(){
+            $("#ba_id").data("kendoComboBox").value('');
+            var ehs_area_id = $("#ehs_area_id").data("kendoComboBox").value();
+            var ba_id_param = { item: { value: 'id', text: 'kode' }, parent: [{ field: 'ehs_area_id',opr:'=', value: ehs_area_id }], order: [] };
+            $("#ba_id").data("kendoComboBox").dataSource.read(ba_id_param);
+            }
+        //=== filter pa_id
+        var pa_id_param = {item : {value:"id",text:"kode"},parent:[{ field: 'ehs_area_id',opr:'=', value: '@filterColumn.ehs_area_id' }, { field: 'ba_id',opr:'=', value: '@filterColumn.ba_id' },{field:"obj_data",value:"Profile"}], order:[]};
+        var pa_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/PersonalArea/LookupDataPA", dataType: "json", data: pa_id_param, type: "POST" } } });
+        var pa_id = $("#pa_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: pa_id_ds, change:onChange_pa_id }).data("kendoComboBox");
+        $(document).ready(function () { $("#pa_id").data("kendoComboBox").value('@filterColumn.pa_id'); });
+        function onChange_pa_id() {if ($("#pa_id").data("kendoComboBox").value() != '' && $("#pa_id").data("kendoComboBox")._oldIndex == -1) {$("#pa_id").data("kendoComboBox").value('');}
+            reload_psa_id();
+        }
+        function reload_pa_id(){
+            $("#pa_id").data("kendoComboBox").value('');
+            var ehs_area_id = $("#ehs_area_id").data("kendoComboBox").value();
+            var ba_id = $("#ba_id").data("kendoComboBox").value();
+            var pa_id_param = { item: { value: 'id', text: 'kode' }, parent: [{ field: 'ehs_area_id',opr:'=', value: ehs_area_id }, { field: 'ba_id',opr:'=', value: ba_id }], order: [] };
+            $("#pa_id").data("kendoComboBox").dataSource.read(pa_id_param);
+            }
+        //=== filter psa_id
+        var psa_id_param = {item : {value:"id",text:"kode"},parent:[{ field: 'ehs_area_id',opr:'=', value: '@filterColumn.ehs_area_id' }, { field: 'ba_id',opr:'=', value: '@filterColumn.ba_id' }, { field: 'pa_id',opr:'=', value: '@filterColumn.pa_id' },{field:"obj_data",value:"Profile"}], order:[]};
+        var psa_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/PersonalSubArea/LookupDataPSA", dataType: "json", data: psa_id_param, type: "POST" } } });
+        var psa_id = $("#psa_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: psa_id_ds, change:onChange_psa_id }).data("kendoComboBox");
+        $(document).ready(function () { $("#psa_id").data("kendoComboBox").value('@filterColumn.psa_id'); });
+        function onChange_psa_id() {if ($("#psa_id").data("kendoComboBox").value() != '' && $("#psa_id").data("kendoComboBox")._oldIndex == -1) {$("#psa_id").data("kendoComboBox").value('');}
+        }
+        function reload_psa_id(){
+            $("#psa_id").data("kendoComboBox").value('');
+            var ehs_area_id = $("#ehs_area_id").data("kendoComboBox").value();
+            var ba_id = $("#ba_id").data("kendoComboBox").value();
+            var pa_id = $("#pa_id").data("kendoComboBox").value();
+            var psa_id_param = { item: { value: 'id', text: 'kode' }, parent: [{ field: 'ehs_area_id',opr:'=', value: ehs_area_id }, { field: 'ba_id',opr:'=', value: ba_id }, { field: 'pa_id',opr:'=', value: pa_id }], order: [] };
+            $("#psa_id").data("kendoComboBox").dataSource.read(psa_id_param);
+        }
+        //=== filter bulan
+        var bulan_param = { item: { value: 'id', text: 'nama', distinct: '0' } ,parent:[{ field: 'cat_id',opr:'=', value: '150' }], order:[{ field: 'id', dir: 'asc' }]};
+        var bulan_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: bulan_param, type: "POST" } } });
+        var bulan = $("#bulan").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", change: onChange_bulan, dataSource: bulan_ds }).data("kendoComboBox");
+        $(document).ready(function () {
+            $("#bulan").data("kendoComboBox").value('@filterColumn.bulan');
+        });
+        function onChange_bulan() {
+            if ($("#bulan").data("kendoComboBox").value() != '' && $("#bulan").data("kendoComboBox")._oldIndex == -1) { $("#bulan").data("kendoComboBox").value(''); }
+            //show_data();
+        }
+
+
+        //=== filter tahun
+        var tahun_param = { item: { value: 'id', text: 'nama', distinct: '0' } ,parent:[{ field: 'cat_id',opr:'=', value: '151' }], order:[{ field: 'id', dir: 'asc' }]};
+        var tahun_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: tahun_param, type: "POST" } } });
+        var tahun = $("#tahun").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", change: onChange_tahun, dataSource: tahun_ds }).data("kendoComboBox");
+        $(document).ready(function () { $("#tahun").data("kendoComboBox").value('@filterColumn.tahun'); });
+        function onChange_tahun() {
+            if ($("#tahun").data("kendoComboBox").value() != '' && $("#tahun").data("kendoComboBox")._oldIndex == -1) { $("#tahun").data("kendoComboBox").value(''); }
+            //show_data();
+        }
+        $("#ok").click(function (e) {
+            show_data();
+        });
+
+        function show_data() {
+            if (validatable.validate() === true) {
+                var cur_bulan = $("#bulan").data("kendoComboBox").value();
+                var cur_tahun = $("#tahun").data("kendoComboBox").text();
+                var ehs_area_id = $("#ehs_area_id").data("kendoComboBox").value();
+                var ba_id = $("#ba_id").data("kendoComboBox").value();
+                var pa_id = $("#pa_id").data("kendoComboBox").value();
+                var psa_id = $("#psa_id").data("kendoComboBox").value();
+                if ((cur_bulan != null && cur_bulan != '') && (cur_tahun != null && cur_tahun != ''))
+                {
+                    //
+                }
+                else
+                {
+                    draw_monthly_man_power(null);
+                    draw_monthly_total_off(null);
+                    draw_monthly_total_man_hour(null);
+                    draw_achievement(null);
+                    draw_fr(null);
+                    draw_sr(null);
+                    return;
+
+                }
+
+                var param = {ehs_area_id:ehs_area_id,ba_id:ba_id,pa_id:pa_id,psa_id:psa_id,cur_bulan:cur_bulan,cur_tahun:cur_tahun};
+                $.ajax({
+                    url: '@ViewBag.BaseUrl/FreeManHours/GetValidData', data:param, type: 'POST',
+                    success: function (data) {
+                        if (data != null && data != undefined) {
+                            if (data.table != null && data.table != undefined && data.table.length > 0) {
+                                draw_monthly_man_power(data.table);
+                            } else {
+                                draw_monthly_man_power(null);
+                            }
+                            if (data.table1 != null && data.table1 != undefined && data.table1.length > 0) {
+                                draw_monthly_total_off(data.table1)
+                            } else {
+                                draw_monthly_total_off(null);
+                            }
+                            if (data.table2 != null && data.table2 != undefined && data.table2.length > 0) {
+                                draw_monthly_total_man_hour(data.table2);
+                            } else {
+                                draw_monthly_total_man_hour(null);
+                            }
+                            if (data.table3 != null && data.table3 != undefined && data.table3.length > 0) {
+                                draw_achievement(data.table3);
+                            } else {
+                                draw_achievement(null);
+                            }
+                            if (data.table4 != null && data.table4 != undefined && data.table4.length > 0) {
+                                draw_fr(data.table4);
+                            } else {
+                                draw_fr(null);
+                            }
+                            if (data.table5 != null && data.table5 != undefined && data.table5.length > 0) {
+                                draw_sr(data.table5);
+                            } else {
+                                draw_sr(null);
+                            }
+
+                        } else {
+                            draw_monthly_man_power(null);
+                            draw_monthly_total_off(null);
+                            draw_monthly_total_man_hour(null);
+                            draw_achievement(null);
+                            draw_fr(null);
+                            draw_sr(null);
+                        }
+                    }
+                });
+            }
+            
+        }
+        function draw_monthly_man_power(data) {
+            var htm = "";
+            if (data != null && data != undefined && data.length > 0) {
+                var htm = '<table class="table table-bordered table-striped table-responsive">';
+                htm += '<tr>';
+                htm += '    <th colspan="3"><div style="padding:2px;white-space:normal;">Total Man Power</div></th>';
+                htm += '</tr>';
+                htm += '<tr>';
+                htm += '    <th style="width:20px;">No</th>';
+                htm += '    <th style="width:500px;">Company</th>';
+                htm += '    <th style="width:125px;">Jumlah (Orang)</th>';
+                htm += '</tr>';
+
+                var no = 0;
+                var event_code = "";
+                var bg_color = "";
+                var font_color = "";
+                var status_text = "";
+                jQuery.each(data, function (i, val) {
+                    no++;
+                    htm += '<tr>';
+                    htm += '    <td style="width:20px;text-align: center;">'+no+'</td>';
+                    htm += '    <td style="width:20px;text-align: left;">' + val.companyName + '</td>';
+                    htm += '    <td style="width:20px;text-align: right;">' + val.empCount + '</td>';
+                    htm += '</tr>';
+                });
+                htm += '</table>';
+            }
+            $("#man_power").html(htm);
+        }
+        function draw_monthly_total_off(data) {
+            var htm = "";
+            if (data != null && data != undefined && data.length > 0) {
+                var htm = '<table class="table table-bordered table-striped table-responsive">';
+                htm += '<tr>';
+                htm += '    <th colspan="3"><div style="padding:2px;white-space:normal;">Rata-rata Total Off selama satu bulan</div></th>';
+                htm += '</tr>';
+                htm += '<tr>';
+                htm += '    <th style="width:20px;">No</th>';
+                htm += '    <th style="width:500px;">Deskripsi</th>';
+                htm += '    <th style="width:125px;">Jumlah</th>';
+                htm += '</tr>';
+
+                var no = 0;
+                var event_code = "";
+                var bg_color = "";
+                var font_color = "";
+                var status_text = "";
+                jQuery.each(data, function (i, val) {
+                    no++;
+                    htm += '<tr>';
+                    htm += '    <td style="width:20px;text-align: center;">'+no+'</td>';
+                    htm += '    <td style="width:20px;text-align: left;">' + val.description + '</td>';
+                    htm += '    <td style="width:20px;text-align: right;">' + val.jumlah + '</td>';
+                    htm += '</tr>';
+                });
+                htm += '</table>';
+            }
+            $("#total_off").html(htm);
+        }
+        function draw_monthly_total_man_hour(data) {
+            var htm = "";
+            if (data != null && data != undefined && data.length > 0) {
+                var htm = '<table class="table table-bordered table-striped table-responsive">';
+                htm += '<tr>';
+                htm += '    <th colspan="3"><div style="padding:2px;white-space:normal;">Man Hour Off</div></th>';
+                htm += '</tr>';
+                htm += '<tr>';
+                htm += '    <th style="width:20px;">No</th>';
+                htm += '    <th style="width:500px;">Deskripsi</th>';
+                htm += '    <th style="width:125px;">Jumlah</th>';
+                htm += '</tr>';
+
+                var no = 0;
+                var event_code = "";
+                var bg_color = "";
+                var font_color = "";
+                var status_text = "";
+                jQuery.each(data, function (i, val) {
+                    no++;
+                    htm += '<tr>';
+                    htm += '    <td style="width:20px;text-align: center;">'+no+'</td>';
+                    htm += '    <td style="width:20px;text-align: left;">' + val.description + '</td>';
+                    htm += '    <td style="width:20px;text-align: right;">' + val.jumlah + '</td>';
+                    htm += '</tr>';
+                });
+                htm += '</table>';
+            }
+            $("#man_hour").html(htm);
+            }
+        function draw_achievement(data) {
+            var htm = "";
+            if (data != null && data != undefined && data.length > 0) {
+                var htm = '<table class="table table-bordered table-striped table-responsive">';
+                htm += '<tr>';
+                htm += '    <th colspan="3"><div style="padding:2px;white-space:normal;">Achievement</div></th>';
+                htm += '</tr>';
+                htm += '<tr>';
+                htm += '    <th style="width:20px;">No</th>';
+                htm += '    <th style="width:500px;">Deskripsi</th>';
+                htm += '    <th style="width:125px;">Jumlah (Jam)</th>';
+                htm += '</tr>';
+
+                var no = 0;
+                var event_code = "";
+                var bg_color = "";
+                var font_color = "";
+                var status_text = "";
+                jQuery.each(data, function (i, val) {
+                    no++;
+                    htm += '<tr>';
+                    htm += '    <td style="width:20px;text-align: center;">'+no+'</td>';
+                    htm += '    <td style="width:20px;text-align: left;">' + val.description + '</td>';
+                    htm += '    <td style="width:20px;text-align: right;">' + val.jumlah + '</td>';
+                    htm += '</tr>';
+                });
+                htm += '</table>';
+            }
+            $("#achievement").html(htm);
+            }
+        function draw_fr(data) {
+            var htm = "";
+            if (data != null && data != undefined && data.length > 0) {
+                var htm = '<table class="table table-bordered table-striped table-responsive">';
+                htm += '<tr>';
+                htm += '    <th colspan="3"><div style="padding:2px;white-space:normal;">Frequency Rate</div></th>';
+                htm += '</tr>';
+                htm += '<tr>';
+                htm += '    <th style="width:20px;">No</th>';
+                htm += '    <th style="width:500px;">Deskripsi</th>';
+                htm += '    <th style="width:125px;">Jumlah (Jam)</th>';
+                htm += '</tr>';
+
+                var no = 0;
+                var event_code = "";
+                var bg_color = "";
+                var font_color = "";
+                var status_text = "";
+                jQuery.each(data, function (i, val) {
+                    no++;
+                    htm += '<tr>';
+                    htm += '    <td style="width:20px;text-align: center;">'+no+'</td>';
+                    htm += '    <td style="width:20px;text-align: left;">' + val.description + '</td>';
+                    htm += '    <td style="width:20px;text-align: right;">' + val.jumlah + '</td>';
+                    htm += '</tr>';
+                });
+                htm += '</table>';
+            }
+            $("#fr").html(htm);
+            }
+        function draw_sr(data) {
+            var htm = "";
+            if (data != null && data != undefined && data.length > 0) {
+                var htm = '<table class="table table-bordered table-striped table-responsive">';
+                htm += '<tr>';
+                htm += '    <th colspan="3"><div style="padding:2px;white-space:normal;">Severity Rate</div></th>';
+                htm += '</tr>';
+                htm += '<tr>';
+                htm += '    <th style="width:20px;">No</th>';
+                htm += '    <th style="width:500px;">Deskripsi</th>';
+                htm += '    <th style="width:125px;">Jumlah (Jam)</th>';
+                htm += '</tr>';
+
+                var no = 0;
+                var event_code = "";
+                var bg_color = "";
+                var font_color = "";
+                var status_text = "";
+                jQuery.each(data, function (i, val) {
+                    no++;
+                    htm += '<tr>';
+                    htm += '    <td style="width:20px;text-align: center;">'+no+'</td>';
+                    htm += '    <td style="width:20px;text-align: left;">' + val.description + '</td>';
+                    htm += '    <td style="width:20px;text-align: right;">' + val.jumlah + '</td>';
+                    htm += '</tr>';
+                });
+                htm += '</table>';
+            }
+            $("#sr").html(htm);
+        }
+
+        $(document).ready(function () {
+            if ('@ViewData["AllowViewAll"]' == '1') {
+                $("#req_ehs_area_id").hide();
+                $("#req_ba_id").hide();
+                $("#req_pa_id").hide();
+                $("#req_psa_id").hide();
+                $("#ehs_area_id").removeAttr('required');
+                $("#ba_id").removeAttr('required');
+                $("#pa_id").removeAttr('required');
+                $("#psa_id").removeAttr('required');
+            } else {
+                $("#req_ehs_area_id").show();
+                $("#ehs_area_id").attr('required','required');
+                if ('@ViewData["IsHeadArea"]' == '1') {
+                    $("#req_ba_id").hide();
+                    $("#req_pa_id").hide();
+                    $("#req_psa_id").hide();
+                    $("#ba_id").removeAttr('required');
+                    $("#pa_id").removeAttr('required');
+                    $("#psa_id").removeAttr('required');
+                } else {
+                    $("#req_ba_id").show();
+                    $("#req_pa_id").show();
+                    $("#req_psa_id").show();
+                    $("#ba_id").attr('required', 'required');
+                    $("#pa_id").attr('required', 'required');
+                    $("#psa_id").attr('required','required');
+                }
+            }
+        });
+    </script>
+}

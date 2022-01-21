@@ -1,0 +1,114 @@
+﻿@model WebApp.Models.AccountViewModels.LoginViewModel
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@{
+    ViewData["Title"] = @ResxHelper.GetValue("Login", "LoginTitle", "Halaman Login");
+    var baseUrl = HttpContextAccessor.HttpContext.Request.Scheme+ "://"+HttpContextAccessor.HttpContext.Request.Host+""+HttpContextAccessor.HttpContext.Request.PathBase;
+    var urlProses = baseUrl + "/Account/LoginProses";
+    var urlHome = baseUrl + "/Home";
+}
+    <style>
+        .field-icon {
+            float: right;
+            margin-left: -25px;
+            margin-top: 10px;
+            margin-right: 5px;
+            position: relative;
+            z-index: 2;
+        }
+    </style>
+<div class="row">
+    <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+        <div class="card card-signin my-5">
+            <div class="card-body">
+                <div class="text-center">
+                    <div style="display:block">
+                        <img src="~/img/header_logo.png" class="img-responsive" alt="" />
+                    </div>
+                    <div style="display:block;padding-top:50px;">
+                        <logo><img src="~/img/logo.png" class="img-responsive" alt="" /><span class="page-logo-text mr-1" style="padding-left:5px;">@ConfigHelper.GetValue("ApplicationCode")</span></logo>
+                    </div>
+                    
+                </div>
+                
+                <h5 class="card-title text-center">@ResxHelper.GetValue("Login", "LoginTitle", "Halaman Login")</h5>
+                <form id="form_edit" method="post">
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="form-group">
+                        <input type="text" title="@ResxHelper.GetValue("Login","UsernameNRP","Username/NRP") @ResxHelper.GetValue("Message", "IsNotValidCharacter","is not valid character input")." pattern="@Html.Raw(ConfigHelper.GetValue("AllowInputCharacters"))" id="Username" name="Username" value="" placeholder="@ResxHelper.GetValue("Login","UsernameNRP","Username/NRP")" class="k-textbox" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("Login","UsernameNRP"))" maxlength="50" style="width:100%;max-width:380px;" />
+                        <span class="k-invalid-msg" data-for="Username"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" id="Password" name="Password" value="" placeholder="@ResxHelper.GetValue("Login","Password")" class="k-textbox" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("Login","Password"))" maxlength="50" style="width:100%;max-width:380px;" />
+                        <span toggle="#Password" class="fa fa-fw fa-eye field-icon toggle-password"></span>
+                    </div>
+                    <div class="form-group" style="display:none">
+                        <div class="checkbox">
+                            <label asp-for="RememberMe">
+                                <input asp-for="RememberMe" />
+                                @Html.DisplayNameFor(m => m.RememberMe)
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <a id="login" class="btn btn-lg btn-login btn-block text-uppercase" href="#"><span id="btnSaveText">@ResxHelper.GetValue("Login", "BtnLoginText", "Next")</span></a>
+                    </div>
+                    <div class="form-group">
+                        <div id="error_message" class="bg-danger" style="display:none;color:#ffffff;padding:3px;text-align:center"></div>
+                    </div>
+                    @*<div class="form-group">
+            <p>
+                <a asp-action="ForgotPassword">Forgot your password?</a>
+            </p>
+            <p>
+                <a asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]">Register as a new user?</a>
+            </p>
+        </div>*@
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+    <script>
+        $(".toggle-password").click(function() {
+          $(this).toggleClass("fa-eye fa-eye-slash");
+          var input = $($(this).attr("toggle"));
+          if (input.attr("type") == "password") {
+            input.attr("type", "text");
+          } else {
+            input.attr("type", "password");
+          }
+        });
+        var myPass = document.getElementById("Password");
+        myPass.addEventListener("keyup", function(event) {
+          if (event.keyCode === 13) {
+           event.preventDefault();
+           document.getElementById("login").click();
+          }
+        });
+
+        var validatable = $("#form_edit").kendoValidator().data("kendoValidator");
+        $("#login").click(function (e) {
+            if (validatable.validate() === true) {
+                kendo.ui.progress($("#form_edit"), true);
+                $.ajax({
+                    url: '@urlProses', data: $('#form_edit').serialize(), type: 'POST',
+                    success: function (data) {
+                        kendo.ui.progress($("#form_edit"), false);
+                        if (data.status == 1) {
+                            //notification.show({ message: data.message }, "success");
+                            window.location.href = '@urlHome';
+                        } else {
+                            //notification.show({ title: data.title, message: data.message }, "error");
+                            $("#error_message").show();
+                            $("#error_message").html(data.message);
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+
+}

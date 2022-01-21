@@ -1,0 +1,25 @@
+﻿@using WebApp;
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
+@{
+    Layout = "~/Views/Shared/Pwa/_Layout.cshtml";
+    ViewData["Title"] = "Session Has Expired";
+    var baseUrl = WebHelper.GetBaseUrl(HttpContextAccessor.HttpContext);
+}
+
+    <div class="container">
+        <div class="center" style="text-align:center;margin-top:280px;">
+            <div class="card">
+                <div class="card-body bg-danger" style="color: #ffffff;">
+                    <h2>@ViewData["Title"]</h2>
+                    <p>Maaf Session Anda telah habis silahkan <a id="login" href="#">login</a> kembali !.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+<script>
+    $("#login").click(function (e) {
+        window.location.href = "@baseUrl/Pwa";
+    });
+</script>

@@ -1,0 +1,199 @@
+@using WebApp
+@using Microsoft.AspNetCore.Http;
+@{
+    Layout = "~/Views/Shared/_LayoutNoHeader.cshtml";
+    var fieldModel = ViewData["fieldModel"] as WebApp.Models.EHSPerformanceModel.ViewModel;
+	ViewData["Title"] = ViewData["TitleHeader"];
+    ViewData["PageName"] = "ehsperformance";
+    ViewData["Heading"] = ViewData["TitleHeader"];
+    ViewData["Category1"] = "";
+    ViewData["Category2"] = "";
+}
+<div class="panel panel-form">
+	<div class="panel-container">
+		<div class="panel-heading">
+			<div class="title-header">@ViewData["TitleHeader"]</div>
+		</div>
+		<div class="panel-content">
+			<div class="row">
+				<div class="col-lg-12">
+
+                    <div id="form_item_id" class="form-group-none">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_ehs_performance", "id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_id" class="form-item-view">@Html.Raw(fieldModel.id)</div>
+                  </div>
+
+                    <div id="form_item_kategori_filter" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_ehs_performance", "kategori_filter")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_kategori_filter" class="form-item-view">@Html.Raw(fieldModel.kategori_filter_text)</div>
+                  </div>
+
+                    <div id="form_item_periode0" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_ehs_performance", "periode0")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_periode0" class="form-item-view">@Html.Raw(fieldModel.periode0_text)</div>
+                  </div>
+
+                    <div id="form_item_ehs_area_id0" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_ehs_performance", "ehs_area_id0")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_ehs_area_id0" class="form-item-view">@Html.Raw(fieldModel.ehs_area_id0_text)</div>
+                  </div>
+
+                    <div id="form_item_ba_id0" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_ehs_performance", "ba_id0")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_ba_id0" class="form-item-view">@Html.Raw(fieldModel.ba_id0_text)</div>
+                  </div>
+
+                    <div id="form_item_pa_id0" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_ehs_performance", "pa_id0")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_pa_id0" class="form-item-view">@Html.Raw(fieldModel.pa_id0_text)</div>
+                  </div>
+
+                    <div id="form_item_psa_id0" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_ehs_performance", "psa_id0")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_psa_id0" class="form-item-view">@Html.Raw(fieldModel.psa_id0_text)</div>
+                  </div>
+
+                    <div id="form_item_tahun0" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_ehs_performance", "tahun0")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_tahun0" class="form-item-view">@Html.Raw(fieldModel.tahun0_text)</div>
+                  </div>
+
+                    <div id="form_item_bulan0" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_ehs_performance", "bulan0")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_bulan0" class="form-item-view">@Html.Raw(fieldModel.bulan0_text)</div>
+                  </div>
+
+                    <div id="form_item_ehs_area_id1" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_ehs_performance", "ehs_area_id1")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_ehs_area_id1" class="form-item-view">@Html.Raw(fieldModel.ehs_area_id1_text)</div>
+                  </div>
+
+                    <div id="form_item_ba_id1" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_ehs_performance", "ba_id1")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_ba_id1" class="form-item-view">@Html.Raw(fieldModel.ba_id1_text)</div>
+                  </div>
+
+                    <div id="form_item_pa_id1" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_ehs_performance", "pa_id1")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_pa_id1" class="form-item-view">@Html.Raw(fieldModel.pa_id1_text)</div>
+                  </div>
+
+                    <div id="form_item_psa_id1" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_ehs_performance", "psa_id1")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_psa_id1" class="form-item-view">@Html.Raw(fieldModel.psa_id1_text)</div>
+                  </div>
+
+                    <div id="form_item_tahun1" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_ehs_performance", "tahun1")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_tahun1" class="form-item-view">@Html.Raw(fieldModel.tahun1_text)</div>
+                  </div>
+
+                    <div id="form_item_bulan1" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_ehs_performance", "bulan1")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_bulan1" class="form-item-view">@Html.Raw(fieldModel.bulan1_text)</div>
+                  </div>
+
+                    <div id="form_item_ehs_area_id2" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_ehs_performance", "ehs_area_id2")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_ehs_area_id2" class="form-item-view">@Html.Raw(fieldModel.ehs_area_id2_text)</div>
+                  </div>
+
+                    <div id="form_item_ba_id2" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_ehs_performance", "ba_id2")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_ba_id2" class="form-item-view">@Html.Raw(fieldModel.ba_id2_text)</div>
+                  </div>
+
+                    <div id="form_item_pa_id2" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_ehs_performance", "pa_id2")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_pa_id2" class="form-item-view">@Html.Raw(fieldModel.pa_id2_text)</div>
+                  </div>
+
+                    <div id="form_item_psa_id2" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_ehs_performance", "psa_id2")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_psa_id2" class="form-item-view">@Html.Raw(fieldModel.psa_id2_text)</div>
+                  </div>
+
+                    <div id="form_item_tahun2" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_ehs_performance", "tahun2")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_tahun2" class="form-item-view">@Html.Raw(fieldModel.tahun2_text)</div>
+                  </div>
+
+                    <div id="form_item_bulan2" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_ehs_performance", "bulan2")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_bulan2" class="form-item-view">@Html.Raw(fieldModel.bulan2_text)</div>
+                  </div>
+
+                    <div id="form_item_ehs_area_id3" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_ehs_performance", "ehs_area_id3")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_ehs_area_id3" class="form-item-view">@Html.Raw(fieldModel.ehs_area_id3_text)</div>
+                  </div>
+
+                    <div id="form_item_ba_id3" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_ehs_performance", "ba_id3")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_ba_id3" class="form-item-view">@Html.Raw(fieldModel.ba_id3_text)</div>
+                  </div>
+
+                    <div id="form_item_pa_id3" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_ehs_performance", "pa_id3")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_pa_id3" class="form-item-view">@Html.Raw(fieldModel.pa_id3_text)</div>
+                  </div>
+
+                    <div id="form_item_psa_id3" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_ehs_performance", "psa_id3")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_psa_id3" class="form-item-view">@Html.Raw(fieldModel.psa_id3_text)</div>
+                  </div>
+
+                    <div id="form_item_tahun3" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_ehs_performance", "tahun3")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_tahun3" class="form-item-view">@Html.Raw(fieldModel.tahun3_text)</div>
+                  </div>
+
+                    <div id="form_item_bulan3" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_ehs_performance", "bulan3")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_bulan3" class="form-item-view">@Html.Raw(fieldModel.bulan3_text)</div>
+                  </div>
+
+				</div>
+			</div>
+		</div>
+		<div class="panel-footer">
+			<a id="close" class="k-button k-button-icontext" href="#"><i class="far fa-times-circle"></i>&nbsp;<span id="btnCloseText">@ResxHelper.GetValue("Message", "Close", "Tutup")</span></a>
+		</div>
+	</div>
+</div>
+<script>
+    $("#close").kendoButton();
+    $("#close").click(function (e) {
+        close_self();
+    });
+    function onCloseDialog(e) { $('#dialog').html(''); }
+    function closeDialog() { $("#dialog").data("kendoWindow").close(); }
+    function close_self() { if (window.parent.$("#dialog_ta_ehs_performance").data("kendoWindow")) { window.parent.$("#dialog_ta_ehs_performance").data("kendoWindow").close(); } else { window.parent.$("#dialog").data("kendoWindow").close(); } }
+</script>

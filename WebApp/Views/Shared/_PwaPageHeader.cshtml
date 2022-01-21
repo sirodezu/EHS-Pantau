@@ -1,0 +1,42 @@
+@if (ViewBag.AppHeader?.Length > 0)
+{
+    <header class="page-header" role="banner">
+        <partial name="_Logo" />
+        @if (ViewBag.AppLayoutShortcut?.Length > 0)
+        {
+            <div class="hidden-md-down dropdown-icon-menu position-relative">
+                <a href="#" class="header-btn btn js-waves-off" data-action="toggle" data-class="nav-function-hidden" title="Hide Navigation">
+                    <i class="ni ni-menu"></i>
+                </a>
+                <ul>
+                    <li>
+                        <a href="#" class="btn js-waves-off" data-action="toggle" data-class="nav-function-minify" title="Minify Navigation">
+                            <i class="ni ni-minify-nav"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="btn js-waves-off" data-action="toggle" data-class="nav-function-fixed" title="Lock Navigation">
+                            <i class="ni ni-lock-nav"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        }
+        <div class="hidden-lg-up">
+            <a href="#" class="header-btn btn press-scale-down" data-action="toggle" data-class="mobile-nav-on">
+                <i class="ni ni-menu"></i>
+            </a>
+        </div>
+        <div class="ml-auto d-flex">
+            <div>
+                <a href="#" data-toggle="dropdown" title="@ViewBag.Fullname" class="header-icon d-flex align-items-center justify-content-center ml-2">
+                    <img src="~/img/user_menu.png" class="profile-image rounded-circle" alt="@ViewBag.User">
+                    @ViewBag.Fullname
+                </a>
+                <div class="dropdown-menu dropdown-menu-animated dropdown-lg">
+                    <partial name="_PwaDropdownMenu" />
+                </div>
+            </div>
+        </div>
+    </header>
+}

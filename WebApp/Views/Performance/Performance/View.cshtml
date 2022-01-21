@@ -1,0 +1,353 @@
+@using WebApp
+@using Microsoft.AspNetCore.Http;
+@{
+    Layout = "~/Views/Shared/_LayoutNoHeader.cshtml";
+    var fieldModel = ViewData["fieldModel"] as WebApp.Models.PerformanceModel.ViewModel;
+	ViewData["Title"] = ViewData["TitleHeader"];
+    ViewData["PageName"] = "performance";
+    ViewData["Heading"] = ViewData["TitleHeader"];
+    ViewData["Category1"] = "";
+    ViewData["Category2"] = "";
+}
+<div class="panel panel-form">
+	<div class="panel-container">
+		<div class="panel-heading">
+			<div class="title-header">@ViewData["TitleHeader"]</div>
+		</div>
+		<div class="panel-content">
+			<div class="row">
+                <div class="col-lg-6">
+
+                    <div id="form_item_id" class="form-group-none">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_performance", "id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_id" class="form-item-view">@Html.Raw(fieldModel.id)</div>
+                    </div>
+
+                    <div id="form_item_ehs_area_id" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_performance", "ehs_area_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_ehs_area_id" class="form-item-view">@Html.Raw(fieldModel.ehs_area_id_text)</div>
+                    </div>
+
+                    <div id="form_item_ba_id" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_performance", "ba_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_ba_id" class="form-item-view">@Html.Raw(fieldModel.ba_id_text)</div>
+                    </div>
+
+                    <div id="form_item_pa_id" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_performance", "pa_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_pa_id" class="form-item-view">@Html.Raw(fieldModel.pa_id_text)</div>
+                    </div>
+
+                    <div id="form_item_psa_id" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_performance", "psa_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_psa_id" class="form-item-view">@Html.Raw(fieldModel.psa_id_text)</div>
+                    </div>
+
+                    <div id="form_item_company_id" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_performance", "company_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_company_id" class="form-item-view">@Html.Raw(fieldModel.company_id_text)</div>
+                    </div>
+
+                    <div id="form_item_person_id" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_performance", "person_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_person_id" class="form-item-view">@Html.Raw(fieldModel.person_id_text)</div>
+                    </div>
+
+
+                    <div><p>&nbsp;</p></div>
+
+                    <div id="form_item_kategori_kejadian_id" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_performance", "kategori_kejadian_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_kategori_kejadian_id" class="form-item-view">@Html.Raw(fieldModel.kategori_kejadian_id_text)</div>
+                    </div>
+
+                    <div><p>&nbsp;</p></div>
+
+
+                    <div id="form_item_bidang_penghargaan_id" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_performance", "bidang_penghargaan_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_bidang_penghargaan_id" class="form-item-view">@Html.Raw(fieldModel.bidang_penghargaan_id_text)</div>
+                    </div>
+
+                    <div id="form_item_bidang_penghargaan_deskripsi" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_performance", "bidang_penghargaan_deskripsi")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_bidang_penghargaan_deskripsi" class="form-item-view">@Html.Raw(fieldModel.bidang_penghargaan_deskripsi)</div>
+                    </div>
+
+                    <div id="form_item_tgl_kasih_penghargaan" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_performance", "tgl_kasih_penghargaan")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_tgl_kasih_penghargaan" class="form-item-view">@Html.Raw(fieldModel.tgl_kasih_penghargaan)</div>
+                    </div>
+
+                    <div id="form_item_pemberi_penghargaan" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_performance", "pemberi_penghargaan")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_pemberi_penghargaan" class="form-item-view">@Html.Raw(fieldModel.pemberi_penghargaan_text)</div>
+                    </div>
+
+
+
+                    <div id="form_item_sakit_jml_hari" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_performance", "sakit_jml_hari")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_sakit_jml_hari" class="form-item-view">@Html.Raw(fieldModel.sakit_jml_hari)</div>
+                    </div>
+
+                    <div id="form_item_sakit_deskripsi" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_performance", "sakit_deskripsi")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_sakit_deskripsi" class="form-item-view">@Html.Raw(fieldModel.sakit_deskripsi)</div>
+                    </div>
+
+                    <div id="form_item_sakit_tgl_mulai" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_performance", "sakit_tgl_mulai")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_sakit_tgl_mulai" class="form-item-view">@Html.Raw(fieldModel.sakit_tgl_mulai)</div>
+                    </div>
+
+                    <div id="form_item_sakit_tgl_akhir" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_performance", "sakit_tgl_akhir")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_sakit_tgl_akhir" class="form-item-view">@Html.Raw(fieldModel.sakit_tgl_akhir)</div>
+                    </div>
+
+
+                    
+                    
+                    <div id="form_item_judul_kejadian" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_performance", "judul_kejadian")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_judul_kejadian" class="form-item-view">@Html.Raw(fieldModel.judul_kejadian)</div>
+                    </div>
+
+                    <div id="form_item_no_kejadian" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_performance", "no_kejadian")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_no_kejadian" class="form-item-view">@Html.Raw(fieldModel.no_kejadian)</div>
+                    </div>
+
+                    <div id="form_item_tgl_kejadian" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_performance", "tgl_kejadian")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_tgl_kejadian" class="form-item-view">@Html.Raw(fieldModel.tgl_kejadian)</div>
+                    </div>
+
+                    <div id="form_item_waktu_kejadian_id" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_performance", "waktu_kejadian_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_waktu_kejadian_id" class="form-item-view">@Html.Raw(fieldModel.waktu_kejadian_id_text)</div>
+                    </div>
+
+                    <div id="form_item_lokasi_kejadian_id" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_performance", "lokasi_kejadian_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_lokasi_kejadian_id" class="form-item-view">@Html.Raw(fieldModel.lokasi_kejadian_id_text)</div>
+                    </div>
+
+                    <div id="form_item_deskripsi_kejadian" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_performance", "deskripsi_kejadian")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_deskripsi_kejadian" class="form-item-view">@Html.Raw(fieldModel.deskripsi_kejadian)</div>
+                    </div>
+
+
+
+                </div>
+                <div class="col-lg-6">
+                    <div id="form_item_jenis_pelanggaran_id" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_performance", "jenis_pelanggaran_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_jenis_pelanggaran_id" class="form-item-view">@Html.Raw(fieldModel.jenis_pelanggaran_id_text)</div>
+                    </div>
+
+                    <div id="form_item_resiko_kejadian_id" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_performance", "resiko_kejadian_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_resiko_kejadian_id" class="form-item-view">@Html.Raw(fieldModel.resiko_kejadian_id_text)</div>
+                    </div>
+
+                    <div><p>&nbsp;</p></div>
+
+                    <div id="form_item_deskripsi_sanksi" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_performance", "deskripsi_sanksi")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_deskripsi_sanksi" class="form-item-view">@Html.Raw(fieldModel.deskripsi_sanksi)</div>
+                    </div>
+
+                    <div id="form_item_masa_berlaku_sanksi" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_performance", "masa_berlaku_sanksi")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_masa_berlaku_sanksi" class="form-item-view">@Html.Raw(fieldModel.masa_berlaku_sanksi)</div>
+                    </div>
+
+                    <div id="form_item_masa_berakhir_sanksi" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_performance", "masa_berakhir_sanksi")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_masa_berakhir_sanksi" class="form-item-view">@Html.Raw(fieldModel.masa_berakhir_sanksi)</div>
+                    </div>
+
+                    <div id="form_item_pemberi_sanksi_id" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_performance", "pemberi_sanksi_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_pemberi_sanksi_id" class="form-item-view">@Html.Raw(fieldModel.pemberi_sanksi_id_text)</div>
+                    </div>
+
+                    <div id="form_item_nama_pemberi_sanksi" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_performance", "nama_pemberi_sanksi")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_nama_pemberi_sanksi" class="form-item-view">@Html.Raw(fieldModel.nama_pemberi_sanksi)</div>
+                    </div>
+
+                    <div id="form_item_company_code_pemberi_sanksi" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_performance", "company_code_pemberi_sanksi")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_company_code_pemberi_sanksi" class="form-item-view">@Html.Raw(fieldModel.company_code_pemberi_sanksi)</div>
+                    </div>
+
+
+
+                </div>
+			</div>
+		</div>
+		<div class="panel-footer">
+			<a id="close" class="k-button k-button-icontext" href="#"><i class="far fa-times-circle"></i>&nbsp;<span id="btnCloseText">@ResxHelper.GetValue("Message", "Close", "Tutup")</span></a>
+		</div>
+	</div>
+</div>
+<script>
+    $("#close").kendoButton();
+    $("#close").click(function (e) {
+        close_self();
+    });
+    function onCloseDialog(e) { $('#dialog').html(''); }
+    function closeDialog() { $("#dialog").data("kendoWindow").close(); }
+    function close_self() { if (window.parent.$("#dialog_ta_performance").data("kendoWindow")) { window.parent.$("#dialog_ta_performance").data("kendoWindow").close(); } else { window.parent.$("#dialog").data("kendoWindow").close(); } }
+
+	function display_by_type() {
+        var kat = '@Html.Raw(fieldModel.kategori_kejadian_id)';
+        if (kat == '1') {
+            $('#form_item_bidang_penghargaan_id').removeClass("form-group-none").addClass("form-group");
+            $('#form_item_bidang_penghargaan_deskripsi').removeClass("form-group-none").addClass("form-group");
+			$('#form_item_tgl_kasih_penghargaan').removeClass("form-group-none").addClass("form-group");
+			$('#form_item_pemberi_penghargaan').removeClass("form-group-none").addClass("form-group");
+			
+
+            $('#form_item_sakit_jml_hari').removeClass("form-group").addClass("form-group-none");
+            $('#form_item_sakit_deskripsi').removeClass("form-group").addClass("form-group-none");
+            $('#form_item_sakit_tgl_mulai').removeClass("form-group").addClass("form-group-none");
+            $('#form_item_sakit_tgl_akhir').removeClass("form-group").addClass("form-group-none");
+
+            $('#form_item_judul_kejadian').removeClass("form-group").addClass("form-group-none");
+            $('#form_item_no_kejadian').removeClass("form-group").addClass("form-group-none");
+            $('#form_item_tgl_kejadian').removeClass("form-group").addClass("form-group-none");
+            $('#form_item_waktu_kejadian_id').removeClass("form-group").addClass("form-group-none");
+            $('#form_item_lokasi_kejadian_id').removeClass("form-group").addClass("form-group-none");
+            $('#form_item_jenis_pelanggaran_id').removeClass("form-group").addClass("form-group-none");
+            $('#form_item_resiko_kejadian_id').removeClass("form-group").addClass("form-group-none");
+            $('#form_item_deskripsi_sanksi').removeClass("form-group").addClass("form-group-none");
+            $('#form_item_masa_berlaku_sanksi').removeClass("form-group").addClass("form-group-none");
+            $('#form_item_masa_berakhir_sanksi').removeClass("form-group").addClass("form-group-none");
+            $('#form_item_deskripsi_kejadian').removeClass("form-group").addClass("form-group-none");
+            $('#form_item_pemberi_sanksi_id').removeClass("form-group").addClass("form-group-none");
+            $('#form_item_nama_pemberi_sanksi').removeClass("form-group").addClass("form-group-none");
+            $('#form_item_company_code_pemberi_sanksi').removeClass("form-group").addClass("form-group-none");
+
+
+        } else if (kat == "3") {
+            $('#form_item_bidang_penghargaan_id').removeClass("form-group").addClass("form-group-none");
+            $('#form_item_bidang_penghargaan_deskripsi').removeClass("form-group").addClass("form-group-none");
+			$('#form_item_tgl_kasih_penghargaan').removeClass("form-group").addClass("form-group-none");
+			$('#form_item_pemberi_penghargaan').removeClass("form-group").addClass("form-group-none");
+
+
+            $('#form_item_sakit_jml_hari').removeClass("form-group-none").addClass("form-group");
+            $('#form_item_sakit_deskripsi').removeClass("form-group-none").addClass("form-group");
+            $('#form_item_sakit_tgl_mulai').removeClass("form-group-none").addClass("form-group");
+            $('#form_item_sakit_tgl_akhir').removeClass("form-group-none").addClass("form-group");
+
+            $('#form_item_judul_kejadian').removeClass("form-group").addClass("form-group-none");
+            $('#form_item_no_kejadian').removeClass("form-group").addClass("form-group-none");
+            $('#form_item_tgl_kejadian').removeClass("form-group").addClass("form-group-none");
+            $('#form_item_waktu_kejadian_id').removeClass("form-group").addClass("form-group-none");
+            $('#form_item_lokasi_kejadian_id').removeClass("form-group").addClass("form-group-none");
+            $('#form_item_jenis_pelanggaran_id').removeClass("form-group").addClass("form-group-none");
+            $('#form_item_resiko_kejadian_id').removeClass("form-group").addClass("form-group-none");
+            $('#form_item_deskripsi_sanksi').removeClass("form-group").addClass("form-group-none");
+            $('#form_item_masa_berlaku_sanksi').removeClass("form-group").addClass("form-group-none");
+            $('#form_item_masa_berakhir_sanksi').removeClass("form-group").addClass("form-group-none");
+            $('#form_item_deskripsi_kejadian').removeClass("form-group").addClass("form-group-none");
+            $('#form_item_pemberi_sanksi_id').removeClass("form-group").addClass("form-group-none");
+            $('#form_item_nama_pemberi_sanksi').removeClass("form-group").addClass("form-group-none");
+            $('#form_item_company_code_pemberi_sanksi').removeClass("form-group").addClass("form-group-none");
+
+
+        } else if (kat == "2") {
+            $('#form_item_bidang_penghargaan_id').removeClass("form-group").addClass("form-group-none");
+            $('#form_item_bidang_penghargaan_deskripsi').removeClass("form-group").addClass("form-group-none");
+			$('#form_item_tgl_kasih_penghargaan').removeClass("form-group").addClass("form-group-none");
+			$('#form_item_pemberi_penghargaan').removeClass("form-group").addClass("form-group-none");			
+
+
+            $('#form_item_sakit_jml_hari').removeClass("form-group").addClass("form-group-none");
+            $('#form_item_sakit_deskripsi').removeClass("form-group").addClass("form-group-none");
+            $('#form_item_sakit_tgl_mulai').removeClass("form-group").addClass("form-group-none");
+            $('#form_item_sakit_tgl_akhir').removeClass("form-group").addClass("form-group-none");
+
+            $('#form_item_judul_kejadian').removeClass("form-group-none").addClass("form-group");
+            $('#form_item_no_kejadian').removeClass("form-group-none").addClass("form-group");
+            $('#form_item_tgl_kejadian').removeClass("form-group-none").addClass("form-group");
+            $('#form_item_waktu_kejadian_id').removeClass("form-group-none").addClass("form-group");
+            $('#form_item_lokasi_kejadian_id').removeClass("form-group-none").addClass("form-group");
+            $('#form_item_jenis_pelanggaran_id').removeClass("form-group-none").addClass("form-group");
+            $('#form_item_resiko_kejadian_id').removeClass("form-group-none").addClass("form-group");
+            $('#form_item_deskripsi_sanksi').removeClass("form-group-none").addClass("form-group");
+            $('#form_item_masa_berlaku_sanksi').removeClass("form-group-none").addClass("form-group");
+            $('#form_item_masa_berakhir_sanksi').removeClass("form-group-none").addClass("form-group");
+            $('#form_item_deskripsi_kejadian').removeClass("form-group-none").addClass("form-group");
+            $('#form_item_pemberi_sanksi_id').removeClass("form-group-none").addClass("form-group");
+            $('#form_item_nama_pemberi_sanksi').removeClass("form-group-none").addClass("form-group");
+            $('#form_item_company_code_pemberi_sanksi').removeClass("form-group-none").addClass("form-group");
+
+        } else {
+            $('#form_item_bidang_penghargaan_id').removeClass("form-group").addClass("form-group-none");
+            $('#form_item_bidang_penghargaan_deskripsi').removeClass("form-group").addClass("form-group-none");
+			$('#form_item_tgl_kasih_penghargaan').removeClass("form-group").addClass("form-group-none");
+			$('#form_item_pemberi_penghargaan').removeClass("form-group").addClass("form-group-none");						
+
+            $('#form_item_sakit_jml_hari').removeClass("form-group").addClass("form-group-none");
+            $('#form_item_sakit_deskripsi').removeClass("form-group").addClass("form-group-none");
+            $('#form_item_sakit_tgl_mulai').removeClass("form-group").addClass("form-group-none");
+            $('#form_item_sakit_tgl_akhir').removeClass("form-group").addClass("form-group-none");
+
+            $('#form_item_judul_kejadian').removeClass("form-group").addClass("form-group-none");
+            $('#form_item_no_kejadian').removeClass("form-group").addClass("form-group-none");
+            $('#form_item_tgl_kejadian').removeClass("form-group").addClass("form-group-none");
+            $('#form_item_waktu_kejadian_id').removeClass("form-group").addClass("form-group-none");
+            $('#form_item_lokasi_kejadian_id').removeClass("form-group").addClass("form-group-none");
+            $('#form_item_jenis_pelanggaran_id').removeClass("form-group").addClass("form-group-none");
+            $('#form_item_resiko_kejadian_id').removeClass("form-group").addClass("form-group-none");
+            $('#form_item_deskripsi_sanksi').removeClass("form-group").addClass("form-group-none");
+            $('#form_item_masa_berlaku_sanksi').removeClass("form-group").addClass("form-group-none");
+            $('#form_item_masa_berakhir_sanksi').removeClass("form-group").addClass("form-group-none");
+            $('#form_item_deskripsi_kejadian').removeClass("form-group").addClass("form-group-none");
+            $('#form_item_pemberi_sanksi_id').removeClass("form-group").addClass("form-group-none");
+            $('#form_item_nama_pemberi_sanksi').removeClass("form-group").addClass("form-group-none");
+            $('#form_item_company_code_pemberi_sanksi').removeClass("form-group").addClass("form-group-none");
+
+        }
+    }
+    $(document).ready(function () {
+        display_by_type();
+    });				
+</script>

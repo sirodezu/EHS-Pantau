@@ -1,0 +1,76 @@
+﻿
+@{
+    ViewData["Title"] = "SINKRONISASI DATA";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var path_data_sources = ViewData["path_data_sources"];
+    var path_data_archive = ViewData["path_data_archive"];
+    ViewData["Title"] = "SINKRONISASI DATA";
+    ViewData["PageName"] = "sinkro";
+    ViewData["Heading"] = "SINKRONISASI DATA";
+    ViewData["Category1"] = "System";
+    ViewData["Category2"] = "";
+}
+
+<div class="panel" id="form_edit">
+    <div class="panel-container">
+        <div class="panel-content">
+            <div>Simpan file sumber data dalam format csv pada folder : <b>@Html.Raw(path_data_sources)</b></div>
+            <div>Untuk mengubah Lokasi folder edit file <b>appsettings.json</b> pada bagian <b>path_data_sources</b></div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                    <div class="title-header">Data Karyawan</div>
+                    <div>
+                        Format Nama File yang dibutuhkan: <b>OBJ_P</b>_[TAHUN][BULAN][TANGGAL]<b>.csv</b>
+                        <div>contoh data klik <a href="@ViewBag.BaseUrl/data/sample/OBJ_P_20191023.csv" target="_blank">di sini</a></div>
+                    </div>
+                    <a onclick="get_data('person')" class="k-button k-button-icontext" href="#"><i class="fa fa-refresh"></i>&nbsp;<span>@ResxHelper.GetValue("Message", "Sinkronisasi", "Sinkronisasi")</span></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+</div>
+@section ScriptsBlock{
+    <script>
+        function get_data(obj) {
+            var msg = '';
+            var lnk = '@ViewBag.BaseUrl/Sinkro/';
+            if (obj == 'person') {
+                msg = 'Data Karyawan';
+                lnk = lnk + 'get_person';
+            }else if (obj == 'person_spesialisasi') {
+                msg = 'Data Spesialisasi Karyawan';
+                lnk = lnk + 'get_person_spesialisasi';
+            }else if (obj == 'person_qualification') {
+                msg = 'Data Kualifikasi Karyawan';
+                lnk = lnk + 'get_person_qualification';
+            }else if (obj == 'person_qualification_valid') {
+                msg = 'Data Masa Berlaku Kualifikasi Karyawan';
+                lnk = lnk + 'get_person_qualification_valid';
+            }
+            var data2 = { title: '@ResxHelper.GetValue("Message","ConfirmSinkroQuestion","Apakah Anda yakin akan melakukan Sinkronisasi Data:")', msg: msg };
+            var winconfirm = $("#dialogconfirm").kendoWindow({ title: "@ResxHelper.GetValue("Message","ConfirmSinkro","Konfirmasi Sinkronisasi Data")", modal: true, visible: false, resizable: true, draggable: true, width: "500px", height: "200px" }).data("kendoWindow");
+            winconfirm.content(confirmTemplate(data2));
+            winconfirm.center(); winconfirm.open();
+            $("#yesButton").click(function () {
+                kendo.ui.progress($("#dialogconfirm"), true);
+                $.ajax({
+                    url: lnk, type: 'POST'
+                    , success: function (data) {
+                        kendo.ui.progress($("#dialogconfirm"), false);
+                        if (data.status != 1) {
+                            notification.show({ title: data.title, message: kendo.toString(data.message) }, "error");
+                            winconfirm.close();
+                        } else {
+                            notification.show({ message: kendo.toString(data.message) }, "success");
+                            winconfirm.close();
+                        }
+                    }
+                });
+            });
+            $("#noButton").click(function () { winconfirm.close(); });
+        }
+    </script>
+}
+
+

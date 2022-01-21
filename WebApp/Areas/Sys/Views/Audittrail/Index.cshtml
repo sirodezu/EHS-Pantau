@@ -1,0 +1,422 @@
+﻿@using WebApp
+@using Newtonsoft.Json
+
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = ViewData["TitleHeader"];
+    ViewData["PageName"] = "audittrail";
+    ViewData["Heading"] = ViewData["TitleHeader"];
+    ViewData["Category1"] = "System";
+    ViewData["Category2"] = "";
+}
+
+<div class="panel">
+    <div class="panel-container">
+        <div class="panel-content">
+            <div id="collapse_filter_sys_audittrail" class="panel-collapse collapse">
+                <div class="panel-heading">
+                    @ResxHelper.GetValue("Message", "FilterDataHeader", "Filter Data")
+                </div>
+                <div class="panel-body">
+                    <section class="filter_cols">
+                        <div class="filter_col" id="fiter_obj_data">
+                            <label for="obj_data" class="label-form">@ResxHelper.GetValue("sys_audittrail", "obj_data"): </label>
+                            <input id="obj_data" name="obj_data" style="width: 250px;" />
+                        </div>
+                        <div class="filter_col" id="fiter_action_type">
+                            <label for="action_type" class="label-form">@ResxHelper.GetValue("sys_audittrail", "action_type"): </label>
+                            <input id="action_type" name="action_type" style="width: 150px;" />
+                        </div>
+                        <div class="filter_col" id="fiter_username">
+                            <label for="username" class="label-form">@ResxHelper.GetValue("sys_audittrail", "username"): </label>
+                            <input id="username" name="username" style="width: 250px;" />
+                        </div>
+                        <div class="filter_col" id="fiter_action_time">
+                            <label for="action_time" class="label-form">@ResxHelper.GetValue("sys_audittrail", "action_time"): </label>
+                            <input id="from_action_time" name="from_action_time" style="width: 130px" /> s/d <input id="to_action_time" name="to_action_time" style="width: 130px" />
+                        </div>
+                    </section>
+                </div>
+                <div class="panel-footer">
+                    <a id="btnResetFilter" onclick="reset_filter_sys_audittrail()" class="k-button" title="Reset Filter">@ResxHelper.GetValue("Message", "ResetFilter", "Reset Filter")</a>
+                </div>
+            </div>
+            <div>
+                <table id="toolbar_panel" style="width:100%;">
+                    <tr>
+                        <td>
+                            <span id="quick_search_template_sys_audittrail" class="k-textbox k-space-right"><input id="txtSearch_sys_audittrail" placeholder="@ResxHelper.GetValue("Message","QuickSearch")" value="" /><a id="btnSearch_sys_audittrail" href="#" class="k-icon k-i-search">&nbsp;</a></span>
+                            <img id="btnSearchByColumn_sys_audittrail" title="@ResxHelper.GetValue("Message","ShowSearchByColumn")" style="cursor:pointer" src="~/img/search_by_column.png" width="20">
+                            <img id="btnShowHideColumn_sys_audittrail" title="@ResxHelper.GetValue("Message","ShowHideColumn")" style="cursor:pointer" src="~/img/show_hide_column.png" width="20">
+                            <a id="btnShowHideFilter" data-toggle="collapse" href="#collapse_filter_sys_audittrail">@ResxHelper.GetValue("Message", "ShowFilter", "Tampilkan Filter")</a>
+                        </td>
+                        <td style="float:right">
+                            @*<a id="backup_data" onclick="backupData_sys_audittrail()" class="k-button">@ResxHelper.GetValue("Message", "Backup","Backup Data")</a>
+                            <a id="deleteSelected" onclick="DeleteSelectedData_sys_audittrail()" class="k-button">@ResxHelper.GetValue("sys_audittrail", "ToolTipDelete")</a>*@
+                            <a id="reset" onclick="ResetData_sys_audittrail()" class="k-button">@ResxHelper.GetValue("sys_audittrail", "ToolTipReset", "Kosongkan Data")</a>
+                            <img id="btnExportExcel_sys_audittrail" title="@ResxHelper.GetValue("Message","ExportToExcel")" style="cursor:pointer" src="~/img/excel.png" width="20" />&nbsp;
+                            <a id="btnAdd_sys_audittrail" onclick="AddData()" class="k-button" title="@ResxHelper.GetValue("Message","Add")">@ResxHelper.GetValue("Message", "Add", "Tambah")</a>
+                        </td>
+                    <tr>
+                </table>
+            </div>
+            <div id="grid_sys_audittrail"></div>
+        </div>
+    </div>
+</div>
+<div id="WinShowHideColumn_sys_audittrail" style="display: none">
+    <div id="attr_column_show_hide" style="width:auto;height:auto;overflow-y:scroll;"></div>
+</div>
+
+@section ScriptsBlock {
+    <script>
+        var param = @Html.Raw(JsonConvert.SerializeObject(ViewData["param"]));
+        var j_data = @Html.Raw(JsonConvert.SerializeObject(ViewData["column_att"]));
+        var colNameTooltip_sys_audittrail = [];
+        var colbuttonCount_sys_audittrail = 0;
+        var columnWidth = 40;
+        colbuttonCount_sys_audittrail += param.btnView == 1 ? 1 : 0;
+        colbuttonCount_sys_audittrail += param.btnEdit == 1 ? 1 : 0;
+        colbuttonCount_sys_audittrail += param.btnDelete == 1 ? 1 : 0;
+        colbuttonCount_sys_audittrail += param.btnCopy == 1 ? 1 : 0;
+        if (colbuttonCount_sys_audittrail == 1) { columnWidth = 40; } else if (colbuttonCount_sys_audittrail == 2) { columnWidth = 60; } else if (colbuttonCount_sys_audittrail == 3) { columnWidth = 95; } else if (colbuttonCount_sys_audittrail == 4) { columnWidth = 120; }
+        var columnActionWidth_sys_audittrail = columnWidth + "px";
+
+        var item_data = "";
+        var col_att = [];
+        var showhide_column = "";
+        var j = 0;
+        var checked = '';
+
+        //col_att[j] = { width: "25px", template: "<input class='checkbox' type='checkbox' />" };
+        //j++;
+        jQuery.each(j_data, function (i, val) {
+            item_data += item_data != "" ? "," : "";
+            item_data += '"' + val.name + '" : { "type": "' + val.type + '" } ';
+            if (val.display) {
+                col_att[j] = { field: val.name, title: val.title, hidden: JSON.parse(val.hidden), width: val.width, format: val.format, attributes: JSON.parse(val.attributes), encoded: JSON.parse(val.encoded), filterable: JSON.parse(val.filterable), sortable: JSON.parse(val.sortable), headerAttributes: { style: "white-space: normal;vertical-align:middle;text-align:center" } };
+                j++;
+                checked = '';
+                if (val.hidden.toString() == 'false') {
+                    checked = 'checked';
+                }
+                showhide_column += '<div><input type="checkbox" onclick="ShowHideColumn_sys_audittrail(this)" '+ checked +' value="' + val.name + '" /> ' + val.title + '</div>';
+            }
+        });
+        showhide_column += '<div><input type="checkbox" onclick="ShowHideColumn_sys_audittrail(this)" checked value="' + j + '" /> Action</div>';
+        item_data = '{' + item_data + '}';
+        var field_data = JSON.parse(item_data);
+        var columns_data = col_att;
+        var col_command = [];
+        var k = 0;
+        if (param.btnView== 1) {
+            col_command[k] = { name: "View", text: "", className: "v-view", click: function (e) { var tr = $(e.target).closest("tr"); var data = this.dataItem(tr); ViewItem_sys_audittrail(data); } };
+            k++;
+        }
+        if (param.btnEdit== 1) {
+            col_command[k] = { name: "Edit", text: "", className: "v-pencil", click: function (e) { var tr = $(e.target).closest("tr"); var data = this.dataItem(tr); EditData_sys_audittrail(data); } };
+            k++;
+        }
+        if (param.btnDelete== 1) {
+            col_command[k] = { name: "Delete", text: "", className: "v-close", click: function (e) { var tr = $(e.target).closest("tr"); var data = this.dataItem(tr); DeleteData_sys_audittrail(data); } };
+            k++;
+        }
+        if (param.btnCopy== 1) {
+            col_command[k] = { name: "Copy", text: "", className: "v-copy", click: function (e) { var tr = $(e.target).closest("tr"); var data = this.dataItem(tr); CopyData_sys_audittrail(data); } };
+            k++;
+        }
+        columns_data[j] = {command: col_command, width: columnActionWidth_sys_audittrail, attributes: " style=\"vertical-align:top;\""};
+
+        //==========================================
+        var confirmTemplate = kendo.template($("#confirmTemplate").html());
+        var notification = $("#notification").kendoNotification({ autoHideAfter: 2000, stacking: "down", show: onShowNotification, templates: [{ type: "info", template: $("#infoTemplate").html() }, { type: "lock", template: $("#lockTemplate").html() }, { type: "error", template: $("#errorTemplate").html() }, { type: "success", template: $("#successTemplate").html() }] }).data("kendoNotification");
+        function onShowNotification(e) { if (!$("." + e.sender._guid)[1]) { var element = e.element.parent(), eWidth = element.width(), eHeight = element.height(), wWidth = $(window).width(), wHeight = $(window).height(), newTop, newLeft; newLeft = Math.floor(wWidth / 2 - eWidth / 2); newTop = Math.floor(wHeight / 2 - eHeight / 2); e.element.parent().css({ top: newTop, left: newLeft }); } }
+
+        var obj_data_param = { item: { value: 'obj_data', text: 'obj_data' } };
+        var obj_data_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Sys/Audittrail/LookupObjData", dataType: "json", data: obj_data_param, type: "POST" } } });
+        var obj_data = $("#obj_data").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", change: onChange_obj_data, dataSource: obj_data_ds }).data("kendoComboBox");
+        $(document).ready(function () { $("#obj_data").data("kendoComboBox").value(''); });
+        function onChange_obj_data() {
+            if ($("#obj_data").data("kendoComboBox").value() != '' && $("#obj_data").data("kendoComboBox")._oldIndex == -1) { $("#obj_data").data("kendoComboBox").value(''); }
+            $("#obj_data_val").val($("#obj_data").data("kendoComboBox").value());
+            onFilterHeader_sys_audittrail();
+        }
+
+        var action_type_ds = [{ value: "", text: "" }, { value: "Add", text: "Add" }, { value: "Edit", text: "Edit" }, { value: "Delete", text: "Delete" }, { value: "Login", text: "Login" }, { value: "Logout", text: "Logout" }];
+        var action_type = $("#action_type").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", change: onChange_action_type, dataSource: action_type_ds }).data("kendoComboBox");
+        $(document).ready(function () { $("#action_type").data("kendoComboBox").value(''); });
+        function onChange_action_type() {
+            if ($("#action_type").data("kendoComboBox").value() != '' && $("#action_type").data("kendoComboBox")._oldIndex == -1) { $("#action_type").data("kendoComboBox").value(''); }
+            $("#action_type_val").val($("#action_type").data("kendoComboBox").value());
+            onFilterHeader_sys_audittrail();
+        }
+        var username_param = { item: { value: 'username', text: 'username' } };
+        var username_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Sys/Audittrail/LookupUsername", dataType: "json", data: username_param, type: "POST" } } });
+        var username = $("#username").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", change: onChange_username, dataSource: username_ds }).data("kendoComboBox");
+        $(document).ready(function () { $("#username").data("kendoComboBox").value(''); });
+        function onChange_username() {
+            if ($("#username").data("kendoComboBox").value() != '' && $("#username").data("kendoComboBox")._oldIndex == -1) { $("#username").data("kendoComboBox").value(''); }
+            $("#username_val").val($("#username").data("kendoComboBox").value());
+            onFilterHeader_sys_audittrail();
+        }
+        $(document).ready(function () {
+            var cur_th = parseInt('@DateTime.Today.Year.ToString()');
+            var cur_m = parseInt('@DateTime.Today.Month.ToString()') - 1;
+            var cur_d = parseInt('@DateTime.Today.Day.ToString()');
+            var maxDate = new Date(cur_th, cur_m, cur_d);
+            var from_action_time = $("#from_action_time").kendoDatePicker({
+                change: from_action_time_Change,max:maxDate
+            }).data("kendoDatePicker");
+
+            var to_action_time = $("#to_action_time").kendoDatePicker({
+                change: to_action_time_Change,max:maxDate
+            }).data("kendoDatePicker");
+            from_action_time.max(to_action_time.value());
+            to_action_time.min(from_action_time.value());
+
+            function from_action_time_Change() {
+                var par_from_action_time = from_action_time.value(),
+                    par_to_action_time = to_action_time.value();
+
+                if (par_from_action_time) {
+                    par_from_action_time = new Date(par_from_action_time);
+                    par_from_action_time.setDate(par_from_action_time.getDate());
+                    to_action_time.min(par_from_action_time);
+                } else if (par_to_action_time) {
+                    from_action_time.max(new Date(par_to_action_time));
+                } else {
+                    par_to_action_time = new Date();
+                    from_action_time.max(par_to_action_time);
+                    to_action_time.min(par_to_action_time);
+                }
+                if (from_action_time.value() == null) {
+                    from_action_time.value('');
+                }
+                onFilterHeader_sys_audittrail();
+            }
+
+            function to_action_time_Change() {
+                var par_to_action_time = to_action_time.value(),
+                    par_from_action_time = from_action_time.value();
+
+                if (par_to_action_time) {
+                    par_to_action_time = new Date(par_to_action_time);
+                    par_to_action_time.setDate(par_to_action_time.getDate());
+                    from_action_time.max(par_to_action_time);
+                } else if (par_from_action_time) {
+                    to_action_time.min(new Date(par_from_action_time));
+                } else {
+                    par_to_action_time = new Date();
+                    from_action_time.max(par_to_action_time);
+                    to_action_time.min(par_to_action_time);
+                }
+                onFilterHeader_sys_audittrail();
+            }
+
+
+        });
+        //====================================
+        $("#collapse_filter_sys_audittrail").on('shown.bs.collapse', function () {
+            $("#btnShowHideFilter").html('@ResxHelper.GetValue("Message","HideFilter","Sembunyikan Filter")');
+        });
+        $("#collapse_filter_sys_audittrail").on('hidden.bs.collapse', function () {
+            $("#btnShowHideFilter").html('@ResxHelper.GetValue("Message","ShowFilter","Tampilkan Filter")');
+        });
+        var record_sys_audittrail = 0;
+        var grid_sys_audittrail_heigth = 0;
+        var ds_sys_audittrail_filter = { filter_by_column: [] };
+        var ds_sys_audittrail = new kendo.data.DataSource({ transport: { read: { url: "@ViewData["UrlGetList"]", dataType: "json", type: "POST", data: ds_sys_audittrail_filter }, parameterMap: function (options) { if (options.filter) { for (var i = 0; i < options.filter.filters.length; i++) { if (options.filter.filters[i].field == 'action_time') { options.filter.filters[i].value = kendo.toString(options.filter.filters[i].value, "yyyy-MM-dd"); } } } return options; } }, schema: { data: "data", total: "total", aggregates: "aggregates", model: { fields: field_data } }, aggregate: [], pageSize: 10, serverAggregates: true, serverPaging: true, serverFiltering: true, serverSorting: true });
+        var list_sys_audittrail = $("#grid_sys_audittrail").kendoGrid({
+            excel: { allPages: true, fileName: '@ViewData["TitleHeader"]'+'.xlsx' },
+            dataSource: ds_sys_audittrail, dataBound: onDataBound_sys_audittrail, height: grid_sys_audittrail_heigth, scrollable: true, groupable: false, columnMenu: false, menu: true, resizable: true, filterable: false, sortable: { mode: "multiple", allowUnsort: true }, pageable: { refresh: true, pageSizes: [5, 10, 20, 50, 100, 200], buttonCount: 5 },
+            columns: columns_data, editable: false, dataBinding: function () { $(".k-grid-content").css("min-height", "320px"); record_sys_audittrail = (this.dataSource.page() - 1) * this.dataSource.pageSize(); }
+        });
+        //list_sys_audittrail_data = $("#grid_sys_audittrail").data("kendoGrid");
+        //list_sys_audittrail_data.table.on("click", ".checkbox" , selectRow);
+        function getParamgrid_sys_audittrail() {
+            var action_type = $("#action_type").data("kendoComboBox").value();
+            var obj_data = $("#obj_data").data("kendoComboBox").value();
+            var username = $("#username").data("kendoComboBox").value();
+            var filter_by_column = [];
+            var k = 0;
+            if (action_type != "") {
+                filter_by_column[k] = { name: "action_type", field: "sys_audittrail.action_type", type: "number", opr: "=", value: action_type };
+                k++;
+            }
+            if (obj_data != "") {
+                filter_by_column[k] = { name: "obj_data", field: "sys_audittrail.obj_data", type: "number", opr: "=", value: obj_data };
+                k++;
+            }
+            if (username != "") {
+                filter_by_column[k] = { name: "username", field: "sys_audittrail.username", type: "string", opr: "=", value: username };
+                k++;
+            }
+            if($("#from_action_time").data("kendoDatePicker").value() != null)
+            {
+                var from_action_time = kendo.toString($("#from_action_time").data("kendoDatePicker").value(), "yyyy-MM-dd");
+                filter_by_column[k] = { name: "from_action_time", field: "sys_audittrail.action_time", type: "date", opr: ">=", value: from_action_time };
+                k++;
+            }
+            if($("#to_action_time").data("kendoDatePicker").value() != null)
+            {
+                var par_to_action_time = $("#to_action_time").data("kendoDatePicker").value();
+                par_to_action_time = addDays(par_to_action_time, 1);
+                var from_action_time = kendo.toString(par_to_action_time,"yyyy-MM-dd");
+                filter_by_column[k] = { name: "to_action_time", field: "sys_audittrail.action_time", type: "date", opr: "<", value: from_action_time };
+                k++;
+            }
+            return { filter_by_column: filter_by_column };
+
+        }
+        function reset_filter_sys_audittrail() {
+            $("#action_type").data("kendoComboBox").value('');
+            $("#obj_data").data("kendoComboBox").value('');
+            $("#username").data("kendoComboBox").value('');
+            $("#from_action_time").data("kendoDatePicker").value('');
+            $("#to_action_time").data("kendoDatePicker").value('');
+            onFilterHeader_sys_audittrail();
+        }
+        function onFilterHeader_sys_audittrail() {
+            $("#txtSearch_sys_audittrail").val('');
+            paramValue = getParamgrid_sys_audittrail();
+            if (list_sys_audittrail.data('kendoGrid').dataSource.page() > 1) {list_sys_audittrail.data('kendoGrid').dataSource.page(0);}
+            list_sys_audittrail.data('kendoGrid').dataSource.transport.options.read.data = paramValue;
+            list_sys_audittrail.data("kendoGrid").dataSource.filter([]);
+        };
+        $("#btnSearchByColumn_sys_audittrail").click(function () { var grid_sys_audittrail_heigth_filter = grid_sys_audittrail_heigth + 38; if (list_sys_audittrail.data("kendoGrid").options.filterable == false) { $('#btnSearchByColumn_sys_audittrail').prop('title', '@ResxHelper.GetValue("Message","HideSearchByColumn")'); $("#txtSearch_sys_audittrail").val(''); if ('1' == '1') { $("#quick_search_template_sys_audittrail").hide(); }; QuickSearch_sys_audittrail(); list_sys_audittrail.data("kendoGrid").setOptions({ height: grid_sys_audittrail_heigth_filter, filterable: { mode: "row" }, }); } else { $('#btnSearchByColumn_sys_audittrail').prop('title', '@ResxHelper.GetValue("Message","ShowSearchByColumn")'); $("#txtSearch_sys_audittrail").val(''); if ('1' == '1') { $("#quick_search_template_sys_audittrail").show(); }; QuickSearch_sys_audittrail(); list_sys_audittrail.data("kendoGrid").setOptions({ height: grid_sys_audittrail_heigth, filterable: false, }); } });
+        $("#btnSearch_sys_audittrail").click(function () { QuickSearch_sys_audittrail(); });
+        $('#txtSearch_sys_audittrail').keypress(function (e) { if (e.keyCode == 13) { QuickSearch_sys_audittrail(); } });
+        function QuickSearch_sys_audittrail() {
+            $filter = new Array();
+            $x = $("#txtSearch_sys_audittrail").val();
+            if ($x) {
+                jQuery.each(j_data, function (i, val) {
+                    if (val.display && val.qsearch && val.type =='string') {
+                        $filter.push({ name: val.name, opr: "contains", value: $x });
+                    }
+                });
+            }
+            if ($filter.length > 0) {
+                list_sys_audittrail.data("kendoGrid").dataSource.filter({ logic: "or", filters: $filter });
+            }
+            else {
+                list_sys_audittrail.data("kendoGrid").dataSource.filter([]);
+            }
+        }
+        function Reload_list_sys_audittrail() { list_sys_audittrail.data('kendoGrid').dataSource.read(); list_sys_audittrail.data('kendoGrid').refresh(); }
+        function onDataBound_sys_audittrail(e) {
+            if (colbuttonCount_sys_audittrail > 0) {
+                var grid = $("#grid_sys_audittrail").data("kendoGrid"); var list_sys_audittrail = grid.dataSource.view();
+                for (var i = 0; i < list_sys_audittrail.length; i++) {
+                    var currentUid = list_sys_audittrail[i].uid; var currenRow = grid.table.find("tr[data-uid='" + currentUid + "']");
+                    if (param.btnView == 1) {
+                        var viewButton = $(currenRow).find(".k-grid-View"); viewButton.attr("title", "@ResxHelper.GetValue("Message","View")");
+                        if ("@ViewData["AllowView"]" == "1") {} else {viewButton.hide();}
+                    }
+                    if (param.btnEdit = 1) {
+                        var editButton = $(currenRow).find(".k-grid-Edit"); editButton.attr("title", "@ResxHelper.GetValue("Message","Edit")");
+                        if ("@ViewData["AllowEdit"]" == "1") {} else {editButton.hide();}
+                    }
+                    if (param.btnDelete == 1) {
+                        var deleteButton = $(currenRow).find(".k-grid-Delete"); deleteButton.attr("title", "@ResxHelper.GetValue("Message","Delete")");
+                        if ("@ViewData["AllowDelete"]" == "1") {} else {deleteButton.hide();}
+                    }
+                    if (param.btnCopy == 1) {
+                        var copyButton = $(currenRow).find(".k-grid-Copy"); copyButton.attr("title", "@ResxHelper.GetValue("Message","Copy")");
+                        if ("@ViewData["AllowAdd"]" == "1") {} else {copyButton.hide();}
+                    }
+                }
+            }
+        }
+        function AddData() { var contentUrl = '@ViewData["UrlAdd"]'; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog, }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: 700, height: 400, minHeight: 300, }); form_edit.data("kendoWindow").center().open().maximize(); }
+        function ViewItem_sys_audittrail(data) { var qs = 'id=' + data.id; var contentUrl = '@ViewData["UrlView"]?' + qs; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: 700, height: 500, minHeight: 300, }); form_edit.data("kendoWindow").center().open().maximize(); }
+        function EditData_sys_audittrail(data) { var qs = 'id=' + data.id; var contentUrl = '@ViewData["UrlEdit"]?' + qs; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: 700, height: 400, minHeight: 300, }); form_edit.data("kendoWindow").center().open().maximize(); }
+        function CopyData_sys_audittrail(data) { var qs = 'id=' + data.id; var contentUrl = '@ViewData["UrlCopy"]?' + qs; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: 700, height: 400, minHeight: 300, }); form_edit.data("kendoWindow").center().open().maximize(); }
+        function DeleteData_sys_audittrail(data) {
+            var keyValue = 'Nama: ' + data.name;
+            var data2 = { title: 'Apakah anda yakin akan menghapus data ini?', msg: keyValue };
+            var winconfirm = $("#dialogconfirm").kendoWindow({ title: "Hapus Role", modal: true, visible: false, resizable: true, draggable: true, width: "350px", height: "150px" }).data("kendoWindow");
+            winconfirm.content(confirmTemplate(data2));
+            winconfirm.center(); winconfirm.open();
+            $("#yesButton").click(function () {
+                $.ajax({
+                    data: { id: data.id }, url: '@ViewData["UrlDelete"]', type: 'POST'
+                    , success: function (data) {
+                        if (data.status != 1) {
+                            notification.show({ title: data.title, message: kendo.toString(data.message) }, "error");
+                            winconfirm.close();
+                        } else {
+                            notification.show({ message: kendo.toString(data.message) }, "success");
+                            Reload_list_sys_audittrail();
+                            winconfirm.close();
+                        }
+                    }
+                });
+            });
+            $("#noButton").click(function () { winconfirm.close(); });
+            }
+
+        function backupData_sys_audittrail() { var contentUrl = '@ViewBag.BaseUrl/Sys/Audittrail/backup'; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog, }); form_edit.data("kendoWindow").setOptions({ title: "@ResxHelper.GetValue("sys_audittrail","BackupTitle","Backup Data Audittrail")", modal: true, resizable: true, width: 700, height: 400, minHeight: 300, }); form_edit.data("kendoWindow").center().open().maximize();}
+        function DeleteSelectedData_sys_audittrail(){
+            var checked = [];
+            for(var i in checkedIds){
+                if(checkedIds[i]){
+                    checked.push(i);
+                }
+            }
+            if(checked.length>0)
+            {
+                var data2 = {title:'@ResxHelper.GetValue("Message","ConfirmDelete")',msg:""};
+                var winconfirm = $("#dialogconfirm").kendoWindow({title: "@ResxHelper.GetValue("sys_audittrail","DeleteTitle")",modal: true,visible: false,resizable: true,draggable: true,width: "350px",height: "150px"}).data("kendoWindow");
+                winconfirm.content(confirmTemplate(data2));winconfirm.center();winconfirm.open();$("#yesButton").click(function(){
+                    $.ajax({data:{key : checked},url:'@ViewBag.BaseUrl/Sys/Audittrail/deleteSelected',type:'POST',success:function(data){var data = eval('('+data+')');if(data.status != 1){notification.show({title: "",message: kendo.toString(data.msg)}, "error");winconfirm.close();}else{notification.show({message: kendo.toString(data.msg)}, "success");Reload_list_sys_audittrail();winconfirm.close();}}});});$("#noButton").click(function(){winconfirm.close();});
+            }
+            else
+            {
+                alert('belum ada data yang dipilih');
+            }
+        }
+        var checkedIds = {};
+        function selectRow() {
+            var checked = this.checked,
+            row = $(this).closest("tr"),
+            grid = $("#grid_sys_audittrail").data("kendoGrid"),
+            dataItem = grid.dataItem(row);
+            checkedIds[dataItem.action_year+'-'+dataItem.id] = checked;
+            if (checked) {
+                row.addClass("k-state-selected");
+            } else {
+                row.removeClass("k-state-selected");
+            }
+        }
+        function ResetData_sys_audittrail(){
+            var data2 = {title:'@ResxHelper.GetValue("Message","ConfirmReset","Apakah anda yakin akan mengosongkan data")',msg:""};
+            var winconfirm = $("#dialogconfirm").kendoWindow({title: "@ResxHelper.GetValue("sys_audittrail","ResetTitle","Kosongkan data")",modal: true,visible: false,resizable: true,draggable: true,width: "350px",height: "150px"}).data("kendoWindow");
+            winconfirm.content(confirmTemplate(data2));winconfirm.center();winconfirm.open();$("#yesButton").click(function(){
+                $.ajax({
+                    url: '@ViewBag.BaseUrl/Sys/Audittrail/Reset', type: 'POST', success: function (data) {
+                        if (data.status != 1) { notification.show({ title: "", message: kendo.toString(data.message) }, "error"); winconfirm.close(); } else { notification.show({ message: kendo.toString(data.message) }, "success"); Reload_list_sys_audittrail(); winconfirm.close(); }
+                    }
+                });
+            }); $("#noButton").click(function () { winconfirm.close(); });
+
+        }
+
+        function onCloseDialog(e) { $('#dialog').html(''); }
+        function closeDialog() { $("#dialog").data("kendoWindow").close(); }
+        $("#btnExportExcel_sys_audittrail").click(function (e) { var grid = $("#grid_sys_audittrail").data("kendoGrid"); grid.saveAsExcel(); });
+        function ShowHideColumn_sys_audittrail(e) { colname = $.isNumeric(e.value) ? parseInt(e.value) : e.value; if (e.checked) { $("#grid_sys_audittrail").data("kendoGrid").showColumn(colname); } else { $("#grid_sys_audittrail").data("kendoGrid").hideColumn(colname); } }
+        $(document).ready(function () {
+            $("#attr_column_show_hide").html(showhide_column);
+            if (param.ShowFilter != 1) { $("#filter_area").hide(); }
+            if (param.btnAdd != 1) { $("#btnAdd_sys_audittrail").hide(); }
+            if (param.quick_search != 1) { $("#quick_search_template_sys_audittrail").hide(); }
+            if (param.search_by_column  != 1) { $("#btnSearchByColumn_sys_audittrail").hide(); }
+            if (param.show_hide_column != 1) { $("#btnShowHideColumn_sys_audittrail").hide(); }
+            if (param.export_exl != 1) { $("#btnExportExcel_sys_audittrail").hide(); }
+            $("#btnShowHideColumn_sys_audittrail").click(function () { var x = $("#btnShowHideColumn_sys_audittrail").offset().left; var y = $("#btnShowHideColumn_sys_audittrail").offset().top; if (!WinShowHideColumn_sys_audittrail) { var WinShowHideColumn_sys_audittrail = $("#WinShowHideColumn_sys_audittrail").kendoWindow({ width: "300px", position: { left: x, top: y }, title: "@ResxHelper.GetValue("Message","ShowHideColumn")", actions: ["Close"] }); } WinShowHideColumn_sys_audittrail.data("kendoWindow").open(); });
+        });
+
+    </script>
+}

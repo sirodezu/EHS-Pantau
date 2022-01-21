@@ -1,0 +1,93 @@
+﻿@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@{
+    var baseUrl = HttpContextAccessor.HttpContext.Request.Scheme + "://" + HttpContextAccessor.HttpContext.Request.Host + "" + HttpContextAccessor.HttpContext.Request.PathBase;
+    var urlLogin = baseUrl + "/Pwa/Login";
+    PersonData curPerson = SecurityHelper.GetPersonData(HttpContextAccessor.HttpContext);
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ConfigHelper.GetValue("ApplicationCode"):: @ViewData["Title"] </title>
+    <link rel="icon" type="image/x-icon" sizes="16x16" href="~/favicon.ico">
+    <link rel="stylesheet" href="~/fontawesome/css/all.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/kendo/styles/kendo.common.min.css" />
+    <link rel="stylesheet" href="~/lib/kendo/styles/kendo.default.min.css" />
+    <link rel="stylesheet" href="~/lib/kendo/styles/kendo.default.mobile.min.css" />
+    <link rel="stylesheet" href="~/lib/kendo/styles/kendo.custom.css" />
+    <link rel="stylesheet" href="~/css/site_pwa.css" />
+    <link rel="manifest" href="~/manifest.json" />
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/kendo/js/kendo.all.min.js"></script>
+    <script src="~/lib/kendo/js/cultures/kendo.culture.id-ID.min.js"></script>
+    <script src="~/pwa_main.js"></script>
+    <script type='text/javascript'>
+        kendo.culture('@ResxHelper.CurrentCultureName');
+        kendo.cultures["@ResxHelper.CurrentCultureName"].calendars.standard.firstDay = 1;
+    </script>
+</head>
+<body>
+    <div class="background-header"></div>
+    <div id="dialog"></div>
+    <div id="dialogconfirm"></div>
+    <script id="confirmTemplate" type="text/x-kendo-template">
+        <center><p><span style="color:blue;font-size:12pt;font-weight:bold">#= title#</span><br /> <b>#= msg #</b></p><button class="k-button" id="yesButton">Ya</button><button class="k-button" id="noButton">Tidak</button></center>
+    </script>
+    <span id="notification" style="display:none;"></span>
+    <script id="infoTemplate" type="text/x-kendo-template">
+        <div class="new-info"><img src="@baseUrl/img/info-data.png" /><h3>#= title #</h3><p>#= message #</p></div>
+    </script>
+    <script id="lockTemplate" type="text/x-kendo-template">
+        <div class="lock-info"><img src="@baseUrl/img/lock-data.png" /><h3>Data Terkunci</h3><p>Diedit Oleh : #= lock_by #<br />Diedit Tanggal : #= lock_at #</p></div>
+    </script>
+    <script id="errorTemplate" type="text/x-kendo-template">
+        <div class="wrong-pass">
+            <div style="margin: auto;">
+                <img src="@baseUrl/img/error-icon.png" />
+            </div>
+            <div style="margin: auto;">
+                <h3>#= title #</h3>
+                <p>#= message #</p>
+            </div>
+        </div>
+    </script>
+    <script id="successTemplate" type="text/x-kendo-template">
+        <div class="upload-success">
+            <div style="margin: auto;"><img src="@baseUrl/img/success-icon.png" />
+            </div>
+            <div style="margin: auto;"><h3>#= message #</h3></div>
+        </div>
+    </script>
+    <script>
+        var confirmTemplate = kendo.template($("#confirmTemplate").html());
+        var notification = $("#notification").kendoNotification({ autoHideAfter: 300, stacking: "down", show: onShowNotification, templates: [{ type: "info", template: $("#infoTemplate").html() }, { type: "lock", template: $("#lockTemplate").html() }, { type: "error", template: $("#errorTemplate").html() }, { type: "success", template: $("#successTemplate").html() }] }).data("kendoNotification");
+        function onShowNotification(e) { if (!$("." + e.sender._guid)[1]) { var element = e.element.parent(), eWidth = element.width(), eHeight = element.height(), wWidth = $(window).width(), wHeight = $(window).height(), newTop, newLeft; newLeft = Math.floor(wWidth / 2 - eWidth / 2); newTop = Math.floor(wHeight / 2 - eHeight / 2); e.element.parent().css({ top: newTop, left: newLeft }); } }
+    </script>
+
+    <div class="container-fluid">
+        @RenderBody()
+    </div>
+    <footer class="footer text-muted">
+        <div class="text-center">
+            @ConfigHelper.GetValue("ApplicationCode") &copy;@DateTime.Now.Year.ToString() @ConfigHelper.GetValue("Copyright")
+        </div>
+    </footer>
+    <div class="background-footer"></div>
+
+    <script>
+        function gotoLogin() {
+            window.location.href = "@urlLogin";
+        }
+        $(document).ready(function () {
+            //onload_layout();
+        });
+    </script>
+    @RenderSection("Scripts", required: false)
+
+</body>
+</html>

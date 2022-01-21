@@ -1,0 +1,405 @@
+@using WebApp
+@using Microsoft.AspNetCore.Http;
+@{
+    Layout = "~/Views/Shared/_LayoutNoHeader.cshtml";
+    var fieldModel = ViewData["fieldModel"] as WebApp.Models.AuditKriteriaSmk3Model.ViewModel;
+    ViewData["Title"] = ViewData["TitleHeader"];
+    ViewData["PageName"] = "auditkriteriasmk3";
+    ViewData["Heading"] = ViewData["TitleHeader"];
+    ViewData["Category1"] = "";
+    ViewData["Category2"] = "";
+}
+
+<form id="form_edit" method="post" class="panel-form">
+    <div class="panel">
+        <div class="panel-heading">
+            <div class="title-header">@ViewData["TitleHeader"]</div>
+        </div>
+		<div class="panel-container">
+			<div class="panel-content">
+				<div class="row">
+					<div class="col-lg-12">
+                        <div id="form_item_id" class="form-group-none">
+                           <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_smk3", "id")<span id="label_req_id" class="required"> *</span></div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_id" class="form-item-field">
+                               <input type="number" id="id" name="id"  min="0" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_smk3","id"))" style ="width:200px;" />
+                               <span class="k-invalid-msg" data-for="id"></span>
+                               <input type="hidden" id="id_old" name="id_old" value="@fieldModel.id" />
+                               <script>
+                                   $("#id").kendoNumericTextBox({ format: "{0:N0}", decimals: 0 });
+                                   $(document).ready(function () {$("#id").data('kendoNumericTextBox').value('@fieldModel.id');})
+                               </script>
+                           </div>
+                       </div>
+
+                        <div id="form_item_audit_id" class="form-group-none">
+                           <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_smk3", "audit_id")<span id="label_req_audit_id" class="required"> *</span></div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_audit_id" class="form-item-field">
+                               <input type="number" id="audit_id" name="audit_id"  min="0" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_smk3","audit_id"))" style ="width:200px;" />
+                               <span class="k-invalid-msg" data-for="audit_id"></span>
+                               <script>
+                                   $("#audit_id").kendoNumericTextBox({ format: "{0:N0}", decimals: 0 });
+                                   $(document).ready(function () {$("#audit_id").data('kendoNumericTextBox').value('@fieldModel.audit_id');})
+                               </script>
+                           </div>
+                       </div>
+
+                        <div id="form_item_kriteria_audit_id" class="form-group-none">
+                           <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_smk3", "kriteria_audit_id")<span id="label_req_kriteria_audit_id" class="required"> *</span></div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_kriteria_audit_id" class="form-item-field">
+                               <input type="number" id="kriteria_audit_id" name="kriteria_audit_id"  min="0"  required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_smk3","kriteria_audit_id"))" style ="width:200px;" />
+                               <span class="k-invalid-msg" data-for="kriteria_audit_id"></span>
+                               <script>
+                                   $("#kriteria_audit_id").kendoNumericTextBox({ format: "{0:N0}", decimals: 0 });
+                                   $(document).ready(function () {$("#kriteria_audit_id").data('kendoNumericTextBox').value('@fieldModel.kriteria_audit_id');})
+                               </script>
+                           </div>
+                       </div>
+
+                        <div id="form_item_pembangunan_komitmen" class="form-group">
+                           <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_smk3", "pembangunan_komitmen")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_pembangunan_komitmen" class="form-item-field">
+                               <input type="number" id="pembangunan_komitmen" name="pembangunan_komitmen"   min="0" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_smk3","pembangunan_komitmen"))" style ="width:200px;" />
+                               <span class="k-invalid-msg" data-for="pembangunan_komitmen"></span>
+                               <script>
+                                   $("#pembangunan_komitmen").kendoNumericTextBox({ format: "{0:N2}", decimals: 2 });
+                                   $(document).ready(function () {$("#pembangunan_komitmen").data('kendoNumericTextBox').value('@fieldModel.pembangunan_komitmen');})
+                               </script>
+                           </div>
+                       </div>
+
+                        <div id="form_item_pembuatan_rencana_kerja" class="form-group">
+                           <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_smk3", "pembuatan_rencana_kerja")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_pembuatan_rencana_kerja" class="form-item-field">
+                               <input type="number" id="pembuatan_rencana_kerja" name="pembuatan_rencana_kerja"  min="0"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_smk3","pembuatan_rencana_kerja"))" style ="width:200px;" />
+                               <span class="k-invalid-msg" data-for="pembuatan_rencana_kerja"></span>
+                               <script>
+                                   $("#pembuatan_rencana_kerja").kendoNumericTextBox({ format: "{0:N2}", decimals: 2 });
+                                   $(document).ready(function () {$("#pembuatan_rencana_kerja").data('kendoNumericTextBox').value('@fieldModel.pembuatan_rencana_kerja');})
+                               </script>
+                           </div>
+                       </div>
+
+                        <div id="form_item_pengendalian_kontrak" class="form-group">
+                           <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_smk3", "pengendalian_kontrak")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_pengendalian_kontrak" class="form-item-field">
+                               <input type="number" id="pengendalian_kontrak" name="pengendalian_kontrak"  min="0"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_smk3","pengendalian_kontrak"))" style ="width:200px;" />
+                               <span class="k-invalid-msg" data-for="pengendalian_kontrak"></span>
+                               <script>
+                                   $("#pengendalian_kontrak").kendoNumericTextBox({ format: "{0:N2}", decimals: 2 });
+                                   $(document).ready(function () {$("#pengendalian_kontrak").data('kendoNumericTextBox').value('@fieldModel.pengendalian_kontrak');})
+                               </script>
+                           </div>
+                       </div>
+
+                        <div id="form_item_pengendalian_dokumen" class="form-group">
+                           <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_smk3", "pengendalian_dokumen")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_pengendalian_dokumen" class="form-item-field">
+                               <input type="number" id="pengendalian_dokumen" name="pengendalian_dokumen"  min="0"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_smk3","pengendalian_dokumen"))" style ="width:200px;" />
+                               <span class="k-invalid-msg" data-for="pengendalian_dokumen"></span>
+                               <script>
+                                   $("#pengendalian_dokumen").kendoNumericTextBox({ format: "{0:N2}", decimals: 2 });
+                                   $(document).ready(function () {$("#pengendalian_dokumen").data('kendoNumericTextBox').value('@fieldModel.pengendalian_dokumen');})
+                               </script>
+                           </div>
+                       </div>
+
+                        <div id="form_item_pengendalian_produk" class="form-group">
+                           <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_smk3", "pengendalian_produk")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_pengendalian_produk" class="form-item-field">
+                               <input type="number" id="pengendalian_produk" name="pengendalian_produk"  min="0"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_smk3","pengendalian_produk"))" style ="width:200px;" />
+                               <span class="k-invalid-msg" data-for="pengendalian_produk"></span>
+                               <script>
+                                   $("#pengendalian_produk").kendoNumericTextBox({ format: "{0:N2}", decimals: 2 });
+                                   $(document).ready(function () {$("#pengendalian_produk").data('kendoNumericTextBox').value('@fieldModel.pengendalian_produk');})
+                               </script>
+                           </div>
+                       </div>
+
+                        <div id="form_item_keamanan" class="form-group">
+                           <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_smk3", "keamanan")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_keamanan" class="form-item-field">
+                               <input type="number" id="keamanan" name="keamanan"  min="0"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_smk3","keamanan"))" style ="width:200px;" />
+                               <span class="k-invalid-msg" data-for="keamanan"></span>
+                               <script>
+                                   $("#keamanan").kendoNumericTextBox({ format: "{0:N2}", decimals: 2 });
+                                   $(document).ready(function () {$("#keamanan").data('kendoNumericTextBox').value('@fieldModel.keamanan');})
+                               </script>
+                           </div>
+                       </div>
+
+                        <div id="form_item_pemantauan" class="form-group">
+                           <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_smk3", "pemantauan")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_pemantauan" class="form-item-field">
+                               <input type="number" id="pemantauan" name="pemantauan"  min="0"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_smk3","pemantauan"))" style ="width:200px;" />
+                               <span class="k-invalid-msg" data-for="pemantauan"></span>
+                               <script>
+                                   $("#pemantauan").kendoNumericTextBox({ format: "{0:N2}", decimals: 2 });
+                                   $(document).ready(function () {$("#pemantauan").data('kendoNumericTextBox').value('@fieldModel.pemantauan');})
+                               </script>
+                           </div>
+                       </div>
+
+                        <div id="form_item_pelaporan_kekurangan" class="form-group">
+                           <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_smk3", "pelaporan_kekurangan")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_pelaporan_kekurangan" class="form-item-field">
+                               <input type="number" id="pelaporan_kekurangan" name="pelaporan_kekurangan"  min="0"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_smk3","pelaporan_kekurangan"))" style ="width:200px;" />
+                               <span class="k-invalid-msg" data-for="pelaporan_kekurangan"></span>
+                               <script>
+                                   $("#pelaporan_kekurangan").kendoNumericTextBox({ format: "{0:N2}", decimals: 2 });
+                                   $(document).ready(function () {$("#pelaporan_kekurangan").data('kendoNumericTextBox').value('@fieldModel.pelaporan_kekurangan');})
+                               </script>
+                           </div>
+                       </div>
+
+                        <div id="form_item_pengelolaan_material" class="form-group">
+                           <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_smk3", "pengelolaan_material")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_pengelolaan_material" class="form-item-field">
+                               <input type="number" id="pengelolaan_material" name="pengelolaan_material"  min="0"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_smk3","pengelolaan_material"))" style ="width:200px;" />
+                               <span class="k-invalid-msg" data-for="pengelolaan_material"></span>
+                               <script>
+                                   $("#pengelolaan_material").kendoNumericTextBox({ format: "{0:N2}", decimals: 2 });
+                                   $(document).ready(function () {$("#pengelolaan_material").data('kendoNumericTextBox').value('@fieldModel.pengelolaan_material');})
+                               </script>
+                           </div>
+                       </div>
+
+                        <div id="form_item_pengumpulan_data" class="form-group">
+                           <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_smk3", "pengumpulan_data")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_pengumpulan_data" class="form-item-field">
+                               <input type="number" id="pengumpulan_data" name="pengumpulan_data"   min="0" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_smk3","pengumpulan_data"))" style ="width:200px;" />
+                               <span class="k-invalid-msg" data-for="pengumpulan_data"></span>
+                               <script>
+                                   $("#pengumpulan_data").kendoNumericTextBox({ format: "{0:N2}", decimals: 2 });
+                                   $(document).ready(function () {$("#pengumpulan_data").data('kendoNumericTextBox').value('@fieldModel.pengumpulan_data');})
+                               </script>
+                           </div>
+                       </div>
+
+                        <div id="form_item_pemeriksaan" class="form-group">
+                           <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_smk3", "pemeriksaan")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_pemeriksaan" class="form-item-field">
+                               <input type="number" id="pemeriksaan" name="pemeriksaan"  min="0"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_smk3","pemeriksaan"))" style ="width:200px;" />
+                               <span class="k-invalid-msg" data-for="pemeriksaan"></span>
+                               <script>
+                                   $("#pemeriksaan").kendoNumericTextBox({ format: "{0:N2}", decimals: 2 });
+                                   $(document).ready(function () {$("#pemeriksaan").data('kendoNumericTextBox').value('@fieldModel.pemeriksaan');})
+                               </script>
+                           </div>
+                       </div>
+
+                        <div id="form_item_pengembangan_keterampilan" class="form-group">
+                           <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_smk3", "pengembangan_keterampilan")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_pengembangan_keterampilan" class="form-item-field">
+                               <input type="number" id="pengembangan_keterampilan" name="pengembangan_keterampilan"  min="0"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_smk3","pengembangan_keterampilan"))" style ="width:200px;" />
+                               <span class="k-invalid-msg" data-for="pengembangan_keterampilan"></span>
+                               <script>
+                                   $("#pengembangan_keterampilan").kendoNumericTextBox({ format: "{0:N2}", decimals: 2 });
+                                   $(document).ready(function () {$("#pengembangan_keterampilan").data('kendoNumericTextBox').value('@fieldModel.pengembangan_keterampilan');})
+                               </script>
+                           </div>
+                       </div>
+
+                        <div id="form_item_total_internal" class="form-group">
+                           <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_smk3", "total_internal")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_total_internal" class="form-item-field">
+                               <input type="number" id="total_internal" name="total_internal"   min="0" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_smk3","total_internal"))" style ="width:200px;" />
+                               <span class="k-invalid-msg" data-for="total_internal"></span>
+                               <script>
+                                   $("#total_internal").kendoNumericTextBox({ format: "{0:N2}", decimals: 2 });
+                                   $(document).ready(function () {$("#total_internal").data('kendoNumericTextBox').value('@fieldModel.total_internal');})
+                               </script>
+                           </div>
+                       </div>
+
+                        <div id="form_item_total_standar" class="form-group">
+                           <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_smk3", "total_standar")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_total_standar" class="form-item-field">
+                               <input type="number" id="total_standar" name="total_standar"  min="0"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_smk3","total_standar"))" style ="width:200px;" />
+                               <span class="k-invalid-msg" data-for="total_standar"></span>
+                               <script>
+                                   $("#total_standar").kendoNumericTextBox({ format: "{0:N2}", decimals: 2 });
+                                   $(document).ready(function () {$("#total_standar").data('kendoNumericTextBox').value('@fieldModel.total_standar');})
+                               </script>
+                           </div>
+                       </div>
+
+                        <div id="form_item_presentasi_pencapaian" class="form-group">
+                           <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_smk3", "presentasi_pencapaian")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_presentasi_pencapaian" class="form-item-field">
+                               <input type="number" id="presentasi_pencapaian" name="presentasi_pencapaian"   min="0" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_smk3","presentasi_pencapaian"))" style ="width:200px;" />
+                               <span class="k-invalid-msg" data-for="presentasi_pencapaian"></span>
+                               <script>
+                                   $("#presentasi_pencapaian").kendoNumericTextBox({ format: "{0:N2}", decimals: 2 });
+                                   $(document).ready(function () {$("#presentasi_pencapaian").data('kendoNumericTextBox').value('@fieldModel.presentasi_pencapaian');})
+                               </script>
+                           </div>
+                       </div>
+
+                       <div id="form_item_nilai_bendera_id" class="form-group">
+                           <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_smk3", "nilai_bendera_id")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_nilai_bendera_id" class="form-item-field">
+                               <input id="nilai_bendera_id" name="nilai_bendera_id"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_smk3","nilai_bendera_id"))" style="width:350px;" />
+                               <span class="k-invalid-msg" data-for="nilai_bendera_id"></span>
+                               <script>
+                                   var nilai_bendera_id_param = {item : {value:"id",text:"nama"},parent:[{ field: 'cat_id',opr:'=', value: '163' }], order:[]};
+                                   var nilai_bendera_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: nilai_bendera_id_param, type: "POST" } } });
+                                   var nilai_bendera_id = $("#nilai_bendera_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: nilai_bendera_id_ds, change:onChange_nilai_bendera_id }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#nilai_bendera_id").data("kendoComboBox").value('@fieldModel.nilai_bendera_id'); });
+                                   function onChange_nilai_bendera_id() {if ($("#nilai_bendera_id").data("kendoComboBox").value() != '' && $("#nilai_bendera_id").data("kendoComboBox")._oldIndex == -1) {$("#nilai_bendera_id").data("kendoComboBox").value('');}
+                                   }
+                               </script>
+                           </div>
+                       </div>
+
+                    <div id="form_item_lampiran_file_path" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_smk3", "lampiran_file_path")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_lampiran_file_path" class="form-item-field">
+                            <input name="lampiran_file_path_file" id="lampiran_file_path_file" type="file" />
+                            <input name="lampiran_file_path" id="lampiran_file_path" type="hidden" value="@fieldModel.lampiran_file_path" data-required-msg="@ResxHelper.GetValue("Message", "RequiredTextFormat").Replace("{0}", @ResxHelper.GetValue("ta_audit_kriteria_smk3", "lampiran_file_path"))" />
+                            <script>
+                                var lampiran_file_path_init = @Html.Raw(fieldModel.lampiran_file_path_init);
+                                $("#lampiran_file_path_file").kendoUpload({multiple:true,
+                                    async: {
+                                        saveUrl: "@ViewBag.BaseUrl/AuditKriteriaSmk3/save_lampiran_file_path",
+                                        removeUrl: "@ViewBag.BaseUrl/AuditKriteriaSmk3/remove_lampiran_file_path",
+                                        autoUpload: true
+                                    },
+                                    validation: {allowedExtensions: [".jpg", ".jpeg", ".png", ".pdf", ".xls", ".xlsx"], maxFileSize: 2097152},
+                                    files: lampiran_file_path_init,
+                                    success: onSuccessUpload,
+                                    select: OnselectUpload_lampiran_file_path
+                                });
+                                function OnselectUpload_lampiran_file_path(e) {OnselectUpload(e, 2);}
+                            </script>
+                            <span class="k-label k-text-info">Allowed Extensions: ".jpg", ".jpeg", ".png", ".pdf", ".xls", ".xlsx"</span>
+                            <br /><span class="k-label k-text-info">Maximum FileSize: @String.Format("{0:N0}", (2097152 / 1024)) KB</span>
+                        </div>
+                    </div>
+                  <div class="form-group"></div>
+                    
+					</div>
+				</div>
+			</div>
+			<div class="panel-footer">
+				<a id="cancel" class="k-button k-button-icontext" href="#"><i class="far fa-times-circle"></i>&nbsp;<span id="btnCancelText">@ResxHelper.GetValue("Message", "Cancel")</span></a>
+				<a id="save" class="k-button k-button-icontext" href="#"><i class="fas fa-save"></i>&nbsp;<span id="btnSaveText">@ResxHelper.GetValue("Message", "Save")</span></a>
+			</div>
+		</div>
+    </div>
+</form>
+
+<script>
+    var form_type = '@ViewData["form_type"]';
+    function ShowHideColumn(form_type)
+    {
+        if(form_type=='Add')
+        {
+            var hiden_column = [];
+            for (i = 0; i < hiden_column.length; i++) {
+                $("#form_item_"+hiden_column[i]).hide();
+            }
+        }
+        else if(form_type=='Edit')
+        {
+            var hiden_column = [];
+            for (i = 0; i < hiden_column.length; i++) {
+                $("#form_item_"+hiden_column[i]).hide();
+            }
+        }
+    }
+    function setReadOnly(form_type,opt)
+    {
+        if(opt==true)
+        {
+            if(form_type=='Add')
+            {
+
+            }
+            else if(form_type=='Edit')
+            {
+
+            }
+        }
+        else
+        {
+            if(form_type=='Add')
+            {
+
+            }
+            else if(form_type=='Edit')
+            {
+
+            }
+        }
+    }
+    function display_by_type() {
+        $("#total_internal").data("kendoNumericTextBox").enable(false);		
+        $("#total_standar").data("kendoNumericTextBox").enable(false);		
+        $("#presentasi_pencapaian").data("kendoNumericTextBox").enable(false);		
+        $("#nilai_bendera_id").data("kendoComboBox").enable(false);
+    }
+    $(document).ready(function () {
+        ShowHideColumn(form_type);
+        setReadOnly(form_type, true);
+        display_by_type();
+    });
+    var validatable = $("#form_edit").kendoValidator().data("kendoValidator");
+    $("#save").click(function (e) {
+        getListFileUpload("lampiran_file_path");
+		setReadOnly(form_type, false);
+        if (validatable.validate() === true) {
+            kendo.ui.progress($("#form_edit"), true);
+            $.ajax({
+                url: '@ViewData["UrlAction"]', data: $('#form_edit').serialize(), type: 'POST',
+                success: function (data) {
+                    kendo.ui.progress($("#form_edit"), false);
+                    if (data.status == 1) {
+                        window.parent.notification.show({title: data.title, message: kendo.toString(data.message) }, "success");
+                        if (window.parent.Reload_list_ta_audit_kriteria_smk3) {
+                            window.parent.Reload_list_ta_audit_kriteria_smk3();
+                        }else if (window.parent.reload_ta_audit_kriteria_smk3) {
+                            window.parent.reload_ta_audit_kriteria_smk3(data.pk);
+                        }
+                        close_self();
+                    } else if (data.status == 3) {
+                        windows.parent.notification.show({ title: data.title, message: data.message }, "error");
+                        setReadOnly(form_type, true);
+						close_self();
+                    } else {
+						setReadOnly(form_type, true);
+                        notification.show({ title: data.title, message: data.message }, "error");
+                    }
+                }
+            });
+        } else {
+            kendo.ui.progress($("#form_edit"), false);
+        }
+		setReadOnly(form_type, true);
+    });
+    $("#cancel").kendoButton();
+    $("#cancel").click(function (e) {
+        close_self();
+    });
+    function close_self() { if (window.parent.$("#dialog_ta_audit_kriteria_smk3").data("kendoWindow")) { window.parent.$("#dialog_ta_audit_kriteria_smk3").data("kendoWindow").close(); } else { window.parent.$("#dialog").data("kendoWindow").close(); } }
+</script>

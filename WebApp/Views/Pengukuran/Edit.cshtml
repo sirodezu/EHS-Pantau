@@ -1,0 +1,393 @@
+@using WebApp
+@using Microsoft.AspNetCore.Http;
+@{
+    Layout = "~/Views/Shared/_LayoutNoHeader.cshtml";
+    var fieldModel = ViewData["fieldModel"] as WebApp.Models.PengukuranModel.ViewModel;
+    ViewData["Title"] = ViewData["TitleHeader"];
+    ViewData["PageName"] = "pengukuran";
+    ViewData["Heading"] = ViewData["TitleHeader"];
+    ViewData["Category1"] = "";
+    ViewData["Category2"] = "";
+}
+
+<form id="form_edit" method="post" class="panel-form">
+    <div class="panel">
+        <div class="panel-heading">
+            <div class="title-header">@ViewData["TitleHeader"]</div>
+        </div>
+		<div class="panel-container">
+			<div class="panel-content">
+				<div class="row">
+                    <div class="col-lg-12">
+                        <div id="form_item_id" class="form-group-none">
+                            <div class="form-item-label220">@ResxHelper.GetValue("ta_pengukuran", "id")<span id="label_req_id" class="required"> *</span></div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_id" class="form-item-field">
+                                <input type="number" id="id" name="id" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_pengukuran","id"))" style="width:200px;" />
+                                <span class="k-invalid-msg" data-for="id"></span>
+                                <input type="hidden" id="id_old" name="id_old" value="@fieldModel.id" />
+                                <script>
+                                   $("#id").kendoNumericTextBox({ format: "{0:N0}", decimals: 0 });
+                                   $(document).ready(function () {$("#id").data('kendoNumericTextBox').value('@fieldModel.id');})
+                                </script>
+                            </div>
+                        </div>
+
+                        <div id="form_item_ehs_area_id" class="form-group">
+                            <div class="form-item-label220">@ResxHelper.GetValue("ta_pengukuran", "ehs_area_id")<span id="label_req_ehs_area_id" class="required"> *</span></div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_ehs_area_id" class="form-item-field">
+                                <input id="ehs_area_id" name="ehs_area_id" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_pengukuran","ehs_area_id"))" style="width:400px;" />
+                                <span class="k-invalid-msg" data-for="ehs_area_id"></span>
+                                <script>
+                                   var ehs_area_id_param = {item : {value:"id",text:"kode,nama"},parent:[{field:"obj_data",value:"Legal"}], order:[]};
+                                   var ehs_area_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/EHSArea/LookupDataEA", dataType: "json", data: ehs_area_id_param, type: "POST" } } });
+                                   var ehs_area_id = $("#ehs_area_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: ehs_area_id_ds, change:onChange_ehs_area_id }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#ehs_area_id").data("kendoComboBox").value('@fieldModel.ehs_area_id'); });
+                                   function onChange_ehs_area_id() {if ($("#ehs_area_id").data("kendoComboBox").value() != '' && $("#ehs_area_id").data("kendoComboBox")._oldIndex == -1) {$("#ehs_area_id").data("kendoComboBox").value('');}
+                                       reload_ba_id();
+                                       reload_pa_id();
+                                       reload_psa_id();
+                                   }
+                                </script>
+                            </div>
+                        </div>
+
+                        <div id="form_item_ba_id" class="form-group">
+                            <div class="form-item-label220">@ResxHelper.GetValue("ta_pengukuran", "ba_id")<span id="label_req_ba_id" class="required"> *</span></div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_ba_id" class="form-item-field">
+                                <input id="ba_id" name="ba_id" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_pengukuran","ba_id"))" style="width:400px;" />
+                                <span class="k-invalid-msg" data-for="ba_id"></span>
+                                <script>
+                                   var ba_id_param = {item : {value:"id",text:"kode,nama"},parent:[{ field: 'ehs_area_id',opr:'=', value: '@fieldModel.ehs_area_id' },{field:"obj_data",value:"Legal"}], order:[]};
+                                   var ba_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/BusinessArea/LookupDataBA", dataType: "json", data: ba_id_param, type: "POST" } } });
+                                   var ba_id = $("#ba_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: ba_id_ds, change:onChange_ba_id }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#ba_id").data("kendoComboBox").value('@fieldModel.ba_id'); });
+                                   function onChange_ba_id() {if ($("#ba_id").data("kendoComboBox").value() != '' && $("#ba_id").data("kendoComboBox")._oldIndex == -1) {$("#ba_id").data("kendoComboBox").value('');}
+                                       reload_pa_id();
+                                       reload_psa_id();
+                                   }
+                                  function reload_ba_id(){
+                                      $("#ba_id").data("kendoComboBox").value('');
+                                      var ehs_area_id = $("#ehs_area_id").data("kendoComboBox").value();
+                                      var ba_id_param = { item: { value: 'id', text: 'kode,nama' }, parent: [{ field: 'ehs_area_id',opr:'=', value: ehs_area_id }], order: [] };
+                                      $("#ba_id").data("kendoComboBox").dataSource.read(ba_id_param);
+                                  }
+                                </script>
+                            </div>
+                        </div>
+
+                        <div id="form_item_pa_id" class="form-group">
+                            <div class="form-item-label220">@ResxHelper.GetValue("ta_pengukuran", "pa_id")<span id="label_req_pa_id" class="required"> *</span></div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_pa_id" class="form-item-field">
+                                <input id="pa_id" name="pa_id" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_pengukuran","pa_id"))" style="width:400px;" />
+                                <span class="k-invalid-msg" data-for="pa_id"></span>
+                                <script>
+                                   var pa_id_param = {item : {value:"id",text:"kode,nama"},parent:[{ field: 'ehs_area_id',opr:'=', value: '@fieldModel.ehs_area_id' }, { field: 'ba_id',opr:'=', value: '@fieldModel.ba_id' },{field:"obj_data",value:"Legal"}], order:[]};
+                                   var pa_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/PersonalArea/LookupDataPA", dataType: "json", data: pa_id_param, type: "POST" } } });
+                                   var pa_id = $("#pa_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: pa_id_ds, change:onChange_pa_id }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#pa_id").data("kendoComboBox").value('@fieldModel.pa_id'); });
+                                   function onChange_pa_id() {if ($("#pa_id").data("kendoComboBox").value() != '' && $("#pa_id").data("kendoComboBox")._oldIndex == -1) {$("#pa_id").data("kendoComboBox").value('');}
+                                       reload_psa_id();
+                                   }
+                                  function reload_pa_id(){
+                                      $("#pa_id").data("kendoComboBox").value('');
+                                      var ehs_area_id = $("#ehs_area_id").data("kendoComboBox").value();
+                                      var ba_id = $("#ba_id").data("kendoComboBox").value();
+                                      var pa_id_param = { item: { value: 'id', text: 'kode,nama' }, parent: [{ field: 'ehs_area_id',opr:'=', value: ehs_area_id }, { field: 'ba_id',opr:'=', value: ba_id }], order: [] };
+                                      $("#pa_id").data("kendoComboBox").dataSource.read(pa_id_param);
+                                  }
+                                </script>
+                            </div>
+                        </div>
+
+                        <div id="form_item_psa_id" class="form-group">
+                            <div class="form-item-label220">@ResxHelper.GetValue("ta_pengukuran", "psa_id")<span id="label_req_psa_id" class="required"> *</span></div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_psa_id" class="form-item-field">
+                                <input id="psa_id" name="psa_id" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_pengukuran","psa_id"))" style="width:400px;" />
+                                <span class="k-invalid-msg" data-for="psa_id"></span>
+                                <script>
+                                   var psa_id_param = {item : {value:"id",text:"kode,nama"},parent:[{ field: 'ehs_area_id',opr:'=', value: '@fieldModel.ehs_area_id' }, { field: 'ba_id',opr:'=', value: '@fieldModel.ba_id' }, { field: 'pa_id',opr:'=', value: '@fieldModel.pa_id' },{field:"obj_data",value:"Legal"}], order:[]};
+                                   var psa_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/PersonalSubArea/LookupDataPSA", dataType: "json", data: psa_id_param, type: "POST" } } });
+                                   var psa_id = $("#psa_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: psa_id_ds, change:onChange_psa_id }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#psa_id").data("kendoComboBox").value('@fieldModel.psa_id'); });
+                                   function onChange_psa_id() {if ($("#psa_id").data("kendoComboBox").value() != '' && $("#psa_id").data("kendoComboBox")._oldIndex == -1) {$("#psa_id").data("kendoComboBox").value('');}
+                                   }
+                                  function reload_psa_id(){
+                                      $("#psa_id").data("kendoComboBox").value('');
+                                      var ehs_area_id = $("#ehs_area_id").data("kendoComboBox").value();
+                                      var ba_id = $("#ba_id").data("kendoComboBox").value();
+                                      var pa_id = $("#pa_id").data("kendoComboBox").value();
+                                      var psa_id_param = { item: { value: 'id', text: 'kode,nama' }, parent: [{ field: 'ehs_area_id',opr:'=', value: ehs_area_id }, { field: 'ba_id',opr:'=', value: ba_id }, { field: 'pa_id',opr:'=', value: pa_id }], order: [] };
+                                      $("#psa_id").data("kendoComboBox").dataSource.read(psa_id_param);
+                                  }
+                                </script>
+                            </div>
+                        </div>
+
+                        <div id="form_item_jenis_pemeriksaan_pengujian_id" class="form-group">
+                            <div class="form-item-label220">@ResxHelper.GetValue("ta_pengukuran", "jenis_pemeriksaan_pengujian_id")<span id="label_req_jenis_pemeriksaan_pengujian_id" class="required"> *</span></div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_jenis_pemeriksaan_pengujian_id" class="form-item-field">
+                                <input id="jenis_pemeriksaan_pengujian_id" name="jenis_pemeriksaan_pengujian_id" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_pengukuran","jenis_pemeriksaan_pengujian_id"))" style="width:350px;" />
+                                <span class="k-invalid-msg" data-for="jenis_pemeriksaan_pengujian_id"></span>
+                                <script>
+                                   var jenis_pemeriksaan_pengujian_id_param = {item : {value:"id",text:"nama"},parent:[{ field: 'cat_id',opr:'=', value: '102' }], order:[{ field: 'ordinal', dir: 'asc' }]};
+                                   var jenis_pemeriksaan_pengujian_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: jenis_pemeriksaan_pengujian_id_param, type: "POST" } } });
+                                   var jenis_pemeriksaan_pengujian_id = $("#jenis_pemeriksaan_pengujian_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: jenis_pemeriksaan_pengujian_id_ds, change:onChange_jenis_pemeriksaan_pengujian_id }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#jenis_pemeriksaan_pengujian_id").data("kendoComboBox").value('@fieldModel.jenis_pemeriksaan_pengujian_id'); });
+                                   function onChange_jenis_pemeriksaan_pengujian_id() {if ($("#jenis_pemeriksaan_pengujian_id").data("kendoComboBox").value() != '' && $("#jenis_pemeriksaan_pengujian_id").data("kendoComboBox")._oldIndex == -1) {$("#jenis_pemeriksaan_pengujian_id").data("kendoComboBox").value('');}
+                                   }
+                                </script>
+                            </div>
+                        </div>
+
+                        <div id="form_item_keterangan_series_kode" class="form-group">
+                            <div class="form-item-label220">@ResxHelper.GetValue("ta_pengukuran", "keterangan_series_kode")<span id="label_req_keterangan_series_kode" class="required"> *</span></div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_keterangan_series_kode" class="form-item-field">
+                                <input type="text" id="keterangan_series_kode" name="keterangan_series_kode" class="k-textbox" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_pengukuran","keterangan_series_kode"))" maxlength="50" style="width:350px;" value="@Html.Raw(fieldModel.keterangan_series_kode)" title="@ResxHelper.GetValue("ta_pengukuran", "keterangan_series_kode") @ResxHelper.GetValue("Message", "IsNotValidCharacter")." pattern="@ConfigHelper.GetValue("AllowInputCharacters")" />
+                                <span class="k-invalid-msg" data-for="keterangan_series_kode"></span>
+                            </div>
+                        </div>
+
+                        <div id="form_item_jumlah_titik_penaatan" class="form-group">
+                            <div class="form-item-label220">@ResxHelper.GetValue("ta_pengukuran", "jumlah_titik_penaatan")<span id="label_req_jumlah_titik_penaatan" class="required"> *</span></div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_jumlah_titik_penaatan" class="form-item-field">
+                                <input type="number" id="jumlah_titik_penaatan" name="jumlah_titik_penaatan" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_pengukuran","jumlah_titik_penaatan"))" style="width:200px;" />
+                                <span class="k-invalid-msg" data-for="jumlah_titik_penaatan"></span>
+                                <script>
+                                   $("#jumlah_titik_penaatan").kendoNumericTextBox({ format: "{0:N0}", decimals: 0 });
+                                   $(document).ready(function () {$("#jumlah_titik_penaatan").data('kendoNumericTextBox').value('@fieldModel.jumlah_titik_penaatan');})
+                                </script>
+                            </div>
+                        </div>
+
+                        <div id="form_item_periode_pemeriksaan_pengujian_id" class="form-group">
+                            <div class="form-item-label220">@ResxHelper.GetValue("ta_pengukuran", "periode_pemeriksaan_pengujian_id")<span id="label_req_periode_pemeriksaan_pengujian_id" class="required"> *</span></div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_periode_pemeriksaan_pengujian_id" class="form-item-field">
+                                <input id="periode_pemeriksaan_pengujian_id" name="periode_pemeriksaan_pengujian_id" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_pengukuran","periode_pemeriksaan_pengujian_id"))" style="width:200px;" />
+                                <span class="k-invalid-msg" data-for="periode_pemeriksaan_pengujian_id"></span>
+                                <script>
+                                   var periode_pemeriksaan_pengujian_id_param = {item : {value:"id",text:"nama"},parent:[{ field: 'cat_id',opr:'=', value: '106' }], order:[{ field: 'ordinal', dir: 'asc' }]};
+                                   var periode_pemeriksaan_pengujian_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: periode_pemeriksaan_pengujian_id_param, type: "POST" } } });
+                                   var periode_pemeriksaan_pengujian_id = $("#periode_pemeriksaan_pengujian_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: periode_pemeriksaan_pengujian_id_ds, change:onChange_periode_pemeriksaan_pengujian_id }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#periode_pemeriksaan_pengujian_id").data("kendoComboBox").value('@fieldModel.periode_pemeriksaan_pengujian_id'); });
+                                   function onChange_periode_pemeriksaan_pengujian_id() {if ($("#periode_pemeriksaan_pengujian_id").data("kendoComboBox").value() != '' && $("#periode_pemeriksaan_pengujian_id").data("kendoComboBox")._oldIndex == -1) {$("#periode_pemeriksaan_pengujian_id").data("kendoComboBox").value('');}
+                                   }
+                                </script>
+                            </div>
+                        </div>
+
+                        <div id="form_item_status_penaatan_id" class="form-group">
+                            <div class="form-item-label220">@ResxHelper.GetValue("ta_pengukuran", "status_penaatan_id")<span id="label_req_status_penaatan_id" class="required"> *</span></div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_status_penaatan_id" class="form-item-field">
+                                <input id="status_penaatan_id" name="status_penaatan_id" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_pengukuran","status_penaatan_id"))" style="width:300px;" />
+                                <span class="k-invalid-msg" data-for="status_penaatan_id"></span>
+                                <script>
+                                   var status_penaatan_id_param = {item : {value:"id",text:"nama"},parent:[{ field: 'cat_id',opr:'=', value: '109' }], order:[{ field: 'ordinal', dir: 'asc' }]};
+                                   var status_penaatan_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: status_penaatan_id_param, type: "POST" } } });
+                                   var status_penaatan_id = $("#status_penaatan_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: status_penaatan_id_ds, change:onChange_status_penaatan_id }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#status_penaatan_id").data("kendoComboBox").value('@fieldModel.status_penaatan_id'); });
+                                   function onChange_status_penaatan_id() {if ($("#status_penaatan_id").data("kendoComboBox").value() != '' && $("#status_penaatan_id").data("kendoComboBox")._oldIndex == -1) {$("#status_penaatan_id").data("kendoComboBox").value('');}
+                                   }
+                                </script>
+                            </div>
+                        </div>
+
+                        <div id="form_item_hasil_pengukuran" class="form-group">
+                            <div class="form-item-label220">@ResxHelper.GetValue("ta_pengukuran", "hasil_pengukuran")<span id="label_req_hasil_pengukuran" class="required"> *</span></div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_hasil_pengukuran" class="form-item-field">
+                                <input type="number" id="hasil_pengukuran" name="hasil_pengukuran" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_pengukuran","hasil_pengukuran"))" style="width:200px;" />
+                                <span class="k-invalid-msg" data-for="hasil_pengukuran"></span>
+                                <script>
+                                   $("#hasil_pengukuran").kendoNumericTextBox({ format: "{0:N2}", decimals: 2 });
+                                   $(document).ready(function () {$("#hasil_pengukuran").data('kendoNumericTextBox').value('@fieldModel.hasil_pengukuran');})
+                                </script>
+                            </div>
+                        </div>
+
+                        <div id="form_item_tanggal_pengujian" class="form-group">
+                            <div class="form-item-label220">@ResxHelper.GetValue("ta_pengukuran", "tanggal_pengujian")<span id="label_req_tanggal_pengujian" class="required"> *</span></div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_tanggal_pengujian" class="form-item-field">
+                                <input id="dt_tanggal_pengujian" name="dt_tanggal_pengujian" data-role="datepicker" data-type="date" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_pengukuran","tanggal_pengujian"))" style="width:130px;" title="@ResxHelper.GetValue("ta_pengukuran", "tanggal_pengujian") @ResxHelper.GetValue("Message", "IsNotValidDate")." />
+                                <span class="k-invalid-msg" data-for="dt_tanggal_pengujian"></span>
+                                <input type="hidden" id="tanggal_pengujian" name="tanggal_pengujian" value="@fieldModel.tanggal_pengujian" />
+                                <script>
+                                   $("#dt_tanggal_pengujian").kendoDatePicker({change:on_chage_tanggal_pengujian, value: "@fieldModel.dt_tanggal_pengujian", format: "{0:dd/MM/yyyy}" });
+                                   function on_chage_tanggal_pengujian() {
+                                       $("#tanggal_pengujian").val(kendo.toString($("#dt_tanggal_pengujian").data("kendoDatePicker").value(), "yyyy-MM-dd"));
+                                   }
+                                </script>
+                            </div>
+                        </div>
+
+                        <div id="form_item_file_path_hasil_uji" class="form-group">
+                            <div class="form-item-label220">@ResxHelper.GetValue("ta_pengukuran", "file_path_hasil_uji")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_file_path_hasil_uji" class="form-item-field">
+                                <input name="file_path_hasil_uji_file" id="file_path_hasil_uji_file" type="file" />
+                                <input name="file_path_hasil_uji" id="file_path_hasil_uji" type="hidden" value="@fieldModel.file_path_hasil_uji" data-required-msg="@ResxHelper.GetValue("Message", "RequiredTextFormat").Replace("{0}", @ResxHelper.GetValue("ta_pengukuran", "file_path_hasil_uji"))" />
+                                <script>
+                                var file_path_hasil_uji_init = @Html.Raw(fieldModel.file_path_hasil_uji_init);
+                                $("#file_path_hasil_uji_file").kendoUpload({multiple:false,
+                                    async: {
+                                        saveUrl: "@ViewBag.BaseUrl/Pengukuran/save_file_path_hasil_uji",
+                                        removeUrl: "@ViewBag.BaseUrl/Pengukuran/remove_file_path_hasil_uji",
+                                        autoUpload: true
+                                    },
+                                    validation: {allowedExtensions: [".jpg", ".jpeg", ".png", ".pdf", ".xls", ".xlsx"], maxFileSize: 2097152},
+                                    files: file_path_hasil_uji_init,
+                                    success: onSuccessUpload,
+                                    select: OnselectUpload_file_path_hasil_uji
+                                });
+                                function OnselectUpload_file_path_hasil_uji(e) {OnselectUpload(e, 1);}
+                                </script>
+                                <span class="k-label k-text-info">Allowed Extensions: ".jpg", ".jpeg", ".png", ".pdf", ".xls", ".xlsx"</span>
+                                <br /><span class="k-label k-text-info">Maximum FileSize: @String.Format("{0:N0}", (2097152 / 1024)) KB</span>
+                            </div>
+                        </div>
+
+                        <div id="form_item_file_path_baku_mutu" class="form-group">
+                            <div class="form-item-label220">@ResxHelper.GetValue("ta_pengukuran", "file_path_baku_mutu")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_file_path_baku_mutu" class="form-item-field">
+                                <input name="file_path_baku_mutu_file" id="file_path_baku_mutu_file" type="file" />
+                                <input name="file_path_baku_mutu" id="file_path_baku_mutu" type="hidden" value="@fieldModel.file_path_baku_mutu" data-required-msg="@ResxHelper.GetValue("Message", "RequiredTextFormat").Replace("{0}", @ResxHelper.GetValue("ta_pengukuran", "file_path_baku_mutu"))" />
+                                <script>
+                                var file_path_baku_mutu_init = @Html.Raw(fieldModel.file_path_baku_mutu_init);
+                                $("#file_path_baku_mutu_file").kendoUpload({multiple:true,
+                                    async: {
+                                        saveUrl: "@ViewBag.BaseUrl/Pengukuran/save_file_path_baku_mutu",
+                                        removeUrl: "@ViewBag.BaseUrl/Pengukuran/remove_file_path_baku_mutu",
+                                        autoUpload: true
+                                    },
+                                    validation: {allowedExtensions: [".jpg", ".jpeg", ".png", ".pdf", ".xls", ".xlsx"], maxFileSize: 2097152},
+                                    files: file_path_baku_mutu_init,
+                                    success: onSuccessUpload,
+                                    select: OnselectUpload_file_path_baku_mutu
+                                });
+                                function OnselectUpload_file_path_baku_mutu(e) {OnselectUpload(e, 3);}
+                                </script>
+                                <span class="k-label k-text-info">Allowed Extensions: ".jpg", ".jpeg", ".png", ".pdf", ".xls", ".xlsx"</span>
+                                <br /><span class="k-label k-text-info">Maximum FileSize: @String.Format("{0:N0}", (2097152 / 1024)) KB</span>
+                            </div>
+                        </div>
+
+                        <div id="form_item_keterangan_uji" class="form-group">
+                            <div class="form-item-label220">@ResxHelper.GetValue("ta_pengukuran", "keterangan_uji")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_keterangan_uji" class="form-item-field">
+                                <textarea type="text" id="keterangan_uji" name="keterangan_uji" class="k-textbox" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_pengukuran","keterangan_uji"))" maxlength="512" style="width:350px;" title="@ResxHelper.GetValue("ta_pengukuran", "keterangan_uji") @ResxHelper.GetValue("Message", "IsNotValidCharacter")." pattern="@ConfigHelper.GetValue("AllowInputCharacters")">@Html.Raw(fieldModel.keterangan_uji)</textarea>
+                                <span class="k-invalid-msg" data-for="keterangan_uji"></span>
+                            </div>
+                        </div>
+                        <div class="form-group"></div>
+
+                    </div>
+				</div>
+			</div>
+			<div class="panel-footer">
+				<a id="cancel" class="k-button k-button-icontext" href="#"><i class="far fa-times-circle"></i>&nbsp;<span id="btnCancelText">@ResxHelper.GetValue("Message", "Cancel")</span></a>
+				<a id="save" class="k-button k-button-icontext" href="#"><i class="fas fa-save"></i>&nbsp;<span id="btnSaveText">@ResxHelper.GetValue("Message", "Save")</span></a>
+			</div>
+		</div>
+    </div>
+</form>
+
+<script>
+    var form_type = '@ViewData["form_type"]';
+    function ShowHideColumn(form_type)
+    {
+        if(form_type=='Add')
+        {
+            var hiden_column = [];
+            for (i = 0; i < hiden_column.length; i++) {
+                $("#form_item_"+hiden_column[i]).hide();
+            }
+        }
+        else if(form_type=='Edit')
+        {
+            var hiden_column = [];
+            for (i = 0; i < hiden_column.length; i++) {
+                $("#form_item_"+hiden_column[i]).hide();
+            }
+        }
+    }
+    function setReadOnly(form_type,opt)
+    {
+        if(opt==true)
+        {
+            if(form_type=='Add')
+            {
+
+            }
+            else if(form_type=='Edit')
+            {
+
+            }
+        }
+        else
+        {
+            if(form_type=='Add')
+            {
+
+            }
+            else if(form_type=='Edit')
+            {
+
+            }
+        }
+    }
+    $(document).ready(function () {
+        ShowHideColumn(form_type);
+        setReadOnly(form_type, true);
+    });
+    var validatable = $("#form_edit").kendoValidator().data("kendoValidator");
+    $("#save").click(function (e) {
+        getListFileUpload("file_path_hasil_uji");
+        getListFileUpload("file_path_baku_mutu");
+		setReadOnly(form_type, false);
+        if (validatable.validate() === true) {
+            kendo.ui.progress($("#form_edit"), true);
+            $.ajax({
+                url: '@ViewData["UrlAction"]', data: $('#form_edit').serialize(), type: 'POST',
+                success: function (data) {
+                    kendo.ui.progress($("#form_edit"), false);
+                    if (data.status == 1) {
+                        window.parent.notification.show({title: data.title, message: kendo.toString(data.message) }, "success");
+                        if (window.parent.Reload_list_ta_pengukuran) {
+                            window.parent.Reload_list_ta_pengukuran();
+                        }else if (window.parent.reload_ta_pengukuran) {
+                            window.parent.reload_ta_pengukuran(data.pk);
+                        }
+                        close_self();
+                    } else if (data.status == 3) {
+                        windows.parent.notification.show({ title: data.title, message: data.message }, "error");
+                        setReadOnly(form_type, true);
+						close_self();
+                    } else {
+						setReadOnly(form_type, true);
+                        notification.show({ title: data.title, message: data.message }, "error");
+                    }
+                }
+            });
+        } else {
+            kendo.ui.progress($("#form_edit"), false);
+        }
+		setReadOnly(form_type, true);
+    });
+    $("#cancel").kendoButton();
+    $("#cancel").click(function (e) {
+        close_self();
+    });
+    function close_self() { if (window.parent.$("#dialog_ta_pengukuran").data("kendoWindow")) { window.parent.$("#dialog_ta_pengukuran").data("kendoWindow").close(); } else { window.parent.$("#dialog").data("kendoWindow").close(); } }
+</script>

@@ -1,0 +1,43 @@
+<script src="~/js/vendors.bundle.js"></script>
+<script src="~/js/app.bundle.js"></script>
+
+<script src="~/lib/kendo/js/jszip.min.js"></script>
+<script src="~/lib/kendo/js/kendo.all.min.js"></script>
+<script src="~/lib/kendo/js/cultures/kendo.culture.id-ID.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+<script type='text/javascript'>
+        kendo.culture('@ResxHelper.CurrentCultureName');
+        kendo.cultures["@ResxHelper.CurrentCultureName"].calendars.standard.firstDay = 1;
+</script>
+
+<div id="dialog"></div>
+<div id="dialogconfirm"></div>
+<script id="confirmTemplate" type="text/x-kendo-template">
+    <center><p><span style="color:blue;font-size:12pt;font-weight:bold">#= title#</span><br /> <b>#= msg #</b></p><button class="k-button" id="yesButton">Ya</button><button class="k-button" id="noButton">Tidak</button></center>
+</script>
+<span id="notification" style="display:none;"></span>
+<script id="infoTemplate" type="text/x-kendo-template">
+    <div class="new-info"><img src="@ViewBag.BaseUrl/img/info-data.png" /><h3>#= title #</h3><p>#= message #</p></div>
+</script>
+<script id="lockTemplate" type="text/x-kendo-template">
+    <div class="lock-info"><img src="@ViewBag.BaseUrl/img/lock-data.png" /><h3>Data Terkunci</h3><p>Diedit Oleh : #= lock_by #<br />Diedit Tanggal : #= lock_at #</p></div>
+</script>
+<script id="errorTemplate" type="text/x-kendo-template">
+    <div class="wrong-pass">
+        <img src="@ViewBag.BaseUrl/img/error-icon.png" />
+        <h3>#= title #</h3>
+        <p>#= message #</p>
+    </div>
+</script>
+<script id="successTemplate" type="text/x-kendo-template">
+    <div class="upload-success">
+        <img src="@ViewBag.BaseUrl/img/success-icon.png" />
+        <h3>#= message #</h3>
+    </div>
+</script>
+<script>
+    var confirmTemplate = kendo.template($("#confirmTemplate").html());
+    var notification = $("#notification").kendoNotification({ autoHideAfter: 2000, stacking: "down", show: onShowNotification, templates: [{ type: "info", template: $("#infoTemplate").html() }, { type: "lock", template: $("#lockTemplate").html() }, { type: "error", template: $("#errorTemplate").html() }, { type: "success", template: $("#successTemplate").html() }] }).data("kendoNotification");
+    function onShowNotification(e) { if (!$("." + e.sender._guid)[1]) { var element = e.element.parent(), eWidth = element.width(), eHeight = element.height(), wWidth = $(window).width(), wHeight = $(window).height(), newTop, newLeft; newLeft = Math.floor(wWidth / 2 - eWidth / 2); newTop = Math.floor(wHeight / 2 - eHeight / 2); e.element.parent().css({ top: newTop, left: newLeft }); } }
+</script>
+

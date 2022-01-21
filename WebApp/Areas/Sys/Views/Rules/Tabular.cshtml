@@ -1,0 +1,266 @@
+﻿@using WebApp;
+@using Newtonsoft.Json
+@using WebApp.Models
+@model IEnumerable<WebApp.Models.GridColumn>
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = ResxHelper.GetValue("sys_rules", "ListTitle");
+    var param = ViewData["param"] as WebApp.Models.ParamGrid;
+    var baseUrl = HttpContextAccessor.HttpContext.Request.Scheme + "://" + HttpContextAccessor.HttpContext.Request.Host + "" + HttpContextAccessor.HttpContext.Request.PathBase;
+}
+<script>
+        var colNameTooltip_sys_rules = [];
+        var colbuttonCount_sys_rules = 0;
+        var columnWidth = 40;
+        colbuttonCount_sys_rules += @param.btnView== "1" ? 1 : 0;
+        colbuttonCount_sys_rules += @param.btnEdit== "1" ? 1 : 0;
+        colbuttonCount_sys_rules += @param.btnDelete == "1" ? 1 : 0;
+        colbuttonCount_sys_rules += @param.btnCopy  == "1" ? 1 : 0;
+        if (colbuttonCount_sys_rules == 1) { columnWidth = 40; } else if (colbuttonCount_sys_rules == 2) { columnWidth = 70; } else if (colbuttonCount_sys_rules == 3) { columnWidth = 95; } else if (colbuttonCount_sys_rules == 4) { columnWidth = 120; }
+        var columnActionWidth_sys_rules = columnWidth + "px";
+        var j_data = @Html.Raw(JsonConvert.SerializeObject(ViewBag.column_att));
+
+        var item_data = "";
+        var col_att = [];
+        var showhide_column = "";
+        var j = 0;
+        var checked = '';
+        jQuery.each(j_data, function (i, val) {
+
+            item_data += item_data != "" ? "," : "";
+            item_data += '"' + val.name + '" : { "type": "' + val.type + '" } ';
+            if (val.display) {
+                col_att[j] = { field: val.name, title: val.title, hidden: JSON.parse(val.hidden), width: val.width, format: val.format, attributes: JSON.parse(val.attributes), encoded: JSON.parse(val.encoded), filterable: JSON.parse(val.filterable), sortable: JSON.parse(val.sortable), headerAttributes: { style: "white-space: normal;vertical-align:middle;text-align:center" } };
+                j += 1;
+                checked = '';
+                if (val.hidden.toString() == 'false') {
+                    checked = 'checked';
+                }
+                showhide_column += '<div><input type="checkbox" onclick="ShowHideColumn_sys_rules(this)" '+ checked +' value="' + val.name + '" /> ' + val.title + '</div>';
+            }
+        });
+        j = parseInt(j);
+        showhide_column += '<div><input type="checkbox" onclick="ShowHideColumn_sys_rules(this)" checked value="' + j + '" /> Action</div>';
+        item_data = '{' + item_data + '}';
+        var field_data = JSON.parse(item_data);
+        var columns_data = col_att;
+        var col_command = [];
+        var k = 0;
+        if (@param.btnView== "1") {
+            col_command[k] = { name: "View", text: "", className: "v-view", click: function (e) { var tr = $(e.target).closest("tr"); var data = this.dataItem(tr); ViewItem_sys_rules(data); } };
+            k++;
+        }
+        if (@param.btnEdit== "1") {
+            col_command[k] = { name: "Edit", text: "", className: "v-pencil", click: function (e) { var tr = $(e.target).closest("tr"); var data = this.dataItem(tr); EditData_sys_rules(data); } };
+            k++;
+        }
+        if (@param.btnDelete== "1") {
+            col_command[k] = { name: "Delete", text: "", className: "v-close", click: function (e) { var tr = $(e.target).closest("tr"); var data = this.dataItem(tr); DeleteData_sys_rules(data); } };
+            k++;
+        }
+        if (@param.btnCopy== "1") {
+            col_command[k] = { name: "Copy", text: "", className: "v-copy", click: function (e) { var tr = $(e.target).closest("tr"); var data = this.dataItem(tr); CopyData_sys_rules(data); } };
+            k++;
+        }
+        columns_data[j] = {command: col_command, width: columnActionWidth_sys_rules, attributes: " style=\"vertical-align:top;\""};
+
+</script>
+<div class="card">
+    <div class="card-header">
+        <div class="title-header">@ResxHelper.GetValue("sys_rules", "ListTitle")</div>
+    </div>
+    <div class="card-body">
+        <div class="container-fluid">
+            <div id="filter_area" class="grid_filter">
+                <div class="panel-group">
+                    <div class="panel panel-success">
+                        <div class="panel-heading">
+                            <h8 class="panel-title">
+                                <a id="btnShowHideFilter" data-toggle="collapse" href="#collapse1">@ResxHelper.GetValue("Message", "ShowFilter", "Tampilkan Filter")</a>
+                            </h8>
+                        </div>
+                        <div id="collapse1" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-footer">
+                                <a id="btnResetFilter" onclick="reset_filter_sys_rules()" class="k-button" title="Reset Filter">@ResxHelper.GetValue("Message", "ResetFilter", "Reset Filter")</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <table id="toolbar_panel" style="width:100%;">
+                    <tr>
+                        <td>
+                            <span id="quick_search_template_sys_rules" class="k-textbox k-space-right"><input id="txtSearch_sys_rules" placeholder="@ResxHelper.GetValue("Message","QuickSearch","pencarian cepat")" value="" /><a id="btnSearch_sys_rules" href="#" class="k-icon k-i-search">&nbsp;</a></span>
+                            <img id="btnSearchByColumn_sys_rules" title="@ResxHelper.GetValue("Message","ShowSearchByColumn","Tampilkan Pencarian per Kolom")" style="cursor:pointer" src="~/img/search_by_column.png" width="20">
+                            <img id="btnShowHideColumn_sys_rules" title="@ResxHelper.GetValue("Message","ShowHideColumn","Tampilkan/Sembunyikan Kolom")" style="cursor:pointer" src="~/img/show_hide_column.png" width="20">
+                        </td>
+                        <td style="float:right">
+                            <img id="btnExportExcel_sys_rules" title="@ResxHelper.GetValue("Message","ExportToExcel","Export Ke Excel")" style="cursor:pointer" src="~/img/excel.png" width="20" />&nbsp;
+                            <a id="btnAdd_sys_rules" onclick="AddData()" class="k-button" title="@ResxHelper.GetValue("Message","Add","Tambah")">@ResxHelper.GetValue("Message", "Add", "Tambah")</a>
+                        </td>
+                    <tr>
+                </table>
+            </div>
+            <div id="grid_sys_rules"></div>
+        </div>
+    </div>
+</div>
+<div id="WinShowHideColumn_sys_rules" style="display: none">
+    <div id="attr_column_show_hide" style="width:auto;height:auto;overflow-y:scroll;"></div>
+</div>
+
+@{
+    <script>
+    $("#collapse1").on('shown.bs.collapse', function () {
+        $("#btnShowHideFilter").html('@ResxHelper.GetValue("Message","HideFilter","Sembunyikan Filter")');
+    });
+    $("#collapse1").on('hidden.bs.collapse', function () {
+        $("#btnShowHideFilter").html('@ResxHelper.GetValue("Message","ShowFilter","Tampilkan Filter")');
+    });
+    var record_sys_rules = 0;
+    var grid_sys_rules_heigth = 0;
+    var ds_sys_rules_filter = { filter_by_column: { level_id: "" } };
+    var ds_sys_rules = new kendo.data.DataSource({ transport: { read: { url: "@ViewData["UrlGetList"]", dataType: "json", type: "POST", data: ds_sys_rules_filter }, parameterMap: function (options) { if (options.filter) { for (var i = 0; i < options.filter.filters.length; i++) { if (options.filter.filters[i].field == 'tanggal') { options.filter.filters[i].value = kendo.toString(options.filter.filters[i].value, "yyyy-MM-dd"); } } } return options; } }, schema: { data: "data", total: "total", aggregates: "aggregates", model: { fields: field_data } }, aggregate: [], pageSize: 10, serverAggregates: true, serverPaging: true, serverFiltering: true, serverSorting: true });
+    var list_sys_rules = $("#grid_sys_rules").kendoGrid({
+        excel: { allPages: true, fileName: 'Resources.xlsx' },
+        dataSource: ds_sys_rules, dataBound: onDataBound_sys_rules, height: grid_sys_rules_heigth, scrollable: true, groupable: false, columnMenu: false, menu: true, resizable: true, filterable: false, sortable: { mode: "multiple", allowUnsort: true }, pageable: { refresh: true, pageSizes: [5, 10, 20, 50, 100, 200], buttonCount: 5 },
+        columns: columns_data, editable: false, dataBinding: function () { $(".k-grid-content").css("min-height", "320px"); record_sys_rules = (this.dataSource.page() - 1) * this.dataSource.pageSize(); }
+    });
+    function getParamgrid_sys_rules() {
+        return { filter_by_column: {} };
+    }
+    function reset_filter_sys_rules() {
+        onFilterHeader_sys_rules();
+    }
+    function onFilterHeader_sys_rules() {
+        paramValue = getParamgrid_sys_rules();
+        if (list_sys_rules.data('kendoGrid').dataSource.page() > 1) {
+            list_sys_rules.data('kendoGrid').dataSource.page(0);
+        }
+        list_sys_rules.data('kendoGrid').dataSource.transport.options.read.data = paramValue;
+        if ($("#txtSearch_sys_rules").val() != "") {
+            //QuickSearch_sys_rules();
+        }
+
+        $filter_date = new Array();
+        $filter = new Array();
+        $x = $("#txtSearch_sys_rules").val();
+        if ($x) {
+            $filter.push({ field: "kode", opr: "contains", value: $x });
+            $filter.push({ field: "nama", opr: "contains", value: $x });
+            $filter.push({ field: "keterangan", opr: "contains", value: $x });
+        } else {
+            //list_sys_rules.data("kendoGrid").dataSource.filter([]);
+        }
+        //===================
+        if ($filter_date.length > 0 && $filter.length > 0) {
+            list_sys_rules.data("kendoGrid").dataSource.filter({ logic: "and", filters: [{ logic: "or", filters: $filter }, { logic: "and", filters: $filter_date }] });
+        }
+        else if ($filter_date.length > 0 && $filter.length == 0) {
+            list_sys_rules.data("kendoGrid").dataSource.filter({ logic: "and", filters: $filter_date });
+        }
+        else if ($filter_date.length == 0 && $filter.length > 0) {
+            list_sys_rules.data("kendoGrid").dataSource.filter({ logic: "or", filters: $filter });
+        }
+        else {
+            list_sys_rules.data("kendoGrid").dataSource.filter([]);
+        }
+    };
+    $("#btnSearchByColumn_sys_rules").click(function () { var grid_sys_rules_heigth_filter = grid_sys_rules_heigth + 38; if (list_sys_rules.data("kendoGrid").options.filterable == false) { $('#btnSearchByColumn_sys_rules').prop('title', 'Sembunyikan Pencarian per Kolom'); $("#txtSearch_sys_rules").val(''); if ('1' == '1') { $("#quick_search_template_sys_rules").hide(); }; QuickSearch_sys_rules(); list_sys_rules.data("kendoGrid").setOptions({ height: grid_sys_rules_heigth_filter, filterable: { mode: "row" }, }); } else { $('#btnSearchByColumn_sys_rules').prop('title', 'Tampilkan Pencarian per Kolom'); $("#txtSearch_sys_rules").val(''); if ('1' == '1') { $("#quick_search_template_sys_rules").show(); }; QuickSearch_sys_rules(); list_sys_rules.data("kendoGrid").setOptions({ height: grid_sys_rules_heigth, filterable: false, }); } });
+    $("#btnSearch_sys_rules").click(function () { QuickSearch_sys_rules(); });
+    $('#txtSearch_sys_rules').keypress(function (e) { if (e.keyCode == 13) { QuickSearch_sys_rules(); } });
+    function QuickSearch_sys_rules() {
+        $filter_date = new Array();
+
+        $filter = new Array();
+        $x = $("#txtSearch_sys_rules").val();
+        if ($x) {
+            $filter.push({ field: "kode", opr: "contains", value: $x });
+            $filter.push({ field: "nama", opr: "contains", value: $x });
+            $filter.push({ field: "keterangan", opr: "contains", value: $x });
+
+        } else {
+            //list_sys_rules.data("kendoGrid").dataSource.filter([]);
+        }
+        if ($filter_date.length > 0 && $filter.length > 0) {
+            list_sys_rules.data("kendoGrid").dataSource.filter({ logic: "and", filters: [{ logic: "or", filters: $filter }, { logic: "and", filters: $filter_date }] });
+        }
+        else if ($filter_date.length > 0 && $filter.length == 0) {
+            list_sys_rules.data("kendoGrid").dataSource.filter({ logic: "and", filters: $filter_date });
+        }
+        else if ($filter_date.length == 0 && $filter.length > 0) {
+            list_sys_rules.data("kendoGrid").dataSource.filter({ logic: "or", filters: $filter });
+        }
+        else {
+            list_sys_rules.data("kendoGrid").dataSource.filter([]);
+        }
+    }
+    function Reload_list_sys_rules() { list_sys_rules.data('kendoGrid').dataSource.read(); list_sys_rules.data('kendoGrid').refresh(); }
+    function onDataBound_sys_rules(e) {
+        if (colbuttonCount_sys_rules > 0) {
+            var grid = $("#grid_sys_rules").data("kendoGrid"); var list_sys_rules = grid.dataSource.view();
+            for (var i = 0; i < list_sys_rules.length; i++) {
+                var currentUid = list_sys_rules[i].uid; var currenRow = grid.table.find("tr[data-uid='" + currentUid + "']");
+                var viewButton = $(currenRow).find(".k-grid-View"); viewButton.attr("title", "Lihat");
+                var editButton = $(currenRow).find(".k-grid-Edit"); editButton.attr("title", "Edit");
+                var deleteButton = $(currenRow).find(".k-grid-Delete"); deleteButton.attr("title", "Hapus");
+                var copyButton = $(currenRow).find(".k-grid-Copy"); copyButton.attr("title", "Salin");
+            }
+        }
+    }
+    function AddData() { var contentUrl = '@ViewData["UrlAdd"]'; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog, }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: 700, height: 400, minHeight: 300, }); form_edit.data("kendoWindow").center().open().maximize(); }
+    function ViewItem_sys_rules(data) { var qs = 'id=' + data.id; var contentUrl = '@ViewData["UrlView"]?' + qs; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: 700, height: 500, minHeight: 300, }); form_edit.data("kendoWindow").center().open().maximize(); }
+    function EditData_sys_rules(data) { var qs = 'id=' + data.id; var contentUrl = '@ViewData["UrlEdit"]?' + qs; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: 700, height: 400, minHeight: 300, }); form_edit.data("kendoWindow").center().open().maximize(); }
+    function CopyData_sys_rules(data) { var qs = 'id=' + data.id; var contentUrl = '@ViewData["UrlCopy"]?' + qs; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: 700, height: 400, minHeight: 300, }); form_edit.data("kendoWindow").center().open().maximize(); }
+    function DeleteData_sys_rules(data) {
+        var keyValue = '@ResxHelper.GetValue("sys_rules","kode"): ' + data.nama;
+        var data2 = { title: 'Apakah anda yakin akan menghapus data ini?', msg: keyValue };
+        var winconfirm = $("#dialogconfirm").kendoWindow({ title: "@ResxHelper.GetValue("sys_rules","DeleteTitle")", modal: true, visible: false, resizable: true, draggable: true, width: "500px", height: "150px" }).data("kendoWindow");
+        winconfirm.content(confirmTemplate(data2));
+        winconfirm.center(); winconfirm.open();
+        $("#yesButton").click(function () {
+            $.ajax({
+                data: { id: data.id}, url: '@ViewData["UrlDelete"]', type: 'POST'
+                , success: function (data) {
+                    if (data.status != 1) {
+                        notification.show({ title: data.title, message: kendo.toString(data.message) }, "error");
+                        winconfirm.close();
+                    } else {
+                        notification.show({ message: kendo.toString(data.message) }, "success");
+                        Reload_list_sys_rules();
+                        winconfirm.close();
+                    }
+                }
+            });
+        });
+        $("#noButton").click(function () { winconfirm.close(); });
+    }
+    function onCloseDialog(e) { $('#dialog').html(''); }
+    function closeDialog() { $("#dialog").data("kendoWindow").close(); }
+    $("#btnExportExcel_sys_rules").click(function (e) { var grid = $("#grid_sys_rules").data("kendoGrid"); grid.saveAsExcel(); });
+    function ShowHideColumn_sys_rules(e) { colname = $.isNumeric(e.value) ? parseInt(e.value) : e.value; if (e.checked) { $("#grid_sys_rules").data("kendoGrid").showColumn(colname); } else { $("#grid_sys_rules").data("kendoGrid").hideColumn(colname); } }
+    $(document).ready(function () {
+        $("#attr_column_show_hide").html(showhide_column);
+        if ("@param.ShowFilter" != "1") { $("#filter_area").hide(); }
+        if ("@param.btnAdd" != "1") { $("#btnAdd_sys_rules").hide(); }
+        if ("@param.quick_search" != '1') { $("#quick_search_template_sys_rules").hide(); }
+        if ("@param.search_by_column"  != '1') { $("#btnSearchByColumn_sys_rules").hide(); }
+        if ("@param.show_hide_column" != '1') { $("#btnShowHideColumn_sys_rules").hide(); }
+        if ("@param.export_exl" != '1') { $("#btnExportExcel_sys_rules").hide(); }
+        $("#btnShowHideColumn_sys_rules").click(function () { var x = $("#btnShowHideColumn_sys_rules").offset().left; var y = $("#btnShowHideColumn_sys_rules").offset().top; if (!WinShowHideColumn_sys_rules) { var WinShowHideColumn_sys_rules = $("#WinShowHideColumn_sys_rules").kendoWindow({ width: "300px", position: { left: x, top: y }, title: "Tampilkan/Sembunyikan Kolom", actions: ["Close"] }); } WinShowHideColumn_sys_rules.data("kendoWindow").open(); });
+    });
+    function addDays(date, days) {
+        var result = new Date(date);
+        result.setDate(result.getDate() + days);
+        return result;
+    }
+    </script>
+}

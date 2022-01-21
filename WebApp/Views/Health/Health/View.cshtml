@@ -1,0 +1,162 @@
+@using WebApp
+@using Microsoft.AspNetCore.Http;
+@{
+    Layout = "~/Views/Shared/_LayoutNoHeader.cshtml";
+    var fieldModel = ViewData["fieldModel"] as WebApp.Models.HealthModel.ViewModel;
+	ViewData["Title"] = ViewData["TitleHeader"];
+    ViewData["PageName"] = "health";
+    ViewData["Heading"] = ViewData["TitleHeader"];
+    ViewData["Category1"] = "";
+    ViewData["Category2"] = "";
+}
+<div class="panel panel-form">
+	<div class="panel-container">
+		<div class="panel-heading">
+			<div class="title-header">@ViewData["TitleHeader"]</div>
+		</div>
+        <div class="panel-content">
+            <div class="row">
+                <div class="col-lg-6">
+
+                    <div id="form_item_id" class="form-group-none">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_health", "id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_id" class="form-item-view">@Html.Raw(fieldModel.id)</div>
+                    </div>
+
+                    <div id="form_item_ehs_area_id" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_health", "ehs_area_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_ehs_area_id" class="form-item-view">@Html.Raw(fieldModel.ehs_area_id_text)</div>
+                    </div>
+
+                    <div id="form_item_ba_id" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_health", "ba_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_ba_id" class="form-item-view">@Html.Raw(fieldModel.ba_id_text)</div>
+                    </div>
+
+                    <div id="form_item_pa_id" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_health", "pa_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_pa_id" class="form-item-view">@Html.Raw(fieldModel.pa_id_text)</div>
+                    </div>
+
+                    <div id="form_item_psa_id" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_health", "psa_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_psa_id" class="form-item-view">@Html.Raw(fieldModel.psa_id_text)</div>
+                    </div>
+
+                    <div id="form_item_company_id" class="form-group-none">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_health", "company_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_company_id" class="form-item-view">@Html.Raw(fieldModel.company_id_text)</div>
+                    </div>
+
+                    <div><p>&nbsp;</p></div>
+
+                    <div id="form_item_karyawan_id" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_health", "karyawan_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_karyawan_id" class="form-item-view">@Html.Raw(fieldModel.karyawan_id_text)</div>
+                    </div>
+
+                    <div id="form_item_kategori_health_colour_id" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_health", "kategori_health_colour_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_kategori_health_colour_id" class="form-item-view">@Html.Raw(fieldModel.kategori_health_colour_id_text)</div>
+                    </div>
+
+                    <div id="form_item_photo_file_name" class="form-group-none">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_health", "photo_file_name")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_photo_file_name" class="form-item-view">@Html.Raw(fieldModel.photo_file_name)</div>
+                    </div>
+
+                    <div id="form_item_photo_file_path" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_health", "photo_file_path")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_photo_file_path" class="form-item-view">@Html.Raw(fieldModel.photo_file_path)</div>
+                    </div>
+
+                </div>
+                <div class="col-lg-6">
+
+                    <div id="form_item_deskripsi_diderita" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_health", "deskripsi_diderita")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_deskripsi_diderita" class="form-item-view">@Html.Raw(fieldModel.deskripsi_diderita)</div>
+                    </div>
+
+                    <div id="form_item_deskripsi_pengobatan" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_health", "deskripsi_pengobatan")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_deskripsi_pengobatan" class="form-item-view">@Html.Raw(fieldModel.deskripsi_pengobatan)</div>
+                    </div>
+
+                    <div id="form_item_pola_hidup_dijaga" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_health", "pola_hidup_dijaga")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_pola_hidup_dijaga" class="form-item-view">@Html.Raw(fieldModel.pola_hidup_dijaga)</div>
+                    </div>
+
+                    <div id="form_item_kunjungan_berikutnya" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_health", "kunjungan_berikutnya")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_kunjungan_berikutnya" class="form-item-view">@Html.Raw(fieldModel.kunjungan_berikutnya)</div>
+                    </div>
+
+                    <div id="form_item_dr_rujukan" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_health", "dr_rujukan")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_dr_rujukan" class="form-item-view">@Html.Raw(fieldModel.dr_rujukan)</div>
+                    </div>
+
+                    <div id="form_item_rs_rujukan" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_health", "rs_rujukan")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_rs_rujukan" class="form-item-view">@Html.Raw(fieldModel.rs_rujukan)</div>
+                    </div>
+
+                    <div id="form_item_tgl_periksa_terakhir" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_health", "tgl_periksa_terakhir")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_tgl_periksa_terakhir" class="form-item-view">@Html.Raw(fieldModel.tgl_periksa_terakhir)</div>
+                    </div>
+					<div id="form_item_pengobatan_sebelumnya" class="form-group">
+                      	<div class="form-item-label220">@ResxHelper.GetValue("ta_health", "pengobatan_sebelumnya")</div>
+                      	<div class="form-item-separator">:</div>
+                      	<div id="view_item_pengobatan_sebelumnya" class="form-item-view">@Html.Raw(fieldModel.pengobatan_sebelumnya)</div>
+                  	</div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    @{
+                        <br /><hr /><h4>GCU Result</h4>
+                        <partial name="_list_health_gcu" />
+
+                        <br /><hr /><h4>Sumber Resiko Penyakit Akibat Kerja</h4>
+                        <partial name="_list_health_sakit_kerja" />
+
+                        <br /><hr /><h4>Gangguan Fisik / Organ Tubuh</h4>
+                        <partial name="_list_health_ganggu_fisik" />
+                    }
+                </div>
+            </div>
+        </div>
+		<div class="panel-footer">
+			<a id="close" class="k-button k-button-icontext" href="#"><i class="far fa-times-circle"></i>&nbsp;<span id="btnCloseText">@ResxHelper.GetValue("Message", "Close", "Tutup")</span></a>
+		</div>
+	</div>
+</div>
+<script>
+    $("#close").kendoButton();
+    $("#close").click(function (e) {
+        close_self();
+    });
+    function onCloseDialog(e) { $('#dialog').html(''); }
+    function closeDialog() { $("#dialog").data("kendoWindow").close(); }
+    function close_self() { if (window.parent.$("#dialog_ta_health").data("kendoWindow")) { window.parent.$("#dialog_ta_health").data("kendoWindow").close(); } else { window.parent.$("#dialog").data("kendoWindow").close(); } }
+</script>

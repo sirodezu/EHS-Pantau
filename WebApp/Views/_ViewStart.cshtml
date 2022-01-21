@@ -1,0 +1,9 @@
+﻿@{
+    if (ViewData["Layout"] != null && ViewData["Layout"].ToString()!="")
+    {
+        Layout = ViewData["Layout"].ToString();
+    }
+    else {
+        Layout = "_Layout";
+    }
+}

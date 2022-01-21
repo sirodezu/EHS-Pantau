@@ -1,0 +1,66 @@
+﻿@using WebApp;
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var baseUrl = ViewData["baseUrl"];
+}
+<div class="card">
+    <div class="card-header">
+        <div class="title-header">@ViewData["TitleHeader"]</div>
+    </div>
+    <div class="card-body">
+        <div class="contaner">
+            <div class="row">
+                <div class="col-4">
+                    <div class="card">
+                        <div class="card-header bg-primary">Organization & Working Area</div>
+                        <div class="card-body">
+                            <ul>
+                                <li><a href="@baseUrl/Ref/AreaType">@ResxHelper.GetValue("ref_area_type", "TableTitle")</a></li>
+                                <li><a href="@baseUrl/Ref/Tta">@ResxHelper.GetValue("ref_tta", "TableTitle")</a></li>
+                                <li><a href="@baseUrl/Ref/BusinessArea">@ResxHelper.GetValue("ref_business_area", "TableTitle")</a></li>
+                                <li><a href="@baseUrl/Ref/PersonalArea">@ResxHelper.GetValue("ref_personal_area", "TableTitle")</a></li>
+                                <li><a href="@baseUrl/Ref/PersonalSubArea">@ResxHelper.GetValue("ref_personal_sub_area", "TableTitle")</a></li>
+                                <li><a href="@baseUrl/Ref/OrgUnit">@ResxHelper.GetValue("ref_org_unit", "TableTitle")</a></li>
+                                <li><a href="@baseUrl/Ref/OrgUnitPa">@ResxHelper.GetValue("ref_org_unit_pa", "TableTitle")</a></li>
+                                <li><a href="@baseUrl/Ref/Location">@ResxHelper.GetValue("ref_location", "TableTitle")</a></li>
+                                <li><a href="@baseUrl/Ref/Room">@ResxHelper.GetValue("ref_room", "TableTitle")</a></li>
+                                <li><a href="@baseUrl/Ref/Company">@ResxHelper.GetValue("ref_company", "TableTitle")</a></li>
+                                <li><a href="@baseUrl/Ref/Jabatan">@ResxHelper.GetValue("ref_jabatan", "TableTitle")</a></li>
+                                <li><a href="@baseUrl/Ref/JabatanPosition">@ResxHelper.GetValue("ref_jabatan_position", "TableTitle")</a></li>
+                                <li><a href="@baseUrl/Person">@ResxHelper.GetValue("ta_person", "TableTitle")</a></li>
+                                <li><a href="@baseUrl/Instruktur">@ResxHelper.GetValue("ta_instruktur", "TableTitle")</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="card">
+                        <div class="card-header bg-primary">Training</div>
+                        <div class="card-body">
+                            <ul>
+                                <li><a href="@baseUrl/Ref/HariLiburtetap">@ResxHelper.GetValue("ref_hari_libur_tetap", "TableTitle")</a></li>
+                                <li><a href="@baseUrl/Ref/HariLibur">@ResxHelper.GetValue("ref_hari_libur", "TableTitle")</a></li>
+                                <li><a href="@baseUrl/Ref/PeriodeProses">@ResxHelper.GetValue("ref_periode_proses", "TableTitle")</a></li>
+                                <li><a href="@baseUrl/Ref/GroupCompetency">@ResxHelper.GetValue("ref_group_competency", "TableTitle")</a></li>
+                                <li><a href="@baseUrl/Ref/Position">@ResxHelper.GetValue("ref_position", "TableTitle")</a></li>
+                                <li><a href="@baseUrl/Ref/CompetencyLevel">@ResxHelper.GetValue("ref_competency_level", "TableTitle")</a></li>
+                                <li><a href="@baseUrl/Ref/MachineType">@ResxHelper.GetValue("ref_machine_type", "TableTitle")</a></li>
+                                <li><a href="@baseUrl/Ref/EventGroup">@ResxHelper.GetValue("ref_event_group", "TableTitle")</a></li>
+                                <li><a href="@baseUrl/Ref/EventSubGroup">@ResxHelper.GetValue("ref_event_sub_group", "TableTitle")</a></li>
+                                <li><a href="@baseUrl/Ref/EventType">@ResxHelper.GetValue("ref_event_type", "TableTitle")</a></li>
+                                <li><a href="@baseUrl/Ref/Qualification">@ResxHelper.GetValue("ref_qualification", "TableTitle")</a></li>
+                                <li><a href="@baseUrl/Ref/EventSubGroupEventType">@ResxHelper.GetValue("ref_event_sub_group_event_type", "TableTitle")</a></li>
+                                <li><a href="@baseUrl/Ref/EventTypeQualification">@ResxHelper.GetValue("ref_event_type_qualification", "TableTitle")</a></li>
+                                <li><a href="@baseUrl/Ref/AlasanPenambahan">@ResxHelper.GetValue("ref_alasan_penambahan", "TableTitle")</a></li>
+                                <li><a href="@baseUrl/Ref/AlasanPembatalan">@ResxHelper.GetValue("ref_alasan_pembatalan", "TableTitle")</a></li>
+                                <li><a href="@baseUrl/Ref/Training">@ResxHelper.GetValue("ref_training", "TableTitle")</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

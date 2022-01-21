@@ -1,0 +1,399 @@
+﻿@using WebApp;
+@using Newtonsoft.Json;
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
+@{
+    ViewData["Title"] = ViewData["TitleHeader"];
+    Layout = "~/Views/Shared/Pwa/_Layout.cshtml";
+    var filterColumn = ViewData["filterColumn"] as WebApp.Models.AccidentModel.ViewModel;
+}
+<style>
+    .page_area {
+        background-color:#FFFFFF;
+        margin-right:5px;
+        margin-left:5px;
+    }
+    .div_page {
+        margin-top: 10px;
+        margin-left: auto;
+        margin-right: auto;
+        
+        text-align: center;
+        background-color:#FFFFFF;
+    }
+
+    .div_page_from_total {
+        padding-right:5px;
+        padding-left:5px;
+        text-align: right;
+        background-color:#FFFFFF;
+    }
+
+    .form-item-label {
+        display: contents;
+    }
+    .form-item-view {
+        display: contents;
+    }
+    .btn-link {
+        color: #ffffff;
+    }
+
+    .btn-link:hover {
+        color: #ffffff;
+    }
+
+    .tanggal {
+        display: block;
+        font-size: small;
+    }
+
+    .item_header {
+        display: block;
+        font-size: medium;
+        cursor: pointer;
+    }
+    .item_hader1 {
+        display: block;
+        font-size: medium;
+        cursor: pointer;
+    }
+    .item_hader2 {
+        display: block;
+        font-size: medium;
+        cursor: pointer;
+        color:#ffff00;
+    }
+    .toolbar_panel {
+        text-align:right;
+        padding-right:10px;
+    }
+    .panel-footer {
+        text-align:left;
+    }
+</style>
+<div class="header-container">
+    <div>
+        <a href="@ViewData["baseUrl"]/Pwa">
+            <i class="fas fa-arrow-left" style="font-size:20px;color:black;line-height:30px;"></i>
+        </a>
+    </div>
+    <div class="header-title-right">
+        @ResxHelper.GetValue("ta_acc", "TableTitle")
+    </div>
+</div>
+<div class="">
+    <div id="filter_area" class="grid_filter">
+        <div class="panel-group">
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    <h8 class="panel-title">
+                        <a id="btnShowHideFilter" data-toggle="collapse" href="#collapse1" style="color:#ffffff">@ResxHelper.GetValue("Message", "ShowFilter")</a>
+                    </h8>
+                </div>
+                <div id="collapse1" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <section class="filter_cols">
+                            <div id="fiter_ehs_area_id" class="filter_col">
+                                <label for="ehs_area_id" class="label-filter">@ResxHelper.GetValue("ta_acc", "ehs_area_id"): </label>
+                                <input id="ehs_area_id" name="ehs_area_id" style="width: 100%;" />
+                            </div>
+                            <div id="fiter_ba_id" class="filter_col">
+                                <label for="ba_id" class="label-filter">@ResxHelper.GetValue("ta_acc", "ba_id"): </label>
+                                <input id="ba_id" name="ba_id" style="width: 100%;" />
+                            </div>
+                            <div id="fiter_pa_id" class="filter_col">
+                                <label for="pa_id" class="label-filter">@ResxHelper.GetValue("ta_acc", "pa_id"): </label>
+                                <input id="pa_id" name="pa_id" style="width: 100%;" />
+                            </div>
+                            <div id="fiter_psa_id" class="filter_col">
+                                <label for="psa_id" class="label-filter">@ResxHelper.GetValue("ta_acc", "psa_id"): </label>
+                                <input id="psa_id" name="psa_id" style="width: 100%;" />
+                            </div>
+                        </section>
+                    </div>
+                    <div class="panel-footer">
+                        <a id="btnResetFilter" onclick="reset_filter_ta_acc()" class="k-button" title="Reset Filter">@ResxHelper.GetValue("Message", "ResetFilter", "Reset Filter")</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="toolbar_panel"><a href="#" onclick="add_data()">@ResxHelper.GetValue("Message", "Add")</a></div>
+    <div class="accordion" id="accordionList"></div>
+    <div id="page_area" class="page_area"></div>
+</div>
+
+<script>
+    $("#collapse1").on('shown.bs.collapse', function () {
+        $("#btnShowHideFilter").html('@ResxHelper.GetValue("Message","HideFilter")');
+    });
+    $("#collapse1").on('hidden.bs.collapse', function () {
+        $("#btnShowHideFilter").html('@ResxHelper.GetValue("Message","ShowFilter")');
+    });
+    //=== filter ehs_area_id 
+    var ehs_area_id_param = { item: { value: 'id', text: 'kode,nama', distinct: '0' } ,parent:[{field:"obj_data",value:"Accident"}], order:[]};
+    var ehs_area_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/EHSArea/LookupDataEA", dataType: "json", data: ehs_area_id_param, type: "POST" } } });
+    var ehs_area_id = $("#ehs_area_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", change: onChange_ehs_area_id, dataSource: ehs_area_id_ds }).data("kendoComboBox");
+    $(document).ready(function () { $("#ehs_area_id").data("kendoComboBox").value('@filterColumn.ehs_area_id'); });
+    function onChange_ehs_area_id() {
+        if ($("#ehs_area_id").data("kendoComboBox").value() != '' && $("#ehs_area_id").data("kendoComboBox")._oldIndex == -1) { $("#ehs_area_id").data("kendoComboBox").value(''); }
+        reload_ba_id();
+        reload_pa_id();
+        reload_psa_id();
+        GetListData(1);
+    }
+    //=== filter ba_id 
+    var ba_id_param = { item: { value: 'id', text: 'kode,nama', distinct: '0' } ,parent:[{ field: 'ehs_area_id',opr:'=', value: '@filterColumn.ehs_area_id' },{field:"obj_data",value:"Accident"}], order:[]};
+    var ba_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/BusinessArea/LookupDataBA", dataType: "json", data: ba_id_param, type: "POST" } } });
+    var ba_id = $("#ba_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", change: onChange_ba_id, dataSource: ba_id_ds }).data("kendoComboBox");
+    $(document).ready(function () { $("#ba_id").data("kendoComboBox").value('@filterColumn.ba_id'); });
+    function onChange_ba_id() {
+        if ($("#ba_id").data("kendoComboBox").value() != '' && $("#ba_id").data("kendoComboBox")._oldIndex == -1) { $("#ba_id").data("kendoComboBox").value(''); }
+        reload_pa_id();
+        reload_psa_id();
+        GetListData(1);
+    }
+        
+    function reload_ba_id(){
+        $("#ba_id").data("kendoComboBox").value('');
+        var ehs_area_id = $("#ehs_area_id").data("kendoComboBox").value();
+        var ba_id_param = { item: { value: 'id', text: 'kode,nama' }, parent: [{ field: 'ehs_area_id',opr:'=', value: ehs_area_id }], order: [] };
+        $("#ba_id").data("kendoComboBox").dataSource.read(ba_id_param);
+    }
+    //=== filter pa_id 
+    var pa_id_param = { item: { value: 'id', text: 'kode,nama', distinct: '0' } ,parent:[{ field: 'ehs_area_id',opr:'=', value: '@filterColumn.ehs_area_id' }, { field: 'ba_id',opr:'=', value: '@filterColumn.ba_id' },{field:"obj_data",value:"Accident"}], order:[]};
+    var pa_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/PersonalArea/LookupDataPA", dataType: "json", data: pa_id_param, type: "POST" } } });
+    var pa_id = $("#pa_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", change: onChange_pa_id, dataSource: pa_id_ds }).data("kendoComboBox");
+    $(document).ready(function () { $("#pa_id").data("kendoComboBox").value('@filterColumn.pa_id'); });
+    function onChange_pa_id() {
+        if ($("#pa_id").data("kendoComboBox").value() != '' && $("#pa_id").data("kendoComboBox")._oldIndex == -1) { $("#pa_id").data("kendoComboBox").value(''); }
+        reload_psa_id();
+        GetListData(1);
+    }
+        
+    function reload_pa_id(){
+        $("#pa_id").data("kendoComboBox").value('');
+        var ehs_area_id = $("#ehs_area_id").data("kendoComboBox").value();
+        var ba_id = $("#ba_id").data("kendoComboBox").value();
+        var pa_id_param = { item: { value: 'id', text: 'kode,nama' }, parent: [{ field: 'ehs_area_id',opr:'=', value: ehs_area_id }, { field: 'ba_id',opr:'=', value: ba_id }], order: [] };
+        $("#pa_id").data("kendoComboBox").dataSource.read(pa_id_param);
+    }
+
+    //=== filter psa_id 
+    var psa_id_param = { item: { value: 'id', text: 'kode,nama', distinct: '0' } ,parent:[{ field: 'ehs_area_id',opr:'=', value: '@filterColumn.ehs_area_id' }, { field: 'ba_id',opr:'=', value: '@filterColumn.ba_id' }, { field: 'pa_id',opr:'=', value: '@filterColumn.pa_id' },{field:"obj_data",value:"Accident"}], order:[]};
+    var psa_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/PersonalSubArea/LookupDataPSA", dataType: "json", data: psa_id_param, type: "POST" } } });
+    var psa_id = $("#psa_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", change: onChange_psa_id, dataSource: psa_id_ds }).data("kendoComboBox");
+    $(document).ready(function () { $("#psa_id").data("kendoComboBox").value('@filterColumn.psa_id'); });
+    function onChange_psa_id() {
+        if ($("#psa_id").data("kendoComboBox").value() != '' && $("#psa_id").data("kendoComboBox")._oldIndex == -1) { $("#psa_id").data("kendoComboBox").value(''); }
+        GetListData(1);
+    }
+        
+    function reload_psa_id(){
+        $("#psa_id").data("kendoComboBox").value('');
+        var ehs_area_id = $("#ehs_area_id").data("kendoComboBox").value();
+        var ba_id = $("#ba_id").data("kendoComboBox").value();
+        var pa_id = $("#pa_id").data("kendoComboBox").value();
+        var psa_id_param = { item: { value: 'id', text: 'kode,nama' }, parent: [{ field: 'ehs_area_id',opr:'=', value: ehs_area_id }, { field: 'ba_id',opr:'=', value: ba_id }, { field: 'pa_id',opr:'=', value: pa_id }], order: [] };
+        $("#psa_id").data("kendoComboBox").dataSource.read(psa_id_param);
+    }
+    function reset_filter_ta_acc() {
+	    $("#ehs_area_id").data("kendoComboBox").value('');
+        $("#ba_id").data("kendoComboBox").value('');
+        $("#pa_id").data("kendoComboBox").value('');
+        $("#psa_id").data("kendoComboBox").value('');
+		GetListData(1);
+	}
+
+    function get_link_page(action,page, count_data, pageSize, pageNum) {
+        var total_page = count_data / pageSize;
+        total_page = Math.ceil(total_page);
+        var page_start = page / pageNum;
+        page_start = (Math.ceil(page_start) * pageNum) - (pageNum - 1);
+        var page_end = page_start + (pageNum - 1);
+        if (page_end > total_page) {
+            page_end = total_page;
+        }
+        var htm_page = '';
+        if (total_page > 1) {
+            htm_page += '<div class="div_page">';
+            htm_page += '<nav aria-label="...">';
+            htm_page += '<ul class="pagination">';
+            if (page <= pageNum) {
+                htm_page += '<li class="page-item disabled">';
+                htm_page += '<a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>';
+                htm_page += '</li>';
+            } else {
+                htm_page += '<li class="page-item">';
+                htm_page += '<a class="page-link" href="#" tabindex="-1" onclick="'+action+'('+(page_start - 1)+')">Previous</a>';
+                htm_page += '</li>';
+            }
+            for (i = page_start; i <= page_end; i++) {
+                if (i == page) {
+                    htm_page += '<li class="page-item active" aria-current="page">';
+                    htm_page += '<a class="page-link" href="#" onclick="'+action+'(' + i + ')">' + i + ' <span class="sr-only">(current)</span></a>';
+                    htm_page += '</li>';
+                } else {
+                    htm_page += '<li class="page-item"><a class="page-link" href="#" onclick="'+action+'(' + i + ')">' + i + '</a></li>';
+                }
+            }
+            if (page_end < total_page) {
+                htm_page += '<li class="page-item">';
+                htm_page += '<a class="page-link" href="#" onclick="'+action+'(' + (page_end + 1) + ')">Next</a>';
+                htm_page += '</li>';
+            } else {
+                htm_page += '<li class="page-item disabled">';
+                htm_page += '<a class="page-link" href="#" aria-disabled="true">Next</a>';
+                htm_page += '</li>';
+            }
+            htm_page += '</ul>';
+            htm_page += '</nav>';
+            htm_page += '</div>';
+            htm_page += '<div class="div_page_from_total">Hal ' + page + ' dari ' + total_page + '</div>';
+        }
+        return htm_page;
+    }
+    function GetListData(page) {
+        var pageNum = 3;
+        var pageSize = 10;
+        var take = 10;
+        var skip = (page - 1) * take;
+        var ehs_area_id = $("#ehs_area_id").data("kendoComboBox").value();
+        var ba_id = $("#ba_id").data("kendoComboBox").value();
+        var pa_id = $("#pa_id").data("kendoComboBox").value();
+        var psa_id = $("#psa_id").data("kendoComboBox").value();
+        var ds_filter = { filter_by_column: [{name:'ehs_area_id',value:ehs_area_id},{name:'ba_id',value:ba_id},{name:'pa_id',value:pa_id},{name:'psa_id',value:psa_id}], sort: [{ field: "tgl_kejadian", dir: "desc" }],take: take, skip: skip, page:page, pageSize:pageSize};
+        $.post( "@ViewData["baseUrl"]/PwaAccident/GetListData", ds_filter)
+            .done(function (data) {
+                var htm = '';
+                var htm_page = '';
+                if (data.total == 0) {
+                    htm += '<ul class="list-group">';
+                    htm += '<li class="list-group-item">@ResxHelper.GetValue("Message", "NoDataAvaliable", "Tidak ada data")</li>';
+                    htm += '</ul>';
+                } else {
+                    jQuery.each(data.data, function (i, val) {
+                        htm += '<div class="card">';
+                        htm += '<div class="card-header" id="heading'+val.id+'">';
+                        //htm += '<h2 class="mb-0">';
+                        htm += '<a class="item_header" data-toggle="collapse" data-target="#collapse' + val.id + '" aria-expanded="true" aria-controls="collapse' + val.id + '">';
+                        htm += '<span class="item_hader1">' + val.judul_kejadian + ' (' + val.psa_id_text + ')</span>';
+                        htm += '<span class="item_hader2">'+val.jenis_kejadian_id_text+'</span>';
+                        htm += '<span class="tanggal">'+ kendo.toString(kendo.parseDate(val.tgl_kejadian), "dd MMMM yyyy")+'</span>';
+                        htm += '</a>';
+                        //htm += '</h2>';
+                        htm += '</div>';
+                        htm += '<div id="collapse'+val.id+'" class="collapse" aria-labelledby="heading'+val.id+'" data-parent="#accordionList">';
+                        htm += '<div class="card-body">';
+                        htm += '<div class="form-group">';
+                        htm += '<div class="form-item-label">@ResxHelper.GetValue("ta_acc", "ehs_area_id"):</div>';
+                        htm += '<div class="form-item-view">'+val.ehs_area_id_text+'</div>';
+                        htm += '</div>';
+                        htm += '<div class="form-group">';
+                        htm += '<div class="form-item-label">@ResxHelper.GetValue("ta_acc", "ba_id"):</div>';
+                        htm += '<div class="form-item-view">'+val.ba_id_text+'</div>';
+                        htm += '</div>';
+                        htm += '<div class="form-group">';
+                        htm += '<div class="form-item-label">@ResxHelper.GetValue("ta_acc", "pa_id"):</div>';
+                        htm += '<div class="form-item-view">'+val.pa_id_text+'</div>';
+                        htm += '</div>';
+                        htm += '<div class="form-group">';
+                        htm += '<div class="form-item-label">@ResxHelper.GetValue("ta_acc", "psa_id"):</div>';
+                        htm += '<div class="form-item-view">'+val.psa_id_text+'</div>';
+                        htm += '</div>';
+                        htm += '<div class="form-group">';
+                        htm += '<div class="form-item-label">@ResxHelper.GetValue("ta_acc", "company_id"):</div>';
+                        htm += '<div class="form-item-view">'+val.company_id_text+'</div>';
+                        htm += '</div>';
+                        @*htm += '<div class="form-group">';
+                        htm += '<div class="form-item-label">@ResxHelper.GetValue("ta_acc", "jenis_kejadian_id"):</div>';
+                        htm += '<div class="form-item-view">'+val.jenis_kejadian_id_text+'</div>';
+                        htm += '</div>';
+                        htm += '<div class="form-group">';
+                        htm += '<div class="form-item-label">@ResxHelper.GetValue("ta_acc", "judul_kejadian"):</div>';
+                        htm += '<div class="form-item-view">'+val.judul_kejadian+'</div>';
+                        htm += '</div>';*@
+                        htm += '<div class="form-group">';
+                        htm += '<div class="form-item-label">@ResxHelper.GetValue("ta_acc", "nomor_kejadian"):</div>';
+                        htm += '<div class="form-item-view">'+val.nomor_kejadian+'</div>';
+                        htm += '</div>';
+                        htm += '<div class="form-group">';
+                        htm += '<div class="form-item-label">@ResxHelper.GetValue("ta_acc", "lokasi_kejadian_id"):</div>';
+                        htm += '<div class="form-item-view">'+val.lokasi_kejadian_id_text+'</div>';
+                        htm += '</div>';
+                        htm += '<div class="form-group">';
+                        htm += '<div class="form-item-label">@ResxHelper.GetValue("ta_acc", "tgl_kejadian"):</div>';
+                        htm += '<div class="form-item-view">'+ kendo.toString(kendo.parseDate(val.tgl_kejadian), "dd MMMM yyyy")+'</div>';
+                        htm += '</div>';
+
+                        htm += '<div class="form-group">';
+                        htm += '<a class="k-button k-button-icontext v-view k-grid-View" href="#" onclick="view_data('+val.id+')" title="@ResxHelper.GetValue("Message","View")"><span class=" "></span></a>';
+                        htm += '<a class="k-button k-button-icontext v-pencil k-grid-Edit" href="#" onclick="edit_data('+val.id+')" title="@ResxHelper.GetValue("Message","Edit")"><span class=" "></span></a>';
+                        htm += '<a class="k-button k-button-icontext v-close k-grid-Delete" href="#" onclick="delete_data('+val.id+',\''+val.judul_kejadian+'\')" title="@ResxHelper.GetValue("Message","Delete")"><span class=" "></span></a>';
+                        htm += '</div>';
+                        htm += '</div>';
+                        htm += '</div>';
+                        htm += '</div>';
+                    });
+                    htm_page = get_link_page('GetListData',page, data.total, pageSize, pageNum);
+                }
+                htm += '';
+                $("#accordionList").html(htm);
+                $("#page_area").html(htm_page);
+                localStorage.setItem("EHS_PwaAccident_last_page", page);
+        });
+    }
+    function view_data(id) {
+        localStorage.setItem("EHS_PwaAccidentPelaku_last_page", 1);
+        localStorage.setItem("EHS_PwaAccidentSakski_last_page", 1);
+        localStorage.setItem("EHS_PwaAccidentKorban_last_page", 1);
+        localStorage.setItem("EHS_PwaAccidentFollowup_last_page", 1);
+        var contentUrl = '@ViewBag.BaseUrl/PwaAccident/ViewItem?id='+id;
+        window.location.href = contentUrl;
+    }
+    function add_data() {
+        var contentUrl = '@ViewBag.BaseUrl/PwaAccident/Add';
+        var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Close"], close: onCloseDialog, });
+        form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: false, width: 400, height: 500, minHeight: 300, });
+        form_edit.data("kendoWindow").center().open().maximize();
+    }
+    function edit_data(id) {
+        var contentUrl = '@ViewBag.BaseUrl/PwaAccident/Edit?id='+id;
+        var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Close"], close: onCloseDialog, });
+        form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: false, width: 400, height: 500, minHeight: 300, });
+        form_edit.data("kendoWindow").center().open().maximize();
+    }
+    function delete_data(id,text) {
+		var keyValue = "@ResxHelper.GetValue("ta_acc", "judul_kejadian"): " + text;
+		var data2 = { title: '@ResxHelper.GetValue("Message","ConfirmDelete")', msg: keyValue };
+		var winconfirm = $("#dialogconfirm").kendoWindow({ title: "@ResxHelper.GetValue("Message","DeleteData")", modal: true, visible: false, resizable: true, draggable: true, width: "100%", height: "200px" }).data("kendoWindow");
+		winconfirm.content(confirmTemplate(data2));
+		winconfirm.center(); winconfirm.open();
+		$("#yesButton").click(function () {
+            $.ajax({
+                data: {id:id}, url: '@ViewBag.BaseUrl/Accident/Delete', type: 'POST'
+				, success: function (data) {
+					if (data.status != 1) {
+						notification.show({ title: data.title, message: kendo.toString(data.message) }, "error");
+					} else {
+						notification.show({ message: kendo.toString(data.message) }, "success");
+						window.location.href = window.location.href;
+						window.location.reload();
+					}
+				}
+			});
+		});
+		$("#noButton").click(function () { winconfirm.close(); });
+	}
+    function onCloseDialog(e) { $('#dialog').html(''); }
+    function closeDialog() { $("#dialog").data("kendoWindow").close(); }
+    $(document).ready(function () {
+        var page = localStorage.getItem("EHS_PwaAccident_last_page");
+        if (page != null && page != undefined) {
+            GetListData(page);
+        } else {
+            GetListData(1);
+        }
+    });
+</script>
+

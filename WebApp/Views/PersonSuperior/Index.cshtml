@@ -1,0 +1,278 @@
+@using WebApp
+@using Newtonsoft.Json
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+	var filterColumn = ViewData["filterColumn"] as WebApp.Models.PersonSuperiorModel.ViewModel;
+    ViewData["Title"] = ViewData["TitleHeader"];
+    ViewData["PageName"] = "personsuperior";
+    ViewData["Heading"] = ViewData["TitleHeader"];
+    ViewData["Category1"] = "";
+    ViewData["Category2"] = "";
+}
+<div class="panel">
+    <div class="panel-container">
+		<div class="panel-content">
+			<div id="collapse_filter_ta_person_superior" class="panel panel-collapse collapse">
+                <div class="panel-heading-filter">
+                    @ResxHelper.GetValue("Message", "FilterDataHeader", "Filter Data")
+                </div>
+				<div class="panel-body-filter">
+                    <section class="filter_cols">
+                        <div id="fiter_person_id" class="filter_col">
+                            <label for="person_id" class="label-filter">@ResxHelper.GetValue("ta_person_superior", "person_id"): </label>
+                            <input id="person_id" name="person_id" style="width: 350px;" />
+                        </div>
+
+                        <div id="fiter_superior_id" class="filter_col">
+                            <label for="superior_id" class="label-filter">@ResxHelper.GetValue("ta_person_superior", "superior_id"): </label>
+                            <input id="superior_id" name="superior_id" style="width: 350px;" />
+                        </div>
+
+                        <div id="fiter_status_id" class="filter_col">
+                            <label for="status_id" class="label-filter">@ResxHelper.GetValue("ta_person_superior", "status_id"): </label>
+                            <input id="status_id" name="status_id" style="width: 200px;" />
+                        </div>
+
+                    </section>
+				</div>
+				<div class="panel-footer-filter">
+					<a id="btnResetFilter_ta_person_superior" onclick="reset_filter_ta_person_superior()" class="k-button" title="Reset Filter">@ResxHelper.GetValue("Message", "ResetFilter", "Reset Filter")</a>
+				</div>
+			</div>
+			<div>
+				<table id="toolbar_panel" style="width:100%;">
+					<tr>
+						<td>
+							<span id="quick_search_template_ta_person_superior" class="k-textbox k-space-right"><input id="txtSearch_ta_person_superior" placeholder="@ResxHelper.GetValue("Message","QuickSearch")" value="" /><a id="btnSearch_ta_person_superior" href="#" class="k-icon k-i-search">&nbsp;</a></span>
+							<img id="btnSearchByColumn_ta_person_superior" title="@ResxHelper.GetValue("Message","ShowSearchByColumn")" style="cursor:pointer" src="~/img/search_by_column.png" width="20">
+							<img id="btnShowHideColumn_ta_person_superior" title="@ResxHelper.GetValue("Message","ShowHideColumn")" style="cursor:pointer" src="~/img/show_hide_column.png" width="20">
+							<a id="btnShowHideFilter_ta_person_superior" data-toggle="collapse" href="#collapse_filter_ta_person_superior" style="display:none">@ResxHelper.GetValue("Message", "ShowFilter", "Tampilkan Filter")</a>
+						</td>
+						<td style="float:right">
+							<img id="btnExportExcel_ta_person_superior" title="@ResxHelper.GetValue("Message","ExportToExcel")" style="cursor:pointer" src="~/img/excel.png" width="20" />&nbsp;
+							<a id="btnAdd_ta_person_superior" onclick="AddData_ta_person_superior()" class="k-button" title="@ResxHelper.GetValue("Message","Add")">@ResxHelper.GetValue("Message", "Add", "Tambah")</a>
+						</td>
+					<tr>
+				</table>
+			</div>
+			<div id="grid_ta_person_superior"></div>
+		</div>
+    </div>
+
+</div>
+<div id="WinShowHideColumn_ta_person_superior" style="display: none">
+    <div id="attr_column_show_hide" style="width:auto;height:auto;overflow-y:scroll;"></div>
+</div>
+@section ScriptsBlock {
+    <script>
+		var param = @Html.Raw(JsonConvert.SerializeObject(ViewData["param"]));
+		var displayName = @Html.Raw(JsonConvert.SerializeObject(ViewData["displayItem"]));
+		var pkKey = @Html.Raw(JsonConvert.SerializeObject(ViewData["pkKey"]));
+		var j_data = @Html.Raw(JsonConvert.SerializeObject(ViewData["column_att"]));
+		var colNameTooltip_ta_person_superior = [];
+		var colbuttonCount_ta_person_superior = 0;
+		var columnWidth = 40;
+		colbuttonCount_ta_person_superior += param.btnView == 1 ? 1 : 0;
+		colbuttonCount_ta_person_superior += param.btnEdit== "1" ? 1 : 0;
+		colbuttonCount_ta_person_superior += param.btnDelete == "1" ? 1 : 0;
+		colbuttonCount_ta_person_superior += param.btnCopy  == "1" ? 1 : 0;
+		if (colbuttonCount_ta_person_superior == 1) { columnWidth = 40; } else if (colbuttonCount_ta_person_superior == 2) { columnWidth = 60; } else if (colbuttonCount_ta_person_superior == 3) { columnWidth = 95; } else if (colbuttonCount_ta_person_superior == 4) { columnWidth = 120; }
+		var columnActionWidth_ta_person_superior = columnWidth + "px";
+		var item_data = "";
+		var col_att = [];
+		var showhide_column = "";
+		var j = 0;
+		var checked = '';
+		var aggregate_data_ta_person_superior = [];
+		var agg_i = 0
+		jQuery.each(j_data, function (i, val) {
+			var footerTemplate = "";
+			if (val.aggregate != "") {
+				footerTemplate = val.footerTemplate!="" ? val.footerTemplate : '#='+val.aggregate+'#';
+				aggregate_data_ta_person_superior[agg_i] = { field: val.name, aggregate: val.aggregate };
+				agg_i++;
+			}
+			item_data += item_data != "" ? "," : "";
+			item_data += '"' + val.name + '" : { "type": "' + val.type + '" } ';
+			if (val.display) {
+				col_att[j] = { field: val.name, title: val.title, hidden: JSON.parse(val.hidden), width: val.width, format: val.format, attributes: JSON.parse(val.attributes), encoded: JSON.parse(val.encoded), filterable: JSON.parse(val.filterable), sortable: JSON.parse(val.sortable), headerAttributes: { style: "white-space: normal;vertical-align:middle;text-align:center" },aggregates: [val.aggregate], footerTemplate: footerTemplate };
+				j++;
+				checked = '';if (val.hidden.toString() == 'false') {checked = 'checked';}
+				showhide_column += '<div><input type="checkbox" onclick="ShowHideColumn_ta_person_superior(this)" '+ checked +' value="' + val.name + '" /> ' + val.title + '</div>';
+			}
+		});
+		showhide_column += '<div><input type="checkbox" onclick="ShowHideColumn_ta_person_superior(this)" checked value="' + j + '" /> Action</div>';
+		item_data = '{' + item_data + '}';
+		var field_data = JSON.parse(item_data);
+		var columns_data = col_att;
+		var col_command = [];
+		var k = 0;
+		if (param.btnView== 1) {col_command[k] = { name: "View", text: "", className: "v-view", click: function (e) { var tr = $(e.target).closest("tr"); var data = this.dataItem(tr); ViewItem_ta_person_superior(data); } };k++;}
+		if (param.btnEdit== 1) {col_command[k] = { name: "Edit", text: "", className: "v-pencil", click: function (e) { var tr = $(e.target).closest("tr"); var data = this.dataItem(tr); EditData_ta_person_superior(data); } };k++;}
+		if (param.btnDelete== 1) {col_command[k] = { name: "Delete", text: "", className: "v-close", click: function (e) { var tr = $(e.target).closest("tr"); var data = this.dataItem(tr); DeleteData_ta_person_superior(data); } };k++;}
+		if (param.btnCopy == 1) { col_command[k] = { name: "Copy", text: "", className: "v-copy", click: function (e) { var tr = $(e.target).closest("tr"); var data = this.dataItem(tr); CopyData_ta_person_superior(data); } }; k++; }
+		if (colbuttonCount_ta_person_superior > 0) {
+			columns_data[j] = {command: col_command, width: columnActionWidth_ta_person_superior, attributes: " style=\"vertical-align:top;\""};
+		}
+		//==============================
+        //=== filter person_id 
+        var person_id_param = { item: { value: 'id', text: 'nrp,nama', distinct: '0' } ,parent:[{ field: 'person_type_id',opr:'=', value: '1' }], order:[]};
+        var person_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Person/LookupData", dataType: "json", data: person_id_param, type: "POST" } } });
+        var person_id = $("#person_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", change: onChange_person_id, dataSource: person_id_ds }).data("kendoComboBox");
+        $(document).ready(function () { $("#person_id").data("kendoComboBox").value('@filterColumn.person_id'); });
+        function onChange_person_id() {
+            if ($("#person_id").data("kendoComboBox").value() != '' && $("#person_id").data("kendoComboBox")._oldIndex == -1) { $("#person_id").data("kendoComboBox").value(''); }
+            onFilterHeader_ta_person_superior();
+        }
+        
+
+        //=== filter superior_id 
+        var superior_id_param = { item: { value: 'id', text: 'nrp,nama', distinct: '0' } ,parent:[], order:[]};
+        var superior_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Person/LookupData", dataType: "json", data: superior_id_param, type: "POST" } } });
+        var superior_id = $("#superior_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", change: onChange_superior_id, dataSource: superior_id_ds }).data("kendoComboBox");
+        $(document).ready(function () { $("#superior_id").data("kendoComboBox").value('@filterColumn.superior_id'); });
+        function onChange_superior_id() {
+            if ($("#superior_id").data("kendoComboBox").value() != '' && $("#superior_id").data("kendoComboBox")._oldIndex == -1) { $("#superior_id").data("kendoComboBox").value(''); }
+            onFilterHeader_ta_person_superior();
+        }
+        
+
+        //=== filter status_id 
+        var status_id_param = { item: { value: 'id', text: 'nama', distinct: '0' } ,parent:[{ field: 'cat_id',opr:'=', value: '3' }], order:[]};
+        var status_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: status_id_param, type: "POST" } } });
+        var status_id = $("#status_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", change: onChange_status_id, dataSource: status_id_ds }).data("kendoComboBox");
+        $(document).ready(function () { $("#status_id").data("kendoComboBox").value('@filterColumn.status_id'); });
+        function onChange_status_id() {
+            if ($("#status_id").data("kendoComboBox").value() != '' && $("#status_id").data("kendoComboBox")._oldIndex == -1) { $("#status_id").data("kendoComboBox").value(''); }
+            onFilterHeader_ta_person_superior();
+        }
+        
+
+		//==============================
+		$("#collapse_filter_ta_person_superior").on('shown.bs.collapse', function () {
+			$("#btnShowHideFilter_ta_person_superior").html('@ResxHelper.GetValue("Message","HideFilter")');
+		});
+		$("#collapse_filter_ta_person_superior").on('hidden.bs.collapse', function () {
+			$("#btnShowHideFilter_ta_person_superior").html('@ResxHelper.GetValue("Message","ShowFilter")');
+		});
+		//==============================
+		var record_ta_person_superior = 0;
+		var grid_ta_person_superior_heigth = 0;
+		var ds_ta_person_superior_filter = { filter_by_column: [{ name: 'person_id',value: '@filterColumn.person_id' }, { name: 'superior_id',value: '@filterColumn.superior_id' }, { name: 'status_id',value: '@filterColumn.status_id' }] };
+		var ds_ta_person_superior = new kendo.data.DataSource({ transport: { read: { url: "@ViewData["UrlGetList"]", dataType: "json", type: "POST", data: ds_ta_person_superior_filter }, parameterMap: function (options) { if (options.filter) { for (var i = 0; i < options.filter.filters.length; i++) { if (options.filter.filters[i].field == 'tanggal') { options.filter.filters[i].value = kendo.toString(options.filter.filters[i].value, "yyyy-MM-dd"); } } } return options; } }, schema: { data: "data", total: "total", aggregates: "aggregates", model: { fields: field_data } }, aggregate: aggregate_data_ta_person_superior, pageSize: 10, serverAggregates: true, serverPaging: true, serverFiltering: true, serverSorting: true });
+		var list_ta_person_superior = $("#grid_ta_person_superior").kendoGrid({
+			excel: { allPages: true, fileName: '@ViewData["TitleHeader"]'+'.xlsx' },
+			dataSource: ds_ta_person_superior, dataBound: onDataBound_ta_person_superior, height: grid_ta_person_superior_heigth, scrollable: true, groupable: false, columnMenu: false, menu: true, resizable: true, filterable: false, sortable: { mode: "multiple", allowUnsort: true }, pageable: { refresh: true, pageSizes: [5, 10, 20, 50, 100, 200], buttonCount: 5 },
+			columns: columns_data, editable: false, dataBinding: function () { record_ta_person_superior = (this.dataSource.page() - 1) * this.dataSource.pageSize(); }
+		});
+		function getParamgrid_ta_person_superior() {
+			var filter_by_column= [];var k = 0;
+	        if ($("#person_id").data("kendoComboBox").value() != "") {filter_by_column[k] = { name: "person_id", field: "ta_person_superior.person_id", opr: "=", value: $("#person_id").data("kendoComboBox").value() };k++;}
+        if ($("#superior_id").data("kendoComboBox").value() != "") {filter_by_column[k] = { name: "superior_id", field: "ta_person_superior.superior_id", opr: "=", value: $("#superior_id").data("kendoComboBox").value() };k++;}
+        if ($("#status_id").data("kendoComboBox").value() != "") {filter_by_column[k] = { name: "status_id", field: "ta_person_superior.status_id", opr: "=", value: $("#status_id").data("kendoComboBox").value() };k++;}
+
+			return { filter_by_column:filter_by_column };
+		}
+		function reset_filter_ta_person_superior() {
+	        $("#person_id").data("kendoComboBox").value('');
+        $("#superior_id").data("kendoComboBox").value('');
+        $("#status_id").data("kendoComboBox").value('');
+
+			onFilterHeader_ta_person_superior();
+		}
+		function onFilterHeader_ta_person_superior() {
+			$("#txtSearch_ta_person_superior").val('');
+			paramValue = getParamgrid_ta_person_superior();
+			if (list_ta_person_superior.data('kendoGrid').dataSource.page() > 1) {
+				list_ta_person_superior.data('kendoGrid').dataSource.page(0);
+			}
+			list_ta_person_superior.data('kendoGrid').dataSource.transport.options.read.data = paramValue;
+			list_ta_person_superior.data("kendoGrid").dataSource.filter([]);
+		};
+		$("#btnSearchByColumn_ta_person_superior").click(function () { var grid_ta_person_superior_heigth_filter = grid_ta_person_superior_heigth + 38; if (list_ta_person_superior.data("kendoGrid").options.filterable == false) { $('#btnSearchByColumn_ta_person_superior').prop('title', '@ResxHelper.GetValue("Message","HideSearchByColumn")'); $("#txtSearch_ta_person_superior").val(''); if ('1' == '1') { $("#quick_search_template_ta_person_superior").hide(); }; QuickSearch_ta_person_superior(); list_ta_person_superior.data("kendoGrid").setOptions({ height: grid_ta_person_superior_heigth_filter, filterable: { mode: "row" }, }); } else { $('#btnSearchByColumn_ta_person_superior').prop('title', '@ResxHelper.GetValue("Message","ShowSearchByColumn")'); $("#txtSearch_ta_person_superior").val(''); if ('1' == '1') { $("#quick_search_template_ta_person_superior").show(); }; QuickSearch_ta_person_superior(); list_ta_person_superior.data("kendoGrid").setOptions({ height: grid_ta_person_superior_heigth, filterable: false, }); } });
+		$("#btnSearch_ta_person_superior").click(function () { QuickSearch_ta_person_superior(); });
+		$('#txtSearch_ta_person_superior').keypress(function (e) { if (e.keyCode == 13) { QuickSearch_ta_person_superior(); } });
+		function QuickSearch_ta_person_superior() {
+			$filter = new Array();
+			$x = $("#txtSearch_ta_person_superior").val();
+			if ($x) {jQuery.each(j_data, function (i, val) {if (val.display && val.qsearch && val.type =='string') {$filter.push({ name: val.name, opr: "contains", value: $x });}});} 
+			if ($filter.length > 0) {list_ta_person_superior.data("kendoGrid").dataSource.filter({ logic: "or", filters: $filter });}else {list_ta_person_superior.data("kendoGrid").dataSource.filter([]);}
+		}
+		function Reload_list_ta_person_superior() { list_ta_person_superior.data('kendoGrid').dataSource.read(); list_ta_person_superior.data('kendoGrid').refresh(); }
+		function onDataBound_ta_person_superior(e) {
+			if (colbuttonCount_ta_person_superior > 0) {
+				var grid = $("#grid_ta_person_superior").data("kendoGrid"); var list_ta_person_superior = grid.dataSource.view();
+				for (var i = 0; i < list_ta_person_superior.length; i++) {
+					var currentUid = list_ta_person_superior[i].uid; var currenRow = grid.table.find("tr[data-uid='" + currentUid + "']");
+					if (param.btnView == 1) {
+						var viewButton = $(currenRow).find(".k-grid-View"); viewButton.attr("title", "@ResxHelper.GetValue("Message","View")");
+						if ("@ViewData["AllowView"]" == "1") {} else {viewButton.hide();}
+					}
+					if (param.btnEdit == 1) {
+						var editButton = $(currenRow).find(".k-grid-Edit"); editButton.attr("title", "@ResxHelper.GetValue("Message","Edit")");
+						if ("@ViewData["AllowEdit"]" == "1") {} else {editButton.hide();}
+					}
+					if (param.btnDelete == 1) {
+						var deleteButton = $(currenRow).find(".k-grid-Delete"); deleteButton.attr("title", "@ResxHelper.GetValue("Message","Delete")");
+						if ("@ViewData["AllowDelete"]" == "1") {} else {deleteButton.hide();}
+					}
+					if (param.btnCopy == 1) {
+						var copyButton = $(currenRow).find(".k-grid-Copy"); copyButton.attr("title", "@ResxHelper.GetValue("Message","Copy")");
+						if ("@ViewData["AllowAdd"]" == "1") {} else {copyButton.hide();}
+					}
+				}
+			}
+		}
+		function AddData_ta_person_superior() {var contentUrl = '@ViewData["UrlAdd"]'; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog, }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: param.btn_add_modal_width, height: param.btn_add_modal_height, minHeight: 300, });if(param.btn_add_modal_width == 0) {form_edit.data("kendoWindow").center().open().maximize()} else {form_edit.data("kendoWindow").center().open();}}
+		function ViewItem_ta_person_superior(data) { var qs = '';jQuery.each(pkKey, function (i, val) {qs += qs != "" ? "&" : "";qs += val+'=' + data[val];});var contentUrl = '@ViewData["UrlView"]?' + qs; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: param.btn_view_modal_width, height: param.btn_view_modal_height, minHeight: 300, }); if (param.btn_view_modal_width == 0) { form_edit.data("kendoWindow").center().open().maximize() } else { form_edit.data("kendoWindow").center().open(); }}
+		function EditData_ta_person_superior(data) { var qs = '';jQuery.each(pkKey, function (i, val) {qs += qs != "" ? "&" : "";qs += val+'=' + data[val];}); var contentUrl = '@ViewData["UrlEdit"]?' + qs; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: param.btn_edit_modal_width, height: param.btn_edit_modal_height, minHeight: 300, }); if(param.btn_edit_modal_width == 0) {form_edit.data("kendoWindow").center().open().maximize()} else {form_edit.data("kendoWindow").center().open();} }
+		function CopyData_ta_person_superior(data) { var qs = '';jQuery.each(pkKey, function (i, val) {qs += qs != "" ? "&" : "";qs += val+'=' + data[val];}); var contentUrl = '@ViewData["UrlCopy"]?' + qs; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: param.btn_edit_modal_width, height: param.btn_edit_modal_height, minHeight: 300, }); if(param.btn_edit_modal_width == 0) {form_edit.data("kendoWindow").center().open().maximize()} else {form_edit.data("kendoWindow").center().open();} }
+		function DeleteData_ta_person_superior(data) {
+			var keyValue = '';
+			jQuery.each(displayName, function (i, val) {
+				keyValue += keyValue != "" ? "<br />" : "";
+				keyValue += val.label+ ": " + data[val.name];
+			});
+			var pkItem = "";
+			jQuery.each(pkKey, function (i, val) {
+				pkItem += pkItem != "" ? ", " : "";
+				pkItem += '"'+val+'":"'+data[val]+'" ';
+			});
+			var pkVal = jQuery.parseJSON("{" + pkItem + "}");
+			var data2 = { title: '@ResxHelper.GetValue("Message","ConfirmDelete")', msg: keyValue };
+			var winconfirm = $("#dialogconfirm").kendoWindow({ title: "@ResxHelper.GetValue("Message","DeleteData")", modal: true, visible: false, resizable: true, draggable: true, width: "500px", height: "200px" }).data("kendoWindow");
+			winconfirm.content(confirmTemplate(data2));
+			winconfirm.center(); winconfirm.open();
+			$("#yesButton").click(function () {
+				$.ajax({
+					data: pkVal, url: '@ViewData["UrlDelete"]', type: 'POST'
+					, success: function (data) {
+						if (data.status != 1) {
+							notification.show({ title: data.title, message: kendo.toString(data.message) }, "error");
+							winconfirm.close();
+						} else {
+							notification.show({ message: kendo.toString(data.message) }, "success");
+							Reload_list_ta_person_superior();
+							winconfirm.close();
+						}
+					}
+				});
+			});
+			$("#noButton").click(function () { winconfirm.close(); });
+		}
+		function onCloseDialog(e) { $('#dialog').html(''); }
+		function closeDialog() { $("#dialog").data("kendoWindow").close(); }
+		$("#btnExportExcel_ta_person_superior").click(function (e) { var grid = $("#grid_ta_person_superior").data("kendoGrid"); grid.saveAsExcel(); });
+		function ShowHideColumn_ta_person_superior(e) { colname = $.isNumeric(e.value) ? parseInt(e.value) : e.value; if (e.checked) { $("#grid_ta_person_superior").data("kendoGrid").showColumn(colname); } else { $("#grid_ta_person_superior").data("kendoGrid").hideColumn(colname); } }
+		$(document).ready(function () {
+			$("#attr_column_show_hide").html(showhide_column);
+			if (param.ShowFilter == 1) { $("#btnShowHideFilter_ta_person_superior").show(); }
+			if (param.btnAdd == 1 && @ViewData["AllowAdd"]== "1") { }else{ $("#btnAdd_ta_person_superior").hide(); }
+			if (param.quick_search != 1) { $("#quick_search_template_ta_person_superior").hide(); }
+			if (param.search_by_column  != 1) { $("#btnSearchByColumn_ta_person_superior").hide(); }
+			if (param.show_hide_column != 1) { $("#btnShowHideColumn_ta_person_superior").hide(); }
+			if (param.export_exl != 1) { $("#btnExportExcel_ta_person_superior").hide(); }
+			$("#btnShowHideColumn_ta_person_superior").click(function () { var x = $("#btnShowHideColumn_ta_person_superior").offset().left; var y = $("#btnShowHideColumn_ta_person_superior").offset().top; if (!WinShowHideColumn_ta_person_superior) { var WinShowHideColumn_ta_person_superior = $("#WinShowHideColumn_ta_person_superior").kendoWindow({ width: "300px", position: { left: x, top: y }, title: "@ResxHelper.GetValue("Message","ShowHideColumn")", actions: ["Close"] }); } WinShowHideColumn_ta_person_superior.data("kendoWindow").open(); });
+		});
+    </script>
+}

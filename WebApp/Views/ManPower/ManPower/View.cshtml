@@ -1,0 +1,291 @@
+@using WebApp
+@using Microsoft.AspNetCore.Http;
+@{
+    Layout = "~/Views/Shared/_LayoutNoHeader.cshtml";
+    var fieldModel = ViewData["fieldModel"] as WebApp.Models.ManPowerModel.ViewModel;
+    ViewData["Title"] = ViewData["TitleHeader"];
+    ViewData["PageName"] = "manpower";
+    ViewData["Heading"] = ViewData["TitleHeader"];
+    ViewData["Category1"] = "";
+    ViewData["Category2"] = "";
+}
+    <style>
+        .k-grid-content {
+            min-height: 50px;
+        }
+    </style>
+<input type="hidden" id="id" name="id" value="@Html.Raw(fieldModel.id)" />
+<div class="panel panel-form w-100">
+    <div class="panel-container">
+        <div class="panel-heading">
+            <div class="title-header">@ViewData["TitleHeader"]</div>
+        </div>
+        <div class="panel-content">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div style="margin-left:auto;margin-top:auto;text-align:center;vertical-align:middle;">
+                        @if (fieldModel.photo != "")
+                        {
+                            @Html.Raw(fieldModel.photo)
+                        }
+                        else
+                        {
+                            <img src="@ViewBag.BaseUrl/img/default_profile.jpg" width="100" />
+                        }
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div id="form_item_nama_lengkap" class="form-group">
+                        <div class="form-item-label160">@ResxHelper.GetValue("ta_mp", "nama_lengkap")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_nama_lengkap" class="form-item-view">@Html.Raw(fieldModel.nama_lengkap)</div>
+                    </div>
+                    <div id="form_item_nrp" class="form-group">
+                        <div class="form-item-label160">@ResxHelper.GetValue("ta_mp", "nrp")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_nrp" class="form-item-view">@Html.Raw(fieldModel.nrp)</div>
+                    </div>
+
+                    <div id="form_item_tempat_lahir" class="form-group">
+                        <div class="form-item-label160">@ResxHelper.GetValue("ta_mp", "tempat_lahir")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_tempat_lahir" class="form-item-view">@Html.Raw(fieldModel.tempat_lahir)</div>
+                    </div>
+
+                    <div id="form_item_tgl_lahir" class="form-group">
+                        <div class="form-item-label160">@ResxHelper.GetValue("ta_mp", "tgl_lahir")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_tgl_lahir" class="form-item-view">@Html.Raw(fieldModel.tgl_lahir)</div>
+                    </div>
+                    <div id="form_item_jenis_kelamin_id" class="form-group">
+                        <div class="form-item-label160">@ResxHelper.GetValue("ta_mp", "jenis_kelamin_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_jenis_kelamin_id" class="form-item-view">@Html.Raw(fieldModel.jenis_kelamin_id_text)</div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div id="form_item_karyawan_nonkaryawan_id" class="form-group">
+                        <div class="form-item-label160">@ResxHelper.GetValue("ta_mp", "karyawan_nonkaryawan_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_karyawan_nonkaryawan_id" class="form-item-view">@Html.Raw(fieldModel.karyawan_nonkaryawan_id_text)</div>
+                    </div>
+                    <div id="form_item_user_nonuser_id" class="form-group">
+                        <div class="form-item-label160">@ResxHelper.GetValue("ta_mp", "user_nonuser_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_user_nonuser_id" class="form-item-view">@Html.Raw(fieldModel.user_nonuser_id_text)</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+                    <div id="form_item_company_id" class="form-group">
+                        <div class="form-item-label160">@ResxHelper.GetValue("ta_mp", "company_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_company_id" class="form-item-view">@Html.Raw(fieldModel.company_id_text)</div>
+                    </div>
+                    <div id="form_item_ehs_area_id" class="form-group">
+                        <div class="form-item-label160">@ResxHelper.GetValue("ta_mp", "ehs_area_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_ehs_area_id" class="form-item-view">@Html.Raw(fieldModel.ehs_area_id_text)</div>
+                    </div>
+
+                    <div id="form_item_business_area_id" class="form-group">
+                        <div class="form-item-label160">@ResxHelper.GetValue("ta_mp", "business_area_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_business_area_id" class="form-item-view">@Html.Raw(fieldModel.business_area_id_text)</div>
+                    </div>
+
+                    <div id="form_item_personal_area_id" class="form-group">
+                        <div class="form-item-label160">@ResxHelper.GetValue("ta_mp", "personal_area_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_personal_area_id" class="form-item-view">@Html.Raw(fieldModel.personal_area_id_text)</div>
+                    </div>
+
+                    <div id="form_item_personal_sub_area_id" class="form-group">
+                        <div class="form-item-label160">@ResxHelper.GetValue("ta_mp", "personal_sub_area_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_personal_sub_area_id" class="form-item-view">@Html.Raw(fieldModel.personal_sub_area_id_text)</div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div id="form_item_job" class="form-group">
+                        <div class="form-item-label160">@ResxHelper.GetValue("ta_mp", "job")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_job" class="form-item-view">@Html.Raw(fieldModel.job)</div>
+                    </div>
+                    <div id="form_item_position" class="form-group">
+                        <div class="form-item-label160">@ResxHelper.GetValue("ta_mp", "position")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_position" class="form-item-view">@Html.Raw(fieldModel.position)</div>
+                    </div>
+                    <div id="form_item_tgl_masuk_kerja" class="form-group">
+                        <div class="form-item-label160">@ResxHelper.GetValue("ta_mp", "tgl_masuk_kerja")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_tgl_masuk_kerja" class="form-item-view">@Html.Raw(fieldModel.tgl_masuk_kerja)</div>
+                    </div>
+
+                    <div id="form_item_tgl_akhir_kerja" class="form-group">
+                        <div class="form-item-label160">@ResxHelper.GetValue("ta_mp", "tgl_akhir_kerja")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_tgl_akhir_kerja" class="form-item-view">@Html.Raw(fieldModel.tgl_akhir_kerja)</div>
+                    </div>
+
+                </div>
+                <div class="col-lg-4">
+                    
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header cursor-pointer" data-toggle="collapse" href="#peserta_training">Riwayat Pelatihan</div>
+                        <div class="card-body panel panel-collapse show" id="peserta_training">
+                            <partial name="_list_peserta_training" />
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header cursor-pointer" data-toggle="collapse" href="#accident_korban">Accident - Korban</div>
+                        <div class="card-body panel panel-collapse show" id="accident_korban">
+                            <partial name="_list_acc_korban" />
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header cursor-pointer" data-toggle="collapse" href="#accident_pelaku">Accident - Pelaku</div>
+                        <div class="card-body panel panel-collapse show" id="accident_pelaku">
+                            <partial name="_list_acc_pelaku" />
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header cursor-pointer" data-toggle="collapse" href="#accident_saksi">Accident - Saksi</div>
+                        <div class="card-body panel panel-collapse show" id="accident_saksi">
+                            <partial name="_list_acc_saksi" />
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header cursor-pointer" data-toggle="collapse" href="#performance">Performance</div>
+                        <div class="card-body panel panel-collapse show" id="performance">
+                            <partial name="_list_performance" />
+                        </div>
+                    </div>
+                    @{
+                        if (fieldModel.user_nonuser_id == "1")
+                        {
+                            <div class="card">
+                                <div class="card-header cursor-pointer" data-toggle="collapse" href="#mp_riwkerja">Riwayat Pekerjaan</div>
+                                <div class="card-body panel panel-collapse show" id="mp_riwkerja">
+                                    <partial name="_list_mp_riwkerja" />
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header cursor-pointer" data-toggle="collapse" href="#tab_screening">Screening</div>
+                                <div class="card-body panel panel-collapse show" id="tab_screening">
+                                    <table class="table table-bordered table-striped">
+                                        <tr>
+                                            <th style="width:20px">No</th>
+                                            <th style="width:100px">Screening</th>
+                                            <th style="width:50px">Nilai</th>
+                                            <th>Catatan Objective</th>
+                                        </tr>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>Behaviour</td>
+                                            <td>@Html.Raw(fieldModel.behaviour_screen_nilai)</td>
+                                            <td>@Html.Raw(fieldModel.behaviour_screen_objective)</td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>TOC</td>
+                                            <td>@Html.Raw(fieldModel.toc_nilai)</td>
+                                            <td>@Html.Raw(fieldModel.toc_objective)</td>
+                                        </tr>
+                                        <tr>
+                                            <td>3</td>
+                                            <td>BMC</td>
+                                            <td>@Html.Raw(fieldModel.bmc_nilai)</td>
+                                            <td>@Html.Raw(fieldModel.bmc_objective)</td>
+                                        </tr>
+                                        <tr>
+                                            <td>4</td>
+                                            <td>English</td>
+                                            <td>@Html.Raw(fieldModel.english_nilai)</td>
+                                            <td>@Html.Raw(fieldModel.english_objective)</td>
+                                        </tr>
+                                    </table>
+                                    <div id="form_item_screening_time" class="form-group">
+                                        <div class="form-item-label">@ResxHelper.GetValue("ta_mp", "screening_time")</div>
+                                        <div class="form-item-separator">:</div>
+                                        <div id="view_item_screening_time" class="form-item-view">@Html.Raw(fieldModel.screening_time)</div>
+                                    </div>
+                                </div>                                
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="panel-footer">
+            <a id="close" class="k-button k-button-icontext" href="#"><i class="far fa-times-circle"></i>&nbsp;<span id="btnCloseText">@ResxHelper.GetValue("Message", "Close", "Tutup")</span></a>
+        </div>
+    </div>
+</div>
+<script>
+    $("#close").kendoButton();
+    $("#close").click(function (e) {
+        close_self();
+    });
+    function onCloseDialog(e) { $('#dialog').html(''); }
+    function closeDialog() { $("#dialog").data("kendoWindow").close(); }
+    function close_self() { if (window.parent.$("#dialog_ta_mp").data("kendoWindow")) { window.parent.$("#dialog_ta_mp").data("kendoWindow").close(); } else { window.parent.$("#dialog").data("kendoWindow").close(); } }
+
+    function display_by_type() {
+
+        var p = '@Html.Raw(fieldModel.person_id)';
+        var u = '@Html.Raw(fieldModel.user_nonuser_id)';
+
+        if (p == '') {
+            //emp
+            $('#form_item_level_jabatan_id').show();
+            $('#form_item_level_jabatan_nama').hide();
+
+        } else {
+            //non-emp
+            $('#form_item_level_jabatan_id').hide();
+            $('#form_item_level_jabatan_nama').show();
+        }
+
+        if (u == '1') {
+            //user
+            $('#form_item_behaviour_screen_nilai').show();
+            $('#form_item_behaviour_screen_objective').show();
+
+            $('#form_item_toc_nilai').show();
+            $('#form_item_toc_objective').show();
+
+            $('#form_item_bmc_nilai').show();
+            $('#form_item_bmc_objective').show();
+
+            $('#form_item_english_nilai').show();
+            $('#form_item_english_objective').show();
+        } else {
+            //non-user
+            $('#form_item_behaviour_screen_nilai').hide();
+            $('#form_item_behaviour_screen_objective').hide();
+
+            $('#form_item_toc_nilai').hide();
+            $('#form_item_toc_objective').hide();
+
+            $('#form_item_bmc_nilai').hide();
+            $('#form_item_bmc_objective').hide();
+
+            $('#form_item_english_nilai').hide();
+            $('#form_item_english_objective').hide();
+
+        }
+    }
+
+    $(document).ready(function () {
+        display_by_type();
+    });
+</script>

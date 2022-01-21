@@ -1,0 +1,200 @@
+﻿@using WebApp
+@using Microsoft.AspNetCore.Http;
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@{
+    Layout = "~/Views/Shared/_LayoutNoHeader.cshtml";
+    var fieldModel = ViewData["fieldModel"] as WebApp.Areas.Sys.Models.UsersModel.ViewModel;
+    var baseUrl = ViewData["baseUrl"];
+}
+
+<form id="form_edit" method="post">
+    <div class="card">
+        <div class="card-header">
+            <div class="title-header">@ViewData["TitleHeader"]</div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12">
+                    <div id="form_item_userid" class="form-item-none">
+                        <div class="form-item-label">@ResxHelper.GetValue("sys_users", "userid")<span class="required"> *</span></div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_userid" class="form-item-field">
+                            <input type="number" id="userid" name="userid" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("sys_users","userid"))" style="width:100px;" />
+                            <span class="k-invalid-msg" data-for="userid"></span>
+                            <script>
+                            $("#userid").kendoNumericTextBox({ format: "#", decimals: 0 });
+                            $(document).ready(function () {$("#userid").data('kendoNumericTextBox').value('@fieldModel.userid');})
+                            </script>
+                            <input type="hidden" id="userid_old" name="userid_old" value="@fieldModel.userid" />
+                        </div>
+                    </div>
+                    <div id="form_item_username" class="form-item">
+                        <div class="form-item-label">@ResxHelper.GetValue("sys_users", "username")<span class="required"> *</span></div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_username" class="form-item-field">
+                            <input type="text" title="@ResxHelper.GetValue("sys_users", "username") @ResxHelper.GetValue("Message", "IsNotValidCharacter","is not valid character input")." pattern="@ConfigHelper.GetValue("AllowInputCharacters")" id="username" name="username" class="k-textbox" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("sys_users","username"))" maxlength="50" style="width:350px;" value="@fieldModel.username" />
+                            <span class="k-invalid-msg" data-for="username"></span>
+                        </div>
+                    </div>
+                    <div id="form_item_password" class="form-item">
+                        <div class="form-item-label">@ResxHelper.GetValue("sys_users", "password")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_password" class="form-item-field">
+                            <input type="password" id="password" name="password" class="k-textbox" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("sys_users","password"))" maxlength="50" style="width:350px;" value="" />
+                            <span class="k-invalid-msg" data-for="password"></span>
+                        </div>
+                    </div>
+                    <div id="form_item_fullname" class="form-item">
+                        <div class="form-item-label">@ResxHelper.GetValue("sys_users", "fullname")<span class="required"> *</span></div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_fullname" class="form-item-field">
+                            <input type="text" title="@ResxHelper.GetValue("sys_users", "fullname") @ResxHelper.GetValue("Message", "IsNotValidCharacter","is not valid character input")." pattern="@ConfigHelper.GetValue("AllowInputCharacters")" id="fullname" name="fullname" class="k-textbox" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("sys_users","fullname"))" maxlength="50" style="width:350px;" value="@fieldModel.fullname" />
+                            <span class="k-invalid-msg" data-for="fullname"></span>
+                        </div>
+                    </div>
+                    <div id="form_item_email" class="form-item">
+                        <div class="form-item-label">@ResxHelper.GetValue("sys_users", "email")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_email" class="form-item-field">
+                            <input type="email" id="email" name="email" class="k-textbox" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("sys_users","email"))" maxlength="50" style="width:350px;" value="@fieldModel.email" />
+                            <span class="k-invalid-msg" data-for="email"></span>
+                        </div>
+                    </div>
+                    <div id="form_item_block" class="form-item">
+                        <div class="form-item-label">@ResxHelper.GetValue("sys_users", "block")<span class="required"> *</span></div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_block" class="form-item-field">
+                            @{
+                                var block0 = fieldModel.block == "0" ? "checked" : "";
+                                var block1 = fieldModel.block == "1" ? "checked" : "";
+                            }
+                            <input type="radio" name="block" id="block1" class="k-radio" value="1" @block1>
+                            <label class="k-radio-label" for="block1">@ResxHelper.GetValue("Message", "Yes")</label>
+                            <input type="radio" name="block" id="block0" class="k-radio" value="0" @block0>
+                            <label class="k-radio-label" for="block0">@ResxHelper.GetValue("Message", "No")</label>
+                        </div>
+                    </div>
+                    <div id="form_item_group_id" class="form-item">
+                        <div class="form-item-label">@ResxHelper.GetValue("sys_user_group", "group_id")<span class="required"> *</span></div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_group_id" class="form-item-field">
+                            <select id="group_id_select" name="group_id_select" style="width:500px;"></select>
+                            <span class="k-invalid-msg" data-for="group_id"></span>
+                            <input id="group_id" name="group_id" type="hidden" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("sys_user_group", "group_id"))" value="@fieldModel.group_id" />
+                            <script>
+                                var group_id_param = { item: { value: 'id', text: 'nama' }};
+                                var group_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@baseUrl/Sys/Groups/LookupData", dataType: "json", data: group_id_param, type: "POST", serverFiltering: false } } });
+                                $("#group_id_select").kendoMultiSelect({ placeholder: "", autoClose: true, filter: 'contains', height: 200, autoBind: false, dataValueField: "value", dataTextField: "text", change: group_id_onChange, autoBind: false, dataSource: group_id_ds });
+                                function group_id_onChange() {
+                                    var ms_val = $("#group_id_select").data("kendoMultiSelect").value();
+                                    var cb_val = '';
+                                    for (i = 0; i < ms_val.length; i++) {
+                                        cb_val += cb_val != '' ? ',' : ''; cb_val += ms_val[i];
+                                    }
+                                    $("#group_id").val(cb_val);
+                                }
+                                function reload_group_id() {
+                                    $("#group_id").val('');
+                                    var user_level_id = $("#user_level_id").data("kendoComboBox").value();
+                                    var group_id_param = { item: { value: 'group_id', text: 'name' }, parent: { user_level_id: user_level_id }, order: { lft: '' } };
+                                    $("#group_id_select").data("kendoMultiSelect").dataSource.read(group_id_param);
+                                }
+                                $(document).ready(function () { $("#group_id_select").data("kendoMultiSelect").value([@fieldModel.group_id]);});
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer" style="text-align:center">
+            <a id="cancel" class="k-button k-button-icontext" href="#"><i class="far fa-times-circle"></i>&nbsp;<span id="btnCancelText">@ResxHelper.GetValue("Message", "Cancel")</span></a>
+            <a id="save" class="k-button k-button-icontext" href="#"><i class="fas fa-save"></i>&nbsp;<span id="btnSaveText">@ResxHelper.GetValue("Message", "Save")</span></a>
+        </div>
+    </div>
+</form>
+
+<script>
+    var form_type = '@ViewData["form_type"]';
+    function ShowHideColumn(form_type)
+    {
+        if(form_type=='Add')
+        {
+            var hiden_column = [];
+            for (i = 0; i < hiden_column.length; i++) {
+                $("#form_item_"+hiden_column[i]).hide();
+            }
+        }
+        else if(form_type=='Edit')
+        {
+            var hiden_column = [];
+            for (i = 0; i < hiden_column.length; i++) {
+                $("#form_item_"+hiden_column[i]).hide();
+            }
+        }
+    }
+    function setReadOnly(form_type,opt)
+    {
+        if(opt==true)
+        {
+            if(form_type=='Add')
+            {
+
+            }
+            else if(form_type=='Edit')
+            {
+
+            }
+        }
+        else
+        {
+            if(form_type=='Add')
+            {
+
+            }
+            else if(form_type=='Edit')
+            {
+
+            }
+        }
+    }
+    $(document).ready(function () {
+        ShowHideColumn(form_type);
+        setReadOnly(form_type, true);
+    });
+    var validatable = $("#form_edit").kendoValidator().data("kendoValidator");
+    $("#save").click(function (e) {
+        if (validatable.validate() === true) {
+            kendo.ui.progress($("#form_edit"), true);
+            $.ajax({
+                url: '@ViewData["UrlAction"]', data: $('#form_edit').serialize(), type: 'POST',
+                success: function (data) {
+                    kendo.ui.progress($("#form_edit"), false);
+                    if (data.status == 1) {
+                        window.parent.notification.show({title: data.title, message: kendo.toString(data.message) }, "success");
+                        if (window.parent.Reload_list_sys_users) {
+                            window.parent.Reload_list_sys_users();
+                        }else if (window.parent.reload_sys_users) {
+                            window.parent.reload_sys_users(data.pk);
+                        }
+                        close_self();
+                    } else if (data.status == 3) {
+                        windows.parent.notification.show({ title: data.title, message: data.message }, "error");
+                        close_self();
+                    } else {
+                        notification.show({ title: data.title, message: data.message }, "error");
+                    }
+                }
+            });
+        } else {
+            kendo.ui.progress($("#form_edit"), false);
+        }
+
+    });
+    $("#cancel").kendoButton();
+    $("#cancel").click(function (e) {
+        close_self();
+    });
+    function close_self() { if (window.parent.$("#dialog_sys_users").data("kendoWindow")) { window.parent.$("#dialog_sys_users").data("kendoWindow").close(); } else { window.parent.$("#dialog").data("kendoWindow").close(); } }
+</script>
+
+

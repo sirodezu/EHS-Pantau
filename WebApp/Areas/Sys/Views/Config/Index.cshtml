@@ -1,0 +1,47 @@
+@using WebApp
+@using Newtonsoft.Json
+@{
+    var baseUrl = ViewData["baseUrl"];
+    var filterColumn = ViewData["filterColumn"] as WebApp.Areas.Sys.Models.ConfigModel.ViewModel;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["PageName"] = "config";
+    ViewData["Heading"] = ViewData["TitleHeader"];
+    ViewData["Category1"] = "System";
+    ViewData["Category2"] = "";
+}
+
+<div class="panel">
+    <div class="panel-container">
+        <div class="panel-content">
+            <div class="text-center" style="padding:50px">
+                <a href="@ViewBag.BaseUrl/sys/config/EditAll"><div class="k-button box-menu">Edit Configuration</div></a>
+                <a href="#" onclick="resert_data()"><div class="k-button box-menu">Reset Data</div></a>
+            </div>
+        </div>
+    </div>
+</div>
+@section ScriptsBlock {
+    <script>
+        function resert_data() {
+            var data2 = { title: '@ResxHelper.GetValue("Message","ConfirmReset","Apakah Anda yakin akan melakukan Reset Data")', msg: "" };
+            var winconfirm = $("#dialogconfirm").kendoWindow({ title: "@ResxHelper.GetValue("Message","DeleteData")", modal: true, visible: false, resizable: true, draggable: true, width: "500px", height: "200px" }).data("kendoWindow");
+            winconfirm.content(confirmTemplate(data2));
+            winconfirm.center(); winconfirm.open();
+            $("#yesButton").click(function () {
+                    $.ajax({
+                        url: '@ViewBag.BaseUrl/sys/config/resetData', type: 'POST'
+                        , success: function (data) {
+                            if (data.status != 1) {
+                                notification.show({ title: data.title, message: kendo.toString(data.message) }, "error");
+                                winconfirm.close();
+                            } else {
+                                notification.show({ message: kendo.toString(data.message) }, "success");
+                                winconfirm.close();
+                            }
+                        }
+                    });
+                });
+            $("#noButton").click(function () { winconfirm.close(); });
+        }
+    </script>
+}

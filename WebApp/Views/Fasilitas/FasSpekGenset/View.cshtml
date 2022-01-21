@@ -1,0 +1,193 @@
+@using WebApp
+@using Microsoft.AspNetCore.Http;
+@{
+    Layout = "~/Views/Shared/_LayoutNoHeader.cshtml";
+    var fieldModel = ViewData["fieldModel"] as WebApp.Models.FasSpekGensetModel.ViewModel;
+	ViewData["Title"] = ViewData["TitleHeader"];
+    ViewData["PageName"] = "fasspekgenset";
+    ViewData["Heading"] = ViewData["TitleHeader"];
+    ViewData["Category1"] = "";
+    ViewData["Category2"] = "";
+}
+<div class="panel panel-form">
+	<div class="panel-container">
+		<div class="panel-heading">
+			<div class="title-header">@ViewData["TitleHeader"]</div>
+		</div>
+		<div class="panel-content">
+			<div class="row">
+				<div class="col-lg-12">
+
+                    <div id="form_item_id" class="form-group-none">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_fas_spek_genset", "id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_id" class="form-item-view">@Html.Raw(fieldModel.id)</div>
+                  </div>
+
+                    <div id="form_item_fasilitas_id" class="form-group-none">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_fas_spek_genset", "fasilitas_id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_fasilitas_id" class="form-item-view">@Html.Raw(fieldModel.fasilitas_id)</div>
+                  </div>
+
+                    <div id="form_item_nomor_aset" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_fas_spek_genset", "nomor_aset")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_nomor_aset" class="form-item-view">@Html.Raw(fieldModel.nomor_aset)</div>
+                  </div>
+
+                    <div id="form_item_merk" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_fas_spek_genset", "merk")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_merk" class="form-item-view">@Html.Raw(fieldModel.merk)</div>
+                  </div>
+
+                    <div id="form_item_serial_number" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_fas_spek_genset", "serial_number")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_serial_number" class="form-item-view">@Html.Raw(fieldModel.serial_number)</div>
+                  </div>
+
+                    <div id="form_item_nama_pabrik_pembuatan" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_fas_spek_genset", "nama_pabrik_pembuatan")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_nama_pabrik_pembuatan" class="form-item-view">@Html.Raw(fieldModel.nama_pabrik_pembuatan)</div>
+                  </div>
+
+                    <div id="form_item_tempat_pembuatan" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_fas_spek_genset", "tempat_pembuatan")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_tempat_pembuatan" class="form-item-view">@Html.Raw(fieldModel.tempat_pembuatan)</div>
+                  </div>
+
+                    <div id="form_item_tahun_pembuatan" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_fas_spek_genset", "tahun_pembuatan")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_tahun_pembuatan" class="form-item-view">@Html.Raw(fieldModel.tahun_pembuatan)</div>
+                  </div>
+
+                    <div id="form_item_daya" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_fas_spek_genset", "daya")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_daya" class="form-item-view">@Html.Raw(fieldModel.daya)</div>
+                  </div>
+
+                    <div id="form_item_frekuensi" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_fas_spek_genset", "frekuensi")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_frekuensi" class="form-item-view">@Html.Raw(fieldModel.frekuensi)</div>
+                  </div>
+
+                    <div id="form_item_putaran" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_fas_spek_genset", "putaran")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_putaran" class="form-item-view">@Html.Raw(fieldModel.putaran)</div>
+                  </div>
+
+                    <div id="form_item_kode_cerobong" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_fas_spek_genset", "kode_cerobong")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_kode_cerobong" class="form-item-view">@Html.Raw(fieldModel.kode_cerobong)</div>
+                  </div>
+
+                    <div id="form_item_alat_pengendali_emisi" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_fas_spek_genset", "alat_pengendali_emisi")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_alat_pengendali_emisi" class="form-item-view">@Html.Raw(fieldModel.alat_pengendali_emisi)</div>
+                  </div>
+
+                    <div id="form_item_nama_bahan_bakar" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_fas_spek_genset", "nama_bahan_bakar")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_nama_bahan_bakar" class="form-item-view">@Html.Raw(fieldModel.nama_bahan_bakar)</div>
+                  </div>
+
+                    <div id="form_item_jumlah_bahan_bakar_per_tahun" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_fas_spek_genset", "jumlah_bahan_bakar_per_tahun")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_jumlah_bahan_bakar_per_tahun" class="form-item-view">@Html.Raw(fieldModel.jumlah_bahan_bakar_per_tahun)</div>
+                  </div>
+
+                    <div id="form_item_waktu_operasi" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_fas_spek_genset", "waktu_operasi")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_waktu_operasi" class="form-item-view">@Html.Raw(fieldModel.waktu_operasi)</div>
+                  </div>
+
+                    <div id="form_item_lokasi" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_fas_spek_genset", "lokasi")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_lokasi" class="form-item-view">@Html.Raw(fieldModel.lokasi)</div>
+                  </div>
+
+                    <div id="form_item_latitude" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_fas_spek_genset", "latitude")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_latitude" class="form-item-view">@Html.Raw(fieldModel.latitude)</div>
+                  </div>
+
+                    <div id="form_item_longitude" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_fas_spek_genset", "longitude")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_longitude" class="form-item-view">@Html.Raw(fieldModel.longitude)</div>
+                  </div>
+
+                    <div id="form_item_bentuk_cerobong_id" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_fas_spek_genset", "bentuk_cerobong_id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_bentuk_cerobong_id" class="form-item-view">@Html.Raw(fieldModel.bentuk_cerobong_id_text)</div>
+                  </div>
+
+                    <div id="form_item_tinggi_cerobong" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_fas_spek_genset", "tinggi_cerobong")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_tinggi_cerobong" class="form-item-view">@Html.Raw(fieldModel.tinggi_cerobong)</div>
+                  </div>
+
+                    <div id="form_item_diameter_cerobong" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_fas_spek_genset", "diameter_cerobong")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_diameter_cerobong" class="form-item-view">@Html.Raw(fieldModel.diameter_cerobong)</div>
+                  </div>
+
+                    <div id="form_item_tinggi_lubang_sampling" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_fas_spek_genset", "tinggi_lubang_sampling")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_tinggi_lubang_sampling" class="form-item-view">@Html.Raw(fieldModel.tinggi_lubang_sampling)</div>
+                  </div>
+
+                    <div id="form_item_photo" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_fas_spek_genset", "photo")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_photo" class="form-item-view">@Html.Raw(fieldModel.photo)</div>
+                  </div>
+
+                    <div id="form_item_tgl_periksa_akhir" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_fas_spek_genset", "tgl_periksa_akhir")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_tgl_periksa_akhir" class="form-item-view">@Html.Raw(fieldModel.tgl_periksa_akhir)</div>
+                  </div>
+
+                    <div id="form_item_hasil_periksa_akhir" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_fas_spek_genset", "hasil_periksa_akhir")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_hasil_periksa_akhir" class="form-item-view">@Html.Raw(fieldModel.hasil_periksa_akhir_text)</div>
+                  </div>
+
+				</div>
+			</div>
+		</div>
+		<div class="panel-footer">
+			<a id="close" class="k-button k-button-icontext" href="#"><i class="far fa-times-circle"></i>&nbsp;<span id="btnCloseText">@ResxHelper.GetValue("Message", "Close", "Tutup")</span></a>
+		</div>
+	</div>
+</div>
+<script>
+    $("#close").kendoButton();
+    $("#close").click(function (e) {
+        close_self();
+    });
+    function onCloseDialog(e) { $('#dialog').html(''); }
+    function closeDialog() { $("#dialog").data("kendoWindow").close(); }
+    function close_self() { if (window.parent.$("#dialog_ta_fas_spek_genset").data("kendoWindow")) { window.parent.$("#dialog_ta_fas_spek_genset").data("kendoWindow").close(); } else { window.parent.$("#dialog").data("kendoWindow").close(); } }
+</script>

@@ -1,0 +1,163 @@
+@using WebApp
+@using Microsoft.AspNetCore.Http;
+@{
+    Layout = "~/Views/Shared/_LayoutNoHeader.cshtml";
+    var fieldModel = ViewData["fieldModel"] as WebApp.Areas.Ref.Models.HariLiburTetapModel.ViewModel;
+    var baseUrl = ViewData["baseUrl"];
+}
+
+<form id="form_edit" method="post">
+    <div class="card">
+        <div class="card-header">
+            <div class="title-header">@ViewData["TitleHeader"]</div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12">
+                    <div id="form_item_bulan_id" class="form-item">
+                        <div class="form-item-label">@ResxHelper.GetValue("ref_hari_libur_tetap", "bulan_id")<span id="label_req_bulan_id" class="required"> *</span></div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_bulan_id" class="form-item-field">
+                            <input id="bulan_id" name="bulan_id" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ref_hari_libur_tetap","bulan_id"))" style="width:120px;" />
+                            <span class="k-invalid-msg" data-for="bulan_id"></span>
+                            <script>
+                                var bulan_id_param = { item: { value: "id", text: "nama" }, parent: [], order: [{field:"id",dir:"asc"}]};
+                                var bulan_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@baseUrl/Sys/Months/LookupData", dataType: "json", data: bulan_id_param, type: "POST" } } });
+                                var bulan_id = $("#bulan_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: bulan_id_ds, change:onChange_bulan_id }).data("kendoComboBox");
+                                $(document).ready(function () { $("#bulan_id").data("kendoComboBox").value('@fieldModel.bulan_id'); });
+                                function onChange_bulan_id() {if ($("#bulan_id").data("kendoComboBox").value() != '' && $("#bulan_id").data("kendoComboBox")._oldIndex == -1) {$("#bulan_id").data("kendoComboBox").value('');}
+                                    reload_tanggal();
+                                }
+                            </script>
+                            <input type="hidden" id="bulan_tanggal" name="bulan_tanggal" value="@fieldModel.bulan_tanggal" />
+                            <input type="hidden" id="bulan_tanggal_old" name="bulan_tanggal_old" value="@fieldModel.bulan_tanggal" />
+
+                        </div>
+                    </div>
+
+                    <div id="form_item_tanggal" class="form-item">
+                        <div class="form-item-label">@ResxHelper.GetValue("ref_hari_libur_tetap", "tanggal")<span id="label_req_tanggal" class="required"> *</span></div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_tanggal" class="form-item-field">
+                            <input id="tanggal" name="tanggal" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ref_hari_libur_tetap","tanggal"))" style="width:80px;" />
+                            <span class="k-invalid-msg" data-for="tanggal"></span>
+                            <script>
+                                var tanggal_param = { item: { value: "id", text: "nama" }, parent: [{field:'bulan',value:'@fieldModel.bulan_id'}], order:[]};
+                                var tanggal_ds = new kendo.data.DataSource({ transport: { read: { url: "@baseUrl/Sys/Months/LookupDate", dataType: "json", data: tanggal_param, type: "POST" } } });
+                                var tanggal = $("#tanggal").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: tanggal_ds, change:onChange_tanggal }).data("kendoComboBox");
+                                $(document).ready(function () { $("#tanggal").data("kendoComboBox").value('@fieldModel.tanggal'); });
+                                function onChange_tanggal() {
+                                    if ($("#tanggal").data("kendoComboBox").value() != '' && $("#tanggal").data("kendoComboBox")._oldIndex == -1) { $("#tanggal").data("kendoComboBox").value(''); }
+                                }
+                                function reload_tanggal(){
+                                    $("#tanggal").data("kendoComboBox").value('');
+                                    var bulan_id = $("#bulan_id").data("kendoComboBox").value();
+                                    var tanggal_param = { item: { value: 'id', text: 'nama' }, parent: [{ field: 'bulan',opr:'=', value: bulan_id }], order: [] };
+                                    $("#tanggal").data("kendoComboBox").dataSource.read(tanggal_param);
+                                }
+                            </script>
+                        </div>
+                    </div>
+
+                   <div id="form_item_keterangan" class="form-item">
+                       <div class="form-item-label">@ResxHelper.GetValue("ref_hari_libur_tetap", "keterangan")<span id="label_req_tanggal" class="required"> *</span></div>
+                       <div class="form-item-separator">:</div>
+                       <div id="field_item_keterangan" class="form-item-field">
+                            <textarea type="text" title="@ResxHelper.GetValue("ref_hari_libur_tetap", "keterangan") @ResxHelper.GetValue("Message", "IsNotValidCharacter","is not valid character input")." pattern="@ConfigHelper.GetValue("AllowInputCharacters")" id="keterangan" name="keterangan" class="k-textbox"  required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ref_hari_libur_tetap","keterangan"))" maxlength="500" style="width:350px;">@Html.Raw(fieldModel.keterangan)</textarea>
+                            <span class="k-invalid-msg" data-for="keterangan"></span>
+                       </div>
+                   </div>
+                    
+                </div>
+            </div>
+        </div>
+        <div class="card-footer" style="text-align:center">
+            <a id="cancel" class="k-button k-button-icontext" href="#"><i class="far fa-times-circle"></i>&nbsp;<span id="btnCancelText">@ResxHelper.GetValue("Message", "Cancel")</span></a>
+            <a id="save" class="k-button k-button-icontext" href="#"><i class="fas fa-save"></i>&nbsp;<span id="btnSaveText">@ResxHelper.GetValue("Message", "Save")</span></a>
+        </div>
+    </div>
+</form>
+
+<script>
+    var form_type = '@ViewData["form_type"]';
+    function ShowHideColumn(form_type)
+    {
+        if(form_type=='Add')
+        {
+            var hiden_column = [];
+            for (i = 0; i < hiden_column.length; i++) {
+                $("#form_item_"+hiden_column[i]).hide();
+            }
+        }
+        else if(form_type=='Edit')
+        {
+            var hiden_column = [];
+            for (i = 0; i < hiden_column.length; i++) {
+                $("#form_item_"+hiden_column[i]).hide();
+            }
+        }
+    }
+    function setReadOnly(form_type,opt)
+    {
+        if(opt==true)
+        {
+            if(form_type=='Add')
+            {
+
+            }
+            else if(form_type=='Edit')
+            {
+
+            }
+        }
+        else
+        {
+            if(form_type=='Add')
+            {
+
+            }
+            else if(form_type=='Edit')
+            {
+
+            }
+        }
+    }
+    $(document).ready(function () {
+        ShowHideColumn(form_type);
+        setReadOnly(form_type, true);
+    });
+    var validatable = $("#form_edit").kendoValidator().data("kendoValidator");
+    $("#save").click(function (e) {
+        if (validatable.validate() === true) {
+            kendo.ui.progress($("#form_edit"), true);
+            $.ajax({
+                url: '@ViewData["UrlAction"]', data: $('#form_edit').serialize(), type: 'POST',
+                success: function (data) {
+                    kendo.ui.progress($("#form_edit"), false);
+                    if (data.status == 1) {
+                        window.parent.notification.show({title: data.title, message: kendo.toString(data.message) }, "success");
+                        if (window.parent.Reload_list_ref_hari_libur_tetap) {
+                            window.parent.Reload_list_ref_hari_libur_tetap();
+                        }else if (window.parent.reload_ref_hari_libur_tetap) {
+                            window.parent.reload_ref_hari_libur_tetap(data.pk);
+                        }
+                        close_self();
+                    } else if (data.status == 3) {
+                        windows.parent.notification.show({ title: data.title, message: data.message }, "error");
+                        close_self();
+                    } else {
+                        notification.show({ title: data.title, message: data.message }, "error");
+                    }
+                }
+            });
+        } else {
+            kendo.ui.progress($("#form_edit"), false);
+        }
+
+    });
+    $("#cancel").kendoButton();
+    $("#cancel").click(function (e) {
+        close_self();
+    });
+    function close_self() { if (window.parent.$("#dialog_ref_hari_libur_tetap").data("kendoWindow")) { window.parent.$("#dialog_ref_hari_libur_tetap").data("kendoWindow").close(); } else { window.parent.$("#dialog").data("kendoWindow").close(); } }
+</script>

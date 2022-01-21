@@ -1,0 +1,103 @@
+﻿@using WebApp;
+@using WebApp.Areas.Sys.Models;
+@using Microsoft.AspNetCore.Http;
+@{
+    var fieldModel = ViewData["fieldModel"] as WebApp.Areas.Sys.Models.AudittrailModel.ViewModel;
+    Layout = "~/Views/Shared/_LayoutNoHeader.cshtml";
+}
+
+<div class="card">
+    <div class="card-header">
+        <div class="title-header">@ViewData["TitleHeader"]</div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12">
+                <div id="form_item_id" class="form-item-none">
+                    <div class="form-item-label">@ResxHelper.GetValue("sys_audittrail", "id", "ID")</div>
+                    <div class="form-item-separator">:</div>
+                    <div id="view_item_id" class="form-item-view">@fieldModel.id</div>
+                </div>
+                <div id="form_item_action_time" class="form-item">
+                    <div class="form-item-label">@ResxHelper.GetValue("sys_audittrail", "action_time")</div>
+                    <div class="form-item-separator">:</div>
+                    <div id="view_item_action_time" class="form-item-view">@fieldModel.action_time</div>
+                </div>
+                <div id="form_item_ipaddress" class="form-item">
+                    <div class="form-item-label">@ResxHelper.GetValue("sys_audittrail", "ipaddress")</div>
+                    <div class="form-item-separator">:</div>
+                    <div id="view_item_ipaddress" class="form-item-view">@fieldModel.ipaddress</div>
+                </div>
+                <div id="form_item_username" class="form-item">
+                    <div class="form-item-label">@ResxHelper.GetValue("sys_audittrail", "username")</div>
+                    <div class="form-item-separator">:</div>
+                    <div id="view_item_username" class="form-item-view">@fieldModel.username</div>
+                </div>
+                <div id="form_item_obj_data" class="form-item">
+                    <div class="form-item-label">@ResxHelper.GetValue("sys_audittrail", "obj_data")</div>
+                    <div class="form-item-separator">:</div>
+                    <div id="view_item_obj_data" class="form-item-view">@fieldModel.obj_data</div>
+                </div>
+                <div id="form_item_obj_key" class="form-item">
+                    <div class="form-item-label">@ResxHelper.GetValue("sys_audittrail", "obj_key")</div>
+                    <div class="form-item-separator">:</div>
+                    <div id="view_item_obj_key" class="form-item-view">@fieldModel.obj_key</div>
+                </div>
+                <div id="form_item_url" class="form-item">
+                    <div class="form-item-label">@ResxHelper.GetValue("sys_audittrail", "url")</div>
+                    <div class="form-item-separator">:</div>
+                    <div id="view_item_url" class="form-item-view">@fieldModel.url</div>
+                </div>
+                <div id="form_item_user_agent" class="form-item">
+                    <div class="form-item-label">@ResxHelper.GetValue("sys_audittrail", "user_agent")</div>
+                    <div class="form-item-separator">:</div>
+                    <div id="view_item_user_agent" class="form-item-view">@fieldModel.user_agent</div>
+                </div>
+                <div id="form_item_action_type" class="form-item">
+                    <div class="form-item-label">@ResxHelper.GetValue("sys_audittrail", "action_type")</div>
+                    <div class="form-item-separator">:</div>
+                    <div id="view_item_action_type" class="form-item-view">@fieldModel.action_type</div>
+                </div>
+                <div id="form_item_action_title" class="form-item">
+                    <div class="form-item-label">@ResxHelper.GetValue("sys_audittrail", "action_title")</div>
+                    <div class="form-item-separator">:</div>
+                    <div id="view_item_action_title" class="form-item-view">@fieldModel.action_title</div>
+                </div>
+                <div id="form_item_action_data" class="form-item">
+                    <div class="form-item-label">@ResxHelper.GetValue("sys_audittrail", "action_data")</div>
+                    <div class="form-item-separator">:</div>
+                    <div id="view_item_action_data" class="form-item-view">
+                        <table class="table table-bordered table-condensed table-responsive">
+                            <tr>
+                                <th>Column Name</th>
+                                <th>New Value</th>
+                                <th>Old Value</th>
+                            </tr>
+                            @foreach (AudittrailModel.ActionDataModel item in @fieldModel.action_data)
+                            {
+                                <tr>
+                                    <td>@item.column_name</td>
+                                    <td>@item.new_val</td>
+                                    <td>@item.old_val</td>
+                                </tr>
+                            }
+                        </table>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="card-footer" style="text-align:center">
+        <a id="close" class="k-button k-button-icontext" href="#"><i class="far fa-times-circle"></i>&nbsp;<span id="btnCloseText">@ResxHelper.GetValue("Message", "Close", "Tutup")</span></a>
+    </div>
+</div>
+<script>
+    $("#close").kendoButton();
+    $("#close").click(function (e) {
+        close_self();
+    });
+    function close_self() { if (window.parent.$("#dialog_sys_audittrail").data("kendoWindow")) { window.parent.$("#dialog_sys_audittrail").data("kendoWindow").close(); } else { window.parent.$("#dialog").data("kendoWindow").close(); } }
+</script>
+

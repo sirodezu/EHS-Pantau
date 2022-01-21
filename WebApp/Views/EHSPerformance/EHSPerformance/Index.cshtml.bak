@@ -1,0 +1,635 @@
+@using WebApp
+@using Newtonsoft.Json
+@using Microsoft.AspNetCore.Http;
+@{
+    Layout = "~/Views/Shared/_LayoutEHSPerformance.cshtml";
+    var fieldModel = ViewData["filterColumn"] as WebApp.Models.EHSPerformanceModel.ViewModel;
+    ViewData["Title"] = ViewData["TitleHeader"];
+    ViewData["PageName"] = "ehsperformance";
+    ViewData["Heading"] = ViewData["TitleHeader"];
+    ViewData["Category1"] = "";
+    ViewData["Category2"] = "";
+}
+<link rel="stylesheet" href="~/fontawesome/css/all.min.css" />
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+<link rel="stylesheet" href="~/lib/kendo/styles/kendo.common.min.css" />
+<link rel="stylesheet" href="~/lib/kendo/styles/kendo.default.min.css" />
+<link rel="stylesheet" href="~/lib/kendo/styles/kendo.default.mobile.min.css" />
+<link rel="stylesheet" href="~/lib/kendo/styles/kendo.custom.css" />
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/lib/kendo/js/jszip.min.js"></script>
+<script src="~/lib/kendo/js/kendo.all.min.js"></script>
+<script src="~/lib/kendo/js/cultures/kendo.culture.id-ID.min.js"></script>
+<link rel="stylesheet" media="screen, print" href="~/css/vendors.bundle.css">
+<link rel="stylesheet" media="screen, print" href="~/css/app.bundle.css">
+<link rel="stylesheet" media="screen, print" href="~/css/site.css">
+<script src="~/js/site.js" asp-append-version="true"></script>
+<style>
+    .curent-data th {
+        padding: 6px;
+        text-align: center;
+        background-color: #7D7D7D;
+        color: #ffffff;
+    }
+
+    .table th {
+        padding: 6px;
+        text-align: center;
+    }
+
+    .table td {
+        padding: 6px;
+    }
+</style>
+<div class="panel">
+    <div class="panel-heading">
+        <div class="title-header">@ResxHelper.GetValue("Message", "FilterDataHeader", "Filter Data")</div>
+    </div>
+    <div class="panel-container">
+        <div class="panel-content">
+            <div class="row">
+                <div class="col-lg-12">
+
+                    <div id="form_item_date_start" class="form-group">
+                        <div class="form-item-label">@ResxHelper.GetValue("ta_ehs_performance", "date_start")<span id="label_req_date_start" class="required"> *</span></div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_date_start" class="form-item-field">
+                            <input id="dt_date_start" name="dt_date_start" data-role="datepicker" data-type="date" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_ehs_performance","date_start"))" style="width:130px;" title="@ResxHelper.GetValue("ta_ehs_performance", "date_start") @ResxHelper.GetValue("Message", "IsNotValidDate")." />
+                            <span class="k-invalid-msg" data-for="dt_date_start"></span>
+                            <input type="hidden" id="date_start" name="date_start" value="@fieldModel.date_start" />
+                            <script>
+                                   $("#dt_date_start").kendoDatePicker({change:on_chage_date_start, value: "@fieldModel.dt_date_start", format: "{0:dd/MM/yyyy}" });
+                                   function on_chage_date_start() {
+                                       show_data();
+                                }
+                            </script>
+                        </div>
+                    </div>
+
+                    <div id="form_item_date_finish" class="form-group">
+                        <div class="form-item-label">@ResxHelper.GetValue("ta_ehs_performance", "date_finish")<span id="label_req_date_finish" class="required"> *</span></div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_date_finish" class="form-item-field">
+                            <input id="dt_date_finish" name="dt_date_finish" data-role="datepicker" data-type="date" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_ehs_performance","date_finish"))" style="width:130px;" title="@ResxHelper.GetValue("ta_ehs_performance", "date_finish") @ResxHelper.GetValue("Message", "IsNotValidDate")." />
+                            <span class="k-invalid-msg" data-for="dt_date_finish"></span>
+                            <input type="hidden" id="date_finish" name="date_finish" value="@fieldModel.date_finish" />
+                            <script>
+                                   $("#dt_date_finish").kendoDatePicker({change:on_chage_date_finish, value: "@fieldModel.dt_date_finish", format: "{0:dd/MM/yyyy}" });
+                                   function on_chage_date_finish() {
+                                       show_data();
+                                }
+                            </script>
+                        </div>
+                    </div>
+
+
+                </div>
+        </div>
+    </div>
+    <div class="panel-content">
+        <div class="row">            
+            <div class="col-sm-6">
+                <div id="employees"></div>
+            </div>
+            <div class="col-sm-6">
+                <div id="chart_employees_div">
+                    <div id="chart_employees"></div>
+                    <div id="overlay_chart_employees" class="overlay"><div style="margin-top: 50px;"></div></div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div id="jabatan"></div>
+            </div>
+            <div class="col-sm-6">
+                <div id="chart_jabatan"></div>
+                <div id="overlay_chart_jabatan" class="overlay"><div style="margin-top: 50px;"></div></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div id="accident"></div>
+            </div>
+            <div class="col-sm-6">
+                <div id="chart_accident"></div>
+                <div id="overlay_chart_accident" class="overlay"><div style="margin-top: 50px;"></div></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div id="performance"></div>
+            </div>
+            <div class="col-sm-6">
+                <div id="chart_performance"></div>
+                <div id="overlay_chart_performance" class="overlay"><div style="margin-top: 50px;"></div></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div id="health"></div>
+            </div>
+            <div class="col-sm-6">
+                <div id="chart_health"></div>
+                <div id="overlay_chart_health" class="overlay"><div style="margin-top: 50px;"></div></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div id="emergency"></div>
+            </div>
+            <div class="col-sm-6">
+                <div id="chart_emergency"></div>
+                <div id="overlay_chart_emergency" class="overlay"><div style="margin-top: 50px;"></div></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div id="campaign"></div>
+            </div>
+            <div class="col-sm-6">
+                <div id="chart_campaign"></div>
+                <div id="overlay_chart_campaign" class="overlay"><div style="margin-top: 50px;"></div></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div id="legal"></div>
+            </div>
+            <div class="col-sm-6">
+                <div id="chart_legal_div">
+                    <div id="chart_legal"></div>
+                    <div id="overlay_chart_legal" class="overlay"><div style="margin-top: 50px;"></div></div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div id="fasilitas"></div>
+            </div>
+            <div class="col-sm-6">
+                <div id="chart_fasilitas"></div>
+                <div id="overlay_chart_fasilitas" class="overlay"><div style="margin-top: 50px;"></div></div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+</div>
+@section ScriptsBlock {
+    <script>
+        function createPieChart(chartname,charttitle,ds,field,categoryField,colorField){
+            var total =0;
+            for (i = 0; i < ds.length; i++){
+                if(field=='jumlah'){
+                    total +=parseInt(ds[i].jumlah);
+                }else{
+                    total += parseFloat(ds[i].harga);
+                }
+            }
+            var judul = 'Total = '+number_format(total,0,',','.');
+            $("#" + chartname).kendoChart({
+                pdf: {
+                    fileName: chartname + ".pdf"
+                },
+                dataSource: ds,
+                theme: "bootstrap",
+                chartArea: { height: 300 }, title: { text: judul, font: "9px sans-serif", position: 'bottom', color: '#000000' },
+                legend: { position: "bottom", labels: { font: "12px sans-serif", template: "#= text # = #= number_format(value, 0, ',', '.') # (#= kendo.format('{0:P}', percentage)#)" }, width: 100 },
+                seriesDefaults: { type: "pie", overlay: { gradient: "roundedBevel" } },
+                series: [{ field: field, categoryField: categoryField, padding: 0 }],
+                tooltip: { visible: true, format: "N0", template: "#= category # = #= number_format(value, 0, ',', '.') # (#= kendo.format('{0:P}', percentage)#)" },
+                name: chartname,
+                title: charttitle,
+                transitions: true
+            });
+        }
+        function show_data() {
+            var date_begin = kendo.toString($("#dt_date_start").data("kendoDatePicker").value(), "yyyy-MM-dd")
+            var date_end = kendo.toString($("#dt_date_finish").data("kendoDatePicker").value(), "yyyy-MM-dd")
+
+            if ((date_begin!=null && date_begin!='') && (date_end!=null && date_end != '')) {
+                if (new Date(date_begin) > new Date(date_end)) {
+                    notification.show({ title: "Error", message: "Tanggal Awal harus lebih kecil atau sama dengan Tanggal Akhir" }, "error");
+                    return;
+                }
+            }
+            else
+            {
+                draw_employees(null);
+                draw_jabatan(null);
+                draw_accident(null);
+                draw_performance(null);
+                draw_health(null);
+                draw_emergency(null);
+                draw_campaign(null);
+                draw_legal(null);
+                draw_fasilitas(null);
+
+                $("#chart_employees").hide();
+                $("#chart_jabatan").hide();
+                $("#chart_accident").hide();
+                $("#chart_performance").hide();
+                $("#chart_health").hide();
+                $("#chart_emergency").hide();
+                $("#chart_campaign").hide();
+                $("#chart_legal").hide();
+                $("#chart_fasilitas").hide();
+
+                return;
+
+            }
+            var param = {date_begin:date_begin,date_end:date_end};
+            $.ajax({
+                url: '@ViewBag.BaseUrl/EHSPerformance/GetValidData', data:param, type: 'POST',
+                success: function (data) {
+                    if (data != null && data != undefined) {
+                        if (data.table != null && data.table != undefined && data.table.length > 0) {
+                            draw_employees(data.table);
+                            $("#chart_employees").show();                            
+                            createPieChart('chart_employees', 'Jumlah Karyawan Berdasarkan PT', data.table, 'employeeCount', 'companyName', 'bg_color');
+                        } else {
+                            draw_employees(null);
+                            $("#chart_employees").hide();
+                        }
+                        if (data.table1 != null && data.table1 != undefined && data.table1.length > 0) {
+                            draw_jabatan(data.table1)
+                            $("#chart_jabatan").show();
+                            createPieChart('chart_jabatan', 'Jumlah Training Berdasarkan Level Jabatan', data.table1, 'jabatanCount', 'jabatanName', 'bg_color');
+                        } else {
+                            draw_jabatan(null);
+                            $("#chart_jabatan").hide();
+                        }
+                        if (data.table2 != null && data.table2 != undefined && data.table2.length > 0) {
+                            draw_accident(data.table2);
+                            $("#chart_accident").show();
+                            createPieChart('chart_accident', 'Persentase Kategori Kecelakaan', data.table2, 'accidentCount', 'accidentName', 'bg_color');
+                        } else {
+                            draw_accident(null);
+                            $("#chart_accident").hide();
+                        }
+                        if (data.table3 != null && data.table3 != undefined && data.table3.length > 0) {
+                            draw_performance(data.table3);
+                            $("#chart_performance").show();
+                            createPieChart('chart_performance', 'Performance', data.table3, 'performanceCount', 'performanceName', 'bg_color');
+                        } else {
+                            draw_performance(null);
+                            $("#chart_performance").hide();
+                        }
+                        if (data.table4 != null && data.table4 != undefined && data.table4.length > 0) {
+                            draw_health(data.table4);
+                            $("#chart_health").show();
+                            createPieChart('chart_health', 'Kategori Health Colour', data.table4, 'healthCount', 'healthName', 'bg_color');
+                        } else {
+                            draw_health(null);
+                            $("#chart_health").hide();
+                        }
+                        if (data.table5 != null && data.table5 != undefined && data.table5.length > 0) {
+                            draw_emergency(data.table5);
+                            $("#chart_emergency").show();
+                            createPieChart('chart_emergency', 'Kategori Kondisi Sarana', data.table5, 'emergencyCount', 'emergencyName', 'bg_color');
+                        } else {
+                            draw_emergency(null);
+                            $("#chart_emergency").hide();
+                        }
+                        if (data.table6 != null && data.table6 != undefined && data.table6.length > 0) {
+                            draw_campaign(data.table6);
+                            $("#chart_campaign").show();
+                            createPieChart('chart_campaign', 'Kategori Campaign', data.table6, 'campaignCount', 'campaignName', 'bg_color');
+                        } else {
+                            draw_campaign(null);
+                            $("#chart_campaign").hide();
+                        }
+                        if (data.table7 != null && data.table7 != undefined && data.table7.length > 0) {
+                            draw_legal(data.table7);
+                            $("#chart_legal_div").show();
+                            createPieChart('chart_legal', 'Pemenuhan Legal', data.table7, 'legalCount', 'legalName', 'bg_color', true);
+                        } else {
+                            draw_legal(null);
+                            $("#chart_legal_div").hide();
+                        }
+                        if (data.table8 != null && data.table8 != undefined && data.table8.length > 0) {
+                            draw_fasilitas(data.table8);
+                            $("#chart_fasilitas").show();
+                            createPieChart('chart_fasilitas', 'Jumlah Item Fasilitas', data.table8, 'fasilitasCount', 'fasilitasName', 'bg_color');
+                        } else {
+                            draw_fasilitas(null);
+                            $("#chart_fasilitas").hide();
+                        }
+
+                    } else {
+                        draw_employees(null);
+                        draw_jabatan(null);
+                        draw_accident(null);
+                        draw_performance(null);
+                        draw_health(null);
+                        draw_emergency(null);
+                        draw_campaign(null);
+                        draw_legal(null);
+                        draw_fasilitas(null);
+
+                        $("#chart_employees").hide();
+                        $("#chart_jabatan").hide();
+                        $("#chart_accident").hide();
+                        $("#chart_performance").hide();
+                        $("#chart_health").hide();
+                        $("#chart_emergency").hide();
+                        $("#chart_campaign").hide();
+                        $("#chart_legal").hide();
+                        $("#chart_fasilitas").hide();
+                    }
+                }
+            });
+        }
+        function draw_employees(data) {
+            var htm = "";
+            if (data != null && data != undefined && data.length > 0) {
+                var htm = '<table class="table table-bordered table-striped table-responsive">';
+                htm += '<tr>';
+                htm += '    <th colspan="4"><div style="padding:2px;white-space:normal;">Jumlah Karyawan Berdasarkan PT</div></th>';
+                htm += '</tr>';
+                htm += '<tr>';
+                htm += '    <th style="width:20px;">No</th>';
+                htm += '    <th style="width:500px;">Company</th>';
+                htm += '    <th style="width:125px;">Total</th>';
+                htm += '    <th style="width:125px;">Persentase (%)</th>';
+                htm += '</tr>';
+
+                var no = 0;
+                var event_code = "";
+                var bg_color = "";
+                var font_color = "";
+                var status_text = "";
+                jQuery.each(data, function (i, val) {
+                    no++;
+                    htm += '<tr>';
+                    htm += '    <td style="width:20px;text-align: center;">'+no+'</td>';
+                    htm += '    <td style="width:20px;text-align: left;">' + val.companyName + '</td>';
+                    htm += '    <td style="width:20px;text-align: right;">' + val.employeeCount + '</td>';
+                    htm += '    <td style="width:20px;text-align: right;">' + val.employeePercentage + '</td>';
+                    htm += '</tr>';
+                });
+                htm += '</table>';
+            }
+            $("#employees").html(htm);
+        }
+        function draw_jabatan(data) {
+            var htm = "";
+            if (data != null && data != undefined && data.length > 0) {
+                var htm = '<table class="table table-bordered table-striped table-responsive">';
+                htm += '<tr>';
+                htm += '    <th colspan="4"><div style="padding:2px;white-space:normal;">Jumlah Training Berdasarkan Level Jabatan</div></th>';
+                htm += '</tr>';
+                htm += '<tr>';
+                htm += '    <th style="width:20px;">No</th>';
+                htm += '    <th style="width:500px;">Jabatan</th>';
+                htm += '    <th style="width:125px;">Total</th>';
+                htm += '    <th style="width:125px;">Persentase (%)</th>';
+                htm += '</tr>';
+
+                var no = 0;
+                var event_code = "";
+                var bg_color = "";
+                var font_color = "";
+                var status_text = "";
+                jQuery.each(data, function (i, val) {
+                    no++;
+                    htm += '<tr>';
+                    htm += '    <td style="width:20px;text-align: center;">'+no+'</td>';
+                    htm += '    <td style="width:20px;text-align: left;">' + val.jabatanName + '</td>';
+                    htm += '    <td style="width:20px;text-align: right;">' + val.jabatanCount + '</td>';
+                    htm += '    <td style="width:20px;text-align: right;">' + val.jabatanPercentage + '</td>';
+                    htm += '</tr>';
+                });
+                htm += '</table>';
+            }
+            $("#jabatan").html(htm);
+        }
+        function draw_accident(data) {
+            var htm = "";
+            if (data != null && data != undefined && data.length > 0) {
+                var htm = '<table class="table table-bordered table-striped table-responsive">';
+                htm += '<tr>';
+                htm += '    <th colspan="4"><div style="padding:2px;white-space:normal;">Persentase Kategori Kecelakaan</div></th>';
+                htm += '</tr>';
+                htm += '<tr>';
+                htm += '    <th style="width:20px;">No</th>';
+                htm += '    <th style="width:500px;">Kecelakaan</th>';
+                htm += '    <th style="width:125px;">Total</th>';
+                htm += '    <th style="width:125px;">Persentase (%)</th>';
+                htm += '</tr>';
+
+                var no = 0;
+                var event_code = "";
+                var bg_color = "";
+                var font_color = "";
+                var status_text = "";
+                jQuery.each(data, function (i, val) {
+                    no++;
+                    htm += '<tr>';
+                    htm += '    <td style="width:20px;text-align: center;">'+no+'</td>';
+                    htm += '    <td style="width:20px;text-align: left;">' + val.accidentName + '</td>';
+                    htm += '    <td style="width:20px;text-align: right;">' + val.accidentCount + '</td>';
+                    htm += '    <td style="width:20px;text-align: right;">' + val.accidentPercentage + '</td>';
+                    htm += '</tr>';
+                });
+                htm += '</table>';
+            }
+            $("#accident").html(htm);
+        }
+        function draw_performance(data) {
+            var htm = "";
+            if (data != null && data != undefined && data.length > 0) {
+                var htm = '<table class="table table-bordered table-striped table-responsive">';
+                htm += '<tr>';
+                htm += '    <th colspan="4"><div style="padding:2px;white-space:normal;">Performance</div></th>';
+                htm += '</tr>';
+                htm += '<tr>';
+                htm += '    <th style="width:20px;">No</th>';
+                htm += '    <th style="width:500px;">Deskripsi</th>';
+                htm += '    <th style="width:125px;">Total</th>';
+                htm += '    <th style="width:125px;">Persentase (%)</th>';
+                htm += '</tr>';
+
+                var no = 0;
+                var event_code = "";
+                var bg_color = "";
+                var font_color = "";
+                var status_text = "";
+                jQuery.each(data, function (i, val) {
+                    no++;
+                    htm += '<tr>';
+                    htm += '    <td style="width:20px;text-align: center;">'+no+'</td>';
+                    htm += '    <td style="width:20px;text-align: left;">' + val.performanceName + '</td>';
+                    htm += '    <td style="width:20px;text-align: right;">' + val.performanceCount + '</td>';
+                    htm += '    <td style="width:20px;text-align: right;">' + val.performancePercentage + '</td>';
+                    htm += '</tr>';
+                });
+                htm += '</table>';
+            }
+            $("#performance").html(htm);
+        }
+        function draw_health(data) {
+            var htm = "";
+            if (data != null && data != undefined && data.length > 0) {
+                var htm = '<table class="table table-bordered table-striped table-responsive">';
+                htm += '<tr>';
+                htm += '    <th colspan="4"><div style="padding:2px;white-space:normal;">Kategori Health Colour</div></th>';
+                htm += '</tr>';
+                htm += '<tr>';
+                htm += '    <th style="width:20px;">No</th>';
+                htm += '    <th style="width:500px;">Health Colour</th>';
+                htm += '    <th style="width:125px;">Total</th>';
+                htm += '    <th style="width:125px;">Persentase (%)</th>';
+                htm += '</tr>';
+
+                var no = 0;
+                var event_code = "";
+                var bg_color = "";
+                var font_color = "";
+                var status_text = "";
+                jQuery.each(data, function (i, val) {
+                    no++;
+                    htm += '<tr>';
+                    htm += '    <td style="width:20px;text-align: center;">'+no+'</td>';
+                    htm += '    <td style="width:20px;text-align: left;">' + val.healthName + '</td>';
+                    htm += '    <td style="width:20px;text-align: right;">' + val.healthCount + '</td>';
+                    htm += '    <td style="width:20px;text-align: right;">' + val.healthPercentage + '</td>';
+                    htm += '</tr>';
+                });
+                htm += '</table>';
+            }
+            $("#health").html(htm);
+        }
+        function draw_emergency(data) {
+            var htm = "";
+            if (data != null && data != undefined && data.length > 0) {
+                var htm = '<table class="table table-bordered table-striped table-responsive">';
+                htm += '<tr>';
+                htm += '    <th colspan="4"><div style="padding:2px;white-space:normal;">Kategori Kondisi Sarana</div></th>';
+                htm += '</tr>';
+                htm += '<tr>';
+                htm += '    <th style="width:20px;">No</th>';
+                htm += '    <th style="width:500px;">Kondisi Sarana</th>';
+                htm += '    <th style="width:125px;">Total</th>';
+                htm += '    <th style="width:125px;">Persentase (%)</th>';
+                htm += '</tr>';
+
+                var no = 0;
+                var event_code = "";
+                var bg_color = "";
+                var font_color = "";
+                var status_text = "";
+                jQuery.each(data, function (i, val) {
+                    no++;
+                    htm += '<tr>';
+                    htm += '    <td style="width:20px;text-align: center;">'+no+'</td>';
+                    htm += '    <td style="width:20px;text-align: left;">' + val.emergencyName + '</td>';
+                    htm += '    <td style="width:20px;text-align: right;">' + val.emergencyCount + '</td>';
+                    htm += '    <td style="width:20px;text-align: right;">' + val.emergencyPercentage + '</td>';
+                    htm += '</tr>';
+                });
+                htm += '</table>';
+            }
+            $("#emergency").html(htm);
+        }
+        function draw_campaign(data) {
+            var htm = "";
+            if (data != null && data != undefined && data.length > 0) {
+                var htm = '<table class="table table-bordered table-striped table-responsive">';
+                htm += '<tr>';
+                htm += '    <th colspan="4"><div style="padding:2px;white-space:normal;">Kategori Campaign</div></th>';
+                htm += '</tr>';
+                htm += '<tr>';
+                htm += '    <th style="width:20px;">No</th>';
+                htm += '    <th style="width:500px;">Campaign</th>';
+                htm += '    <th style="width:125px;">Total</th>';
+                htm += '    <th style="width:125px;">Persentase (%)</th>';
+                htm += '</tr>';
+
+                var no = 0;
+                var event_code = "";
+                var bg_color = "";
+                var font_color = "";
+                var status_text = "";
+                jQuery.each(data, function (i, val) {
+                    no++;
+                    htm += '<tr>';
+                    htm += '    <td style="width:20px;text-align: center;">'+no+'</td>';
+                    htm += '    <td style="width:20px;text-align: left;">' + val.campaignName + '</td>';
+                    htm += '    <td style="width:20px;text-align: right;">' + val.campaignCount + '</td>';
+                    htm += '    <td style="width:20px;text-align: right;">' + val.campaignPercentage + '</td>';
+                    htm += '</tr>';
+                });
+                htm += '</table>';
+            }
+            $("#campaign").html(htm);
+        }
+        function draw_legal(data) {
+            var htm = "";
+            if (data != null && data != undefined && data.length > 0) {
+                var htm = '<table class="table table-bordered table-striped table-responsive">';
+                htm += '<tr>';
+                htm += '    <th colspan="4"><div style="padding:2px;white-space:normal;">Pemenuhan Legal</div></th>';
+                htm += '</tr>';
+                htm += '<tr>';
+                htm += '    <th style="width:20px;">No</th>';
+                htm += '    <th style="width:500px;">Status Perizinan</th>';
+                htm += '    <th style="width:125px;">Total</th>';
+                htm += '    <th style="width:125px;">Persentase (%)</th>';
+                htm += '</tr>';
+
+                var no = 0;
+                var event_code = "";
+                var bg_color = "";
+                var font_color = "";
+                var status_text = "";
+                jQuery.each(data, function (i, val) {
+                    no++;
+                    htm += '<tr>';
+                    htm += '    <td style="width:20px;text-align: center;">'+no+'</td>';
+                    htm += '    <td style="width:20px;text-align: left;">' + val.legalName + '</td>';
+                    htm += '    <td style="width:20px;text-align: right;">' + val.legalCount + '</td>';
+                    htm += '    <td style="width:20px;text-align: right;">' + val.legalPercentage + '</td>';
+                    htm += '</tr>';
+                });
+                htm += '</table>';
+            }
+            $("#legal").html(htm);
+        }
+        function draw_fasilitas(data) {
+            var htm = "";
+            if (data != null && data != undefined && data.length > 0) {
+                var htm = '<table class="table table-bordered table-striped table-responsive">';
+                htm += '<tr>';
+                htm += '    <th colspan="4"><div style="padding:2px;white-space:normal;">Jumlah Item Fasilitas</div></th>';
+                htm += '</tr>';
+                htm += '<tr>';
+                htm += '    <th style="width:20px;">No</th>';
+                htm += '    <th style="width:500px;">Fasilitas</th>';
+                htm += '    <th style="width:125px;">Total</th>';
+                htm += '    <th style="width:125px;">Persentase (%)</th>';
+                htm += '</tr>';
+
+                var no = 0;
+                var event_code = "";
+                var bg_color = "";
+                var font_color = "";
+                var status_text = "";
+                jQuery.each(data, function (i, val) {
+                    no++;
+                    htm += '<tr>';
+                    htm += '    <td style="width:20px;text-align: center;">'+no+'</td>';
+                    htm += '    <td style="width:20px;text-align: left;">' + val.fasilitasName + '</td>';
+                    htm += '    <td style="width:20px;text-align: right;">' + val.fasilitasCount + '</td>';
+                    htm += '    <td style="width:20px;text-align: right;">' + val.fasilitasPercentage + '</td>';
+                    htm += '</tr>';
+                });
+                htm += '</table>';
+            }
+            $("#fasilitas").html(htm);
+        }
+    </script>
+}

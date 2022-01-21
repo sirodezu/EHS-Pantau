@@ -1,0 +1,384 @@
+@using WebApp
+@using Microsoft.AspNetCore.Http;
+@{
+    Layout = "~/Views/Shared/_LayoutNoHeader.cshtml";
+    var fieldModel = ViewData["fieldModel"] as WebApp.Models.FasSpekIpalDomestikModel.ViewModel;
+    ViewData["Title"] = ViewData["TitleHeader"];
+    ViewData["PageName"] = "fasspekipaldomestik";
+    ViewData["Heading"] = ViewData["TitleHeader"];
+    ViewData["Category1"] = "";
+    ViewData["Category2"] = "";
+}
+
+<form id="form_edit" method="post" class="panel-form">
+    <div class="panel">
+        <div class="panel-heading">
+            <div class="title-header">@ViewData["TitleHeader"]</div>
+        </div>
+		<div class="panel-container">
+			<div class="panel-content">
+				<div class="row">
+					<div class="col-lg-12">
+                        <div id="form_item_id" class="form-group-none">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_fas_spek_ipal_domestik", "id")<span id="label_req_id" class="required"> *</span></div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_id" class="form-item-field">
+                               <input type="number" id="id" name="id" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_fas_spek_ipal_domestik","id"))" style ="width:200px;" />
+                               <span class="k-invalid-msg" data-for="id"></span>
+                               <input type="hidden" id="id_old" name="id_old" value="@fieldModel.id" />
+                               <script>
+                                   $("#id").kendoNumericTextBox({ format: "{0:N0}", decimals: 0 });
+                                   $(document).ready(function () {$("#id").data('kendoNumericTextBox').value('@fieldModel.id');})
+                               </script>
+                           </div>
+                       </div>
+
+                       <div id="form_item_fasilitas_id" class="form-group-none">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_fas_spek_ipal_domestik", "fasilitas_id")<span id="label_req_fasilitas_id" class="required"> *</span></div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_fasilitas_id" class="form-item-field">
+                               <input type="text" id="fasilitas_id" name="fasilitas_id" class="k-textbox" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_fas_spek_ipal_domestik","fasilitas_id"))"   style="width:200px;" value="@Html.Raw(fieldModel.fasilitas_id)" title="@ResxHelper.GetValue("ta_fas_spek_ipal_domestik", "fasilitas_id") @ResxHelper.GetValue("Message", "IsNotValidCharacter")." pattern="@ConfigHelper.GetValue("AllowInputCharacters")" />
+                               <span class="k-invalid-msg" data-for="fasilitas_id"></span>
+                           </div>
+                       </div>
+
+                       <div id="form_item_nomor_aset" class="form-group">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_fas_spek_ipal_domestik", "nomor_aset")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_nomor_aset" class="form-item-field">
+                               <input type="text" id="nomor_aset" name="nomor_aset" class="k-textbox"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_fas_spek_ipal_domestik","nomor_aset"))"  maxlength="50" style="width:350px;" value="@Html.Raw(fieldModel.nomor_aset)" title="@ResxHelper.GetValue("ta_fas_spek_ipal_domestik", "nomor_aset") @ResxHelper.GetValue("Message", "IsNotValidCharacter")." pattern="@ConfigHelper.GetValue("AllowInputCharacters")" />
+                               <span class="k-invalid-msg" data-for="nomor_aset"></span>
+                           </div>
+                       </div>
+
+                       <div id="form_item_jenis_pengolahan_id" class="form-group">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_fas_spek_ipal_domestik", "jenis_pengolahan_id")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_jenis_pengolahan_id" class="form-item-field">
+                               <input id="jenis_pengolahan_id" name="jenis_pengolahan_id"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_fas_spek_ipal_domestik","jenis_pengolahan_id"))" style="width:350px;" />
+                               <span class="k-invalid-msg" data-for="jenis_pengolahan_id"></span>
+                               <script>
+                                   var jenis_pengolahan_id_param = {item : {value:"id",text:"nama"},parent:[{ field: 'cat_id',opr:'=', value: '72' }], order:[]};
+                                   var jenis_pengolahan_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: jenis_pengolahan_id_param, type: "POST" } } });
+                                   var jenis_pengolahan_id = $("#jenis_pengolahan_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: jenis_pengolahan_id_ds, change:onChange_jenis_pengolahan_id }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#jenis_pengolahan_id").data("kendoComboBox").value('@fieldModel.jenis_pengolahan_id'); });
+                                   function onChange_jenis_pengolahan_id() {if ($("#jenis_pengolahan_id").data("kendoComboBox").value() != '' && $("#jenis_pengolahan_id").data("kendoComboBox")._oldIndex == -1) {$("#jenis_pengolahan_id").data("kendoComboBox").value('');}
+                                   }
+                               </script>
+                           </div>
+                       </div>
+
+                        <div id="form_item_kapasitas_pengolahan" class="form-group">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_fas_spek_ipal_domestik", "kapasitas_pengolahan")<span id="label_req_kapasitas_pengolahan" class="required"> *</span></div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_kapasitas_pengolahan" class="form-item-field">
+                               <input type="number" id="kapasitas_pengolahan" name="kapasitas_pengolahan" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_fas_spek_ipal_domestik","kapasitas_pengolahan"))" style ="width:200px;" />
+                               <span class="k-invalid-msg" data-for="kapasitas_pengolahan"></span>
+                               <script>
+                                   $("#kapasitas_pengolahan").kendoNumericTextBox({ format: "{0:N2}", decimals: 2 });
+                                   $(document).ready(function () {$("#kapasitas_pengolahan").data('kendoNumericTextBox').value('@fieldModel.kapasitas_pengolahan');})
+                               </script>
+                           </div>
+                       </div>
+
+                       <div id="form_item_saluran_pembuangan_id" class="form-group">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_fas_spek_ipal_domestik", "saluran_pembuangan_id")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_saluran_pembuangan_id" class="form-item-field">
+                               <input id="saluran_pembuangan_id" name="saluran_pembuangan_id"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_fas_spek_ipal_domestik","saluran_pembuangan_id"))" style="width:350px;" />
+                               <span class="k-invalid-msg" data-for="saluran_pembuangan_id"></span>
+                               <script>
+                                   var saluran_pembuangan_id_param = {item : {value:"id",text:"nama"},parent:[{ field: 'cat_id',opr:'=', value: '76' }], order:[]};
+                                   var saluran_pembuangan_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: saluran_pembuangan_id_param, type: "POST" } } });
+                                   var saluran_pembuangan_id = $("#saluran_pembuangan_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: saluran_pembuangan_id_ds, change:onChange_saluran_pembuangan_id }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#saluran_pembuangan_id").data("kendoComboBox").value('@fieldModel.saluran_pembuangan_id'); });
+                                   function onChange_saluran_pembuangan_id() {if ($("#saluran_pembuangan_id").data("kendoComboBox").value() != '' && $("#saluran_pembuangan_id").data("kendoComboBox")._oldIndex == -1) {$("#saluran_pembuangan_id").data("kendoComboBox").value('');}
+                                   }
+                               </script>
+                           </div>
+                       </div>
+
+                       <div id="form_item_sistem_pengolahan_id" class="form-group">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_fas_spek_ipal_domestik", "sistem_pengolahan_id")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_sistem_pengolahan_id" class="form-item-field">
+                               <input id="sistem_pengolahan_id_select" name="sistem_pengolahan_id_select" style="width:350px;" />
+                               <span class="k-invalid-msg" data-for="sistem_pengolahan_id"></span>
+                               <input type="hidden" id="sistem_pengolahan_id" name="sistem_pengolahan_id" value="@fieldModel.sistem_pengolahan_id"   data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_fas_spek_ipal_domestik","sistem_pengolahan_id"))" />
+                               <script>
+                                   var sistem_pengolahan_id_param = {item : {value:"id",text:"nama", attribute: ['nama']},parent:[{ field: 'cat_id',opr:'=', value: '79' }], order:[]};
+                                   var sistem_pengolahan_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: sistem_pengolahan_id_param, type: "POST" } } });
+                                   var sistem_pengolahan_id = $("#sistem_pengolahan_id_select").kendoMultiSelect({ placeholder: "", autoClose: true, filter: 'contains', height: 200, autoBind: false, dataValueField: "value", dataTextField: "text", change: sistem_pengolahan_id_onChange, autoBind: false, dataSource: sistem_pengolahan_id_ds });
+                                   $(document).ready(function () { $("#sistem_pengolahan_id_select").data("kendoMultiSelect").value([@fieldModel.sistem_pengolahan_id]); });
+                                   function sistem_pengolahan_id_onChange() {
+                                       var dataItem = $("#sistem_pengolahan_id_select").data("kendoMultiSelect").dataItems();
+                                       var cb_val = '';
+                                       var cb_text = '';
+                                       for (i = 0; i < dataItem.length; i++) {
+                                           cb_val += cb_val != '' ? ',' : ''; cb_val += dataItem[i].value;
+                                           cb_text += cb_text != '' ? ',' : ''; cb_text += dataItem[i].text;
+                                       }
+                                       $("#sistem_pengolahan_id").val(cb_val);
+                                   }
+                               </script>
+                           </div>
+                       </div>
+
+                       <div id="form_item_sistem_pengolahan_nama" class="form-group">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_fas_spek_ipal_domestik", "sistem_pengolahan_nama")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_sistem_pengolahan_nama" class="form-item-field">
+                               <textarea type="text" id="sistem_pengolahan_nama" name="sistem_pengolahan_nama" class="k-textbox"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_fas_spek_ipal_domestik","sistem_pengolahan_nama"))" maxlength="500" style="width:350px;" title="@ResxHelper.GetValue("ta_fas_spek_ipal_domestik", "sistem_pengolahan_nama") @ResxHelper.GetValue("Message", "IsNotValidCharacter")." pattern="@ConfigHelper.GetValue("AllowInputCharacters")">@Html.Raw(fieldModel.sistem_pengolahan_nama)</textarea>
+                               <span class="k-invalid-msg" data-for="sistem_pengolahan_nama"></span>
+                           </div>
+                       </div>
+
+                       <div id="form_item_alat_ukur_debit_id" class="form-group">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_fas_spek_ipal_domestik", "alat_ukur_debit_id")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_alat_ukur_debit_id" class="form-item-field">
+                               <input id="alat_ukur_debit_id" name="alat_ukur_debit_id"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_fas_spek_ipal_domestik","alat_ukur_debit_id"))" style="width:350px;" />
+                               <span class="k-invalid-msg" data-for="alat_ukur_debit_id"></span>
+                               <script>
+                                   var alat_ukur_debit_id_param = {item : {value:"id",text:"nama"},parent:[{ field: 'cat_id',opr:'=', value: '2' }], order:[]};
+                                   var alat_ukur_debit_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: alat_ukur_debit_id_param, type: "POST" } } });
+                                   var alat_ukur_debit_id = $("#alat_ukur_debit_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: alat_ukur_debit_id_ds, change:onChange_alat_ukur_debit_id }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#alat_ukur_debit_id").data("kendoComboBox").value('@fieldModel.alat_ukur_debit_id'); });
+                                   function onChange_alat_ukur_debit_id() {if ($("#alat_ukur_debit_id").data("kendoComboBox").value() != '' && $("#alat_ukur_debit_id").data("kendoComboBox")._oldIndex == -1) {$("#alat_ukur_debit_id").data("kendoComboBox").value('');}
+                                   }
+                               </script>
+                           </div>
+                       </div>
+
+                        <div id="form_item_debit_max" class="form-group">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_fas_spek_ipal_domestik", "debit_max")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_debit_max" class="form-item-field">
+                               <input type="number" id="debit_max" name="debit_max"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_fas_spek_ipal_domestik","debit_max"))" style ="width:200px;" />
+                               <span class="k-invalid-msg" data-for="debit_max"></span>
+                               <script>
+                                   $("#debit_max").kendoNumericTextBox({ format: "{0:N2}", decimals: 2 });
+                                   $(document).ready(function () {$("#debit_max").data('kendoNumericTextBox').value('@fieldModel.debit_max');})
+                               </script>
+                           </div>
+                       </div>
+
+                       <div id="form_item_penanganan_lumpur_id" class="form-group">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_fas_spek_ipal_domestik", "penanganan_lumpur_id")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_penanganan_lumpur_id" class="form-item-field">
+                               <input id="penanganan_lumpur_id" name="penanganan_lumpur_id"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_fas_spek_ipal_domestik","penanganan_lumpur_id"))" style="width:350px;" />
+                               <span class="k-invalid-msg" data-for="penanganan_lumpur_id"></span>
+                               <script>
+                                   var penanganan_lumpur_id_param = {item : {value:"id",text:"nama"},parent:[{ field: 'cat_id',opr:'=', value: '74' }], order:[]};
+                                   var penanganan_lumpur_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: penanganan_lumpur_id_param, type: "POST" } } });
+                                   var penanganan_lumpur_id = $("#penanganan_lumpur_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: penanganan_lumpur_id_ds, change:onChange_penanganan_lumpur_id }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#penanganan_lumpur_id").data("kendoComboBox").value('@fieldModel.penanganan_lumpur_id'); });
+                                   function onChange_penanganan_lumpur_id() {if ($("#penanganan_lumpur_id").data("kendoComboBox").value() != '' && $("#penanganan_lumpur_id").data("kendoComboBox")._oldIndex == -1) {$("#penanganan_lumpur_id").data("kendoComboBox").value('');}
+                                   }
+                               </script>
+                           </div>
+                       </div>
+
+                    <div id="form_item_layout_file_path" class="form-group">
+                        <div class="form-item-label">@ResxHelper.GetValue("ta_fas_spek_ipal_domestik", "layout_file_path")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_layout_file_path" class="form-item-field">
+                            <input name="layout_file_path_file" id="layout_file_path_file" type="file" />
+                            <input name="layout_file_path" id="layout_file_path" type="hidden" value="@fieldModel.layout_file_path" data-required-msg="@ResxHelper.GetValue("Message", "RequiredTextFormat").Replace("{0}", @ResxHelper.GetValue("ta_fas_spek_ipal_domestik", "layout_file_path"))" />
+                            <script>
+                                var layout_file_path_init = @Html.Raw(fieldModel.layout_file_path_init);
+                                $("#layout_file_path_file").kendoUpload({multiple:true,
+                                    async: {
+                                        saveUrl: "@ViewBag.BaseUrl/FasSpekIpalDomestik/save_layout_file_path",
+                                        removeUrl: "@ViewBag.BaseUrl/FasSpekIpalDomestik/remove_layout_file_path",
+                                        autoUpload: true
+                                    },
+                                    validation: {allowedExtensions: [".jpg", ".jpeg", ".png"], maxFileSize: 256000},
+                                    files: layout_file_path_init,
+                                    success: onSuccessUpload,
+                                    select: OnselectUpload_layout_file_path
+                                });
+                                function OnselectUpload_layout_file_path(e) {OnselectUpload(e, 2);}
+                            </script>
+                            <span class="k-label k-text-info">Allowed Extensions: ".jpg", ".jpeg", ".png"</span>
+                            <br /><span class="k-label k-text-info">Maximum FileSize: @String.Format("{0:N0}", (256000 / 1024)) KB</span>
+                        </div>
+                    </div>
+
+                    <div id="form_item_photo" class="form-group">
+                        <div class="form-item-label">@ResxHelper.GetValue("ta_fas_spek_ipal_domestik", "photo")<span id="label_req_photo" class="required"> *</span></div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_photo" class="form-item-field">
+                            <input name="photo_file" id="photo_file" type="file" />
+                            <input name="photo" id="photo" type="hidden" value="@fieldModel.photo" required data-required-msg="@ResxHelper.GetValue("Message", "RequiredTextFormat").Replace("{0}", @ResxHelper.GetValue("ta_fas_spek_ipal_domestik", "photo"))" />
+                            <script>
+                                var photo_init = @Html.Raw(fieldModel.photo_init);
+                                $("#photo_file").kendoUpload({multiple:true,
+                                    async: {
+                                        saveUrl: "@ViewBag.BaseUrl/FasSpekIpalDomestik/save_photo",
+                                        removeUrl: "@ViewBag.BaseUrl/FasSpekIpalDomestik/remove_photo",
+                                        autoUpload: true
+                                    },
+                                    validation: {allowedExtensions: [".jpg", ".jpeg", ".png"], maxFileSize: 256000},
+                                    files: photo_init,
+                                    success: onSuccessUpload,
+                                    select: OnselectUpload_photo
+                                });
+                                function OnselectUpload_photo(e) {OnselectUpload(e, 2);}
+                            </script>
+                            <span class="k-label k-text-info">Allowed Extensions: ".jpg", ".jpeg", ".png"</span>
+                            <br /><span class="k-label k-text-info">Maximum FileSize: @String.Format("{0:N0}", (256000 / 1024)) KB</span>
+                        </div>
+                    </div>
+
+                       <div id="form_item_tgl_periksa_akhir" class="form-group">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_fas_spek_ipal_domestik", "tgl_periksa_akhir")<span id="label_req_tgl_periksa_akhir" class="required"> *</span></div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_tgl_periksa_akhir" class="form-item-field">
+                               <input id="dt_tgl_periksa_akhir" name="dt_tgl_periksa_akhir" data-role="datepicker" data-type="date" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_fas_spek_ipal_domestik","tgl_periksa_akhir"))" style ="width:130px;" title="@ResxHelper.GetValue("ta_fas_spek_ipal_domestik", "tgl_periksa_akhir") @ResxHelper.GetValue("Message", "IsNotValidDate")." />
+                               <span class="k-invalid-msg" data-for="dt_tgl_periksa_akhir"></span>
+                               <input type="hidden" id="tgl_periksa_akhir" name="tgl_periksa_akhir" value="@fieldModel.tgl_periksa_akhir" />
+                               <script>
+                                   $("#dt_tgl_periksa_akhir").kendoDatePicker({change:on_chage_tgl_periksa_akhir, value: "@fieldModel.dt_tgl_periksa_akhir", format: "{0:dd/MM/yyyy}" });
+                                   function on_chage_tgl_periksa_akhir() {
+                                       $("#tgl_periksa_akhir").val(kendo.toString($("#dt_tgl_periksa_akhir").data("kendoDatePicker").value(), "yyyy-MM-dd"));
+                                   }
+                               </script>
+                           </div>
+                       </div>
+
+                       <div id="form_item_hasil_periksa_akhir" class="form-group">
+                           <div class="form-item-label">@ResxHelper.GetValue("ta_fas_spek_ipal_domestik", "hasil_periksa_akhir")<span id="label_req_hasil_periksa_akhir" class="required"> *</span></div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_hasil_periksa_akhir" class="form-item-field">
+                               <input id="hasil_periksa_akhir" name="hasil_periksa_akhir" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_fas_spek_ipal_domestik","hasil_periksa_akhir"))" style="width:350px;" />
+                               <span class="k-invalid-msg" data-for="hasil_periksa_akhir"></span>
+                               <script>
+                                   var hasil_periksa_akhir_param = {item : {value:"id",text:"nama"},parent:[{ field: 'cat_id',opr:'=', value: '155' }], order:[]};
+                                   var hasil_periksa_akhir_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: hasil_periksa_akhir_param, type: "POST" } } });
+                                   var hasil_periksa_akhir = $("#hasil_periksa_akhir").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: hasil_periksa_akhir_ds, change:onChange_hasil_periksa_akhir }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#hasil_periksa_akhir").data("kendoComboBox").value('@fieldModel.hasil_periksa_akhir'); });
+                                   function onChange_hasil_periksa_akhir() {if ($("#hasil_periksa_akhir").data("kendoComboBox").value() != '' && $("#hasil_periksa_akhir").data("kendoComboBox")._oldIndex == -1) {$("#hasil_periksa_akhir").data("kendoComboBox").value('');}
+                                   }
+                               </script>
+                           </div>
+                       </div>
+                  <div class="form-group"></div>
+                    
+					</div>
+				</div>
+			</div>
+			<div class="panel-footer">
+				<a id="cancel" class="k-button k-button-icontext" href="#"><i class="far fa-times-circle"></i>&nbsp;<span id="btnCancelText">@ResxHelper.GetValue("Message", "Cancel")</span></a>
+				<a id="save" class="k-button k-button-icontext" href="#"><i class="fas fa-save"></i>&nbsp;<span id="btnSaveText">@ResxHelper.GetValue("Message", "Save")</span></a>
+			</div>
+		</div>
+    </div>
+</form>
+
+<script>
+    var form_type = '@ViewData["form_type"]';
+    function ShowHideColumn(form_type)
+    {
+        if(form_type=='Add')
+        {
+            var hiden_column = [];
+            for (i = 0; i < hiden_column.length; i++) {
+                $("#form_item_"+hiden_column[i]).hide();
+            }
+        }
+        else if(form_type=='Edit')
+        {
+            var hiden_column = [];
+            for (i = 0; i < hiden_column.length; i++) {
+                $("#form_item_"+hiden_column[i]).hide();
+            }
+        }
+    }
+    function setReadOnly(form_type,opt)
+    {
+        if(opt==true)
+        {
+            if(form_type=='Add')
+            {
+
+            }
+            else if(form_type=='Edit')
+            {
+
+            }
+        }
+        else
+        {
+            if(form_type=='Add')
+            {
+
+            }
+            else if(form_type=='Edit')
+            {
+
+            }
+        }
+    }
+    function display_by_type() {
+        /*
+        $.urlParam = function (name) {
+            var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.search);
+            return (results !== null) ? results[1] || 0 : false;
+        }
+        var ski = $.urlParam('status_kepemilikan_id');
+        if (ski == '2') { //customer
+            $('#label_req_serial_number').hide();
+            $("#serial_number").removeAttr('required');
+        } else {
+            $('#label_req_serial_number').show();
+            $("#serial_number").attr('required', 'required');
+        }
+        */
+    }
+    $(document).ready(function () {
+        ShowHideColumn(form_type);
+        setReadOnly(form_type, true);
+        display_by_type();
+    });
+    var validatable = $("#form_edit").kendoValidator().data("kendoValidator");
+    $("#save").click(function (e) {
+        getListFileUpload("layout_file_path");
+        getListFileUpload("photo");
+		setReadOnly(form_type, false);
+        if (validatable.validate() === true) {
+            kendo.ui.progress($("#form_edit"), true);
+            $.ajax({
+                url: '@ViewData["UrlAction"]', data: $('#form_edit').serialize(), type: 'POST',
+                success: function (data) {
+                    kendo.ui.progress($("#form_edit"), false);
+                    if (data.status == 1) {
+                        window.parent.notification.show({title: data.title, message: kendo.toString(data.message) }, "success");
+                        if (window.parent.Reload_list_ta_fas_spek_ipal_domestik) {
+                            window.parent.Reload_list_ta_fas_spek_ipal_domestik();
+                        }else if (window.parent.reload_ta_fas_spek_ipal_domestik) {
+                            window.parent.reload_ta_fas_spek_ipal_domestik(data.pk);
+                        }
+                        close_self();
+                    } else if (data.status == 3) {
+                        windows.parent.notification.show({ title: data.title, message: data.message }, "error");
+                        setReadOnly(form_type, true);
+						close_self();
+                    } else {
+						setReadOnly(form_type, true);
+                        notification.show({ title: data.title, message: data.message }, "error");
+                    }
+                }
+            });
+        } else {
+            kendo.ui.progress($("#form_edit"), false);
+        }
+		setReadOnly(form_type, true);
+    });
+    $("#cancel").kendoButton();
+    $("#cancel").click(function (e) {
+        close_self();
+    });
+    function close_self() { if (window.parent.$("#dialog_ta_fas_spek_ipal_domestik").data("kendoWindow")) { window.parent.$("#dialog_ta_fas_spek_ipal_domestik").data("kendoWindow").close(); } else { window.parent.$("#dialog").data("kendoWindow").close(); } }
+</script>

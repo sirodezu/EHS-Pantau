@@ -1,0 +1,281 @@
+﻿@using WebApp;
+@using Microsoft.AspNetCore.Http;
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@{
+    Layout = "~/Views/Shared/_LayoutNoHeader.cshtml";
+    var baseUrl = ViewData["baseUrl"];
+    var fieldModel = ViewData["fieldModel"] as WebApp.Areas.Sys.Models.GroupsModel.ViewModel;
+}
+<style>
+    .form-item-label {
+        width:150px;
+    }
+</style>
+<form id="form_edit" method="post">
+    <div class="card">
+        <div class="card-header">
+            <div class="title-header">@ViewData["TitleHeader"]</div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12">
+                    <div id="form_item_id" class="form-item-none">
+                        <div class="form-item-label">@ResxHelper.GetValue("sys_groups", "id", "ID")<span class="required"> *</span></div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_id" class="form-item-field">
+                            <input type="number" id="id" name="id" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("sys_groups","id"))" style="width:100px;" />
+                            <span class="k-invalid-msg" data-for="id"></span>
+                            <script>
+                            $("#id").kendoNumericTextBox({ format: "#", decimals: 0 });
+                            $(document).ready(function () {$("#id").data('kendoNumericTextBox').value('@fieldModel.id');})
+                            </script>
+                            <input type="hidden" id="id_old" name="id_old" value="@fieldModel.id" />
+                        </div>
+                    </div>
+                    <div id="form_item_parent_id" class="form-item-none">
+                        <div class="form-item-label">@ResxHelper.GetValue("sys_groups", "parent_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_parent_id" class="form-item-field">
+                            <input id="parent_id" name="parent_id" style="width:500px;" />
+                            <span class="k-invalid-msg" data-for="parent_id"></span>
+                            <input type="hidden" id="parent_id_old" name="parent_id_old" value="@fieldModel.parent_id" />
+                            <script>
+                                $(document).ready(function () {
+                                    var lookupUrl_parent_id = "@baseUrl/Sys/Groups/LookupTreeData";
+                                    var parent_id_param = {};
+                                    var ds_parent_id = new kendo.data.HierarchicalDataSource({ transport: { read: { type: 'POST', url: lookupUrl_parent_id, dataType: "json", data: parent_id_param } }, schema: { model: { id: "value", hasChildren: "has_child", children: "item" } } });
+                                    $("#parent_id").kendoDropDownTree({
+                                        placeholder: "Select ...",
+                                        height: "auto",
+                                        dataSource: ds_parent_id,
+                                        value: '@fieldModel.parent_id',
+                                        change: function(e) {
+                                            reload_ordinal()
+                                        }
+                                    });
+                                });
+                            </script>
+                        </div>
+                    </div>
+                    <div id="form_item_kode" class="form-item">
+                        <div class="form-item-label">@ResxHelper.GetValue("sys_groups", "kode", "Kode")<span class="required"> *</span></div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_kode" class="form-item-field">
+                            <input type="text" title="@ResxHelper.GetValue("sys_groups", "kode") @ResxHelper.GetValue("Message", "IsNotValidCharacter","is not valid character input")." pattern="@ConfigHelper.GetValue("AllowInputCharacters")" id="kode" name="kode" class="k-textbox" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("sys_groups","kode"))" maxlength="50" style="width:350px;" value="@fieldModel.kode" />
+                            <span class="k-invalid-msg" data-for="kode"></span>
+                        </div>
+                    </div>
+                    <div id="form_item_nama" class="form-item">
+                        <div class="form-item-label">@ResxHelper.GetValue("sys_groups", "nama", "Nama")<span class="required"> *</span></div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_nama" class="form-item-field">
+                            <input type="text" title="@ResxHelper.GetValue("sys_groups", "nama") @ResxHelper.GetValue("Message", "IsNotValidCharacter","is not valid character input")." pattern="@ConfigHelper.GetValue("AllowInputCharacters")" id="nama" name="nama" class="k-textbox" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("sys_groups","nama"))" maxlength="50" style="width:350px;" value="@fieldModel.nama" />
+                            <span class="k-invalid-msg" data-for="nama"></span>
+                        </div>
+                    </div>
+                    <div id="form_item_role_id" class="form-item">
+                        <div class="form-item-label">@ResxHelper.GetValue("sys_groups", "role_id", "Peran")<span class="required"> *</span></div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_role_id" class="form-item-field">
+                            <input id="role_id" name="role_id" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("sys_groups","role_id"))" style="width:350px;" />
+                            <span class="k-invalid-msg" data-for="role_id"></span>
+                            <script>
+                                var role_id_param = { item: { value: 'id', text: 'nama' },order: [{ field: 'level_id', dir: 'asc' } ] };
+                                var role_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@baseUrl/Sys/Roles/LookupData", dataType: "json", data: role_id_param, type: "POST" } } });
+                                var role_id = $("#role_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", change: onChange_role_id, dataSource: role_id_ds }).data("kendoComboBox");
+                                $(document).ready(function () { $("#role_id").data("kendoComboBox").value('@fieldModel.role_id'); });
+                                function onChange_role_id() {if ($("#role_id").data("kendoComboBox").value() != '' && $("#role_id").data("kendoComboBox")._oldIndex == -1) { $("#role_id").data("kendoComboBox").value(''); }}
+                            </script>
+                        </div>
+                    </div>
+                    <div id="form_item_ba_id" class="form-item">
+                        <div class="form-item-label">@ResxHelper.GetValue("sys_groups", "ba_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_ba_id" class="form-item-field">
+                            <input id="ba_id" name="ba_id" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("sys_groups","ba_id"))" style="width:350px;" />
+                            <span class="k-invalid-msg" data-for="ba_id"></span>
+                            <script>
+                                var ba_id_param = { item: { value: 'id', text: 'nama' },order: [{ field: 'ordinal', dir: 'asc' } ] };
+                                var ba_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@baseUrl/Ref/BusinessArea/LookupData", dataType: "json", data: ba_id_param, type: "POST" } } });
+                                var ba_id = $("#ba_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", change: onChange_ba_id, dataSource: ba_id_ds }).data("kendoComboBox");
+                                $(document).ready(function () { $("#ba_id").data("kendoComboBox").value('@fieldModel.ba_id'); });
+                                function onChange_ba_id() {if ($("#ba_id").data("kendoComboBox").value() != '' && $("#ba_id").data("kendoComboBox")._oldIndex == -1) { $("#ba_id").data("kendoComboBox").value(''); }}
+                            </script>
+                        </div>
+                    </div>
+                    <div id="form_item_pa_id" class="form-item">
+                        <div class="form-item-label">@ResxHelper.GetValue("sys_groups", "pa_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_pa_id" class="form-item-field">
+                            <input id="pa_id" name="pa_id" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("sys_groups","pa_id"))" style="width:350px;" />
+                            <span class="k-invalid-msg" data-for="pa_id"></span>
+                            <script>
+                                var pa_id_param = { item: { value: 'id', text: 'nama' },order: [{ field: 'ordinal', dir: 'asc' } ] };
+                                var pa_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@baseUrl/Ref/PersonalArea/LookupData", dataType: "json", data: pa_id_param, type: "POST" } } });
+                                var pa_id = $("#pa_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", change: onChange_pa_id, dataSource: pa_id_ds }).data("kendoComboBox");
+                                $(document).ready(function () { $("#pa_id").data("kendoComboBox").value('@fieldModel.pa_id'); });
+                                function onChange_pa_id() { if ($("#pa_id").data("kendoComboBox").value() != '' && $("#pa_id").data("kendoComboBox")._oldIndex == -1) { $("#pa_id").data("kendoComboBox").value(''); } reload_psa_id();}
+                            </script>
+                        </div>
+                    </div>
+                    <div id="form_item_psa_id" class="form-item">
+                        <div class="form-item-label">@ResxHelper.GetValue("sys_groups", "psa_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_psa_id" class="form-item-field">
+                            <input id="psa_id" name="psa_id" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("sys_groups","psa_id"))" style="width:350px;" />
+                            <span class="k-invalid-msg" data-for="psa_id"></span>
+                            <script>
+                                var psa_id_param = { item: { value: 'id', text: 'nama' },parent: [{ field: 'pa_id',value: '@fieldModel.pa_id' } ] ,order: [{ field: 'ordinal', dir: 'asc' } ] };
+                                var psa_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@baseUrl/Ref/PersonalSubArea/LookupData", dataType: "json", data: psa_id_param, type: "POST" } } });
+                                var psa_id = $("#psa_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", change: onChange_psa_id, dataSource: psa_id_ds }).data("kendoComboBox");
+                                $(document).ready(function () { $("#psa_id").data("kendoComboBox").value('@fieldModel.psa_id'); });
+                                function onChange_psa_id() { if ($("#psa_id").data("kendoComboBox").value() != '' && $("#psa_id").data("kendoComboBox")._oldIndex == -1) { $("#psa_id").data("kendoComboBox").value(''); } }
+                                function reload_psa_id() {
+                                    var pa_id = $("#pa_id").data("kendoComboBox").value();
+                                    if (pa_id != '@fieldModel.pa_id') {
+                                        $("#psa_id").data("kendoComboBox").value('');
+                                    }
+                                    var psa_id_param = { item: { value: 'id', text: 'nama' }, parent: [{ field: 'pa_id', value: pa_id }], order: [{ field: 'ordinal', dir: 'asc' }] };
+                                    $("#psa_id").data("kendoComboBox").dataSource.read(psa_id_param);
+                                }
+                            </script>
+                        </div>
+                    </div>
+                    <div id="form_item_keterangan" class="form-item">
+                        <div class="form-item-label">@ResxHelper.GetValue("sys_groups", "keterangan", "Keterangan")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_keterangan" class="form-item-field">
+                            <textarea type="text" title="@ResxHelper.GetValue("sys_groups", "keterangan") @ResxHelper.GetValue("Message", "IsNotValidCharacter","is not valid character input")." pattern="@ConfigHelper.GetValue("AllowInputCharacters")" id="keterangan" name="keterangan" class="k-textbox" maxlength="500" style="width:350px;">@fieldModel.keterangan</textarea>
+                            <span class="k-invalid-msg" data-for="keterangan"></span>
+                        </div>
+                    </div>
+                    <div id="form_item_aktif_id" class="form-item">
+                        <div class="form-item-label">@ResxHelper.GetValue("sys_groups", "aktif_id")<span class="required"> *</span></div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_aktif_id" class="form-item-field">
+                            <input type="radio" name="aktif_id" id="aktif_id1" class="k-radio" value="1" @fieldModel.aktif_id1>
+                            <label class="k-radio-label" for="aktif_id1">@ResxHelper.GetValue("Message", "Yes")</label>
+                            <input type="radio" name="aktif_id" id="aktif_id0" class="k-radio" value="0" @fieldModel.aktif_id0>
+                            <label class="k-radio-label" for="aktif_id0">@ResxHelper.GetValue("Message", "No")</label>
+                        </div>
+                    </div>
+                    <div id="form_item_ordinal" class="form-item">
+                        <div class="form-item-label">@ResxHelper.GetValue("sys_groups", "ordinal", "Urutan")<span class="required"> *</span></div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_ordinal" class="form-item-field">
+                            <input id="ordinal" name="ordinal" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("sys_roles","ordinal"))" style="width:300px;" />
+                            <span class="k-invalid-msg" data-for="ordinal"></span>
+                            <script>
+                                var ordinal_param = {parent: [{field:"parent_id",value:'@fieldModel.parent_id'}]};
+                                var ordinal_ds = new kendo.data.DataSource({ transport: { read: { url: "@baseUrl/Sys/Groups/LookupOrderByParent", dataType: "json", data: ordinal_param, type: "POST" } } });
+                                var ordinal = $("#ordinal").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: ordinal_ds }).data("kendoComboBox");
+                                $(document).ready(function () { $("#ordinal").data("kendoComboBox").value('@fieldModel.ordinal'); });
+                                function onChange_ordinal() {if ($("#ordinal").data("kendoComboBox").value() != '' && $("#ordinal").data("kendoComboBox")._oldIndex == -1) {$("#ordinal").data("kendoComboBox").value('');}}
+                                function reload_ordinal() {
+                                    var parent_id = $("#parent_id").data("kendoDropDownTree").value();
+                                    if (parent_id != '@fieldModel.parent_id') {
+                                        $("#ordinal").data("kendoComboBox").value('');
+                                    }
+                                    var ordinal_param = { parent: [{ field: "parent_id", value: parent_id }] };
+                                    $("#ordinal").data("kendoComboBox").dataSource.read(ordinal_param);
+                                }
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer" style="text-align:center">
+            <a id="cancel" class="k-button k-button-icontext" href="#"><i class="far fa-times-circle"></i>&nbsp;<span id="btnCancelText">@ResxHelper.GetValue("Message", "Cancel", "Batal")</span></a>
+            <a id="save" class="k-button k-button-icontext" href="#"><i class="fas fa-save"></i>&nbsp;<span id="btnSaveText">@ResxHelper.GetValue("Message", "Save", "Simpan")</span></a>
+        </div>
+    </div>
+</form>
+
+<script>
+    var form_type = '@ViewData["form_type"]';
+    function ShowHideColumn(form_type)
+    {
+        if(form_type=='Add')
+        {
+            var hiden_column = ["ordinal"];
+            for (i = 0; i < hiden_column.length; i++) { 
+                $("#form_item_"+hiden_column[i]).hide();
+            }
+            $("#ordinal").removeProp('required');
+        }
+        else if(form_type=='Edit')
+        {
+            var hiden_column = [];
+            for (i = 0; i < hiden_column.length; i++) { 
+                $("#form_item_"+hiden_column[i]).hide();
+            }
+            $("#ordinal").prop('required','required');
+        }    
+    }
+    function setReadOnly(form_type,opt)
+    {
+        if(opt==true)
+        {
+            if(form_type=='Add')
+            {
+
+            }
+            else if(form_type=='Edit')
+            {
+
+            }
+        }
+        else
+        {
+            if(form_type=='Add')
+            {
+
+            }
+            else if(form_type=='Edit')
+            {
+
+            }
+        }
+    }
+    $(document).ready(function () {
+        ShowHideColumn(form_type);
+        setReadOnly(form_type, true);
+    });
+    var validatable = $("#form_edit").kendoValidator().data("kendoValidator");
+    $("#save").click(function (e) {
+        if (validatable.validate() === true) {
+            kendo.ui.progress($("#form_edit"), true);
+            $.ajax({
+                url: '@ViewData["UrlAction"]', data: $('#form_edit').serialize(), type: 'POST',
+                success: function (data) {
+                    kendo.ui.progress($("#form_edit"), false);
+                    console.log(data);
+                    if (data.status == 1) {
+                        window.parent.notification.show({title: data.title, message: kendo.toString(data.message) }, "success");
+                        if (window.parent.Reload_list_sys_groups) {
+                            window.parent.Reload_list_sys_groups();
+                        }else if (window.parent.reload_sys_groups) {
+                            window.parent.reload_sys_groups(data.pk);
+                        }
+                        close_self();
+                    } else if (data.status == 3) {
+                        windows.parent.notification.show({ title: data.title, message: data.message }, "error");
+                        close_self();
+                    } else {
+                        notification.show({ title: data.title, message: data.message }, "error");
+                    }
+                }
+            });
+        } else {
+            kendo.ui.progress($("#form_edit"), false);
+        }
+
+    });
+    $("#cancel").kendoButton();
+    $("#cancel").click(function (e) {
+        close_self();
+    });
+    function close_self() { if (window.parent.$("#dialog_sys_groups").data("kendoWindow")) { window.parent.$("#dialog_sys_groups").data("kendoWindow").close(); } else { window.parent.$("#dialog").data("kendoWindow").close(); } }
+</script>
+

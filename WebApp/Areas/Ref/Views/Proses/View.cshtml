@@ -1,0 +1,76 @@
+@using WebApp
+@using Microsoft.AspNetCore.Http;
+@{
+    Layout = "~/Views/Shared/_LayoutNoHeader.cshtml";
+    var fieldModel = ViewData["fieldModel"] as WebApp.Areas.Ref.Models.ProsesModel.ViewModel;
+}
+<div class="card">
+    <div class="card-header">
+        <div class="title-header">@ViewData["TitleHeader"]</div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12">
+
+                <div id="form_item_id" class="form-item-none">
+                    <div class="form-item-label">@ResxHelper.GetValue("ref_proses", "id")</div>
+                    <div class="form-item-separator">:</div>
+                    <div id="view_item_id" class="form-item-view">@Html.Raw(fieldModel.id)</div>
+                </div>
+
+                <div id="form_item_kode" class="form-item">
+                    <div class="form-item-label">@ResxHelper.GetValue("ref_proses", "kode")</div>
+                    <div class="form-item-separator">:</div>
+                    <div id="view_item_kode" class="form-item-view">@Html.Raw(fieldModel.kode)</div>
+                </div>
+
+                <div id="form_item_nama" class="form-item">
+                    <div class="form-item-label">@ResxHelper.GetValue("ref_proses", "nama")</div>
+                    <div class="form-item-separator">:</div>
+                    <div id="view_item_nama" class="form-item-view">@Html.Raw(fieldModel.nama)</div>
+                </div>
+
+                <div id="form_item_start_date" class="form-item">
+                    <div class="form-item-label">@ResxHelper.GetValue("ref_proses", "start_date")</div>
+                    <div class="form-item-separator">:</div>
+                    <div id="view_item_start_date" class="form-item-view">@Html.Raw(fieldModel.start_date)</div>
+                </div>
+
+                <div id="form_item_start_month" class="form-item">
+                    <div class="form-item-label">@ResxHelper.GetValue("ref_proses", "start_month")</div>
+                    <div class="form-item-separator">:</div>
+                    <div id="view_item_start_month" class="form-item-view">@Html.Raw(fieldModel.start_month_text)</div>
+                </div>
+
+                <div id="form_item_end_date" class="form-item">
+                    <div class="form-item-label">@ResxHelper.GetValue("ref_proses", "end_date")</div>
+                    <div class="form-item-separator">:</div>
+                    <div id="view_item_end_date" class="form-item-view">@Html.Raw(fieldModel.end_date)</div>
+                </div>
+
+                <div id="form_item_end_month" class="form-item">
+                    <div class="form-item-label">@ResxHelper.GetValue("ref_proses", "end_month")</div>
+                    <div class="form-item-separator">:</div>
+                    <div id="view_item_end_month" class="form-item-view">@Html.Raw(fieldModel.end_month_text)</div>
+                </div>
+                <div id="form_item_keterangan" class="form-item">
+                    <div class="form-item-label">@ResxHelper.GetValue("ref_proses", "keterangan")</div>
+                    <div class="form-item-separator">:</div>
+                    <div id="view_item_keterangan" class="form-item-view">@fieldModel.keterangan</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer" style="text-align:center">
+        <a id="close" class="k-button k-button-icontext" href="#"><i class="far fa-times-circle"></i>&nbsp;<span id="btnCloseText">@ResxHelper.GetValue("Message", "Close", "Tutup")</span></a>
+    </div>
+</div>
+<script>
+    $("#close").kendoButton();
+    $("#close").click(function (e) {
+        close_self();
+    });
+    function onCloseDialog(e) { $('#dialog').html(''); }
+    function closeDialog() { $("#dialog").data("kendoWindow").close(); }
+    function close_self() { if (window.parent.$("#dialog_ref_proses").data("kendoWindow")) { window.parent.$("#dialog_ref_proses").data("kendoWindow").close(); } else { window.parent.$("#dialog").data("kendoWindow").close(); } }
+</script>

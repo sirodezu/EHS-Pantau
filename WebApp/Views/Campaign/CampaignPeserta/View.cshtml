@@ -1,0 +1,91 @@
+@using WebApp
+@using Microsoft.AspNetCore.Http;
+@{
+    Layout = "~/Views/Shared/_LayoutNoHeader.cshtml";
+    var fieldModel = ViewData["fieldModel"] as WebApp.Models.CampaignPesertaModel.ViewModel;
+	ViewData["Title"] = ViewData["TitleHeader"];
+    ViewData["PageName"] = "campaignpeserta";
+    ViewData["Heading"] = ViewData["TitleHeader"];
+    ViewData["Category1"] = "";
+    ViewData["Category2"] = "";
+}
+<div class="panel panel-form">
+	<div class="panel-container">
+		<div class="panel-heading">
+			<div class="title-header">@ViewData["TitleHeader"]</div>
+		</div>
+		<div class="panel-content">
+			<div class="row">
+				<div class="col-lg-12">
+
+                    <div id="form_item_id" class="form-group-none">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_cmp_peserta", "id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_id" class="form-item-view">@Html.Raw(fieldModel.id)</div>
+                  </div>
+
+                    <div id="form_item_cmp_id" class="form-group-none">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_cmp_peserta", "cmp_id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_cmp_id" class="form-item-view">@Html.Raw(fieldModel.cmp_id)</div>
+                  </div>
+
+                    <div id="form_item_ehs_area_id" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_cmp_peserta", "ehs_area_id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_ehs_area_id" class="form-item-view">@Html.Raw(fieldModel.ehs_area_id_text)</div>
+                  </div>
+
+                    <div id="form_item_ba_id" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_cmp_peserta", "ba_id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_ba_id" class="form-item-view">@Html.Raw(fieldModel.ba_id_text)</div>
+                  </div>
+
+                    <div id="form_item_pa_id" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_cmp_peserta", "pa_id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_pa_id" class="form-item-view">@Html.Raw(fieldModel.pa_id_text)</div>
+                  </div>
+
+                    <div id="form_item_psa_id" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_cmp_peserta", "psa_id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_psa_id" class="form-item-view">@Html.Raw(fieldModel.psa_id_text)</div>
+                  </div>
+
+                    <div id="form_item_company_id" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_cmp_peserta", "company_id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_company_id" class="form-item-view">@Html.Raw(fieldModel.company_id_text)</div>
+                  </div>
+
+                    <div id="form_item_peserta_id" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_cmp_peserta", "peserta_id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_peserta_id" class="form-item-view">@Html.Raw(fieldModel.peserta_id_text)</div>
+                  </div>
+
+                    <div id="form_item_jabatan_peserta" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_cmp_peserta", "jabatan_peserta")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_jabatan_peserta" class="form-item-view">@Html.Raw(fieldModel.jabatan_peserta)</div>
+                  </div>
+
+				</div>
+			</div>
+		</div>
+		<div class="panel-footer">
+			<a id="close" class="k-button k-button-icontext" href="#"><i class="far fa-times-circle"></i>&nbsp;<span id="btnCloseText">@ResxHelper.GetValue("Message", "Close", "Tutup")</span></a>
+		</div>
+	</div>
+</div>
+<script>
+    $("#close").kendoButton();
+    $("#close").click(function (e) {
+        close_self();
+    });
+    function onCloseDialog(e) { $('#dialog').html(''); }
+    function closeDialog() { $("#dialog").data("kendoWindow").close(); }
+    function close_self() { if (window.parent.$("#dialog_ta_cmp_peserta").data("kendoWindow")) { window.parent.$("#dialog_ta_cmp_peserta").data("kendoWindow").close(); } else { window.parent.$("#dialog").data("kendoWindow").close(); } }
+</script>

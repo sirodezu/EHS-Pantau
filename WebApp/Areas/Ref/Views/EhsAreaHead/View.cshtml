@@ -1,0 +1,91 @@
+@using WebApp
+@using Microsoft.AspNetCore.Http;
+@{
+    Layout = "~/Views/Shared/_LayoutNoHeader.cshtml";
+    var fieldModel = ViewData["fieldModel"] as WebApp.Areas.Ref.Models.EhsAreaHeadModel.ViewModel;
+	ViewData["Title"] = ViewData["TitleHeader"];
+    ViewData["PageName"] = "ehsareahead";
+    ViewData["Heading"] = ViewData["TitleHeader"];
+    ViewData["Category1"] = "";
+    ViewData["Category2"] = "";
+}
+<div class="panel panel-form">
+	<div class="panel-container">
+		<div class="panel-heading">
+			<div class="title-header">@ViewData["TitleHeader"]</div>
+		</div>
+		<div class="panel-content">
+			<div class="row">
+				<div class="col-lg-12">
+
+                    <div id="form_item_id" class="form-group-none">
+                      <div class="form-item-label">@ResxHelper.GetValue("ref_ehs_area_head", "id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_id" class="form-item-view">@Html.Raw(fieldModel.id)</div>
+                  </div>
+
+                    <div id="form_item_ehs_area_id" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ref_ehs_area_head", "ehs_area_id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_ehs_area_id" class="form-item-view">@Html.Raw(fieldModel.ehs_area_id_text)</div>
+                  </div>
+
+                    <div id="form_item_head_id" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ref_ehs_area_head", "head_id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_head_id" class="form-item-view">@Html.Raw(fieldModel.head_id_text)</div>
+                  </div>
+
+                    <div id="form_item_head_nrp" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ref_ehs_area_head", "head_nrp")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_head_nrp" class="form-item-view">@Html.Raw(fieldModel.head_nrp)</div>
+                  </div>
+
+                    <div id="form_item_head_nama" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ref_ehs_area_head", "head_nama")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_head_nama" class="form-item-view">@Html.Raw(fieldModel.head_nama)</div>
+                  </div>
+
+                    <div id="form_item_status_id" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ref_ehs_area_head", "status_id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_status_id" class="form-item-view">@Html.Raw(fieldModel.status_id_text)</div>
+                  </div>
+
+                    <div id="form_item_start_date" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ref_ehs_area_head", "start_date")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_start_date" class="form-item-view">@Html.Raw(fieldModel.start_date)</div>
+                  </div>
+
+                    <div id="form_item_end_date" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ref_ehs_area_head", "end_date")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_end_date" class="form-item-view">@Html.Raw(fieldModel.end_date)</div>
+                  </div>
+
+                    <div id="form_item_keterangan" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ref_ehs_area_head", "keterangan")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_keterangan" class="form-item-view">@Html.Raw(fieldModel.keterangan)</div>
+                  </div>
+
+				</div>
+			</div>
+		</div>
+		<div class="panel-footer">
+			<a id="close" class="k-button k-button-icontext" href="#"><i class="far fa-times-circle"></i>&nbsp;<span id="btnCloseText">@ResxHelper.GetValue("Message", "Close", "Tutup")</span></a>
+		</div>
+	</div>
+</div>
+<script>
+    $("#close").kendoButton();
+    $("#close").click(function (e) {
+        close_self();
+    });
+    function onCloseDialog(e) { $('#dialog').html(''); }
+    function closeDialog() { $("#dialog").data("kendoWindow").close(); }
+    function close_self() { if (window.parent.$("#dialog_ref_ehs_area_head").data("kendoWindow")) { window.parent.$("#dialog_ref_ehs_area_head").data("kendoWindow").close(); } else { window.parent.$("#dialog").data("kendoWindow").close(); } }
+</script>

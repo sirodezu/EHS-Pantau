@@ -1,0 +1,1268 @@
+@using WebApp
+@using Newtonsoft.Json
+@using Microsoft.AspNetCore.Http;
+@{
+    Layout = "~/Views/Shared/_LayoutEHSPerformance.cshtml";
+    var fieldModel = ViewData["filterColumn"] as WebApp.Models.EHSPerformanceModel.ViewModel;
+    ViewData["Title"] = ViewData["TitleHeader"];
+    ViewData["PageName"] = "ehsperformance";
+    ViewData["Heading"] = ViewData["TitleHeader"];
+    ViewData["Category1"] = "";
+    ViewData["Category2"] = "";
+}
+<partial name="_ScriptsBasePlugins" />
+<style>
+    .curent-data th {
+        padding: 6px;
+        text-align: center;
+        background-color: #7D7D7D;
+        color: #ffffff;
+    }
+
+    .table th {
+        padding: 6px;
+        text-align: center;
+    }
+
+    .table td {
+        padding: 6px;
+    }
+</style>
+<form id="form_edit" method="post">
+    <div class="panel">
+        <div class="panel-heading">
+            <div class="title-header">@ResxHelper.GetValue("Message", "FilterDataHeader", "Filter Data")</div>
+        </div>
+        <div class="panel-container">
+            <div class="panel-content">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div id="form_item_kategori_filter" class="form-group">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_ehs_performance", "kategori_filter")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_kategori_filter" class="form-item-field">
+                                <input id="kategori_filter" name="kategori_filter" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_ehs_performance","kategori_filter"))" style="width:300px;" />
+                                <span class="k-invalid-msg" data-for="kategori_filter"></span>
+                                <script>
+                                   var kategori_filter_param = {item : {value:"id",text:"nama"},parent:[{ field: 'cat_id',opr:'=', value: '167' }], order:[]};
+                                   var kategori_filter_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: kategori_filter_param, type: "POST" } } });
+                                   var kategori_filter = $("#kategori_filter").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: kategori_filter_ds, change:onChange_kategori_filter }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#kategori_filter").data("kendoComboBox").value('@fieldModel.kategori_filter'); });
+                                    function onChange_kategori_filter() {if ($("#kategori_filter").data("kendoComboBox").value() != '' && $("#kategori_filter").data("kendoComboBox")._oldIndex == -1) { $("#kategori_filter").data("kendoComboBox").value(''); }
+                                        show_kategori_filter_detail();
+                                   }
+                                </script>
+                            </div>
+                        </div>
+
+                        <div id="form_item_ehs_area_id0" class="form-group-none">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_ehs_performance", "ehs_area_id0")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_ehs_area_id0" class="form-item-field">
+                                <input id="ehs_area_id0" name="ehs_area_id0" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_ehs_performance","ehs_area_id0"))" style="width:200px;" />
+                                <span class="k-invalid-msg" data-for="ehs_area_id0"></span>
+                                <script>
+                                   var ehs_area_id0_param = {item : {value:"id",text:"kode"},parent:[{field:"obj_data",value:"DashboardEHSPerformance"}], order:[]};
+                                   var ehs_area_id0_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/EHSArea/LookupDataEA", dataType: "json", data: ehs_area_id0_param, type: "POST" } } });
+                                   var ehs_area_id0 = $("#ehs_area_id0").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: ehs_area_id0_ds, change:onChange_ehs_area_id0 }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#ehs_area_id0").data("kendoComboBox").value('@fieldModel.ehs_area_id0'); });
+                                   function onChange_ehs_area_id0() {if ($("#ehs_area_id0").data("kendoComboBox").value() != '' && $("#ehs_area_id0").data("kendoComboBox")._oldIndex == -1) {$("#ehs_area_id0").data("kendoComboBox").value('');}
+                                       reload_ba_id0();
+                                       reload_pa_id0();
+                                       reload_psa_id0();
+                                   }
+                                </script>
+                            </div>
+                        </div>
+
+                        <div id="form_item_ba_id0" class="form-group-none">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_ehs_performance", "ba_id0")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_ba_id0" class="form-item-field">
+                                <input id="ba_id0" name="ba_id0" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_ehs_performance","ba_id0"))" style="width:200px;" />
+                                <span class="k-invalid-msg" data-for="ba_id0"></span>
+                                <script>
+                                   var ba_id0_param = {item : {value:"id",text:"kode"},parent:[{ field: 'ehs_area_id',opr:'=', value: '@fieldModel.ehs_area_id0' },{field:"obj_data",value:"DashboardEHSPerformance"}], order:[]};
+                                   var ba_id0_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/BusinessArea/LookupDataBA", dataType: "json", data: ba_id0_param, type: "POST" } } });
+                                   var ba_id0 = $("#ba_id0").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: ba_id0_ds, change:onChange_ba_id0 }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#ba_id0").data("kendoComboBox").value('@fieldModel.ba_id0'); });
+                                   function onChange_ba_id0() {if ($("#ba_id0").data("kendoComboBox").value() != '' && $("#ba_id0").data("kendoComboBox")._oldIndex == -1) {$("#ba_id0").data("kendoComboBox").value('');}
+                                       reload_pa_id0();
+                                       reload_psa_id0();
+                                   }
+                                  function reload_ba_id0(){
+                                      $("#ba_id0").data("kendoComboBox").value('');
+                                      var ehs_area_id0 = $("#ehs_area_id0").data("kendoComboBox").value();
+                                      var ba_id0_param = { item: { value: 'id', text: 'kode' }, parent: [{ field: 'ehs_area_id',opr:'=', value: ehs_area_id0 }], order: [] };
+                                      $("#ba_id0").data("kendoComboBox").dataSource.read(ba_id0_param);
+                                  }
+                                </script>
+                            </div>
+                        </div>
+
+                        <div id="form_item_pa_id0" class="form-group-none">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_ehs_performance", "pa_id0")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_pa_id0" class="form-item-field">
+                                <input id="pa_id0" name="pa_id0" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_ehs_performance","pa_id0"))" style="width:200px;" />
+                                <span class="k-invalid-msg" data-for="pa_id0"></span>
+                                <script>
+                                   var pa_id0_param = {item : {value:"id",text:"kode"},parent:[{ field: 'ehs_area_id',opr:'=', value: '@fieldModel.ehs_area_id0' }, { field: 'ba_id',opr:'=', value: '@fieldModel.ba_id0' },{field:"obj_data",value:"DashboardEHSPerformance"}], order:[]};
+                                   var pa_id0_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/PersonalArea/LookupDataPA", dataType: "json", data: pa_id0_param, type: "POST" } } });
+                                   var pa_id0 = $("#pa_id0").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: pa_id0_ds, change:onChange_pa_id0 }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#pa_id0").data("kendoComboBox").value('@fieldModel.pa_id0'); });
+                                   function onChange_pa_id0() {if ($("#pa_id0").data("kendoComboBox").value() != '' && $("#pa_id0").data("kendoComboBox")._oldIndex == -1) {$("#pa_id0").data("kendoComboBox").value('');}
+                                       reload_psa_id0();
+                                   }
+                                  function reload_pa_id0(){
+                                      $("#pa_id0").data("kendoComboBox").value('');
+                                      var ehs_area_id0 = $("#ehs_area_id0").data("kendoComboBox").value();
+                                      var ba_id0 = $("#ba_id0").data("kendoComboBox").value();
+                                      var pa_id0_param = { item: { value: 'id', text: 'kode' }, parent: [{ field: 'ehs_area_id',opr:'=', value: ehs_area_id0 }, { field: 'ba_id',opr:'=', value: ba_id0 }], order: [] };
+                                      $("#pa_id0").data("kendoComboBox").dataSource.read(pa_id0_param);
+                                  }
+                                </script>
+                            </div>
+                        </div>
+
+                        <div id="form_item_psa_id0" class="form-group-none">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_ehs_performance", "psa_id0")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_psa_id0" class="form-item-field">
+                                <input id="psa_id0" name="psa_id0" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_ehs_performance","psa_id0"))" style="width:200px;" />
+                                <span class="k-invalid-msg" data-for="psa_id0"></span>
+                                <script>
+                                   var psa_id0_param = {item : {value:"id",text:"kode"},parent:[{ field: 'ehs_area_id',opr:'=', value: '@fieldModel.ehs_area_id0' }, { field: 'ba_id',opr:'=', value: '@fieldModel.ba_id0' }, { field: 'pa_id',opr:'=', value: '@fieldModel.pa_id0' },{field:"obj_data",value:"DashboardEHSPerformance"}], order:[]};
+                                   var psa_id0_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/PersonalSubArea/LookupDataPSA", dataType: "json", data: psa_id0_param, type: "POST" } } });
+                                   var psa_id0 = $("#psa_id0").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: psa_id0_ds, change:onChange_psa_id0 }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#psa_id0").data("kendoComboBox").value('@fieldModel.psa_id0'); });
+                                   function onChange_psa_id0() {if ($("#psa_id0").data("kendoComboBox").value() != '' && $("#psa_id0").data("kendoComboBox")._oldIndex == -1) {$("#psa_id0").data("kendoComboBox").value('');}
+                                   }
+                                  function reload_psa_id0(){
+                                      $("#psa_id0").data("kendoComboBox").value('');
+                                      var ehs_area_id0 = $("#ehs_area_id0").data("kendoComboBox").value();
+                                      var ba_id0 = $("#ba_id0").data("kendoComboBox").value();
+                                      var pa_id0 = $("#pa_id0").data("kendoComboBox").value();
+                                      var psa_id0_param = { item: { value: 'id', text: 'kode' }, parent: [{ field: 'ehs_area_id',opr:'=', value: ehs_area_id0 }, { field: 'ba_id',opr:'=', value: ba_id0 }, { field: 'pa_id',opr:'=', value: pa_id0 }], order: [] };
+                                      $("#psa_id0").data("kendoComboBox").dataSource.read(psa_id0_param);
+                                  }
+                                </script>
+                            </div>
+                        </div>
+
+                        <div id="form_item_periode0" class="form-group-none">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_ehs_performance", "periode0")<span id="label_req_id" class="required"> *</span></div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_periode0" class="form-item-field">
+                                <input id="periode0" name="periode0" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_ehs_performance","periode0"))" style="width:200px;" />
+                                <span class="k-invalid-msg" data-for="periode0"></span>
+                                <script>
+                                   var periode0_param = {item : {value:"id",text:"nama"},parent:[{ field: 'cat_id',opr:'=', value: '166' }], order:[]};
+                                   var periode0_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: periode0_param, type: "POST" } } });
+                                   var periode0 = $("#periode0").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: periode0_ds, change:onChange_periode0 }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#periode0").data("kendoComboBox").value('@fieldModel.periode0'); });
+                                   function onChange_periode0() {if ($("#periode0").data("kendoComboBox").value() != '' && $("#periode0").data("kendoComboBox")._oldIndex == -1) {$("#periode0").data("kendoComboBox").value('');}
+                                       periode0_change();
+                                   }
+                                </script>
+                            </div>
+                        </div>
+
+                        <div id="form_item_tahun0" class="form-group-none">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_ehs_performance", "tahun0")<span id="label_req_id" class="required"> *</span></div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_tahun0" class="form-item-field">
+                                <input id="tahun0" name="tahun0" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_ehs_performance","tahun0"))" style="width:200px;" />
+                                <span class="k-invalid-msg" data-for="tahun0"></span>
+                                <script>
+                                   var tahun0_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupDataEHSPerformanceYear", dataType: "json", type: "POST" } } });
+                                   var tahun0 = $("#tahun0").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: tahun0_ds, change:onChange_tahun0 }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#tahun0").data("kendoComboBox").value('@fieldModel.tahun0'); });
+                                    function onChange_tahun0() {
+                                        if ($("#tahun0").data("kendoComboBox").value() != '' && $("#tahun0").data("kendoComboBox")._oldIndex == -1) { $("#tahun0").data("kendoComboBox").value(''); }
+                                        reload_bulan0();
+                                    }
+                                    function reload_bulan0(){
+                                      $("#bulan0").data("kendoComboBox").value('');
+                                        var tahun0_val = $("#tahun0").data("kendoComboBox").text();
+                                        var bulan0_param = {'year':tahun0_val};
+                                      $("#bulan0").data("kendoComboBox").dataSource.read(bulan0_param);
+                                    }
+                                </script>
+                            </div>
+                        </div>
+
+                        <div id="form_item_bulan0" class="form-group-none">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_ehs_performance", "bulan0")<span id="label_req_id" class="required"> *</span></div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_bulan0" class="form-item-field">
+                                <input id="bulan0" name="bulan0" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_ehs_performance","bulan0"))" style="width:200px;" />
+                                <span class="k-invalid-msg" data-for="bulan0"></span>
+                                <script>
+                                   var bulan0_param = {'year':$("#tahun0").data("kendoComboBox").text()};
+                                   var bulan0_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupDataEHSPerformanceMonth", dataType: "json", data: bulan0_param, type: "POST" } } });
+                                   var bulan0 = $("#bulan0").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: bulan0_ds, change:onChange_bulan0 }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#bulan0").data("kendoComboBox").value('@fieldModel.bulan0'); });
+                                   function onChange_bulan0() {if ($("#bulan0").data("kendoComboBox").value() != '' && $("#bulan0").data("kendoComboBox")._oldIndex == -1) {$("#bulan0").data("kendoComboBox").value('');}
+                                   }
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="panel-content-compare" class="panel-content" style="display:none">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div id="form_item_ehs_area_id1" class="form-group-none">
+                                <div class="form-item-label">@ResxHelper.GetValue("ta_ehs_performance", "ehs_area_id1"):</div>
+                                <div id="field_item_ehs_area_id1" class="form-item-field">
+                                    <input id="ehs_area_id1" name="ehs_area_id1" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_ehs_performance","ehs_area_id1"))" style="width:200px;" />
+                                    <span class="k-invalid-msg" data-for="ehs_area_id1"></span>
+                                    <script>
+                                    var ehs_area_id1_param = { item: { value: "id", text: "kode" }, parent: [{field:"obj_data",value:"DashboardEHSPerformance"}], order:[]};
+                                   var ehs_area_id1_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/EHSArea/LookupDataEA", dataType: "json", data: ehs_area_id1_param, type: "POST" } } });
+                                   var ehs_area_id1 = $("#ehs_area_id1").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: ehs_area_id1_ds, change:onChange_ehs_area_id1 }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#ehs_area_id1").data("kendoComboBox").value('@fieldModel.ehs_area_id1'); });
+                                   function onChange_ehs_area_id1() {if ($("#ehs_area_id1").data("kendoComboBox").value() != '' && $("#ehs_area_id1").data("kendoComboBox")._oldIndex == -1) {$("#ehs_area_id1").data("kendoComboBox").value('');}
+                                       reload_ba_id1();
+                                       reload_pa_id1();
+                                       reload_psa_id1();
+                                   }
+                                    </script>
+                                </div>
+                            </div>
+
+                            <div id="form_item_ba_id1" class="form-group-none">
+                                <div class="form-item-label">@ResxHelper.GetValue("ta_ehs_performance", "ba_id1"):</div>
+                                <div id="field_item_ba_id1" class="form-item-field">
+                                    <input id="ba_id1" name="ba_id1" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_ehs_performance","ba_id1"))" style="width:200px;" />
+                                    <span class="k-invalid-msg" data-for="ba_id1"></span>
+                                    <script>
+                                    var ba_id1_param = { item: { value: "id", text: "kode" }, parent: [{ field: 'ehs_area_id', opr: '=', value: '@fieldModel.ehs_area_id1' }, {field:"obj_data",value:"DashboardEHSPerformance"}], order:[]};
+                                   var ba_id1_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/BusinessArea/LookupDataBA", dataType: "json", data: ba_id1_param, type: "POST" } } });
+                                   var ba_id1 = $("#ba_id1").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: ba_id1_ds, change:onChange_ba_id1 }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#ba_id1").data("kendoComboBox").value('@fieldModel.ba_id1'); });
+                                   function onChange_ba_id1() {if ($("#ba_id1").data("kendoComboBox").value() != '' && $("#ba_id1").data("kendoComboBox")._oldIndex == -1) {$("#ba_id1").data("kendoComboBox").value('');}
+                                       reload_pa_id1();
+                                       reload_psa_id1();
+                                   }
+                                  function reload_ba_id1(){
+                                      $("#ba_id1").data("kendoComboBox").value('');
+                                      var ehs_area_id1 = $("#ehs_area_id1").data("kendoComboBox").value();
+                                      var ba_id1_param = { item: { value: 'id', text: 'kode' }, parent: [{ field: 'ehs_area_id',opr:'=', value: ehs_area_id1 }], order: [] };
+                                      $("#ba_id1").data("kendoComboBox").dataSource.read(ba_id1_param);
+                                  }
+                                    </script>
+                                </div>
+                            </div>
+
+                            <div id="form_item_pa_id1" class="form-group-none">
+                                <div class="form-item-label">@ResxHelper.GetValue("ta_ehs_performance", "pa_id1"):</div>
+                                <div id="field_item_pa_id1" class="form-item-field">
+                                    <input id="pa_id1" name="pa_id1" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_ehs_performance","pa_id1"))" style="width:200px;" />
+                                    <span class="k-invalid-msg" data-for="pa_id1"></span>
+                                    <script>
+                                    var pa_id1_param = { item: { value: "id", text: "kode" }, parent: [{ field: 'ehs_area_id', opr: '=', value: '@fieldModel.ehs_area_id1' }, { field: 'ba_id', opr: '=', value: '@fieldModel.ba_id1' }, {field:"obj_data",value:"DashboardEHSPerformance"}], order:[]};
+                                   var pa_id1_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/PersonalArea/LookupDataPA", dataType: "json", data: pa_id1_param, type: "POST" } } });
+                                   var pa_id1 = $("#pa_id1").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: pa_id1_ds, change:onChange_pa_id1 }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#pa_id1").data("kendoComboBox").value('@fieldModel.pa_id1'); });
+                                   function onChange_pa_id1() {if ($("#pa_id1").data("kendoComboBox").value() != '' && $("#pa_id1").data("kendoComboBox")._oldIndex == -1) {$("#pa_id1").data("kendoComboBox").value('');}
+                                       reload_psa_id1();
+                                   }
+                                  function reload_pa_id1(){
+                                      $("#pa_id1").data("kendoComboBox").value('');
+                                      var ehs_area_id1 = $("#ehs_area_id1").data("kendoComboBox").value();
+                                      var ba_id1 = $("#ba_id1").data("kendoComboBox").value();
+                                      var pa_id1_param = { item: { value: 'id', text: 'kode' }, parent: [{ field: 'ehs_area_id',opr:'=', value: ehs_area_id1 }, { field: 'ba_id',opr:'=', value: ba_id1 }], order: [] };
+                                      $("#pa_id1").data("kendoComboBox").dataSource.read(pa_id1_param);
+                                  }
+                                    </script>
+                                </div>
+                            </div>
+
+                            <div id="form_item_psa_id1" class="form-group-none">
+                                <div class="form-item-label">@ResxHelper.GetValue("ta_ehs_performance", "psa_id1"):</div>
+                                <div id="field_item_psa_id1" class="form-item-field">
+                                    <input id="psa_id1" name="psa_id1" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_ehs_performance","psa_id1"))" style="width:200px;" />
+                                    <span class="k-invalid-msg" data-for="psa_id1"></span>
+                                    <script>
+                                    var psa_id1_param = { item: { value: "id", text: "kode" }, parent: [{ field: 'ehs_area_id', opr: '=', value: '@fieldModel.ehs_area_id1' }, { field: 'ba_id', opr: '=', value: '@fieldModel.ba_id1' }, { field: 'pa_id', opr: '=', value: '@fieldModel.pa_id1' }, {field:"obj_data",value:"DashboardEHSPerformance"}], order:[]};
+                                   var psa_id1_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/PersonalSubArea/LookupDataPSA", dataType: "json", data: psa_id1_param, type: "POST" } } });
+                                   var psa_id1 = $("#psa_id1").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: psa_id1_ds, change:onChange_psa_id1 }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#psa_id1").data("kendoComboBox").value('@fieldModel.psa_id1'); });
+                                   function onChange_psa_id1() {if ($("#psa_id1").data("kendoComboBox").value() != '' && $("#psa_id1").data("kendoComboBox")._oldIndex == -1) {$("#psa_id1").data("kendoComboBox").value('');}
+                                   }
+                                  function reload_psa_id1(){
+                                      $("#psa_id1").data("kendoComboBox").value('');
+                                      var ehs_area_id1 = $("#ehs_area_id1").data("kendoComboBox").value();
+                                      var ba_id1 = $("#ba_id1").data("kendoComboBox").value();
+                                      var pa_id1 = $("#pa_id1").data("kendoComboBox").value();
+                                      var psa_id1_param = { item: { value: 'id', text: 'kode' }, parent: [{ field: 'ehs_area_id',opr:'=', value: ehs_area_id1 }, { field: 'ba_id',opr:'=', value: ba_id1 }, { field: 'pa_id',opr:'=', value: pa_id1 }], order: [] };
+                                      $("#psa_id1").data("kendoComboBox").dataSource.read(psa_id1_param);
+                                  }
+                                    </script>
+                                </div>
+                            </div>
+
+                            <div id="form_item_tahun1" class="form-group-none">
+                                <div class="form-item-label">@ResxHelper.GetValue("ta_ehs_performance", "tahun1"):</div>
+                                <div id="field_item_tahun1" class="form-item-field">
+                                    <input id="tahun1" name="tahun1" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_ehs_performance","tahun1"))" style="width:200px;" />
+                                    <span class="k-invalid-msg" data-for="tahun1"></span>
+                                    <script>
+                                   var tahun1_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupDataEHSPerformanceYear", dataType: "json", type: "POST" } } });
+                                   var tahun1 = $("#tahun1").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: tahun1_ds, change:onChange_tahun1 }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#tahun1").data("kendoComboBox").value('@fieldModel.tahun1'); });
+                                        function onChange_tahun1() {
+                                            if ($("#tahun1").data("kendoComboBox").value() != '' && $("#tahun1").data("kendoComboBox")._oldIndex == -1) { $("#tahun1").data("kendoComboBox").value(''); }
+                                            reload_bulan1();
+                                        }
+                                    function reload_bulan1(){
+                                        $("#bulan1").data("kendoComboBox").value('');
+                                        var tahun1_val = $("#tahun1").data("kendoComboBox").text();
+                                        var bulan1_param = {'year':tahun1_val};
+                                      $("#bulan1").data("kendoComboBox").dataSource.read(bulan1_param);
+                                    }
+                                    </script>
+                                </div>
+                            </div>
+
+                            <div id="form_item_bulan1" class="form-group-none">
+                                <div class="form-item-label">@ResxHelper.GetValue("ta_ehs_performance", "bulan1"):</div>
+                                <div id="field_item_bulan1" class="form-item-field">
+                                    <input id="bulan1" name="bulan1" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_ehs_performance","bulan1"))" style="width:200px;" />
+                                    <span class="k-invalid-msg" data-for="bulan1"></span>
+                                    <script>
+                                   var bulan1_param = {'year':$("#tahun1").data("kendoComboBox").text()};
+                                   var bulan1_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupDataEHSPerformanceMonth", dataType: "json", data: bulan1_param, type: "POST" } } });
+                                   var bulan1 = $("#bulan1").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: bulan1_ds, change:onChange_bulan1 }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#bulan1").data("kendoComboBox").value('@fieldModel.bulan1'); });
+                                   function onChange_bulan1() {if ($("#bulan1").data("kendoComboBox").value() != '' && $("#bulan1").data("kendoComboBox")._oldIndex == -1) {$("#bulan1").data("kendoComboBox").value('');}
+                                   }
+                                    </script>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div id="form_item_ehs_area_id2" class="form-group-none">
+                                <div class="form-item-label">@ResxHelper.GetValue("ta_ehs_performance", "ehs_area_id2"):</div>
+                                <div id="field_item_ehs_area_id2" class="form-item-field">
+                                    <input id="ehs_area_id2" name="ehs_area_id2" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_ehs_performance","ehs_area_id2"))" style="width:200px;" />
+                                    <span class="k-invalid-msg" data-for="ehs_area_id2"></span>
+                                    <script>
+                                    var ehs_area_id2_param = { item: { value: "id", text: "kode" }, parent: [{field:"obj_data",value:"DashboardEHSPerformance"}], order:[]};
+                                   var ehs_area_id2_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/EHSArea/LookupDataEA", dataType: "json", data: ehs_area_id2_param, type: "POST" } } });
+                                   var ehs_area_id2 = $("#ehs_area_id2").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: ehs_area_id2_ds, change:onChange_ehs_area_id2 }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#ehs_area_id2").data("kendoComboBox").value('@fieldModel.ehs_area_id2'); });
+                                   function onChange_ehs_area_id2() {if ($("#ehs_area_id2").data("kendoComboBox").value() != '' && $("#ehs_area_id2").data("kendoComboBox")._oldIndex == -1) {$("#ehs_area_id2").data("kendoComboBox").value('');}
+                                       reload_ba_id2();
+                                       reload_pa_id2();
+                                       reload_psa_id2();
+                                   }
+                                    </script>
+                                </div>
+                            </div>
+
+                            <div id="form_item_ba_id2" class="form-group-none">
+                                <div class="form-item-label">@ResxHelper.GetValue("ta_ehs_performance", "ba_id2"):</div>
+                                <div id="field_item_ba_id2" class="form-item-field">
+                                    <input id="ba_id2" name="ba_id2" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_ehs_performance","ba_id2"))" style="width:200px;" />
+                                    <span class="k-invalid-msg" data-for="ba_id2"></span>
+                                    <script>
+                                    var ba_id2_param = { item: { value: "id", text: "kode" }, parent: [{ field: 'ehs_area_id', opr: '=', value: '@fieldModel.ehs_area_id2' }, {field:"obj_data",value:"DashboardEHSPerformance"}], order:[]};
+                                   var ba_id2_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/BusinessArea/LookupDataBA", dataType: "json", data: ba_id2_param, type: "POST" } } });
+                                   var ba_id2 = $("#ba_id2").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: ba_id2_ds, change:onChange_ba_id2 }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#ba_id2").data("kendoComboBox").value('@fieldModel.ba_id2'); });
+                                   function onChange_ba_id2() {if ($("#ba_id2").data("kendoComboBox").value() != '' && $("#ba_id2").data("kendoComboBox")._oldIndex == -1) {$("#ba_id2").data("kendoComboBox").value('');}
+                                       reload_pa_id2();
+                                       reload_psa_id2();
+                                   }
+                                  function reload_ba_id2(){
+                                      $("#ba_id2").data("kendoComboBox").value('');
+                                      var ehs_area_id2 = $("#ehs_area_id2").data("kendoComboBox").value();
+                                      var ba_id2_param = { item: { value: 'id', text: 'kode' }, parent: [{ field: 'ehs_area_id',opr:'=', value: ehs_area_id2 }], order: [] };
+                                      $("#ba_id2").data("kendoComboBox").dataSource.read(ba_id2_param);
+                                  }
+                                    </script>
+                                </div>
+                            </div>
+
+                            <div id="form_item_pa_id2" class="form-group-none">
+                                <div class="form-item-label">@ResxHelper.GetValue("ta_ehs_performance", "pa_id2"):</div>
+                                <div id="field_item_pa_id2" class="form-item-field">
+                                    <input id="pa_id2" name="pa_id2" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_ehs_performance","pa_id2"))" style="width:200px;" />
+                                    <span class="k-invalid-msg" data-for="pa_id2"></span>
+                                    <script>
+                                   var pa_id2_param = {item : {value:"id",text:"kode"},parent:[{ field: 'ehs_area_id',opr:'=', value: '@fieldModel.ehs_area_id2' }, { field: 'ba_id',opr:'=', value: '@fieldModel.ba_id2' },{field:"obj_data",value:"DashboardEHSPerformance"}], order:[]};
+                                   var pa_id2_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/PersonalArea/LookupDataPA", dataType: "json", data: pa_id2_param, type: "POST" } } });
+                                   var pa_id2 = $("#pa_id2").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: pa_id2_ds, change:onChange_pa_id2 }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#pa_id2").data("kendoComboBox").value('@fieldModel.pa_id2'); });
+                                   function onChange_pa_id2() {if ($("#pa_id2").data("kendoComboBox").value() != '' && $("#pa_id2").data("kendoComboBox")._oldIndex == -1) {$("#pa_id2").data("kendoComboBox").value('');}
+                                       reload_psa_id2();
+                                   }
+                                  function reload_pa_id2(){
+                                      $("#pa_id2").data("kendoComboBox").value('');
+                                      var ehs_area_id2 = $("#ehs_area_id2").data("kendoComboBox").value();
+                                      var ba_id2 = $("#ba_id2").data("kendoComboBox").value();
+                                      var pa_id2_param = { item: { value: 'id', text: 'kode' }, parent: [{ field: 'ehs_area_id',opr:'=', value: ehs_area_id2 }, { field: 'ba_id',opr:'=', value: ba_id2 }], order: [] };
+                                      $("#pa_id2").data("kendoComboBox").dataSource.read(pa_id2_param);
+                                  }
+                                    </script>
+                                </div>
+                            </div>
+
+                            <div id="form_item_psa_id2" class="form-group-none">
+                                <div class="form-item-label">@ResxHelper.GetValue("ta_ehs_performance", "psa_id2"):</div>
+                                <div id="field_item_psa_id2" class="form-item-field">
+                                    <input id="psa_id2" name="psa_id2" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_ehs_performance","psa_id2"))" style="width:200px;" />
+                                    <span class="k-invalid-msg" data-for="psa_id2"></span>
+                                    <script>
+                                   var psa_id2_param = {item : {value:"id",text:"kode"},parent:[{ field: 'ehs_area_id',opr:'=', value: '@fieldModel.ehs_area_id2' }, { field: 'ba_id',opr:'=', value: '@fieldModel.ba_id2' }, { field: 'pa_id',opr:'=', value: '@fieldModel.pa_id2' },{field:"obj_data",value:"DashboardEHSPerformance"}], order:[]};
+                                   var psa_id2_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/PersonalSubArea/LookupDataPSA", dataType: "json", data: psa_id2_param, type: "POST" } } });
+                                   var psa_id2 = $("#psa_id2").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: psa_id2_ds, change:onChange_psa_id2 }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#psa_id2").data("kendoComboBox").value('@fieldModel.psa_id2'); });
+                                   function onChange_psa_id2() {if ($("#psa_id2").data("kendoComboBox").value() != '' && $("#psa_id2").data("kendoComboBox")._oldIndex == -1) {$("#psa_id2").data("kendoComboBox").value('');}
+                                   }
+                                  function reload_psa_id2(){
+                                      $("#psa_id2").data("kendoComboBox").value('');
+                                      var ehs_area_id2 = $("#ehs_area_id2").data("kendoComboBox").value();
+                                      var ba_id2 = $("#ba_id2").data("kendoComboBox").value();
+                                      var pa_id2 = $("#pa_id2").data("kendoComboBox").value();
+                                      var psa_id2_param = { item: { value: 'id', text: 'kode' }, parent: [{ field: 'ehs_area_id',opr:'=', value: ehs_area_id2 }, { field: 'ba_id',opr:'=', value: ba_id2 }, { field: 'pa_id',opr:'=', value: pa_id2 }], order: [] };
+                                      $("#psa_id2").data("kendoComboBox").dataSource.read(psa_id2_param);
+                                  }
+                                    </script>
+                                </div>
+                            </div>
+
+                            <div id="form_item_tahun2" class="form-group-none">
+                                <div class="form-item-label">@ResxHelper.GetValue("ta_ehs_performance", "tahun2"):</div>
+                                <div id="field_item_tahun2" class="form-item-field">
+                                    <input id="tahun2" name="tahun2" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_ehs_performance","tahun2"))" style="width:200px;" />
+                                    <span class="k-invalid-msg" data-for="tahun2"></span>
+                                    <script>
+                                        var tahun2_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupDataEHSPerformanceYear", dataType: "json", type: "POST" } } });
+                                   var tahun2 = $("#tahun2").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: tahun2_ds, change:onChange_tahun2 }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#tahun2").data("kendoComboBox").value('@fieldModel.tahun2'); });
+                                        function onChange_tahun2() {
+                                            if ($("#tahun2").data("kendoComboBox").value() != '' && $("#tahun2").data("kendoComboBox")._oldIndex == -1) { $("#tahun2").data("kendoComboBox").value(''); }
+                                            reload_bulan2();
+                                        }
+                                    function reload_bulan2(){
+                                        $("#bulan2").data("kendoComboBox").value('');
+                                        var tahun2_val = $("#tahun2").data("kendoComboBox").text();
+                                        var bulan2_param = {'year':tahun2_val};
+                                      $("#bulan2").data("kendoComboBox").dataSource.read(bulan2_param);
+                                    }
+                                    </script>
+                                </div>
+                            </div>
+
+                            <div id="form_item_bulan2" class="form-group-none">
+                                <div class="form-item-label">@ResxHelper.GetValue("ta_ehs_performance", "bulan2"):</div>
+                                <div id="field_item_bulan2" class="form-item-field">
+                                    <input id="bulan2" name="bulan2" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_ehs_performance","bulan2"))" style="width:200px;" />
+                                    <span class="k-invalid-msg" data-for="bulan2"></span>
+                                    <script>
+                                   var bulan2_param = {'year':$("#tahun2").data("kendoComboBox").text()};
+                                   var bulan2_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupDataEHSPerformanceMonth", dataType: "json", data: bulan2_param, type: "POST" } } });
+                                   var bulan2 = $("#bulan2").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: bulan2_ds, change:onChange_bulan2 }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#bulan2").data("kendoComboBox").value('@fieldModel.bulan2'); });
+                                   function onChange_bulan2() {if ($("#bulan2").data("kendoComboBox").value() != '' && $("#bulan2").data("kendoComboBox")._oldIndex == -1) {$("#bulan2").data("kendoComboBox").value('');}
+                                   }
+                                    </script>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div id="form_item_ehs_area_id3" class="form-group-none">
+                                <div class="form-item-label">@ResxHelper.GetValue("ta_ehs_performance", "ehs_area_id3"):</div>
+                                <div id="field_item_ehs_area_id3" class="form-item-field">
+                                    <input id="ehs_area_id3" name="ehs_area_id3" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_ehs_performance","ehs_area_id3"))" style="width:200px;" />
+                                    <span class="k-invalid-msg" data-for="ehs_area_id3"></span>
+                                    <script>
+                                   var ehs_area_id3_param = {item : {value:"id",text:"kode"},parent:[{field:"obj_data",value:"DashboardEHSPerformance"}], order:[]};
+                                   var ehs_area_id3_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/EHSArea/LookupDataEA", dataType: "json", data: ehs_area_id3_param, type: "POST" } } });
+                                   var ehs_area_id3 = $("#ehs_area_id3").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: ehs_area_id3_ds, change:onChange_ehs_area_id3 }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#ehs_area_id3").data("kendoComboBox").value('@fieldModel.ehs_area_id3'); });
+                                   function onChange_ehs_area_id3() {if ($("#ehs_area_id3").data("kendoComboBox").value() != '' && $("#ehs_area_id3").data("kendoComboBox")._oldIndex == -1) {$("#ehs_area_id3").data("kendoComboBox").value('');}
+                                       reload_ba_id3();
+                                       reload_pa_id3();
+                                       reload_psa_id3();
+                                   }
+                                    </script>
+                                </div>
+                            </div>
+
+                            <div id="form_item_ba_id3" class="form-group-none">
+                                <div class="form-item-label">@ResxHelper.GetValue("ta_ehs_performance", "ba_id3"):</div>
+                                <div id="field_item_ba_id3" class="form-item-field">
+                                    <input id="ba_id3" name="ba_id3" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_ehs_performance","ba_id3"))" style="width:200px;" />
+                                    <span class="k-invalid-msg" data-for="ba_id3"></span>
+                                    <script>
+                                   var ba_id3_param = {item : {value:"id",text:"kode"},parent:[{ field: 'ehs_area_id',opr:'=', value: '@fieldModel.ehs_area_id3' },{field:"obj_data",value:"DashboardEHSPerformance"}], order:[]};
+                                   var ba_id3_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/BusinessArea/LookupDataBA", dataType: "json", data: ba_id3_param, type: "POST" } } });
+                                   var ba_id3 = $("#ba_id3").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: ba_id3_ds, change:onChange_ba_id3 }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#ba_id3").data("kendoComboBox").value('@fieldModel.ba_id3'); });
+                                   function onChange_ba_id3() {if ($("#ba_id3").data("kendoComboBox").value() != '' && $("#ba_id3").data("kendoComboBox")._oldIndex == -1) {$("#ba_id3").data("kendoComboBox").value('');}
+                                       reload_pa_id3();
+                                       reload_psa_id3();
+                                   }
+                                  function reload_ba_id3(){
+                                      $("#ba_id3").data("kendoComboBox").value('');
+                                      var ehs_area_id3 = $("#ehs_area_id3").data("kendoComboBox").value();
+                                      var ba_id3_param = { item: { value: 'id', text: 'kode' }, parent: [{ field: 'ehs_area_id',opr:'=', value: ehs_area_id3 }], order: [] };
+                                      $("#ba_id3").data("kendoComboBox").dataSource.read(ba_id3_param);
+                                  }
+                                    </script>
+                                </div>
+                            </div>
+
+                            <div id="form_item_pa_id3" class="form-group-none">
+                                <div class="form-item-label">@ResxHelper.GetValue("ta_ehs_performance", "pa_id3"):</div>
+                                <div id="field_item_pa_id3" class="form-item-field">
+                                    <input id="pa_id3" name="pa_id3" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_ehs_performance","pa_id3"))" style="width:200px;" />
+                                    <span class="k-invalid-msg" data-for="pa_id3"></span>
+                                    <script>
+                                   var pa_id3_param = {item : {value:"id",text:"kode"},parent:[{ field: 'ehs_area_id',opr:'=', value: '@fieldModel.ehs_area_id3' }, { field: 'ba_id',opr:'=', value: '@fieldModel.ba_id3' },{field:"obj_data",value:"DashboardEHSPerformance"}], order:[]};
+                                   var pa_id3_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/PersonalArea/LookupDataPA", dataType: "json", data: pa_id3_param, type: "POST" } } });
+                                   var pa_id3 = $("#pa_id3").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: pa_id3_ds, change:onChange_pa_id3 }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#pa_id3").data("kendoComboBox").value('@fieldModel.pa_id3'); });
+                                   function onChange_pa_id3() {if ($("#pa_id3").data("kendoComboBox").value() != '' && $("#pa_id3").data("kendoComboBox")._oldIndex == -1) {$("#pa_id3").data("kendoComboBox").value('');}
+                                       reload_psa_id3();
+                                   }
+                                  function reload_pa_id3(){
+                                      $("#pa_id3").data("kendoComboBox").value('');
+                                      var ehs_area_id3 = $("#ehs_area_id3").data("kendoComboBox").value();
+                                      var ba_id3 = $("#ba_id3").data("kendoComboBox").value();
+                                      var pa_id3_param = { item: { value: 'id', text: 'kode' }, parent: [{ field: 'ehs_area_id',opr:'=', value: ehs_area_id3 }, { field: 'ba_id',opr:'=', value: ba_id3 }], order: [] };
+                                      $("#pa_id3").data("kendoComboBox").dataSource.read(pa_id3_param);
+                                  }
+                                    </script>
+                                </div>
+                            </div>
+
+                            <div id="form_item_psa_id3" class="form-group-none">
+                                <div class="form-item-label">@ResxHelper.GetValue("ta_ehs_performance", "psa_id3"):</div>
+                                <div id="field_item_psa_id3" class="form-item-field">
+                                    <input id="psa_id3" name="psa_id3" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_ehs_performance","psa_id3"))" style="width:200px;" />
+                                    <span class="k-invalid-msg" data-for="psa_id3"></span>
+                                    <script>
+                                   var psa_id3_param = {item : {value:"id",text:"kode"},parent:[{ field: 'ehs_area_id',opr:'=', value: '@fieldModel.ehs_area_id3' }, { field: 'ba_id',opr:'=', value: '@fieldModel.ba_id3' }, { field: 'pa_id',opr:'=', value: '@fieldModel.pa_id3' },{field:"obj_data",value:"DashboardEHSPerformance"}], order:[]};
+                                   var psa_id3_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/PersonalSubArea/LookupDataPSA", dataType: "json", data: psa_id3_param, type: "POST" } } });
+                                   var psa_id3 = $("#psa_id3").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: psa_id3_ds, change:onChange_psa_id3 }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#psa_id3").data("kendoComboBox").value('@fieldModel.psa_id3'); });
+                                   function onChange_psa_id3() {if ($("#psa_id3").data("kendoComboBox").value() != '' && $("#psa_id3").data("kendoComboBox")._oldIndex == -1) {$("#psa_id3").data("kendoComboBox").value('');}
+                                   }
+                                  function reload_psa_id3(){
+                                      $("#psa_id3").data("kendoComboBox").value('');
+                                      var ehs_area_id3 = $("#ehs_area_id3").data("kendoComboBox").value();
+                                      var ba_id3 = $("#ba_id3").data("kendoComboBox").value();
+                                      var pa_id3 = $("#pa_id3").data("kendoComboBox").value();
+                                      var psa_id3_param = { item: { value: 'id', text: 'kode' }, parent: [{ field: 'ehs_area_id',opr:'=', value: ehs_area_id3 }, { field: 'ba_id',opr:'=', value: ba_id3 }, { field: 'pa_id',opr:'=', value: pa_id3 }], order: [] };
+                                      $("#psa_id3").data("kendoComboBox").dataSource.read(psa_id3_param);
+                                  }
+                                    </script>
+                                </div>
+                            </div>
+
+                            <div id="form_item_tahun3" class="form-group-none">
+                                <div class="form-item-label">@ResxHelper.GetValue("ta_ehs_performance", "tahun3"):</div>
+                                <div id="field_item_tahun3" class="form-item-field">
+                                    <input id="tahun3" name="tahun3" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_ehs_performance","tahun3"))" style="width:200px;" />
+                                    <span class="k-invalid-msg" data-for="tahun3"></span>
+                                    <script>
+                                        var tahun3_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupDataEHSPerformanceYear", dataType: "json", type: "POST" } } });
+                                   var tahun3 = $("#tahun3").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: tahun3_ds, change:onChange_tahun3 }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#tahun3").data("kendoComboBox").value('@fieldModel.tahun3'); });
+                                        function onChange_tahun3() {
+                                            if ($("#tahun3").data("kendoComboBox").value() != '' && $("#tahun3").data("kendoComboBox")._oldIndex == -1) { $("#tahun3").data("kendoComboBox").value(''); }
+                                            reload_bulan3();
+                                        }
+                                    function reload_bulan3(){
+                                        $("#bulan3").data("kendoComboBox").value('');
+                                        var tahun3_val = $("#tahun3").data("kendoComboBox").text();
+                                        var bulan3_param = {'year':tahun3_val};
+                                      $("#bulan3").data("kendoComboBox").dataSource.read(bulan3_param);
+                                    }
+                                    </script>
+                                </div>
+                            </div>
+
+                            <div id="form_item_bulan3" class="form-group-none">
+                                <div class="form-item-label">@ResxHelper.GetValue("ta_ehs_performance", "bulan3"):</div>
+                                <div id="field_item_bulan3" class="form-item-field">
+                                    <input id="bulan3" name="bulan3" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_ehs_performance","bulan3"))" style="width:200px;" />
+                                    <span class="k-invalid-msg" data-for="bulan3"></span>
+                                    <script>
+                                   var bulan3_param = {'year':$("#tahun3").data("kendoComboBox").text()};
+                                   var bulan3_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupDataEHSPerformanceMonth", dataType: "json", data: bulan3_param, type: "POST" } } });
+                                   var bulan3 = $("#bulan3").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: bulan3_ds, change:onChange_bulan3 }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#bulan3").data("kendoComboBox").value('@fieldModel.bulan3'); });
+                                   function onChange_bulan3() {if ($("#bulan3").data("kendoComboBox").value() != '' && $("#bulan3").data("kendoComboBox")._oldIndex == -1) {$("#bulan3").data("kendoComboBox").value('');}
+                                   }
+                                    </script>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="panel-footer" class="panel-footer" style="display:none">
+                <a id="ok" class="k-button k-button-icontext" href="#"><span id="btnOkText">@ResxHelper.GetValue("Message", "Ok")</span></a>
+            </div>
+            <!-- -->
+            <div id="panel-content-result" class="panel-content" style="display:none">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div id="result11">
+                            <div class="card text-center" style="width: 100%;">
+                                <div class="card-header">Safety Performance</div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <img src="~/img/fatality.jpeg" width="48" /><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:small">Fatality</span><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:x-large"><span id="sp11"></span></span>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <img src="~/img/lost_time_injury.jpeg" width="48" /><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:small">Lost Time Injury</span><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:x-large"><span id="sp12"></span></span>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <img src="~/img/minor_injury.jpeg" width="48" /><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:small">Minor Injury</span><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:x-large"><span id="sp13"></span></span>
+                                        </div>
+                                        <div><p>&nbsp;</p></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <img src="~/img/fire.jpeg" width="48" /><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:small">Fire</span><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:x-large"><span id="sp14"></span></span>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <img src="~/img/property_damage.jpeg" width="48" /><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:small">Property Damage</span><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:x-large"><span id="sp15"></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="result12">
+                            <div class="card text-center" style="width: 100%;">
+                                <div class="card-header">Environment Performance</div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <img src="~/img/water.jpeg" width="48" /><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:small">Water</span><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:x-large"><span id="ep11"></span></span>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <img src="~/img/electricity.jpeg" width="48" /><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:small">Electricity</span><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:x-large"><span id="ep12"></span></span>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <img src="~/img/fuel.jpeg" width="48" /><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:small">Fuel</span><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:x-large"><span id="ep13"></span></span>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <img src="~/img/ghg.jpeg" width="48" /><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:small">GHG</span><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:x-large"><span id="ep14">0</span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="result13">
+                            <div class="card text-center" style="width: 100%;">
+                                <div class="card-header">Health Performance</div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <img src="~/img/health_red.jpeg" width="48" /><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:x-large"><span id="hp11"></span></span>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <img src="~/img/health_yellow.jpeg" width="48" /><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:x-large"><span id="hp12"></span></span>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <img src="~/img/health_blue.jpeg" width="48" /><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:x-large"><span id="hp13"></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div id="result21">
+                            <div class="card text-center" style="width: 100%;">
+                                <div class="card-header">Safety Performance</div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <img src="~/img/fatality.jpeg" width="48" /><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:small">Fatality</span><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:x-large"><span id="sp21"></span></span>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <img src="~/img/lost_time_injury.jpeg" width="48" /><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:small">Lost Time Injury</span><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:x-large"><span id="sp22"></span></span>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <img src="~/img/minor_injury.jpeg" width="48" /><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:small">Minor Injury</span><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:x-large"><span id="sp23"></span></span>
+                                        </div>
+                                        <div><p>&nbsp;</p></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <img src="~/img/fire.jpeg" width="48" /><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:small">Fire</span><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:x-large"><span id="sp24"></span></span>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <img src="~/img/property_damage.jpeg" width="48" /><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:small">Property Damage</span><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:x-large"><span id="sp25"></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="result22">
+                            <div class="card text-center" style="width: 100%;">
+                                <div class="card-header">Environment Performance</div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <img src="~/img/water.jpeg" width="48" /><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:small">Water</span><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:x-large"><span id="ep21"></span></span>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <img src="~/img/electricity.jpeg" width="48" /><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:small">Electricity</span><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:x-large"><span id="ep22"></span></span>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <img src="~/img/fuel.jpeg" width="48" /><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:small">Fuel</span><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:x-large"><span id="ep23"></span></span>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <img src="~/img/ghg.jpeg" width="48" /><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:small">GHG</span><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:x-large"><span id="ep24">0</span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="result23">
+                            <div class="card text-center" style="width: 100%;">
+                                <div class="card-header">Health Performance</div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <img src="~/img/health_red.jpeg" width="48" /><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:x-large"><span id="hp21"></span></span>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <img src="~/img/health_yellow.jpeg" width="48" /><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:x-large"><span id="hp22"></span></span>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <img src="~/img/health_blue.jpeg" width="48" /><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:x-large"><span id="hp23"></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div id="result31">
+                            <div class="card text-center" style="width: 100%;">
+                                <div class="card-header">Safety Performance</div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <img src="~/img/fatality.jpeg" width="48" /><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:small">Fatality</span><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:x-large"><span id="sp31"></span></span>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <img src="~/img/lost_time_injury.jpeg" width="48" /><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:small">Lost Time Injury</span><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:x-large"><span id="sp32"></span></span>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <img src="~/img/minor_injury.jpeg" width="48" /><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:small">Minor Injury</span><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:x-large"><span id="sp33"></span></span>
+                                        </div>
+                                        <div><p>&nbsp;</p></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <img src="~/img/fire.jpeg" width="48" /><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:small">Fire</span><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:x-large"><span id="sp34"></span></span>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <img src="~/img/property_damage.jpeg" width="48" /><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:small">Property Damage</span><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:x-large"><span id="sp35"></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="result32">
+                            <div class="card text-center" style="width: 100%;">
+                                <div class="card-header">Environment Performance</div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <img src="~/img/water.jpeg" width="48" /><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:small">Water</span><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:x-large"><span id="ep31"></span></span>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <img src="~/img/electricity.jpeg" width="48" /><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:small">Electricity</span><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:x-large"><span id="ep32"></span></span>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <img src="~/img/fuel.jpeg" width="48" /><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:small">Fuel</span><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:x-large"><span id="ep33"></span></span>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <img src="~/img/ghg.jpeg" width="48" /><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:small">GHG</span><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:x-large"><span id="ep34">0</span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="result33">
+                            <div class="card text-center" style="width: 100%;">
+                                <div class="card-header">Health Performance</div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <img src="~/img/health_red.jpeg" width="48" /><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:x-large"><span id="hp31"></span></span>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <img src="~/img/health_yellow.jpeg" width="48" /><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:x-large"><span id="hp32"></span></span>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <img src="~/img/health_blue.jpeg" width="48" /><br />
+                                            <span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:x-large"><span id="hp33"></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- -->
+        </div>
+    </div>
+</form>
+    @section ScriptsBlock {
+        <script>
+        $(document).ready(function () {
+        });
+        function show_kategori_filter_detail() {
+            var v = $("#kategori_filter").data("kendoComboBox").value();
+            //
+            $('#panel-content-result').css('display', 'none');
+            //
+            $("#ehs_area_id0").data("kendoComboBox").value('');
+            $("#ba_id0").data("kendoComboBox").value('');
+            $("#pa_id0").data("kendoComboBox").value('');
+            $("#psa_id0").data("kendoComboBox").value('');
+            $("#periode0").data("kendoComboBox").value('');
+            $("#tahun0").data("kendoComboBox").value('');
+            $("#bulan0").data("kendoComboBox").value('');
+            //
+            $("#ehs_area_id1").data("kendoComboBox").value('');
+            $("#ba_id1").data("kendoComboBox").value('');
+            $("#pa_id1").data("kendoComboBox").value('');
+            $("#psa_id1").data("kendoComboBox").value('');
+            $("#tahun1").data("kendoComboBox").value('');
+            $("#bulan1").data("kendoComboBox").value('');
+            //
+            $("#ehs_area_id2").data("kendoComboBox").value('');
+            $("#ba_id2").data("kendoComboBox").value('');
+            $("#pa_id2").data("kendoComboBox").value('');
+            $("#psa_id2").data("kendoComboBox").value('');
+            $("#tahun2").data("kendoComboBox").value('');
+            $("#bulan2").data("kendoComboBox").value('');
+            //
+            $("#ehs_area_id3").data("kendoComboBox").value('');
+            $("#ba_id3").data("kendoComboBox").value('');
+            $("#pa_id3").data("kendoComboBox").value('');
+            $("#psa_id3").data("kendoComboBox").value('');
+            $("#tahun3").data("kendoComboBox").value('');
+            $("#bulan3").data("kendoComboBox").value('');
+            //
+            if (v == '1') { // By Lokasi
+                $('#form_item_ehs_area_id0').hide();
+                $('#form_item_ba_id0').hide();
+                $('#form_item_pa_id0').hide();
+                $('#form_item_psa_id0').hide();
+                $('#form_item_periode0').show();
+                $('#form_item_tahun0').hide();
+                $('#form_item_bulan0').hide();
+                //
+                $('#form_item_ehs_area_id1').show();
+                $('#form_item_ba_id1').show();
+                $('#form_item_pa_id1').show();
+                $('#form_item_psa_id1').show();
+                $('#form_item_tahun1').hide();
+                $('#form_item_bulan1').hide();
+                //
+                $('#form_item_ehs_area_id2').show();
+                $('#form_item_ba_id2').show();
+                $('#form_item_pa_id2').show();
+                $('#form_item_psa_id2').show();
+                $('#form_item_tahun2').hide();
+                $('#form_item_bulan2').hide();
+                //
+                $('#form_item_ehs_area_id3').show();
+                $('#form_item_ba_id3').show();
+                $('#form_item_pa_id3').show();
+                $('#form_item_psa_id3').show();
+                $('#form_item_tahun3').hide();
+                $('#form_item_bulan3').hide();
+                //
+                $('#panel-content-compare').css('display', 'block');
+                $("#panel-footer").css('display', 'block');
+            } else if (v == '2') { // By Periode
+                $('#form_item_ehs_area_id0').show();
+                $('#form_item_ba_id0').show();
+                $('#form_item_pa_id0').show();
+                $('#form_item_psa_id0').show();
+                $('#form_item_periode0').show();
+                $('#form_item_tahun0').hide();
+                $('#form_item_bulan0').hide();
+                //
+                $('#form_item_ehs_area_id1').hide();
+                $('#form_item_ba_id1').hide();
+                $('#form_item_pa_id1').hide();
+                $('#form_item_psa_id1').hide();
+                $('#form_item_tahun1').hide();
+                $('#form_item_bulan1').hide();
+                //
+                $('#form_item_ehs_area_id2').hide();
+                $('#form_item_ba_id2').hide();
+                $('#form_item_pa_id2').hide();
+                $('#form_item_psa_id2').hide();
+                $('#form_item_tahun2').hide();
+                $('#form_item_bulan2').hide();
+                //
+                $('#form_item_ehs_area_id3').hide();
+                $('#form_item_ba_id3').hide();
+                $('#form_item_pa_id3').hide();
+                $('#form_item_psa_id3').hide();
+                $('#form_item_tahun3').hide();
+                $('#form_item_bulan3').hide();
+                //
+                $('#panel-content-compare').css('display', 'block');
+                $("#panel-footer").css('display', 'block');
+            } else {
+                $('#form_item_ehs_area_id0').hide();
+                $('#form_item_ba_id0').hide();
+                $('#form_item_pa_id0').hide();
+                $('#form_item_psa_id0').hide();
+                $('#form_item_periode0').hide();
+                $('#form_item_tahun0').hide();
+                $('#form_item_bulan0').hide();
+                //
+                $('#form_item_ehs_area_id1').hide();
+                $('#form_item_ba_id1').hide();
+                $('#form_item_pa_id1').hide();
+                $('#form_item_psa_id1').hide();
+                $('#form_item_tahun1').hide();
+                $('#form_item_bulan1').hide();
+                //
+                $('#form_item_ehs_area_id2').hide();
+                $('#form_item_ba_id2').hide();
+                $('#form_item_pa_id2').hide();
+                $('#form_item_psa_id2').hide();
+                $('#form_item_tahun2').hide();
+                $('#form_item_bulan2').hide();
+                //
+                $('#form_item_ehs_area_id3').hide();
+                $('#form_item_ba_id3').hide();
+                $('#form_item_pa_id3').hide();
+                $('#form_item_psa_id3').hide();
+                $('#form_item_tahun3').hide();
+                $('#form_item_bulan3').hide();
+                //
+                //
+                $('#panel-content-compare').css('display', 'none');
+                $("#panel-footer").css('display', 'none');
+            }
+        }
+        function periode0_change() {
+            var v = $("#kategori_filter").data("kendoComboBox").value();
+            var p = $("#periode0").data("kendoComboBox").value();
+            //
+            $('#panel-content-result').css('display', 'none');
+            //
+            $("#tahun0").removeAttr('required');
+            $("#bulan0").removeAttr('required');
+            //
+            $("#tahun0").data("kendoComboBox").value('');
+            $("#bulan0").data("kendoComboBox").value('');
+            $("#tahun1").data("kendoComboBox").value('');
+            $("#bulan1").data("kendoComboBox").value('');
+            $("#tahun2").data("kendoComboBox").value('');
+            $("#bulan2").data("kendoComboBox").value('');
+            $("#tahun3").data("kendoComboBox").value('');
+            $("#bulan3").data("kendoComboBox").value('');
+
+            if (v == '1') { // By Lokasi
+                if (p == '1') { // YTD
+                    $('#form_item_tahun0').show();
+                    $('#form_item_bulan0').hide();
+                    //
+                    $("#tahun0").attr('required', 'required');
+                } else if (p == '2') { // MTD
+                    $('#form_item_tahun0').show();
+                    $('#form_item_bulan0').show();
+                    //
+                    $("#tahun0").attr('required', 'required');
+                    $("#bulan0").attr('required', 'required');
+                } else {
+                    $('#form_item_tahun0').hide();
+                    $('#form_item_tahun1').hide();
+                    $('#form_item_tahun2').hide();
+                    $('#form_item_tahun3').hide();
+
+                    $('#form_item_bulan0').hide();
+                    $('#form_item_bulan1').hide();
+                    $('#form_item_bulan2').hide();
+                    $('#form_item_bulan3').hide();
+                }
+            } else if (v == '2') { // By Period
+                if (p == '1') { // YTD
+                    //$('#form_item_tahun0').show();
+                    $('#form_item_tahun1').show();
+                    $('#form_item_tahun2').show();
+                    $('#form_item_tahun3').show();
+                    //
+                    //$('#form_item_bulan0').hide();
+                    $('#form_item_bulan1').hide();
+                    $('#form_item_bulan2').hide();
+                    $('#form_item_bulan3').hide();
+                } else if (p == '2') { // MTD
+                    //$('#form_item_tahun0').show();
+                    $('#form_item_tahun1').show();
+                    $('#form_item_tahun2').show();
+                    $('#form_item_tahun3').show();
+                    //
+                    //$('#form_item_bulan0').hide();
+                    $('#form_item_bulan1').show();
+                    $('#form_item_bulan2').show();
+                    $('#form_item_bulan3').show();
+                } else {
+                    $('#form_item_tahun0').hide();
+                    $('#form_item_tahun1').hide();
+                    $('#form_item_tahun2').hide();
+                    $('#form_item_tahun3').hide();
+
+                    $('#form_item_bulan0').hide();
+                    $('#form_item_bulan1').hide();
+                    $('#form_item_bulan2').hide();
+                    $('#form_item_bulan3').hide();
+                }
+            } else {
+                $('#form_item_tahun0').hide();
+                $('#form_item_tahun1').hide();
+                $('#form_item_tahun2').hide();
+                $('#form_item_tahun3').hide();
+
+                $('#form_item_bulan0').hide();
+                $('#form_item_bulan1').hide();
+                $('#form_item_bulan2').hide();
+                $('#form_item_bulan3').hide();
+            }
+        }
+        $("#ok").click(function (e) {
+            var validatable = $("#form_edit").kendoValidator().data("kendoValidator");
+            if (validatable.validate() === true) {
+                show_data();
+                $('#panel-content-result').css('display', 'block');
+            } else {
+                //
+            }
+        });
+        function show_data() {
+            var v = $("#kategori_filter").data("kendoComboBox").value(); //1:Lokasi, 2:Periode
+            var param = '';
+            var ehs_area_id = '';
+            var ba_id = '';
+            var pa_id = '';
+            var psa_id = '';
+            var tahun = '';
+            var bulan = '';
+            //
+            ehs_area_id = $("#ehs_area_id1").data("kendoComboBox").value();
+            ba_id = $("#ba_id1").data("kendoComboBox").value();
+            pa_id = $("#pa_id1").data("kendoComboBox").value();
+            psa_id = $("#psa_id1").data("kendoComboBox").value();
+            if (v == '1') { // By Lokasi            
+                tahun = $("#tahun0").data("kendoComboBox").text();
+                bulan = $("#bulan0").data("kendoComboBox").value();
+            } else {
+                ehs_area_id = $("#ehs_area_id0").data("kendoComboBox").value();
+                ba_id = $("#ba_id0").data("kendoComboBox").value();
+                pa_id = $("#pa_id0").data("kendoComboBox").value();
+                psa_id = $("#psa_id0").data("kendoComboBox").value();
+                //
+                tahun = $("#tahun1").data("kendoComboBox").text();
+                bulan = $("#bulan1").data("kendoComboBox").value();
+            }
+            param = {cur_year:tahun,cur_month:bulan,ehs_area_id:ehs_area_id,ba_id:ba_id,pa_id:pa_id,psa_id:psa_id};
+            $.ajax({
+                url: '@ViewBag.BaseUrl/EHSPerformance/GetValidData', data:param, type: 'POST',
+                success: function (data) {
+                    if (data != null && data != undefined) {
+                        if (data.table != null && data.table != undefined && data.table.length > 0) {
+                            draw_result_sp(data.table, '1');
+                        }
+                        if (data.table1 != null && data.table1 != undefined && data.table1.length > 0) {
+                            draw_result_ep(data.table1, '1');
+                        }
+                        if (data.table2 != null && data.table2 != undefined && data.table2.length > 0) {
+                            draw_result_hp(data.table2, '1');
+                        }
+                    }
+                }
+            });
+            //
+            ehs_area_id = $("#ehs_area_id2").data("kendoComboBox").value();
+            ba_id = $("#ba_id2").data("kendoComboBox").value();
+            pa_id = $("#pa_id2").data("kendoComboBox").value();
+            psa_id = $("#psa_id2").data("kendoComboBox").value();
+            if (v == '1') { // By Lokasi            
+                tahun = $("#tahun0").data("kendoComboBox").text();
+                bulan = $("#bulan0").data("kendoComboBox").value();
+            } else {
+                ehs_area_id = $("#ehs_area_id0").data("kendoComboBox").value();
+                ba_id = $("#ba_id0").data("kendoComboBox").value();
+                pa_id = $("#pa_id0").data("kendoComboBox").value();
+                psa_id = $("#psa_id0").data("kendoComboBox").value();
+                //
+                tahun = $("#tahun2").data("kendoComboBox").text();
+                bulan = $("#bulan2").data("kendoComboBox").value();
+            }
+            param = {cur_year:tahun,cur_month:bulan,ehs_area_id:ehs_area_id,ba_id:ba_id,pa_id:pa_id,psa_id:psa_id};
+            $.ajax({
+                url: '@ViewBag.BaseUrl/EHSPerformance/GetValidData', data:param, type: 'POST',
+                success: function (data) {
+                    if (data != null && data != undefined) {
+                        if (data.table != null && data.table != undefined && data.table.length > 0) {
+                            draw_result_sp(data.table, '2');
+                        }
+                        if (data.table1 != null && data.table1 != undefined && data.table1.length > 0) {
+                            draw_result_ep(data.table1, '2');
+                        }
+                        if (data.table2 != null && data.table2 != undefined && data.table2.length > 0) {
+                            draw_result_hp(data.table2, '2');
+                        }
+                    }
+                }
+            });
+            //
+            ehs_area_id = $("#ehs_area_id3").data("kendoComboBox").value();
+            ba_id = $("#ba_id3").data("kendoComboBox").value();
+            pa_id = $("#pa_id3").data("kendoComboBox").value();
+            psa_id = $("#psa_id3").data("kendoComboBox").value();
+            if (v == '1') { // By Lokasi            
+                tahun = $("#tahun0").data("kendoComboBox").text();
+                bulan = $("#bulan0").data("kendoComboBox").value();
+            } else {
+                ehs_area_id = $("#ehs_area_id0").data("kendoComboBox").value();
+                ba_id = $("#ba_id0").data("kendoComboBox").value();
+                pa_id = $("#pa_id0").data("kendoComboBox").value();
+                psa_id = $("#psa_id0").data("kendoComboBox").value();
+                //
+                tahun = $("#tahun3").data("kendoComboBox").text();
+                bulan = $("#bulan3").data("kendoComboBox").value();
+            }
+            param = {cur_year:tahun,cur_month:bulan,ehs_area_id:ehs_area_id,ba_id:ba_id,pa_id:pa_id,psa_id:psa_id};
+            $.ajax({
+                url: '@ViewBag.BaseUrl/EHSPerformance/GetValidData', data:param, type: 'POST',
+                success: function (data) {
+                    if (data != null && data != undefined) {
+                        if (data.table != null && data.table != undefined && data.table.length > 0) {
+                            draw_result_sp(data.table, '3');
+                        }
+                        if (data.table1 != null && data.table1 != undefined && data.table1.length > 0) {
+                            draw_result_ep(data.table1, '3');
+                        }
+                        if (data.table2 != null && data.table2 != undefined && data.table2.length > 0) {
+                            draw_result_hp(data.table2, '3');
+                        }
+                    }
+                }
+            });
+            //
+        }
+        function draw_result_sp(data, result_id) {
+            if (data != null && data != undefined && data.length > 0) {
+                jQuery.each(data, function (i, val) {
+                    if (val.id == '4') { $('#sp'+result_id+'1').text(val.accidentCount); }
+                    if (val.id == '3') { $('#sp'+result_id+'2').text(val.accidentCount); }
+                    if (val.id == '1') { $('#sp'+result_id+'3').text(val.accidentCount); }
+                    if (val.id == '8') { $('#sp'+result_id+'4').text(val.accidentCount); }
+                    if (val.id == '567') { $('#sp'+result_id+'5').text(val.accidentCount); }
+                });
+            }
+            
+        }
+        function draw_result_ep(data, result_id) {
+            if (data != null && data != undefined && data.length > 0) {
+                jQuery.each(data, function (i, val) {
+                    if (val.id == '11') { $('#ep'+result_id+'1').text(val.environmentPercentage); }
+                    if (val.id == '12') { $('#ep'+result_id+'2').text(val.environmentPercentage); }
+                    if (val.id == '13') { $('#ep'+result_id+'3').text(val.environmentPercentage); }
+                });
+            }
+        }
+        function draw_result_hp(data, result_id) {
+            if (data != null && data != undefined && data.length > 0) {
+                jQuery.each(data, function (i, val) {
+                    if (val.id == '1') { $('#hp'+result_id+'1').text(val.healthCount); }
+                    if (val.id == '2') { $('#hp'+result_id+'2').text(val.healthCount); }
+                    if (val.id == '3') { $('#hp'+result_id+'3').text(val.healthCount); }
+                });
+            }
+        }
+        </script>
+    }

@@ -1,0 +1,385 @@
+@using WebApp
+@using Newtonsoft.Json
+@using Microsoft.AspNetCore.Http;
+@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	var filterColumn = ViewData["filterColumn"] as WebApp.Models.ServiceReportModel.ViewModel;
+	ViewData["Title"] = ViewData["TitleHeader"];
+	ViewData["PageName"] = "servicereport";
+	ViewData["Heading"] = ViewData["TitleHeader"];
+	ViewData["Category1"] = "";
+	ViewData["Category2"] = "";
+}
+<style>
+	.curent-data th {
+		padding: 6px;
+		text-align: center;
+		background-color: #7D7D7D;
+		color: #ffffff;
+	}
+
+	.table th {
+		padding: 6px;
+		text-align: center;
+	}
+
+	.table td {
+		padding: 6px;
+	}
+    .legend_header {
+        color:#09804d;font-weight:bold;
+    }
+    .legend_item {
+        padding:2px;color:#09804d;
+    }
+    .legend_color_1 {
+        display:inline-block;width:50px;background-color:#c9bb2e;
+    }
+    .legend_color_2 {
+        display:inline-block;width:50px;background-color:#00ff3c;
+    }
+    .legend_color_3 {
+        display:inline-block;width:50px;background-color:#2f00ff;
+    }
+    .legend_color_4 {
+        display:inline-block;width:50px;background-color:#ff0800;
+    }
+    .legend_color_5 {
+        display:inline-block;width:50px;background-color:#000000;
+    }
+</style>
+<div class="panel">
+	<div class="panel-heading">
+		<div class="title-header">@ResxHelper.GetValue("Message", "FilterDataHeader", "Filter Data")</div>
+	</div>
+	<div class="panel-container">
+		<div class="panel-content">
+			<div class="row">
+				<div class="col-lg-12">
+
+					<div id="form_item_id_bulan" class="form-group">
+						<div class="form-item-label100">@ResxHelper.GetValue("ta_service_report", "bulan")</div>
+						<div class="form-item-separator">:</div>
+						<div id="field_item_id" class="form-item-field">
+							<input id="bulan" name="bulan" style="width: 120px;" />
+						</div>
+					</div>
+					<div id="form_item_id_tahun" class="form-group">
+						<div class="form-item-label100">@ResxHelper.GetValue("ta_service_report", "tahun")</div>
+						<div class="form-item-separator">:</div>
+						<div id="field_item_id" class="form-item-field">
+							<input id="tahun" name="tahun" style="width: 120px;" />
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+        <div class="panel-content">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div id="service_report_area"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div id="service_report_psa"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel" id="legend" style="display:none;">
+                        <div class="panel-heading">
+                            <div class="title-header">LEGEND</div>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="legend_header">ASTRA GREEN COMPANY (AGC)</div>
+                                    <div class="legend_item">
+                                        <div class="legend_color_1">&nbsp;</div> >=90% CP dan LC EMAS
+                                    </div>
+                                    <div class="legend_item" style="padding:2px;">
+                                        <div class="legend_color_2">&nbsp;</div> 76 - 89% CP dan LC HIJAU
+                                    </div>
+                                    <div class="legend_item" style="padding:2px;">
+                                        <div class="legend_color_3">&nbsp;</div> 51 - 75% CP dan LC BIRU
+                                    </div>
+                                    <div class="legend_item" style="padding:2px;">
+                                        <div class="legend_color_4">&nbsp;</div> 21-50% CP dan LC MERAH
+                                    </div>
+                                    <div class="legend_item" style="padding:2px;">
+                                        <div class="legend_color_5">&nbsp;</div> 0-20% CP dan LC HITAM
+                                    </div>
+                                </div>
+                                <div class="col-lg-2">
+                                    <div class="legend_header">FREQUENCY RATE (FR)</div>
+                                    <div class="legend_item">
+                                        <div class="legend_color_1">&nbsp;</div> 0 - 0,99
+                                    </div>
+                                    <div class="legend_item" style="padding:2px;">
+                                        <div class="legend_color_2">&nbsp;</div> 1 - 1,99
+                                    </div>
+                                    <div class="legend_item" style="padding:2px;">
+                                        <div class="legend_color_3">&nbsp;</div> 2 - 2,99
+                                    </div>
+                                    <div class="legend_item" style="padding:2px;">
+                                        <div class="legend_color_4">&nbsp;</div> 3 - 3,99
+                                    </div>
+                                    <div class="legend_item" style="padding:2px;">
+                                        <div class="legend_color_5">&nbsp;</div> >4
+                                    </div>
+                                </div>
+                                <div class="col-lg-2">
+                                    <div class="legend_header">SAVERITY RATE (SR)</div>
+                                    <div class="legend_item">
+                                        <div class="legend_color_1">&nbsp;</div> < 170
+                                    </div>
+                                    <div class="legend_item" style="padding:2px;">
+                                        <div class="legend_color_2">&nbsp;</div> 170 - 374
+                                    </div>
+                                    <div class="legend_item" style="padding:2px;">
+                                        <div class="legend_color_3">&nbsp;</div> 375 -749
+                                    </div>
+                                    <div class="legend_item" style="padding:2px;">
+                                        <div class="legend_color_4">&nbsp;</div> 750 -1749
+                                    </div>
+                                    <div class="legend_item" style="padding:2px;">
+                                        <div class="legend_color_5">&nbsp;</div> > 1750
+                                    </div>
+                                </div>
+                                <div class="col-lg-2">
+                                    <div class="legend_header">SAFETY TALK (ST)</div>
+                                    <div class="legend_item">
+                                        <div class="legend_color_1">&nbsp;</div> >4
+                                    </div>
+                                    <div class="legend_item" style="padding:2px;">
+                                        <div class="legend_color_2">&nbsp;</div> 3
+                                    </div>
+                                    <div class="legend_item" style="padding:2px;">
+                                        <div class="legend_color_3">&nbsp;</div> 2
+                                    </div>
+                                    <div class="legend_item" style="padding:2px;">
+                                        <div class="legend_color_4">&nbsp;</div> 1
+                                    </div>
+                                    <div class="legend_item" style="padding:2px;">
+                                        <div class="legend_color_5">&nbsp;</div> 0
+                                    </div>
+                                </div>
+                                <div class="col-lg-2">
+                                    <div class="legend_header">GENBA/INSPEKSI (GNB)</div>
+                                    <div class="legend_item">
+                                        <div class="legend_color_1">&nbsp;</div> >4
+                                    </div>
+                                    <div class="legend_item" style="padding:2px;">
+                                        <div class="legend_color_2">&nbsp;</div> 3
+                                    </div>
+                                    <div class="legend_item" style="padding:2px;">
+                                        <div class="legend_color_3">&nbsp;</div> 2
+                                    </div>
+                                    <div class="legend_item" style="padding:2px;">
+                                        <div class="legend_color_4">&nbsp;</div> 1
+                                    </div>
+                                    <div class="legend_item" style="padding:2px;">
+                                        <div class="legend_color_5">&nbsp;</div> 0
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+	</div>
+</div>
+@section ScriptsBlock {
+	<script>
+        //=== filter bulan
+        var bulan_param = { item: { value: 'id', text: 'nama', distinct: '0' } ,parent:[{ field: 'cat_id',opr:'=', value: '150' }], order:[{ field: 'id', dir: 'asc' }]};
+        var bulan_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: bulan_param, type: "POST" } } });
+        var bulan = $("#bulan").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", change: onChange_bulan, dataSource: bulan_ds }).data("kendoComboBox");
+        $(document).ready(function () { $("#bulan").data("kendoComboBox").value('@filterColumn.bulan'); });
+        function onChange_bulan() {
+            if ($("#bulan").data("kendoComboBox").value() != '' && $("#bulan").data("kendoComboBox")._oldIndex == -1) { $("#bulan").data("kendoComboBox").value(''); }
+            show_data();
+        }
+
+
+        //=== filter tahun
+        var tahun_param = { item: { value: 'id', text: 'nama', distinct: '0' } ,parent:[{ field: 'cat_id',opr:'=', value: '151' }], order:[]};
+        var tahun_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: tahun_param, type: "POST" } } });
+        var tahun = $("#tahun").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", change: onChange_tahun, dataSource: tahun_ds }).data("kendoComboBox");
+        $(document).ready(function () { $("#tahun").data("kendoComboBox").value('@filterColumn.tahun'); });
+        function onChange_tahun() {
+            if ($("#tahun").data("kendoComboBox").value() != '' && $("#tahun").data("kendoComboBox")._oldIndex == -1) { $("#tahun").data("kendoComboBox").value(''); }
+            show_data();
+        }
+
+
+        function show_data() {
+            var cur_bulan = $("#bulan").data("kendoComboBox").value();
+            var cur_tahun = $("#tahun").data("kendoComboBox").text();
+            if ((cur_bulan != null && cur_bulan != '') && (cur_tahun != null && cur_tahun != ''))
+            {
+                $("#legend").show();
+            }
+            else
+            {
+                draw_service_report_area(null);
+                draw_service_report_psa(null);
+
+                $("#service_report_area").parent().parent().hide();
+                $("#service_report_psa").parent().parent().hide();
+                $("#legend").hide();
+                return;
+
+            }
+
+            var param = {cur_bulan:cur_bulan,cur_tahun:cur_tahun};
+            $.ajax({
+                url: '@ViewBag.BaseUrl/ServiceReport/GetValidData', data:param, type: 'POST',
+                success: function (data) {
+                    if (data != null && data != undefined) {
+                        if (data.table != null && data.table != undefined && data.table.length > 0) {
+                            draw_service_report_psa(data.table);
+                            $("#service_report_psa").show();
+                            $("#service_report_psa").parent().parent().show();
+                        } else {
+                            draw_service_report_psa(null);
+                            $("#service_report_psa").parent().parent().hide();
+                        }
+                        if (data.table1 != null && data.table1 != undefined && data.table1.length > 0) {
+                            draw_service_report_area(data.table1);
+                            $("#service_report_area").show();
+                            $("#service_report_area").parent().parent().show();
+                        } else {
+                            draw_service_report_area(null);
+                            $("#service_report_area").parent().parent().hide();
+                        }
+                        /*
+                        if (data.table != null && data.table != undefined && data.table.length > 0) {
+                            draw_service_report_area(data.table)
+                            $("#service_report_area").show();
+                            $("#service_report_area").parent().parent().show();
+                        } else {
+                            draw_service_report_area(null);
+                            $("#service_report_area").parent().parent().hide();
+                        }
+                        if (data.table1 != null && data.table1 != undefined && data.table1.length > 0) {
+                            draw_service_report_psa(data.table1)
+                            $("#service_report_psa").show();
+                            $("#service_report_psa").parent().parent().show();
+                        } else {
+                            draw_service_report_psa(null);
+                            $("#service_report_psa").parent().parent().hide();
+                        }
+                        */
+                    } else {
+                        draw_service_report_area(null);
+                        draw_service_report_psa(null);
+
+                        $("#service_report_area").parent().parent().hide();
+                        $("#service_report_psa").parent().parent().hide();
+                    }
+                }
+            });
+        }
+        function draw_service_report_area(data) {
+            var htm = "";
+            if (data != null && data != undefined && data.length > 0) {
+                var htm = '<table class="table table-bordered table-striped table-responsive">';
+                htm += '<tr>';
+                htm += '    <th colspan="10"><div style="padding:2px;white-space:normal;">Service Report - Area</div></th>';
+                htm += '</tr>';
+                htm += '<tr>';
+                htm += '    <th rowspan="2" style="width:50px;">No</th>';
+                htm += '    <th rowspan="2" style="width:300px;">Area</th>';
+                htm += '    <th rowspan="2" style="width:300px;">Area Head</th>';
+                htm += '    <th rowspan="2" style="width:50px;">AGC</th>';
+                htm += '    <th rowspan="2" style="width:50px;">FR</th>';
+                htm += '    <th rowspan="2" style="width:50px;">SR</th>';
+                htm += '    <th colspan="2" style="width:100px;">Safety Talk</th>';
+                htm += '    <th colspan="2" style="width:100px;">Genba</th>';
+                htm += '</tr>';
+                htm += '<tr>';
+                htm += '    <th style="width:50px;">This Month</th>';
+                htm += '    <th style="width:50px;">YTD</th>';
+                htm += '    <th style="width:50px;">This Month</th>';
+                htm += '    <th style="width:50px;">YTD</th>';
+                htm += '</tr>';
+
+                var no = 0;
+                var event_code = "";
+                var bg_color = "";
+                var font_color = "";
+                var status_text = "";
+                jQuery.each(data, function (i, val) {
+                    no++;
+                    htm += '<tr>';
+                    htm += '    <td style="text-align: center;">'+no+'</td>';
+                    htm += '    <td style="text-align: left;">' + val.ehs_nama + '</td>';
+                    htm += '    <td style="text-align: left;">' + val.ehs_head + '</td>';
+                    htm += '    <td style="text-align: left;" ' + (val.agc == '' ? '' : 'bgcolor="#'+ val.agc +'"') + '></td>';
+                    htm += '    <td style="text-align: left;" ' + (val.fr == '' ? '' : 'bgcolor="#'+ val.fr +'"') + '></td>';
+                    htm += '    <td style="text-align: left;" ' + (val.sr == '' ? '' : 'bgcolor="#'+ val.sr +'"') + '></td>';
+                    htm += '    <td style="text-align: left;" ' + (val.st_month == '' ? '' : 'bgcolor="#'+ val.st_month +'"') + '></td>';
+                    htm += '    <td style="text-align: left;" ' + (val.st_year == '' ? '' : 'bgcolor="#' + val.st_year + '"') + '></td>';
+                    htm += '    <td style="text-align: left;" ' + (val.gb_month == '' ? '' : 'bgcolor="#'+ val.gb_month +'"') + '></td>';
+                    htm += '    <td style="text-align: left;" ' + (val.gb_year == '' ? '' : 'bgcolor="#'+ val.gb_year +'"') + '></td>';
+                    htm += '</tr>';
+                });
+                htm += '</table>';
+            }
+            $("#service_report_area").html(htm);
+        }
+        function draw_service_report_psa(data) {
+            var htm = "";
+            if (data != null && data != undefined && data.length > 0) {
+                var htm = '<table class="table table-bordered table-striped table-responsive">';
+                htm += '<tr>';
+                htm += '    <th colspan="10"><div style="padding:2px;white-space:normal;">Service Report - Personal Sub Area</div></th>';
+                htm += '</tr>';
+                htm += '<tr>';
+                htm += '    <th rowspan="2" style="width:50px;">No</th>';
+                htm += '    <th rowspan="2" style="width:300px;">Personal Sub Area</th>';
+                htm += '    <th rowspan="2" style="width:300px;">Personal Sub Area Head</th>';
+                htm += '    <th rowspan="2" style="width:50px;">AGC</th>';
+                htm += '    <th rowspan="2" style="width:50px;">FR</th>';
+                htm += '    <th rowspan="2" style="width:50px;">SR</th>';
+                htm += '    <th colspan="2" style="width:100px;">Safety Talk</th>';
+                htm += '    <th colspan="2" style="width:100px;">Genba</th>';
+                htm += '</tr>';
+                htm += '<tr>';
+                htm += '    <th style="width:50px;">This Month</th>';
+                htm += '    <th style="width:50px;">YTD</th>';
+                htm += '    <th style="width:50px;">This Month</th>';
+                htm += '    <th style="width:50px;">YTD</th>';
+                htm += '</tr>';
+
+                var no = 0;
+                var event_code = "";
+                var bg_color = "";
+                var font_color = "";
+                var status_text = "";
+                jQuery.each(data, function (i, val) {
+                    no++;
+                    htm += '<tr>';
+                    htm += '    <td style="text-align: center;">'+no+'</td>';
+                    htm += '    <td style="text-align: left;">' + val.psa_nama + '</td>';
+                    htm += '    <td style="text-align: left;">' + val.psa_head + '</td>';
+                    htm += '    <td style="text-align: left;" ' + (val.agc == '' ? '' : 'bgcolor="#'+ val.agc +'"') + '></td>';
+                    htm += '    <td style="text-align: left;" ' + (val.fr == '' ? '' : 'bgcolor="#'+ val.fr +'"') + '></td>';
+                    htm += '    <td style="text-align: left;" ' + (val.sr == '' ? '' : 'bgcolor="#'+ val.sr +'"') + '></td>';
+                    htm += '    <td style="text-align: left;" ' + (val.st_month == '' ? '' : 'bgcolor="#'+ val.st_month +'"') + '></td>';
+                    htm += '    <td style="text-align: left;" ' + (val.st_year == '' ? '' : 'bgcolor="#' + val.st_year + '"') + '></td>';
+                    htm += '    <td style="text-align: left;" ' + (val.gb_month == '' ? '' : 'bgcolor="#'+ val.gb_month +'"') + '></td>';
+                    htm += '    <td style="text-align: left;" ' + (val.gb_year == '' ? '' : 'bgcolor="#'+ val.gb_year +'"') + '></td>';
+                    htm += '</tr>';
+                });
+                htm += '</table>';
+            }
+            $("#service_report_psa").html(htm);
+        }
+    </script>
+}

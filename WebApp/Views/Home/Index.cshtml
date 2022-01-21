@@ -1,0 +1,83 @@
+﻿@using System.Data;
+@{
+    ViewData["Title"] = ResxHelper.GetValue("Home", "Title", "Dashboard");
+    var baseUrl = ViewData["baseUrl"];
+    ViewData["PageName"] = "home";
+    ViewData["Heading"] = ViewData["TitleHeader"];
+    ViewData["Category1"] = "";
+    ViewData["Category2"] = "";
+
+    var carouselData = ViewData["CarouselData"] as DataTable;
+}
+<style>
+    .carousel-inner {
+        /*height: 400px;*/
+    }
+</style>
+<div class="text-center">
+    @*<h4 class="k-display-1">Welcome @ViewData["CurrentFullname"]!</h4>
+    <p>@ViewData["CurrentRole"]</p>*@
+    <div class="row">
+        <div class="col-xl-12">
+            <div id="panel-1" class="panel">
+                @*<div class="panel-hdr">
+                    <h2>
+                        Campaign
+                    </h2>
+                    <div class="panel-toolbar">
+                        <button class="btn btn-panel" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"></button>
+                        <button class="btn btn-panel" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"></button>
+                    </div>
+                </div>*@
+                <div class="panel-container show">
+                    <div class="panel-content">
+                        <div id="carouselCampaign" class="carousel slide" data-ride="carousel">
+                            <ol class="carousel-indicators">
+                                @{ int no_cmp = 0;string csl_active = "";
+                                    foreach (DataRow dr in carouselData.Rows)
+                                    {
+                                        csl_active = no_cmp == 0 ? "active" : "";
+                                        <li data-target="#carouselCampaign" data-slide-to="@no_cmp" class="@csl_active"></li>
+                                        no_cmp++;
+                                    }
+                                }
+                            </ol>
+                            <div class="carousel-inner">
+                                @{ no_cmp = 0; csl_active = "";
+                                    foreach (DataRow dr in carouselData.Rows)
+                                    {
+                                        csl_active = no_cmp == 0 ? "active" : "";
+                                        <div class="carousel-item @csl_active">
+                                            <img class="d-block w-100" src="@dr["link_img"].ToString()" alt="@dr["keterangan"].ToString()">
+                                            <div class="carousel-caption d-none d-md-block">
+                                                <p>@dr["keterangan"].ToString()</p>
+                                            </div>
+                                        </div>
+                                        no_cmp++;
+                                    }
+                                }
+                            </div>
+                            <a class="carousel-control-prev" href="#carouselCampaign" role="button" data-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="carousel-control-next" href="#carouselCampaign" role="button" data-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>      
+    </div>
+    <div id="panel_chart">
+        <div class="row">
+            <div class="col-12">
+                
+            </div>
+        </div>
+        
+    </div>
+</div>
+

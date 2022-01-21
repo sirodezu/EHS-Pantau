@@ -1,0 +1,407 @@
+@using WebApp
+@using Newtonsoft.Json
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+	var filterColumn = ViewData["filterColumn"] as WebApp.Models.DocumentModel.ViewModel;
+    ViewData["Title"] = ViewData["TitleHeader"];
+    ViewData["PageName"] = "document";
+    ViewData["Heading"] = ViewData["TitleHeader"];
+    ViewData["Category1"] = "";
+    ViewData["Category2"] = "";
+}
+<div class="panel">
+    <div class="panel-container">
+		<div class="panel-content">
+			<div id="collapse_filter_ta_document" class="panel panel-collapse collapse">
+                <div class="panel-heading-filter">
+                    @ResxHelper.GetValue("Message", "FilterDataHeader", "Filter Data")
+                </div>
+				<div class="panel-body-filter">
+                    <section class="filter_cols">
+                        <div id="fiter_ehs_area_id" class="filter_col">
+                            <label for="ehs_area_id" class="label-filter">@ResxHelper.GetValue("ta_document", "ehs_area_id"): </label>
+                            <input id="ehs_area_id" name="ehs_area_id" style="width: 350px;" />
+                        </div>
+
+                        <div id="fiter_ba_id" class="filter_col">
+                            <label for="ba_id" class="label-filter">@ResxHelper.GetValue("ta_document", "ba_id"): </label>
+                            <input id="ba_id" name="ba_id" style="width: 350px;" />
+                        </div>
+
+                        <div id="fiter_pa_id" class="filter_col">
+                            <label for="pa_id" class="label-filter">@ResxHelper.GetValue("ta_document", "pa_id"): </label>
+                            <input id="pa_id" name="pa_id" style="width: 350px;" />
+                        </div>
+
+                        <div id="fiter_psa_id" class="filter_col">
+                            <label for="psa_id" class="label-filter">@ResxHelper.GetValue("ta_document", "psa_id"): </label>
+                            <input id="psa_id" name="psa_id" style="width: 350px;" />
+                        </div>
+
+                        <div id="fiter_group_name" class="filter_col">
+                            <label for="group_name" class="label-filter">@ResxHelper.GetValue("ta_document", "group_name"): </label>
+                            <input id="group_name" name="group_name" style="width: 350px;" />
+                        </div>
+
+                        <div id="fiter_title" class="filter_col">
+                            <label for="title" class="label-filter">@ResxHelper.GetValue("ta_document", "title"): </label>
+                            <input id="title" name="title" style="width: 350px;" />
+                        </div>
+
+                        <div id="fiter_col_title" class="filter_col">
+                            <label for="col_title" class="label-filter">@ResxHelper.GetValue("ta_document", "col_title"): </label>
+                            <input id="col_title" name="col_title" style="width: 350px;" />
+                        </div>
+
+                        <div id="fiter_file_name" class="filter_col">
+                            <label for="file_name" class="label-filter">@ResxHelper.GetValue("ta_document", "file_name"): </label>
+                            <input id="file_name" name="file_name" style="width: 350px;" />
+                        </div>
+
+                    </section>
+				</div>
+				<div class="panel-footer-filter">
+					<a id="btnResetFilter_ta_document" onclick="reset_filter_ta_document()" class="k-button" title="Reset Filter">@ResxHelper.GetValue("Message", "ResetFilter", "Reset Filter")</a>
+				</div>
+			</div>
+			<div>
+				<table id="toolbar_panel" style="width:100%;">
+					<tr>
+						<td>
+							<span id="quick_search_template_ta_document" class="k-textbox k-space-right"><input id="txtSearch_ta_document" placeholder="@ResxHelper.GetValue("Message","QuickSearch")" value="" /><a id="btnSearch_ta_document" href="#" class="k-icon k-i-search">&nbsp;</a></span>
+							<img id="btnSearchByColumn_ta_document" title="@ResxHelper.GetValue("Message","ShowSearchByColumn")" style="cursor:pointer" src="~/img/search_by_column.png" width="20">
+							<img id="btnShowHideColumn_ta_document" title="@ResxHelper.GetValue("Message","ShowHideColumn")" style="cursor:pointer" src="~/img/show_hide_column.png" width="20">
+							<a id="btnShowHideFilter_ta_document" data-toggle="collapse" href="#collapse_filter_ta_document" style="display:none">@ResxHelper.GetValue("Message", "ShowFilter", "Tampilkan Filter")</a>
+						</td>
+						<td style="float:right">
+							<img id="btnExportExcel_ta_document" title="@ResxHelper.GetValue("Message","ExportToExcel")" style="cursor:pointer" src="~/img/excel.png" width="20" />&nbsp;
+							<a id="btnAdd_ta_document" onclick="AddData_ta_document()" class="k-button" title="Tambah Non-Module Dokumen">@ResxHelper.GetValue("Message", "Add", "Tambah")</a>
+						</td>
+					<tr>
+				</table>
+			</div>
+			<div id="grid_ta_document"></div>
+		</div>
+    </div>
+
+</div>
+<div id="WinShowHideColumn_ta_document" style="display: none">
+    <div id="attr_column_show_hide" style="width:auto;height:auto;overflow-y:scroll;"></div>
+</div>
+@section ScriptsBlock {
+    <script>
+		var param_ta_document = @Html.Raw(JsonConvert.SerializeObject(WebApp.Models.DocumentModel.GetListParam()));
+		var displayName_ta_document = @Html.Raw(JsonConvert.SerializeObject(WebApp.Models.DocumentModel.GetDisplayItem()));
+		var pkKey_ta_document = @Html.Raw(JsonConvert.SerializeObject(WebApp.Models.DocumentModel._pkKey));
+		var j_data_ta_document = @Html.Raw(JsonConvert.SerializeObject(WebApp.Models.DocumentModel.GetGridColumn()));
+		var colNameTooltip_ta_document = [];
+		var colbuttonCount_ta_document = 0;
+		var columnWidth = 40;
+		colbuttonCount_ta_document += param_ta_document.btnView == 1 ? 1 : 0;
+		colbuttonCount_ta_document += param_ta_document.btnEdit== "1" ? 1 : 0;
+		colbuttonCount_ta_document += param_ta_document.btnDelete == "1" ? 1 : 0;
+		colbuttonCount_ta_document += param_ta_document.btnCopy  == "1" ? 1 : 0;
+		if (colbuttonCount_ta_document == 1) { columnWidth = 40; } else if (colbuttonCount_ta_document == 2) { columnWidth = 60; } else if (colbuttonCount_ta_document == 3) { columnWidth = 95; } else if (colbuttonCount_ta_document == 4) { columnWidth = 120; }
+		var columnActionWidth_ta_document = columnWidth + "px";
+		var item_data = "";
+		var col_att = [];
+		var showhide_column = "";
+		var j = 0;
+		var checked = '';
+		var aggregate_data_ta_document = [];
+		var agg_i = 0
+		jQuery.each(j_data_ta_document, function (i, val) {
+			var footerTemplate = "";
+			if (val.aggregate != "") {
+				footerTemplate = val.footerTemplate!="" ? val.footerTemplate : '#='+val.aggregate+'#';
+				aggregate_data_ta_document[agg_i] = { field: val.name, aggregate: val.aggregate };
+				agg_i++;
+			}
+			item_data += item_data != "" ? "," : "";
+			item_data += '"' + val.name + '" : { "type": "' + val.type + '" } ';
+			if (val.display) {
+				col_att[j] = { field: val.name, title: val.title, hidden: JSON.parse(val.hidden), width: val.width, format: val.format, attributes: JSON.parse(val.attributes), encoded: JSON.parse(val.encoded), filterable: JSON.parse(val.filterable), sortable: JSON.parse(val.sortable), headerAttributes: { style: "white-space: normal;vertical-align:middle;text-align:center" },aggregates: [val.aggregate], footerTemplate: footerTemplate };
+				j++;
+				checked = '';if (val.hidden.toString() == 'false') {checked = 'checked';}
+				showhide_column += '<div><input type="checkbox" onclick="ShowHideColumn_ta_document(this)" '+ checked +' value="' + val.name + '" /> ' + val.title + '</div>';
+			}
+		});
+		showhide_column += '<div><input type="checkbox" onclick="ShowHideColumn_ta_document(this)" checked value="' + j + '" /> Action</div>';
+		item_data = '{' + item_data + '}';
+		var field_data = JSON.parse(item_data);
+		var columns_data = col_att;
+		var col_command = [];
+		var k = 0;
+		if (param_ta_document.btnView== 1) {col_command[k] = { name: "View", text: "", className: "v-view", click: function (e) { var tr = $(e.target).closest("tr"); var data = this.dataItem(tr); ViewItem_ta_document(data); } };k++;}
+		if (param_ta_document.btnEdit== 1) {col_command[k] = { name: "Edit", text: "", className: "v-pencil", click: function (e) { var tr = $(e.target).closest("tr"); var data = this.dataItem(tr); EditData_ta_document(data); } };k++;}
+		if (param_ta_document.btnDelete== 1) {col_command[k] = { name: "Delete", text: "", className: "v-close", click: function (e) { var tr = $(e.target).closest("tr"); var data = this.dataItem(tr); DeleteData_ta_document(data); } };k++;}
+		if (param_ta_document.btnCopy == 1) { col_command[k] = { name: "Copy", text: "", className: "v-copy", click: function (e) { var tr = $(e.target).closest("tr"); var data = this.dataItem(tr); CopyData_ta_document(data); } }; k++; }
+		if (colbuttonCount_ta_document > 0) {
+			columns_data[j] = {command: col_command, width: columnActionWidth_ta_document, attributes: " style=\"vertical-align:top;\""};
+		}
+		//==============================
+        //=== filter ehs_area_id 
+        var ehs_area_id_param = { item: { value: 'id', text: 'kode', distinct: '0' } ,parent:[{field:"obj_data",value:"Legal"}], order:[]};
+        var ehs_area_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/EHSArea/LookupDataEA", dataType: "json", data: ehs_area_id_param, type: "POST" } } });
+        var ehs_area_id = $("#ehs_area_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", change: onChange_ehs_area_id, dataSource: ehs_area_id_ds }).data("kendoComboBox");
+        $(document).ready(function () { $("#ehs_area_id").data("kendoComboBox").value('@filterColumn.ehs_area_id'); });
+        function onChange_ehs_area_id() {
+            if ($("#ehs_area_id").data("kendoComboBox").value() != '' && $("#ehs_area_id").data("kendoComboBox")._oldIndex == -1) { $("#ehs_area_id").data("kendoComboBox").value(''); }
+            reload_ba_id();
+            reload_pa_id();
+            reload_psa_id();
+            onFilterHeader_ta_document();
+        }
+        
+
+        //=== filter ba_id 
+        var ba_id_param = { item: { value: 'id', text: 'kode', distinct: '0' } ,parent:[{ field: 'ehs_area_id',opr:'=', value: '@filterColumn.ehs_area_id' },{field:"obj_data",value:"Legal"}], order:[]};
+        var ba_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/BusinessArea/LookupDataBA", dataType: "json", data: ba_id_param, type: "POST" } } });
+        var ba_id = $("#ba_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", change: onChange_ba_id, dataSource: ba_id_ds }).data("kendoComboBox");
+        $(document).ready(function () { $("#ba_id").data("kendoComboBox").value('@filterColumn.ba_id'); });
+        function onChange_ba_id() {
+            if ($("#ba_id").data("kendoComboBox").value() != '' && $("#ba_id").data("kendoComboBox")._oldIndex == -1) { $("#ba_id").data("kendoComboBox").value(''); }
+            reload_pa_id();
+            reload_psa_id();
+            onFilterHeader_ta_document();
+        }
+        
+        function reload_ba_id(){
+            $("#ba_id").data("kendoComboBox").value('');
+            var ehs_area_id = $("#ehs_area_id").data("kendoComboBox").value();
+            var ba_id_param = { item: { value: 'id', text: 'kode' }, parent: [{ field: 'ehs_area_id',opr:'=', value: ehs_area_id }], order: [] };
+            $("#ba_id").data("kendoComboBox").dataSource.read(ba_id_param);
+        }
+
+
+        //=== filter pa_id 
+        var pa_id_param = { item: { value: 'id', text: 'kode', distinct: '0' } ,parent:[{ field: 'ehs_area_id',opr:'=', value: '@filterColumn.ehs_area_id' }, { field: 'ba_id',opr:'=', value: '@filterColumn.ba_id' },{field:"obj_data",value:"Legal"}], order:[]};
+        var pa_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/PersonalArea/LookupDataPA", dataType: "json", data: pa_id_param, type: "POST" } } });
+        var pa_id = $("#pa_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", change: onChange_pa_id, dataSource: pa_id_ds }).data("kendoComboBox");
+        $(document).ready(function () { $("#pa_id").data("kendoComboBox").value('@filterColumn.pa_id'); });
+        function onChange_pa_id() {
+            if ($("#pa_id").data("kendoComboBox").value() != '' && $("#pa_id").data("kendoComboBox")._oldIndex == -1) { $("#pa_id").data("kendoComboBox").value(''); }
+            reload_psa_id();
+            onFilterHeader_ta_document();
+        }
+        
+        function reload_pa_id(){
+            $("#pa_id").data("kendoComboBox").value('');
+            var ehs_area_id = $("#ehs_area_id").data("kendoComboBox").value();
+            var ba_id = $("#ba_id").data("kendoComboBox").value();
+            var pa_id_param = { item: { value: 'id', text: 'kode' }, parent: [{ field: 'ehs_area_id',opr:'=', value: ehs_area_id }, { field: 'ba_id',opr:'=', value: ba_id }], order: [] };
+            $("#pa_id").data("kendoComboBox").dataSource.read(pa_id_param);
+        }
+
+
+        //=== filter psa_id 
+        var psa_id_param = { item: { value: 'id', text: 'kode', distinct: '0' } ,parent:[{ field: 'ehs_area_id',opr:'=', value: '@filterColumn.ehs_area_id' }, { field: 'ba_id',opr:'=', value: '@filterColumn.ba_id' }, { field: 'pa_id',opr:'=', value: '@filterColumn.pa_id' },{field:"obj_data",value:"Legal"}], order:[]};
+        var psa_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/PersonalSubArea/LookupDataPSA", dataType: "json", data: psa_id_param, type: "POST" } } });
+        var psa_id = $("#psa_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", change: onChange_psa_id, dataSource: psa_id_ds }).data("kendoComboBox");
+        $(document).ready(function () { $("#psa_id").data("kendoComboBox").value('@filterColumn.psa_id'); });
+        function onChange_psa_id() {
+            if ($("#psa_id").data("kendoComboBox").value() != '' && $("#psa_id").data("kendoComboBox")._oldIndex == -1) { $("#psa_id").data("kendoComboBox").value(''); }
+            onFilterHeader_ta_document();
+        }
+        
+        function reload_psa_id(){
+            $("#psa_id").data("kendoComboBox").value('');
+            var ehs_area_id = $("#ehs_area_id").data("kendoComboBox").value();
+            var ba_id = $("#ba_id").data("kendoComboBox").value();
+            var pa_id = $("#pa_id").data("kendoComboBox").value();
+            var psa_id_param = { item: { value: 'id', text: 'kode' }, parent: [{ field: 'ehs_area_id',opr:'=', value: ehs_area_id }, { field: 'ba_id',opr:'=', value: ba_id }, { field: 'pa_id',opr:'=', value: pa_id }], order: [] };
+            $("#psa_id").data("kendoComboBox").dataSource.read(psa_id_param);
+        }
+
+        //=== filter group_name 
+        var group_name_param = { item: { value: 'group_name', text: 'group_name', distinct: '1' } ,parent:[], order:[{ field: 'group_name', dir: 'asc' }]};
+        var group_name_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Document/LookupData", dataType: "json", data: group_name_param, type: "POST" } } });
+        var group_name = $("#group_name").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", change: onChange_group_name, dataSource: group_name_ds }).data("kendoComboBox");
+        $(document).ready(function () { $("#group_name").data("kendoComboBox").value('@filterColumn.group_name'); });
+        function onChange_group_name() {
+            if ($("#group_name").data("kendoComboBox").value() != '' && $("#group_name").data("kendoComboBox")._oldIndex == -1) { $("#group_name").data("kendoComboBox").value(''); }
+            onFilterHeader_ta_document();
+        }
+        
+
+        //=== filter title 
+        var title_param = { item: { value: 'title', text: 'title', distinct: '1' } ,parent:[], order:[{ field: 'title', dir: 'asc' }]};
+        var title_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Document/LookupData", dataType: "json", data: title_param, type: "POST" } } });
+        var title = $("#title").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", change: onChange_title, dataSource: title_ds }).data("kendoComboBox");
+        $(document).ready(function () { $("#title").data("kendoComboBox").value('@filterColumn.title'); });
+        function onChange_title() {
+            if ($("#title").data("kendoComboBox").value() != '' && $("#title").data("kendoComboBox")._oldIndex == -1) { $("#title").data("kendoComboBox").value(''); }
+            onFilterHeader_ta_document();
+        }
+        
+
+        //=== filter col_title 
+        var col_title_param = { item: { value: 'col_title', text: 'col_title', distinct: '1' } ,parent:[], order:[{ field: 'col_title', dir: 'asc' }]};
+        var col_title_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Document/LookupData", dataType: "json", data: col_title_param, type: "POST" } } });
+        var col_title = $("#col_title").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", change: onChange_col_title, dataSource: col_title_ds }).data("kendoComboBox");
+        $(document).ready(function () { $("#col_title").data("kendoComboBox").value('@filterColumn.col_title'); });
+        function onChange_col_title() {
+            if ($("#col_title").data("kendoComboBox").value() != '' && $("#col_title").data("kendoComboBox")._oldIndex == -1) { $("#col_title").data("kendoComboBox").value(''); }
+            onFilterHeader_ta_document();
+        }
+        
+
+        //=== filter file_name 
+        var file_name_param = { item: { value: 'file_name', text: 'file_name', distinct: '1' } ,parent:[], order:[{ field: 'file_name', dir: 'asc' }]};
+        var file_name_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Document/LookupData", dataType: "json", data: file_name_param, type: "POST" } } });
+        var file_name = $("#file_name").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", change: onChange_file_name, dataSource: file_name_ds }).data("kendoComboBox");
+        $(document).ready(function () { $("#file_name").data("kendoComboBox").value('@filterColumn.file_name'); });
+        function onChange_file_name() {
+            if ($("#file_name").data("kendoComboBox").value() != '' && $("#file_name").data("kendoComboBox")._oldIndex == -1) { $("#file_name").data("kendoComboBox").value(''); }
+            onFilterHeader_ta_document();
+        }
+        
+
+		//==============================
+		$("#collapse_filter_ta_document").on('shown.bs.collapse', function () {
+			$("#btnShowHideFilter_ta_document").html('@ResxHelper.GetValue("Message","HideFilter")');
+		});
+		$("#collapse_filter_ta_document").on('hidden.bs.collapse', function () {
+			$("#btnShowHideFilter_ta_document").html('@ResxHelper.GetValue("Message","ShowFilter")');
+		});
+		//==============================
+		var record_ta_document = 0;
+		var grid_ta_document_heigth = 0;
+		var ds_ta_document_filter = { filter_by_column: [{ name: 'ehs_area_id',value: '@filterColumn.ehs_area_id' }, { name: 'ba_id',value: '@filterColumn.ba_id' }, { name: 'pa_id',value: '@filterColumn.pa_id' }, { name: 'psa_id',value: '@filterColumn.psa_id' }] };
+		var ds_ta_document = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Document/GetListData", dataType: "json", type: "POST", data: ds_ta_document_filter }, parameterMap: function (options) { if (options.filter) { for (var i = 0; i < options.filter.filters.length; i++) { if (options.filter.filters[i].field == 'tanggal') { options.filter.filters[i].value = kendo.toString(options.filter.filters[i].value, "yyyy-MM-dd"); } } } return options; } }, schema: { data: "data", total: "total", aggregates: "aggregates", model: { fields: field_data } }, aggregate: aggregate_data_ta_document, pageSize: 10, serverAggregates: true, serverPaging: true, serverFiltering: true, serverSorting: true });
+		var list_ta_document = $("#grid_ta_document").kendoGrid({
+			excel: { allPages: true, fileName: '@ViewData["TitleHeader"]'+'.xlsx' },
+			dataSource: ds_ta_document, dataBound: onDataBound_ta_document, height: grid_ta_document_heigth, scrollable: true, groupable: false, columnMenu: false, menu: true, resizable: true, filterable: false, sortable: { mode: "multiple", allowUnsort: true }, pageable: { refresh: true, pageSizes: [5, 10, 20, 50, 100, 200], buttonCount: 5 },
+			columns: columns_data, editable: false, dataBinding: function () { record_ta_document = (this.dataSource.page() - 1) * this.dataSource.pageSize(); }
+		});
+		function getParamgrid_ta_document() {
+			var filter_by_column= [];var k = 0;
+	        if ($("#ehs_area_id").data("kendoComboBox").value() != "") {filter_by_column[k] = { name: "ehs_area_id", field: "ta_document.ehs_area_id", opr: "=", value: $("#ehs_area_id").data("kendoComboBox").value() };k++;}
+        if ($("#ba_id").data("kendoComboBox").value() != "") {filter_by_column[k] = { name: "ba_id", field: "ta_document.ba_id", opr: "=", value: $("#ba_id").data("kendoComboBox").value() };k++;}
+        if ($("#pa_id").data("kendoComboBox").value() != "") {filter_by_column[k] = { name: "pa_id", field: "ta_document.pa_id", opr: "=", value: $("#pa_id").data("kendoComboBox").value() };k++;}
+        if ($("#psa_id").data("kendoComboBox").value() != "") {filter_by_column[k] = { name: "psa_id", field: "ta_document.psa_id", opr: "=", value: $("#psa_id").data("kendoComboBox").value() };k++;}
+        if ($("#group_name").data("kendoComboBox").value() != "") {filter_by_column[k] = { name: "group_name", field: "ta_document.group_name", opr: "=", value: $("#group_name").data("kendoComboBox").value() };k++;}
+        if ($("#title").data("kendoComboBox").value() != "") {filter_by_column[k] = { name: "title", field: "ta_document.title", opr: "=", value: $("#title").data("kendoComboBox").value() };k++;}
+        if ($("#col_title").data("kendoComboBox").value() != "") {filter_by_column[k] = { name: "col_title", field: "ta_document.col_title", opr: "=", value: $("#col_title").data("kendoComboBox").value() };k++;}
+        if ($("#file_name").data("kendoComboBox").value() != "") {filter_by_column[k] = { name: "file_name", field: "ta_document.file_name", opr: "=", value: $("#file_name").data("kendoComboBox").value() };k++;}
+			return { filter_by_column:filter_by_column };
+		}
+		function reset_filter_ta_document() {
+	        $("#ehs_area_id").data("kendoComboBox").value('');
+        $("#ba_id").data("kendoComboBox").value('');
+        $("#pa_id").data("kendoComboBox").value('');
+        $("#psa_id").data("kendoComboBox").value('');
+        $("#group_name").data("kendoComboBox").value('');
+        $("#title").data("kendoComboBox").value('');
+        $("#col_title").data("kendoComboBox").value('');
+        $("#file_name").data("kendoComboBox").value('');
+			onFilterHeader_ta_document();
+		}
+		function onFilterHeader_ta_document() {
+			$("#txtSearch_ta_document").val('');
+			paramValue = getParamgrid_ta_document();
+			if (list_ta_document.data('kendoGrid').dataSource.page() > 1) {
+				list_ta_document.data('kendoGrid').dataSource.page(0);
+			}
+			list_ta_document.data('kendoGrid').dataSource.transport.options.read.data = paramValue;
+			list_ta_document.data("kendoGrid").dataSource.filter([]);
+		};
+		$("#btnSearchByColumn_ta_document").click(function () { var grid_ta_document_heigth_filter = grid_ta_document_heigth + 38; if (list_ta_document.data("kendoGrid").options.filterable == false) { $('#btnSearchByColumn_ta_document').prop('title', '@ResxHelper.GetValue("Message","HideSearchByColumn")'); $("#txtSearch_ta_document").val(''); if ('1' == '1') { $("#quick_search_template_ta_document").hide(); }; QuickSearch_ta_document(); list_ta_document.data("kendoGrid").setOptions({ height: grid_ta_document_heigth_filter, filterable: { mode: "row" }, }); } else { $('#btnSearchByColumn_ta_document').prop('title', '@ResxHelper.GetValue("Message","ShowSearchByColumn")'); $("#txtSearch_ta_document").val(''); if ('1' == '1') { $("#quick_search_template_ta_document").show(); }; QuickSearch_ta_document(); list_ta_document.data("kendoGrid").setOptions({ height: grid_ta_document_heigth, filterable: false, }); } });
+		$("#btnSearch_ta_document").click(function () { QuickSearch_ta_document(); });
+		$('#txtSearch_ta_document').keypress(function (e) { if (e.keyCode == 13) { QuickSearch_ta_document(); } });
+		function QuickSearch_ta_document() {
+			$filter = new Array();
+			$x = $("#txtSearch_ta_document").val();
+			if ($x) {jQuery.each(j_data_ta_document, function (i, val) {if (val.display && val.qsearch && val.type =='string') {$filter.push({ name: val.name, opr: "contains", value: $x });}});} 
+			if ($filter.length > 0) {list_ta_document.data("kendoGrid").dataSource.filter({ logic: "or", filters: $filter });}else {list_ta_document.data("kendoGrid").dataSource.filter([]);}
+		}
+		function Reload_list_ta_document() { list_ta_document.data('kendoGrid').dataSource.read(); list_ta_document.data('kendoGrid').refresh(); }
+		function onDataBound_ta_document(e) {
+			if (colbuttonCount_ta_document > 0) {
+				var grid = $("#grid_ta_document").data("kendoGrid"); var list_ta_document = grid.dataSource.view();
+				for (var i = 0; i < list_ta_document.length; i++) {
+					var currentUid = list_ta_document[i].uid; var currenRow = grid.table.find("tr[data-uid='" + currentUid + "']");
+					if (param_ta_document.btnView == 1) {
+						var viewButton = $(currenRow).find(".k-grid-View"); viewButton.attr("title", "@ResxHelper.GetValue("Message","View")");
+						if ("@ViewData["AllowView"]" == "1") {} else {viewButton.hide();}
+					}
+					if (param_ta_document.btnEdit == 1) {
+						var editButton = $(currenRow).find(".k-grid-Edit"); editButton.attr("title", "@ResxHelper.GetValue("Message","Edit")");
+                        if (
+                            ("@ViewData["AllowEdit"]" == "1" && list_ta_document[i].officer_id == "@ViewBag.person_id")
+							|| ("@ViewData["AllowEdit"]" == "1" && list_ta_document[i].ehs_head_id == "@ViewBag.person_id")
+							|| ("@ViewData["AllowEditAll"]" == "1" )
+                        ) { } else { editButton.hide(); }
+					}
+					if (param_ta_document.btnDelete == 1) {
+						var deleteButton = $(currenRow).find(".k-grid-Delete"); deleteButton.attr("title", "@ResxHelper.GetValue("Message","Delete")");
+                        if (list_ta_document[i].tbl_name == "ta_document_nm"
+                            && (
+                                ("@ViewData["AllowDelete"]" == "1" && list_ta_document[i].officer_id == "@ViewBag.person_id")
+							    || ("@ViewData["AllowDelete"]" == "1" && list_ta_document[i].ehs_head_id == "@ViewBag.person_id")
+                                || ("@ViewData["AllowDeleteAll"]" == "1")
+                            )
+                        ) { } else { deleteButton.hide(); }
+					}
+					if (param_ta_document.btnCopy == 1) {
+						var copyButton = $(currenRow).find(".k-grid-Copy"); copyButton.attr("title", "@ResxHelper.GetValue("Message","Copy")");
+						if ("@ViewData["AllowAdd"]" == "1") {} else {copyButton.hide();}
+					}
+				}
+			}
+		}
+		function AddData_ta_document() {var contentUrl = '@ViewBag.BaseUrl/Document/Add'; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog, }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: param_ta_document.btn_add_modal_width, height: param_ta_document.btn_add_modal_height, minHeight: 300, });if(param_ta_document.btn_add_modal_width == 0) {form_edit.data("kendoWindow").center().open().maximize()} else {form_edit.data("kendoWindow").center().open();}}
+		function ViewItem_ta_document(data) { var qs = '';jQuery.each(pkKey_ta_document, function (i, val) {qs += qs != "" ? "&" : "";qs += val+'=' + data[val];});var contentUrl = '@ViewBag.BaseUrl/Document/ViewItem?' + qs; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: param_ta_document.btn_view_modal_width, height: param_ta_document.btn_view_modal_height, minHeight: 300, }); if (param_ta_document.btn_view_modal_width == 0) { form_edit.data("kendoWindow").center().open().maximize() } else { form_edit.data("kendoWindow").center().open(); }}
+		function EditData_ta_document(data) { var qs = '';jQuery.each(pkKey_ta_document, function (i, val) {qs += qs != "" ? "&" : "";qs += val+'=' + data[val];}); var contentUrl = '@ViewBag.BaseUrl/Document/Edit?' + qs; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: param_ta_document.btn_edit_modal_width, height: param_ta_document.btn_edit_modal_height, minHeight: 300, }); if(param_ta_document.btn_edit_modal_width == 0) {form_edit.data("kendoWindow").center().open().maximize()} else {form_edit.data("kendoWindow").center().open();} }
+		function CopyData_ta_document(data) { var qs = '';jQuery.each(pkKey_ta_document, function (i, val) {qs += qs != "" ? "&" : "";qs += val+'=' + data[val];}); var contentUrl = '@ViewBag.BaseUrl/Document/Copy?' + qs; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: param_ta_document.btn_edit_modal_width, height: param_ta_document.btn_edit_modal_height, minHeight: 300, }); if(param_ta_document.btn_edit_modal_width == 0) {form_edit.data("kendoWindow").center().open().maximize()} else {form_edit.data("kendoWindow").center().open();} }
+		function DeleteData_ta_document(data) {
+			var keyValue = '';
+			jQuery.each(displayName_ta_document, function (i, val) {
+				keyValue += keyValue != "" ? "<br />" : "";
+				keyValue += val.label+ ": " + data[val.name];
+			});
+			var pkItem = "";
+			jQuery.each(pkKey_ta_document, function (i, val) {
+				pkItem += pkItem != "" ? ", " : "";
+				pkItem += '"'+val+'":"'+data[val]+'" ';
+			});
+			var pkVal = jQuery.parseJSON("{" + pkItem + "}");
+			var data2 = { title: '@ResxHelper.GetValue("Message","ConfirmDelete")', msg: keyValue };
+			var winconfirm = $("#dialogconfirm").kendoWindow({ title: "@ResxHelper.GetValue("Message","DeleteData")", modal: true, visible: false, resizable: true, draggable: true, width: "500px", height: "200px" }).data("kendoWindow");
+			winconfirm.content(confirmTemplate(data2));
+			winconfirm.center(); winconfirm.open();
+			$("#yesButton").click(function () {
+				$.ajax({
+					data: pkVal, url: '@ViewBag.BaseUrl/Document/Delete', type: 'POST'
+					, success: function (data) {
+						if (data.status != 1) {
+							notification.show({ title: data.title, message: kendo.toString(data.message) }, "error");
+							winconfirm.close();
+						} else {
+							notification.show({ message: kendo.toString(data.message) }, "success");
+							Reload_list_ta_document();
+							winconfirm.close();
+						}
+					}
+				});
+			});
+			$("#noButton").click(function () { winconfirm.close(); });
+		}
+		function onCloseDialog(e) { $('#dialog').html(''); }
+		function closeDialog() { $("#dialog").data("kendoWindow").close(); }
+		$("#btnExportExcel_ta_document").click(function (e) { var grid = $("#grid_ta_document").data("kendoGrid"); grid.saveAsExcel(); });
+		function ShowHideColumn_ta_document(e) { colname = $.isNumeric(e.value) ? parseInt(e.value) : e.value; if (e.checked) { $("#grid_ta_document").data("kendoGrid").showColumn(colname); } else { $("#grid_ta_document").data("kendoGrid").hideColumn(colname); } }
+		$(document).ready(function () {
+			$("#attr_column_show_hide").html(showhide_column);
+            if (param_ta_document.ShowFilter == 1) { $("#btnShowHideFilter_ta_document").show(); }
+			//
+            if (param_ta_document.btnAdd == 1 && @ViewData["AllowAdd"]== "1") { } else { $("#btnAdd_ta_document").hide(); } //$("#btnAdd_ta_document").hide();
+			//
+			if (param_ta_document.quick_search != 1) { $("#quick_search_template_ta_document").hide(); }
+			if (param_ta_document.search_by_column  != 1) { $("#btnSearchByColumn_ta_document").hide(); }
+			if (param_ta_document.show_hide_column != 1) { $("#btnShowHideColumn_ta_document").hide(); }
+			if (param_ta_document.export_exl != 1) { $("#btnExportExcel_ta_document").hide(); }
+			$("#btnShowHideColumn_ta_document").click(function () { var x = $("#btnShowHideColumn_ta_document").offset().left; var y = $("#btnShowHideColumn_ta_document").offset().top; if (!WinShowHideColumn_ta_document) { var WinShowHideColumn_ta_document = $("#WinShowHideColumn_ta_document").kendoWindow({ width: "300px", position: { left: x, top: y }, title: "@ResxHelper.GetValue("Message","ShowHideColumn")", actions: ["Close"] }); } WinShowHideColumn_ta_document.data("kendoWindow").open(); });
+		});
+    </script>
+}

@@ -1,0 +1,198 @@
+@using WebApp
+@using Microsoft.AspNetCore.Http;
+@{
+    Layout = "~/Views/Shared/_LayoutNoHeader.cshtml";
+    var fieldModel = ViewData["fieldModel"] as WebApp.Models.LegalModel.ViewModel;
+	ViewData["Title"] = ViewData["TitleHeader"];
+    ViewData["PageName"] = "legal";
+    ViewData["Heading"] = ViewData["TitleHeader"];
+    ViewData["Category1"] = "";
+    ViewData["Category2"] = "";
+}
+<div class="panel panel-form">
+	<div class="panel-container">
+		<div class="panel-heading">
+			<div class="title-header">@ViewData["TitleHeader"]</div>
+		</div>
+		<div class="panel-content">
+			<div class="row">
+                <div class="col-lg-12">
+
+                    <div id="form_item_id" class="form-group-none">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_legal", "id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_id" class="form-item-view">@Html.Raw(fieldModel.id)</div>
+                    </div>
+
+                    <div id="form_item_ehs_area_id" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_legal", "ehs_area_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_ehs_area_id" class="form-item-view">@Html.Raw(fieldModel.ehs_area_id_text)</div>
+                    </div>
+
+                    <div id="form_item_ba_id" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_legal", "ba_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_ba_id" class="form-item-view">@Html.Raw(fieldModel.ba_id_text)</div>
+                    </div>
+
+                    <div id="form_item_pa_id" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_legal", "pa_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_pa_id" class="form-item-view">@Html.Raw(fieldModel.pa_id_text)</div>
+                    </div>
+
+                    <div id="form_item_psa_id" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_legal", "psa_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_psa_id" class="form-item-view">@Html.Raw(fieldModel.psa_id_text)</div>
+                    </div>
+
+
+                    <div><p>&nbsp;</p></div>
+
+
+                    <div id="form_item_kategori_perizinan_id" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_legal", "kategori_perizinan_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_kategori_perizinan_id" class="form-item-view">@Html.Raw(fieldModel.kategori_perizinan_id_text)</div>
+                    </div>
+
+                    <div id="form_item_jenis_perizinan_id" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_legal", "jenis_perizinan_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_jenis_perizinan_id" class="form-item-view">@Html.Raw(fieldModel.jenis_perizinan_id_text)</div>
+                    </div>
+
+                    <div id="form_item_jenis_limbah_tersimpan_id" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_legal", "jenis_limbah_tersimpan_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_jenis_limbah_tersimpan_id" class="form-item-view">@Html.Raw(fieldModel.jenis_limbah_tersimpan_id_text)</div>
+                    </div>
+
+                    <div id="form_item_kode_limbah" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_legal", "kode_limbah")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_kode_limbah" class="form-item-view">@Html.Raw(fieldModel.kode_limbah)</div>
+                    </div>
+
+                    <div id="form_item_periode_telah_dilaporkan_id" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_legal", "periode_telah_dilaporkan_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_periode_telah_dilaporkan_id" class="form-item-view">@Html.Raw(fieldModel.periode_telah_dilaporkan_id_text)</div>
+                    </div>
+
+                    <div id="form_item_tanggal_pelaporan" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_legal", "tanggal_pelaporan")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_tanggal_pelaporan" class="form-item-view">@Html.Raw(fieldModel.tanggal_pelaporan)</div>
+                    </div>
+
+                    <div id="form_item_file_path_bukti_lapor" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_legal", "file_path_bukti_lapor")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_file_path_bukti_lapor" class="form-item-view">@Html.Raw(fieldModel.file_path_bukti_lapor)</div>
+                    </div>
+
+                    <div id="form_item_no_izin" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_legal", "no_izin")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_no_izin" class="form-item-view">@Html.Raw(fieldModel.no_izin)</div>
+                    </div>
+
+                    <div id="form_item_institusi_pengesahan_izin_id" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_legal", "institusi_pengesahan_izin_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_institusi_pengesahan_izin_id" class="form-item-view">@Html.Raw(fieldModel.institusi_pengesahan_izin_id_text)</div>
+                    </div>
+
+                    <div id="form_item_tanggal_izin_terbit" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_legal", "tanggal_izin_terbit")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_tanggal_izin_terbit" class="form-item-view">@Html.Raw(fieldModel.tanggal_izin_terbit)</div>
+                    </div>
+
+                    <div id="form_item_tgl_masa_berlaku" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_legal", "tgl_masa_berlaku")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_tgl_masa_berlaku" class="form-item-view">@Html.Raw(fieldModel.tgl_masa_berlaku)</div>
+                    </div>
+
+                    <div id="form_item_tanggal_habis_izin" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_legal", "tanggal_habis_izin")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_tanggal_habis_izin" class="form-item-view">@Html.Raw(fieldModel.tanggal_habis_izin)</div>
+                    </div>
+
+                    <div id="form_item_status_izin_id" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_legal", "status_izin_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_status_izin_id" class="form-item-view">@Html.Raw(fieldModel.status_izin_id_text)</div>
+                    </div>
+
+                    <div id="form_item_file_path_status_izin" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_legal", "file_path_status_izin")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_file_path_status_izin" class="form-item-view">@Html.Raw(fieldModel.file_path_status_izin)</div>
+                    </div>
+
+                    <div id="form_item_file_path_dokumen_izin" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_legal", "file_path_dokumen_izin")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_file_path_dokumen_izin" class="form-item-view">@Html.Raw(fieldModel.file_path_dokumen_izin)</div>
+                    </div>
+
+                    <div id="form_item_keterangan_izin" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_legal", "keterangan_izin")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_keterangan_izin" class="form-item-view">@Html.Raw(fieldModel.keterangan_izin)</div>
+                    </div>
+
+
+                </div>
+			</div>
+		</div>
+		<div class="panel-footer">
+			<a id="close" class="k-button k-button-icontext" href="#"><i class="far fa-times-circle"></i>&nbsp;<span id="btnCloseText">@ResxHelper.GetValue("Message", "Close", "Tutup")</span></a>
+		</div>
+	</div>
+</div>
+<script>
+    $("#close").kendoButton();
+    $("#close").click(function (e) {
+        close_self();
+    });
+    function onCloseDialog(e) { $('#dialog').html(''); }
+    function closeDialog() { $("#dialog").data("kendoWindow").close(); }
+    function close_self() { if (window.parent.$("#dialog_ta_legal").data("kendoWindow")) { window.parent.$("#dialog_ta_legal").data("kendoWindow").close(); } else { window.parent.$("#dialog").data("kendoWindow").close(); } }
+
+    function display_by_type() {
+        $("#form_item_jenis_limbah_tersimpan_id").hide();
+        $("#form_item_kode_limbah").hide();
+        //
+        $("#form_item_periode_telah_dilaporkan_id").hide();
+        $("#form_item_tanggal_pelaporan").hide();
+        $("#form_item_file_name_bukti_lapor").hide();
+        $("#form_item_file_path_bukti_lapor").hide();
+        $("#form_item_tanggal_habis_izin").show();
+        //
+        if ( @Html.Raw(fieldModel.kategori_perizinan_id) == '1' ) {
+            var ji = @Html.Raw(fieldModel.jenis_perizinan_id);
+            if (ji == '18') {
+                $("#form_item_jenis_limbah_tersimpan_id").show();
+                $("#form_item_kode_limbah").show();
+                        
+            }
+            if (ji=='1' || ji=='14' || ji=='15' || ji=='16') {
+                $("#form_item_periode_telah_dilaporkan_id").show();
+                $("#form_item_tanggal_pelaporan").show();
+                $("#form_item_file_name_bukti_lapor").show();
+                $("#form_item_file_path_bukti_lapor").show();
+                $("#form_item_tanggal_habis_izin").hide();
+            }
+        }
+    }
+    $(document).ready(function () {
+        display_by_type();
+    });		
+</script>

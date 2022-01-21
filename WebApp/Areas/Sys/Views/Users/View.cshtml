@@ -1,0 +1,45 @@
+﻿@using WebApp;
+@using WebApp.Models;
+@using Microsoft.AspNetCore.Http;
+@{
+    Layout = "~/Views/Shared/_LayoutNoHeader.cshtml";
+    var fieldModel = ViewData["fieldModel"] as WebApp.Areas.Sys.Models.UsersModel.ViewModel;
+}
+
+<div class="card">
+    <div class="card-header">
+        <div class="title-header">@ViewData["TitleHeader"]</div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12">
+                <div id="form_item_userid" class="form-item">
+                    <div class="form-item-label">@ResxHelper.GetValue("sys_users", "userid")</div>
+                    <div class="form-item-separator">:</div>
+                    <div id="view_item_userid" class="form-item-view">@fieldModel.userid</div>
+                </div>
+                <div id="form_item_username" class="form-item">
+                    <div class="form-item-label">@ResxHelper.GetValue("sys_users", "username")</div>
+                    <div class="form-item-separator">:</div>
+                    <div id="view_item_username" class="form-item-view">@fieldModel.username</div>
+                </div>
+                <div id="form_item_fullname" class="form-item">
+                    <div class="form-item-label">@ResxHelper.GetValue("sys_users", "fullname" )</div>
+                    <div class="form-item-separator">:</div>
+                    <div id="view_item_fullname" class="form-item-view">@fieldModel.fullname</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer" style="text-align:center">
+        <a id="close" class="k-button k-button-icontext" href="#"><i class="far fa-times-circle"></i>&nbsp;<span id="btnCloseText">@ResxHelper.GetValue("Message", "Close")</span></a>
+    </div>
+</div>
+<script>
+    $("#close").kendoButton();
+    $("#close").click(function (e) {
+        close_self();
+    });
+    function close_self() { if (window.parent.$("#dialog_sys_users").data("kendoWindow")) { window.parent.$("#dialog_sys_users").data("kendoWindow").close(); } else { window.parent.$("#dialog").data("kendoWindow").close(); } }
+</script>
+

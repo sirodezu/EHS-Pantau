@@ -1,0 +1,787 @@
+﻿@using WebApp;
+@using Newtonsoft.Json;
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
+@{
+    Layout = "~/Views/Shared/Pwa/_Layout.cshtml";
+    var fieldModel = ViewData["fieldModel"] as WebApp.Models.AccidentModel.ViewModel;
+	ViewData["Title"] = ViewData["TitleHeader"];    
+}
+<style>
+    .form-item-label {
+        display: inline-block;
+        float: none;
+    }
+    .form-item-view {
+        min-height: 15px;
+    }
+    .form-item-form-item-separator {
+        display: block;
+        float: none;
+    }
+    .person_val {
+        display:block;
+        font-weight:bold;
+    }
+    .company_val {
+        display:block;
+        font-size:small;
+    }
+</style>
+    <div class="header-container">
+        <div>
+            <a href="#" onclick="goBack()">
+                <i class="fas fa-arrow-left" style="font-size:20px;color:black;line-height:30px;"></i>
+            </a>
+        </div>
+        <div class="header-title-right">
+            @ResxHelper.GetValue("ta_acc", "TableTitle")
+        </div>
+    </div>
+    <div class="panel panel-form">
+        <div class="card">
+            <div class="card-header">
+                <div class="title-header">@ViewData["TitleHeader"]</div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div id="form_item_id" class="form-group-none">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_acc", "id")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="view_item_id" class="form-item-view">@Html.Raw(fieldModel.id)</div>
+                        </div>
+
+                        <div id="form_item_ehs_area_id" class="form-group">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_acc", "ehs_area_id")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="view_item_ehs_area_id" class="form-item-view">@Html.Raw(fieldModel.ehs_area_id_text)</div>
+                        </div>
+
+                        <div id="form_item_ba_id" class="form-group">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_acc", "ba_id")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="view_item_ba_id" class="form-item-view">@Html.Raw(fieldModel.ba_id_text)</div>
+                        </div>
+
+                        <div id="form_item_pa_id" class="form-group">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_acc", "pa_id")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="view_item_pa_id" class="form-item-view">@Html.Raw(fieldModel.pa_id_text)</div>
+                        </div>
+
+                        <div id="form_item_psa_id" class="form-group">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_acc", "psa_id")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="view_item_psa_id" class="form-item-view">@Html.Raw(fieldModel.psa_id_text)</div>
+                        </div>
+
+                        <div id="form_item_company_id" class="form-group">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_acc", "company_id")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="view_item_company_id" class="form-item-view">@Html.Raw(fieldModel.company_id_text)</div>
+                        </div>
+
+                        <div><p>&nbsp;</p></div>
+
+                        <div id="form_item_jenis_kejadian_id" class="form-group">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_acc", "jenis_kejadian_id")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="view_item_jenis_kejadian_id" class="form-item-view">@Html.Raw(fieldModel.jenis_kejadian_id_text)</div>
+                        </div>
+
+                        <div id="form_item_judul_kejadian" class="form-group">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_acc", "judul_kejadian")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="view_item_judul_kejadian" class="form-item-view">@Html.Raw(fieldModel.judul_kejadian)</div>
+                        </div>
+
+                        <div id="form_item_nomor_kejadian" class="form-group">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_acc", "nomor_kejadian")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="view_item_nomor_kejadian" class="form-item-view">@Html.Raw(fieldModel.nomor_kejadian)</div>
+                        </div>
+
+                        <div id="form_item_lokasi_kejadian_id" class="form-group">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_acc", "lokasi_kejadian_id")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="view_item_lokasi_kejadian_id" class="form-item-view">@Html.Raw(fieldModel.lokasi_kejadian_id_text)</div>
+                        </div>
+
+                        <div id="form_item_tgl_kejadian" class="form-group">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_acc", "tgl_kejadian")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="view_item_tgl_kejadian" class="form-item-view">@Html.Raw(fieldModel.tgl_kejadian)</div>
+                        </div>
+
+                        <div id="form_item_waktu_kejadian_id" class="form-group">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_acc", "waktu_kejadian_id")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="view_item_waktu_kejadian_id" class="form-item-view">@Html.Raw(fieldModel.waktu_kejadian_id_text)</div>
+                        </div>
+
+                        <div id="form_item_deskripsi_kejadian" class="form-group">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_acc", "deskripsi_kejadian")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="view_item_deskripsi_kejadian" class="form-item-view">@Html.Raw(fieldModel.deskripsi_kejadian)</div>
+                        </div>
+
+                        <div id="form_item_kategori_kejadian_id" class="form-group-none">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_acc", "kategori_kejadian_id")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="view_item_kategori_kejadian_id" class="form-item-view">@Html.Raw(fieldModel.kategori_kejadian_id_text)</div>
+                        </div>
+
+                        <div id="form_item_kategori_kejadian_nama" class="form-group">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_acc", "kategori_kejadian_nama")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="view_item_kategori_kejadian_nama" class="form-item-view">@Html.Raw(fieldModel.kategori_kejadian_nama)</div>
+                        </div>
+
+                        <div id="form_item_jumlah_korban" class="form-group">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_acc", "jumlah_korban")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="view_item_jumlah_korban" class="form-item-view">@Html.Raw(fieldModel.jumlah_korban)</div>
+                        </div>
+
+                        <div id="form_item_jumlah_kerugian" class="form-group-none">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_acc", "jumlah_kerugian")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="view_item_jumlah_kerugian" class="form-item-view">@Html.Raw(fieldModel.jumlah_kerugian)</div>
+                        </div>
+
+                        <div id="form_item_status_jam_kerja" class="form-group">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_acc", "status_jam_kerja")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="view_item_status_jam_kerja" class="form-item-view">@Html.Raw(fieldModel.status_jam_kerja_text)</div>
+                        </div>
+
+                        <div id="form_item_jml_hari_hilang" class="form-group-none">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_acc", "jml_hari_hilang")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="view_item_jml_hari_hilang" class="form-item-view">@Html.Raw(fieldModel.jml_hari_hilang)</div>
+                        </div>
+
+                        <div id="form_item_lampiran" class="form-group">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_acc", "lampiran")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="view_item_lampiran" class="form-item-view">@Html.Raw(fieldModel.lampiran)</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div id="form_item_dampak_fasilitas_id" class="form-group-none">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_acc", "dampak_fasilitas_id")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="view_item_dampak_fasilitas_id" class="form-item-view">@Html.Raw(fieldModel.dampak_fasilitas_id_text)</div>
+                        </div>
+
+                        <div id="form_item_dampak_fasilitas_nama" class="form-group">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_acc", "dampak_fasilitas_nama")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="view_item_dampak_fasilitas_nama" class="form-item-view">@Html.Raw(fieldModel.dampak_fasilitas_nama)</div>
+                        </div>
+
+                        <div id="form_item_dampak_lingkungan_id" class="form-group-none">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_acc", "dampak_lingkungan_id")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="view_item_dampak_lingkungan_id" class="form-item-view">@Html.Raw(fieldModel.dampak_lingkungan_id_text)</div>
+                        </div>
+
+                        <div id="form_item_dampak_lingkungan_nama" class="form-group">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_acc", "dampak_lingkungan_nama")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="view_item_dampak_lingkungan_nama" class="form-item-view">@Html.Raw(fieldModel.dampak_lingkungan_nama)</div>
+                        </div>
+
+
+                        <div><p>&nbsp;</p></div>
+
+                        <div id="form_item_tipe_celaka_id" class="form-group-none">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_acc", "tipe_celaka_id")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="view_item_tipe_celaka_id" class="form-item-view">@Html.Raw(fieldModel.tipe_celaka_id_text)</div>
+                        </div>
+
+                        <div id="form_item_tipe_celaka_nama" class="form-group">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_acc", "tipe_celaka_nama")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="view_item_tipe_celaka_nama" class="form-item-view">@Html.Raw(fieldModel.tipe_celaka_nama)</div>
+                        </div>
+
+                        <div id="form_item_faktor_pribadi_id" class="form-group-none">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_acc", "faktor_pribadi_id")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="view_item_faktor_pribadi_id" class="form-item-view">@Html.Raw(fieldModel.faktor_pribadi_id_text)</div>
+                        </div>
+
+                        <div id="form_item_faktor_pribadi_nama" class="form-group">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_acc", "faktor_pribadi_nama")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="view_item_faktor_pribadi_nama" class="form-item-view">@Html.Raw(fieldModel.faktor_pribadi_nama)</div>
+                        </div>
+
+                        <div id="form_item_faktor_kerja_id" class="form-group-none">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_acc", "faktor_kerja_id")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="view_item_faktor_kerja_id" class="form-item-view">@Html.Raw(fieldModel.faktor_kerja_id_text)</div>
+                        </div>
+
+                        <div id="form_item_faktor_kerja_nama" class="form-group">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_acc", "faktor_kerja_nama")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="view_item_faktor_kerja_nama" class="form-item-view">@Html.Raw(fieldModel.faktor_kerja_nama)</div>
+                        </div>
+
+
+                        <div><p>&nbsp;</p></div>
+
+                        <div id="form_item_tindak_bahaya_id" class="form-group-none">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_acc", "tindak_bahaya_id")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="view_item_tindak_bahaya_id" class="form-item-view">@Html.Raw(fieldModel.tindak_bahaya_id_text)</div>
+                        </div>
+
+                        <div id="form_item_tindak_bahaya_nama" class="form-group">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_acc", "tindak_bahaya_nama")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="view_item_tindak_bahaya_nama" class="form-item-view">@Html.Raw(fieldModel.tindak_bahaya_nama)</div>
+                        </div>
+
+                        <div id="form_item_kondisi_bahaya_id" class="form-group-none">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_acc", "kondisi_bahaya_id")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="view_item_kondisi_bahaya_id" class="form-item-view">@Html.Raw(fieldModel.kondisi_bahaya_id_text)</div>
+                        </div>
+
+                        <div id="form_item_kondisi_bahaya_nama" class="form-group">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_acc", "kondisi_bahaya_nama")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="view_item_kondisi_bahaya_nama" class="form-item-view">@Html.Raw(fieldModel.kondisi_bahaya_nama)</div>
+                        </div>
+
+                        <div><p>&nbsp;</p></div>
+
+                        <div id="form_item_kompen_rugi_id" class="form-group-none">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_acc", "kompen_rugi_id")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="view_item_kompen_rugi_id" class="form-item-view">@Html.Raw(fieldModel.kompen_rugi_id_text)</div>
+                        </div>
+
+                        <div id="form_item_kompen_rugi_nama" class="form-group">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_acc", "kompen_rugi_nama")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="view_item_kompen_rugi_nama" class="form-item-view">@Html.Raw(fieldModel.kompen_rugi_nama)</div>
+                        </div>
+
+                        <div id="form_item_deskripsi_kerugian" class="form-group">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_acc", "deskripsi_kerugian")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="view_item_deskripsi_kerugian" class="form-item-view">@Html.Raw(fieldModel.deskripsi_kerugian)</div>
+                        </div>
+
+                        <div id="form_item_biaya_kerugian" class="form-group">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_acc", "biaya_kerugian")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="view_item_biaya_kerugian" class="form-item-view">@Html.Raw(fieldModel.biaya_kerugian)</div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div id="panel_pelaku" class="panel">
+                            <div class="panel-heading"><div id="title_pelaku" class="title-header">Pelaku</div></div>
+                            <div id="panel_body_pelaku" class="panel-body">
+                                <div id="data_pelaku"></div>
+                                <div id="page_pelaku"></div>
+                                <div id="toolbar_pelaku" style="display:none"><a id="btn_add_pelaku" href="#" onclick="add_pelaku()">@ResxHelper.GetValue("Message", "Add")</a></div>
+                            </div>
+                        </div>
+                        <div id="panel_saksi" class="panel">
+                            <div class="panel-heading"><div id="title_saksi" class="title-header">Saksi</div></div>
+                            <div id="panel_body_saksi" class="panel-body">
+                                <div id="data_saksi"></div>
+                                <div id="page_saksi"></div>
+                                <div id="toolbar_saksi" style="display:none"><a id="btn_add_saksi" href="#" onclick="add_saksi()">@ResxHelper.GetValue("Message","Add")</a></div>
+                            </div>
+                        </div>
+                        <div id="panel_korban" class="panel">
+                            <div class="panel-heading"><div id="title_korban" class="title-header">Korban</div></div>
+                            <div id="panel_body_korban" class="panel-body">
+                                <div id="data_korban"></div>
+                                <div id="page_korban"></div>
+                                <div id="toolbar_korban" style="display:none"><a id="btn_add_korban" href="#" onclick="add_korban()">@ResxHelper.GetValue("Message", "Add")</a></div>
+                            </div>
+                        </div>
+                        <div id="panel_followup" class="panel">
+                            <div class="panel-heading"><div id="title_followup" class="title-header">Follow Up</div></div>
+                            <div id="panel_body_followup" class="panel-body">
+                                <div id="data_followup"></div>
+                                <div id="page_followup"></div>
+                                <div id="toolbar_followup" style="display:none"><a id="btn_add_followup" href="#" onclick="add_followup()">@ResxHelper.GetValue("Message", "Add")</a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-footer">
+                <a id="back" onclick="goBack()" class="k-button k-button-icontext" href="#"><i class="far fa-times-circle"></i>&nbsp;@ResxHelper.GetValue("Message", "Back", "Back")</span></a>
+            </div>
+        </div>
+    </div>
+<script>
+    function goBack() {
+        window.location.href = '@ViewBag.baseUrl/PwaAccident';
+    }
+    function display_by_type() {
+        var jjk = '@fieldModel.status_jam_kerja';
+        if (jjk == '2' || jjk == '3') {
+            $("#form_item_jml_hari_hilang").show();
+        } else {
+            $("#form_item_jml_hari_hilang").hide();
+        }
+    }
+    function get_link_page(action,page, count_data, pageSize, pageNum) {
+        var total_page = count_data / pageSize;
+        total_page = Math.ceil(total_page);
+        var page_start = page / pageNum;
+        page_start = (Math.ceil(page_start) * pageNum) - (pageNum - 1);
+        var page_end = page_start + (pageNum - 1);
+        if (page_end > total_page) {
+            page_end = total_page;
+        }
+        var htm_page = '';
+        if (total_page > 1) {
+            htm_page += '<div class="div_page">';
+            htm_page += '<nav aria-label="...">';
+            htm_page += '<ul class="pagination">';
+            if (page <= pageNum) {
+                htm_page += '<li class="page-item disabled">';
+                htm_page += '<a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>';
+                htm_page += '</li>';
+            } else {
+                htm_page += '<li class="page-item">';
+                htm_page += '<a class="page-link" href="#" tabindex="-1" onclick="'+action+'('+(page_start - 1)+')">Previous</a>';
+                htm_page += '</li>';
+            }
+            for (i = page_start; i <= page_end; i++) {
+                if (i == page) {
+                    htm_page += '<li class="page-item active" aria-current="page">';
+                    htm_page += '<a class="page-link" href="#" onclick="'+action+'(' + i + ')">' + i + ' <span class="sr-only">(current)</span></a>';
+                    htm_page += '</li>';
+                } else {
+                    htm_page += '<li class="page-item"><a class="page-link" href="#" onclick="'+action+'(' + i + ')">' + i + '</a></li>';
+                }
+            }
+            if (page_end < total_page) {
+                htm_page += '<li class="page-item">';
+                htm_page += '<a class="page-link" href="#" onclick="'+action+'(' + (page_end + 1) + ')">Next</a>';
+                htm_page += '</li>';
+            } else {
+                htm_page += '<li class="page-item disabled">';
+                htm_page += '<a class="page-link" href="#" aria-disabled="true">Next</a>';
+                htm_page += '</li>';
+            }
+            htm_page += '</ul>';
+            htm_page += '</nav>';
+            htm_page += '</div>';
+            htm_page += '<div class="div_page_from_total">Hal ' + page + ' dari ' + total_page + '</div>';
+        }
+        return htm_page;
+    }
+    
+    function GetListDataPelaku(page) {
+        if (page == null || page == undefined) {
+            var page = localStorage.getItem("EHS_PwaAccidentPelaku_last_page");
+            if (page == null && page == undefined) {
+                page=1;
+            } 
+        }
+        var pageNum = 3;
+        var pageSize = 10;
+        var take = 10;
+        var skip = (page - 1) * take;
+        var ds_filter = { filter_by_column: [{name:"acc_id",opr:"=",value:"@fieldModel.id"}] ,take: take, skip: skip, page:page, pageSize:pageSize};							
+		$.post( "@ViewData["baseUrl"]/PwaAccident/GetListDataPelaku", ds_filter)
+            .done(function (data) {
+                var htm = '';
+                var htm_page = '';
+                $("#title_pelaku").html('Pelaku (' + data.total + ')');
+                if (data.total == 0) {
+                    htm += '<ul class="list-group">';
+                    htm += '<li class="list-group-item">@ResxHelper.GetValue("Message", "NoDataAvaliable", "Tidak ada data")</li>';
+                    htm += '</ul>';
+                } else {
+                    jQuery.each(data.data, function (i, val) {
+                        htm += '<ul class="list-group">';
+                        htm += '<li class="list-group-item">';
+                        htm += '<span class="person_val">'+val.person_id_text+'</span><span class="company_val">'+val.company_id_text+' ('+val.psa_id_text+')<span>';
+                        htm += '<div>';
+                        htm += '<a class="k-button k-button-icontext v-view k-grid-View" href="#" onclick="view_pelaku('+val.id+')" title="@ResxHelper.GetValue("Message","View")"><span class=" "></span></a>';
+                        if ("@ViewData["AllowEdit"]" == "1" ) {
+                            htm += '<a class="k-button k-button-icontext v-pencil k-grid-Edit" href="#" onclick="edit_pelaku('+val.id+')" title="@ResxHelper.GetValue("Message","Edit")"><span class=" "></span></a>';
+                        }
+                        if ("@ViewData["AllowDelete"]" == "1" ) {
+                            htm += '<a class="k-button k-button-icontext v-close k-grid-Delete" href="#" onclick="delete_pelaku('+val.id+',\''+val.person_id_text+'\')" title="@ResxHelper.GetValue("Message","Delete")"><span class=" "></span></a>';
+                        }
+                        htm += '</div>';
+                        htm += '</li>';
+                        htm += '</ul>';
+                    });
+                    htm_page = get_link_page('GetListDataPelaku',page, data.total, pageSize, pageNum);
+                }
+                htm += '';
+                $("#data_pelaku").html(htm);
+                $("#page_pelaku").html(htm_page);
+                localStorage.setItem("EHS_PwaAccidentPelaku_last_page", page);
+        });
+    }
+    function GetListDataSaksi(page) {
+        if (page == null || page == undefined) {
+            var page = localStorage.getItem("EHS_PwaAccidentSaksi_last_page");
+            if (page == null && page == undefined) {
+                page=1;
+            } 
+        }
+        var pageNum = 3;
+        var pageSize = 10;
+        var take = 10;
+        var skip = (page - 1) * take;
+        var ds_filter = { filter_by_column: [{name:"acc_id",opr:"=",value:"@fieldModel.id"}] ,take: take, skip: skip, page:page, pageSize:pageSize};							
+		$.post( "@ViewData["baseUrl"]/PwaAccident/GetListDataSaksi", ds_filter)
+            .done(function (data) {
+                var htm = '';
+                var htm_page = '';
+                $("#title_saksi").html('Saksi (' + data.total + ')');
+                if (data.total == 0) {
+                    htm += '<ul class="list-group">';
+                    htm += '<li class="list-group-item">@ResxHelper.GetValue("Message", "NoDataAvaliable", "Tidak ada data")</li>';
+                    htm += '</ul>';
+                } else {
+                    jQuery.each(data.data, function (i, val) {
+                        htm += '<ul class="list-group">';
+                        htm += '<li class="list-group-item">';
+                        htm += '<span class="person_val">'+val.person_id_text+'</span><span class="company_val">'+val.company_id_text+' ('+val.psa_id_text+')<span>';
+                        htm += '<div>';
+                        htm += '<a class="k-button k-button-icontext v-view k-grid-View" href="#" onclick="view_saksi('+val.id+')" title="@ResxHelper.GetValue("Message","View")"><span class=" "></span></a>';
+                        if ("@ViewData["AllowEdit"]" == "1") {
+                            htm += '<a class="k-button k-button-icontext v-pencil k-grid-Edit" href="#" onclick="edit_saksi('+val.id+')" title="@ResxHelper.GetValue("Message","Edit")"><span class=" "></span></a>';
+                        }
+                        if ("@ViewData["AllowDelete"]" == "1" ) {
+                            htm += '<a class="k-button k-button-icontext v-close k-grid-Delete" href="#" onclick="delete_saksi('+val.id+',\''+val.person_id_text+'\')" title="@ResxHelper.GetValue("Message","Delete")"><span class=" "></span></a>';
+                        }
+                        htm += '</div>';
+                        htm += '</li>';
+                        htm += '</ul>';
+                    });
+                    htm_page = get_link_page('GetListDataSaksi',page, data.total, pageSize, pageNum);
+                }
+                htm += '';
+                $("#data_saksi").html(htm);
+                $("#page_saksi").html(htm_page);
+                localStorage.setItem("EHS_PwaAccidentSaksi_last_page", page);
+        });
+    }
+    function GetListDataKorban(page) {
+        if (page == null || page == undefined) {
+            var page = localStorage.getItem("EHS_PwaAccidentKorban_last_page");
+            if (page == null && page == undefined) {
+                page=1;
+            } 
+        }
+        var pageNum = 3;
+        var pageSize = 10;
+        var take = 10;
+        var skip = (page - 1) * take;
+        var ds_filter = { filter_by_column: [{name:"acc_id",opr:"=",value:"@fieldModel.id"}] ,take: take, skip: skip, page:page, pageSize:pageSize};							
+		$.post( "@ViewData["baseUrl"]/PwaAccident/GetListDataKorban", ds_filter)
+            .done(function (data) {
+                var htm = '';
+                var htm_page = '';
+                $("#title_korban").html('Korban (' + data.total + ')');
+                if (data.total == 0) {
+                    htm += '<ul class="list-group">';
+                    htm += '<li class="list-group-item">@ResxHelper.GetValue("Message", "NoDataAvaliable", "Tidak ada data")</li>';
+                    htm += '</ul>';
+                } else {
+                    jQuery.each(data.data, function (i, val) {
+                        htm += '<ul class="list-group">';
+                        htm += '<li class="list-group-item">';
+                        htm += '<span class="person_val">'+val.person_id_text+'</span><span class="company_val">'+val.company_id_text+' ('+val.psa_id_text+')<span>';
+                        htm += '<div>';
+                        htm += '<a class="k-button k-button-icontext v-view k-grid-View" href="#" onclick="view_korban('+val.id+')" title="@ResxHelper.GetValue("Message","View")"><span class=" "></span></a>';
+                        if ("@ViewData["AllowEdit"]" == "1") {
+                            htm += '<a class="k-button k-button-icontext v-pencil k-grid-Edit" href="#" onclick="edit_korban('+val.id+')" title="@ResxHelper.GetValue("Message","Edit")"><span class=" "></span></a>';
+                        }
+                        if ("@ViewData["AllowDelete"]") {
+                            htm += '<a class="k-button k-button-icontext v-close k-grid-Delete" href="#" onclick="delete_korban('+val.id+',\''+val.person_id_text+'\')" title="@ResxHelper.GetValue("Message","Delete")"><span class=" "></span></a>';
+                        }
+                        htm += '</div>';
+                        htm += '</li>';
+                        htm += '</ul>';
+                    });
+                    var jml = data.total;
+                    var total_page = jml / pageSize;
+                    total_page = Math.ceil(total_page);//total_page.toFixed(0);
+                    var page_start = page / pageNum;
+                    page_start = (Math.ceil(page_start) * pageNum) - (pageNum - 1);//page_start.toFixed(0);
+                    var page_end = page_start + (pageNum - 1);
+                    if (page_end > total_page) {
+                        page_end = total_page;
+                    }
+                    htm_page = get_link_page('GetListDataKorban',page, data.total, pageSize, pageNum);
+                    
+                }
+                htm += '';
+                $("#data_korban").html(htm);
+                $("#page_korban").html(htm_page);
+                localStorage.setItem("EHS_PwaAccidentKorban_last_page", page);
+        });
+    }
+    function GetListDataFollowup(page) {
+        if (page == null || page == undefined) {
+            var page = localStorage.getItem("EHS_PwaAccidentFollowup_last_page");
+            if (page == null && page == undefined) {
+                page=1;
+            } 
+        }
+        var pageNum = 3;
+        var pageSize = 10;
+        var take = 10;
+        var skip = (page - 1) * take;
+        var ds_filter = { filter_by_column: [{name:"acc_id",opr:"=",value:"@fieldModel.id"}] ,take: take, skip: skip, page:page, pageSize:pageSize};							
+		$.post( "@ViewData["baseUrl"]/PwaAccident/GetListDataFollowup", ds_filter)
+            .done(function (data) {
+                var htm = '';
+                var htm_page = '';
+                $("#title_followup").html('Follow Up (' + data.total + ')');
+                if (data.total == 0) {
+                    htm += '<ul class="list-group">';
+                    htm += '<li class="list-group-item">@ResxHelper.GetValue("Message", "NoDataAvaliable", "Tidak ada data")</li>';
+                    htm += '</ul>';
+                } else {
+                    jQuery.each(data.data, function (i, val) {
+                        htm += '<ul class="list-group">';
+                        htm += '<li class="list-group-item">';
+                        htm += '<label>'+val.followup_accident_id_text+'</label>';
+                        htm += ' (<span class="">'+kendo.toString(kendo.parseDate(val.due_date), "dd MMMM yyyy")+'</span>';
+                        htm += ' - <span class="">'+val.status_followup_id_text+'</span>)';
+                        htm += '<p>'+val.deskripsi_tindak_lanjut+'</p>';
+                        htm += '<div>';
+                        htm += '<a class="k-button k-button-icontext v-view k-grid-View" href="#" onclick="view_followup('+val.id+')" title="@ResxHelper.GetValue("Message","View")"><span class=" "></span></a>';
+                        if ("@ViewData["AllowEdit"]" == "1")
+                        {
+                            htm += '<a class="k-button k-button-icontext v-pencil k-grid-Edit" href="#" onclick="edit_followup(' + val.id + ')" title="@ResxHelper.GetValue("Message","Edit")"><span class=" "></span></a>';
+                        }
+                        if ("@ViewData["AllowDelete"]" == "1")
+                        {
+                            htm += '<a class="k-button k-button-icontext v-close k-grid-Delete" href="#" onclick="delete_followup('+val.id+',\''+val.followup_accident_id_text+'\')" title="@ResxHelper.GetValue("Message","Delete")"><span class=" "></span></a>';
+                        }
+                        htm += '</div>';
+                        htm += '</li>';
+                        htm += '</ul>';
+                    });
+                    htm_page = get_link_page('GetListDataFollowup',page, data.total, pageSize, pageNum);
+                }
+                htm += '';
+                $("#data_followup").html(htm);
+                $("#page_followup").html(htm_page);
+                localStorage.setItem("EHS_PwaAccidentFollowup_last_page", page);
+        });
+    }
+    function view_pelaku(id) {
+        var contentUrl = '@ViewBag.BaseUrl/PwaAccident/ViewPelaku?id='+id;
+        var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Close"], close: onCloseDialog, });
+        form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: false, width: 400, height: 500, minHeight: 300, });
+        form_edit.data("kendoWindow").center().open().maximize();
+    }
+    function add_pelaku() {
+        var contentUrl = '@ViewBag.BaseUrl/PwaAccident/AddPelaku?acc_id=@ViewBag.acc_id';
+        var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Close"], close: onCloseDialog, });
+        form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: false, width: 400, height: 500, minHeight: 300, });
+        form_edit.data("kendoWindow").center().open().maximize();
+    }
+    function edit_pelaku(id) {
+        var contentUrl = '@ViewBag.BaseUrl/PwaAccident/EditPelaku?id='+id;
+        var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Close"], close: onCloseDialog, });
+        form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: false, width: 400, height: 500, minHeight: 300, });
+        form_edit.data("kendoWindow").center().open().maximize();
+    }
+    function delete_pelaku(id,text) {
+		var keyValue = text;
+		var data2 = { title: '@ResxHelper.GetValue("Message","ConfirmDelete")', msg: keyValue };
+		var winconfirm = $("#dialogconfirm").kendoWindow({ title: "@ResxHelper.GetValue("Message","DeleteData")", modal: true, visible: false, resizable: true, draggable: true, width: "100%", height: "200px" }).data("kendoWindow");
+		winconfirm.content(confirmTemplate(data2));
+		winconfirm.center(); winconfirm.open();
+		$("#yesButton").click(function () {
+            $.ajax({
+                data: {id,id}, url: '@ViewBag.BaseUrl/AccidentPelaku/Delete', type: 'POST'
+				, success: function (data) {
+					if (data.status != 1) {
+						notification.show({ title: data.title, message: kendo.toString(data.message) }, "error");
+					} else {
+                        notification.show({ message: kendo.toString(data.message) }, "success");
+                        GetListDataPelaku(null);
+                        winconfirm.close();
+					}
+				}
+			});
+		});
+		$("#noButton").click(function () { winconfirm.close(); });
+    }
+    function view_saksi(id) {
+        var contentUrl = '@ViewBag.BaseUrl/PwaAccident/ViewSaksi?id='+id;
+        var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Close"], close: onCloseDialog, });
+        form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: false, width: 400, height: 500, minHeight: 300, });
+        form_edit.data("kendoWindow").center().open().maximize();
+    }
+    function add_saksi() {
+        var contentUrl = '@ViewBag.BaseUrl/PwaAccident/AddSaksi?acc_id=@ViewBag.acc_id';
+        var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Close"], close: onCloseDialog, });
+        form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: false, width: 400, height: 500, minHeight: 300, });
+        form_edit.data("kendoWindow").center().open().maximize();
+    }
+    function edit_saksi(id) {
+        var contentUrl = '@ViewBag.BaseUrl/PwaAccident/EditSaksi?id='+id;
+        var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Close"], close: onCloseDialog, });
+        form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: false, width: 400, height: 500, minHeight: 300, });
+        form_edit.data("kendoWindow").center().open().maximize();
+    }
+    function delete_saksi(id,text) {
+		var keyValue = text;
+		var data2 = { title: '@ResxHelper.GetValue("Message","ConfirmDelete")', msg: keyValue };
+		var winconfirm = $("#dialogconfirm").kendoWindow({ title: "@ResxHelper.GetValue("Message","DeleteData")", modal: true, visible: false, resizable: true, draggable: true, width: "100%", height: "200px" }).data("kendoWindow");
+		winconfirm.content(confirmTemplate(data2));
+		winconfirm.center(); winconfirm.open();
+		$("#yesButton").click(function () {
+            $.ajax({
+                data: {id,id}, url: '@ViewBag.BaseUrl/AccidentSaksi/Delete', type: 'POST'
+				, success: function (data) {
+					if (data.status != 1) {
+						notification.show({ title: data.title, message: kendo.toString(data.message) }, "error");
+					} else {
+                        notification.show({ message: kendo.toString(data.message) }, "success");
+                        GetListDataSaksi(null);
+                        winconfirm.close();
+					}
+				}
+			});
+		});
+		$("#noButton").click(function () { winconfirm.close(); });
+    }
+    function view_korban(id) {
+        var contentUrl = '@ViewBag.BaseUrl/PwaAccident/ViewKorban?id='+id;
+        var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Close"], close: onCloseDialog, });
+        form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: false, width: 400, height: 500, minHeight: 300, });
+        form_edit.data("kendoWindow").center().open().maximize();
+    }
+    function add_korban() {
+        var contentUrl = '@ViewBag.BaseUrl/PwaAccident/AddKorban?acc_id=@ViewBag.acc_id';
+        var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Close"], close: onCloseDialog, });
+        form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: false, width: 400, height: 500, minHeight: 300, });
+        form_edit.data("kendoWindow").center().open().maximize();
+    }
+    function edit_korban(id) {
+        var contentUrl = '@ViewBag.BaseUrl/PwaAccident/EditKorban?id='+id;
+        var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Close"], close: onCloseDialog, });
+        form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: false, width: 400, height: 500, minHeight: 300, });
+        form_edit.data("kendoWindow").center().open().maximize();
+    }
+    function delete_korban(id,text) {
+		var keyValue = text;
+		var data2 = { title: '@ResxHelper.GetValue("Message","ConfirmDelete")', msg: keyValue };
+		var winconfirm = $("#dialogconfirm").kendoWindow({ title: "@ResxHelper.GetValue("Message","DeleteData")", modal: true, visible: false, resizable: true, draggable: true, width: "100%", height: "200px" }).data("kendoWindow");
+		winconfirm.content(confirmTemplate(data2));
+		winconfirm.center(); winconfirm.open();
+		$("#yesButton").click(function () {
+            $.ajax({
+                data: {id,id}, url: '@ViewBag.BaseUrl/AccidentKorban/Delete', type: 'POST'
+				, success: function (data) {
+					if (data.status != 1) {
+						notification.show({ title: data.title, message: kendo.toString(data.message) }, "error");
+					} else {
+                        notification.show({ message: kendo.toString(data.message) }, "success");
+                        GetListDataKorban(null);
+                        winconfirm.close();
+					}
+				}
+			});
+		});
+		$("#noButton").click(function () { winconfirm.close(); });
+    }
+    function view_followup(id) {
+        var contentUrl = '@ViewBag.BaseUrl/PwaAccident/ViewFollowup?id='+id;
+        var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Close"], close: onCloseDialog, });
+        form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: false, width: 400, height: 500, minHeight: 300, });
+        form_edit.data("kendoWindow").center().open().maximize();
+    }
+    function add_followup() {
+        var contentUrl = '@ViewBag.BaseUrl/PwaAccident/AddFollowup?acc_id=@ViewBag.acc_id';
+        var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Close"], close: onCloseDialog, });
+        form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: false, width: 400, height: 500, minHeight: 300, });
+        form_edit.data("kendoWindow").center().open().maximize();
+    }
+    function edit_followup(id) {
+        var contentUrl = '@ViewBag.BaseUrl/PwaAccident/EditFollowup?id='+id;
+        var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Close"], close: onCloseDialog, });
+        form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: false, width: 400, height: 500, minHeight: 300, });
+        form_edit.data("kendoWindow").center().open().maximize();
+    }
+    function delete_followup(id,text) {
+		var keyValue = text;
+		var data2 = { title: '@ResxHelper.GetValue("Message","ConfirmDelete")', msg: keyValue };
+		var winconfirm = $("#dialogconfirm").kendoWindow({ title: "@ResxHelper.GetValue("Message","DeleteData")", modal: true, visible: false, resizable: true, draggable: true, width: "100%", height: "200px" }).data("kendoWindow");
+		winconfirm.content(confirmTemplate(data2));
+		winconfirm.center(); winconfirm.open();
+		$("#yesButton").click(function () {
+            $.ajax({
+                data: {id,id}, url: '@ViewBag.BaseUrl/AccidentFollowup/Delete', type: 'POST'
+				, success: function (data) {
+					if (data.status != 1) {
+						notification.show({ title: data.title, message: kendo.toString(data.message) }, "error");
+					} else {
+                        notification.show({ message: kendo.toString(data.message) }, "success");
+                        GetListDataFollowup(null);
+                        winconfirm.close();
+					}
+				}
+			});
+		});
+		$("#noButton").click(function () { winconfirm.close(); });
+	}
+	function onCloseDialog(e) { $('#dialog').html(''); }
+    function closeDialog() { $("#dialog").data("kendoWindow").close(); }
+    $(document).ready(function () {
+        display_by_type();
+        var page_pelaku = localStorage.getItem("EHS_PwaAccidentPelaku_last_page");
+        if (page_pelaku != null && page_pelaku != undefined) {
+            GetListDataPelaku(page_pelaku);
+        } else {
+            GetListDataPelaku(1);
+        }
+        var page_saksi = localStorage.getItem("EHS_PwaAccidentSaksi_last_page");
+        if (page_saksi != null && page_saksi != undefined) {
+            GetListDataSaksi(page_saksi);
+        } else {
+            GetListDataSaksi(1);
+        }
+        var page_korban = localStorage.getItem("EHS_PwaAccidentKorban_last_page");
+        if (page_korban != null && page_korban != undefined) {
+            GetListDataKorban(page_korban);
+        } else {
+            GetListDataKorban(1);
+        }
+        var page_followup = localStorage.getItem("EHS_PwaAccidentFollowup_last_page");
+        if (page_followup != null && page_followup != undefined) {
+            GetListDataFollowup(page_followup);
+        } else {
+            GetListDataFollowup(1);
+        }
+        if (@ViewData["AllowAdd"]== "1") {
+            $("#toolbar_pelaku").show();
+            $("#toolbar_saksi").show();
+            $("#toolbar_korban").show();
+            $("#toolbar_followup").show();
+        }
+			
+    });
+</script>

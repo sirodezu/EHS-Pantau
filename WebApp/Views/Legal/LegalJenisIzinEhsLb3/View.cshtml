@@ -1,0 +1,85 @@
+@using WebApp
+@using Microsoft.AspNetCore.Http;
+@{
+    Layout = "~/Views/Shared/_LayoutNoHeader.cshtml";
+    var fieldModel = ViewData["fieldModel"] as WebApp.Models.LegalJenisIzinEhsLb3Model.ViewModel;
+	ViewData["Title"] = ViewData["TitleHeader"];
+    ViewData["PageName"] = "legaljenisizinehslb3";
+    ViewData["Heading"] = ViewData["TitleHeader"];
+    ViewData["Category1"] = "";
+    ViewData["Category2"] = "";
+}
+<div class="panel panel-form">
+	<div class="panel-container">
+		<div class="panel-heading">
+			<div class="title-header">@ViewData["TitleHeader"]</div>
+		</div>
+		<div class="panel-content">
+			<div class="row">
+				<div class="col-lg-12">
+
+                    <div id="form_item_id" class="form-group-none">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_legal_jenis_izin_ehs_lb3", "id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_id" class="form-item-view">@Html.Raw(fieldModel.id)</div>
+                  </div>
+
+                    <div id="form_item_legal_id" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_legal_jenis_izin_ehs_lb3", "legal_id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_legal_id" class="form-item-view">@Html.Raw(fieldModel.legal_id_text)</div>
+                  </div>
+
+                    <div id="form_item_jenis_limbah_tersimpan_id" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_legal_jenis_izin_ehs_lb3", "jenis_limbah_tersimpan_id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_jenis_limbah_tersimpan_id" class="form-item-view">@Html.Raw(fieldModel.jenis_limbah_tersimpan_id_text)</div>
+                  </div>
+
+                    <div id="form_item_kode_limbah" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_legal_jenis_izin_ehs_lb3", "kode_limbah")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_kode_limbah" class="form-item-view">@Html.Raw(fieldModel.kode_limbah)</div>
+                  </div>
+
+                    <div id="form_item_periode_telah_dilaporkan_id" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_legal_jenis_izin_ehs_lb3", "periode_telah_dilaporkan_id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_periode_telah_dilaporkan_id" class="form-item-view">@Html.Raw(fieldModel.periode_telah_dilaporkan_id_text)</div>
+                  </div>
+
+                    <div id="form_item_tanggal_pelaporan" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_legal_jenis_izin_ehs_lb3", "tanggal_pelaporan")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_tanggal_pelaporan" class="form-item-view">@Html.Raw(fieldModel.tanggal_pelaporan)</div>
+                  </div>
+
+                    <div id="form_item_file_name_bukti_lapor" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_legal_jenis_izin_ehs_lb3", "file_name_bukti_lapor")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_file_name_bukti_lapor" class="form-item-view">@Html.Raw(fieldModel.file_name_bukti_lapor)</div>
+                  </div>
+
+                    <div id="form_item_file_path_bukti_lapor" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_legal_jenis_izin_ehs_lb3", "file_path_bukti_lapor")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_file_path_bukti_lapor" class="form-item-view">@Html.Raw(fieldModel.file_path_bukti_lapor)</div>
+                  </div>
+
+				</div>
+			</div>
+		</div>
+		<div class="panel-footer">
+			<a id="close" class="k-button k-button-icontext" href="#"><i class="far fa-times-circle"></i>&nbsp;<span id="btnCloseText">@ResxHelper.GetValue("Message", "Close", "Tutup")</span></a>
+		</div>
+	</div>
+</div>
+<script>
+    $("#close").kendoButton();
+    $("#close").click(function (e) {
+        close_self();
+    });
+    function onCloseDialog(e) { $('#dialog').html(''); }
+    function closeDialog() { $("#dialog").data("kendoWindow").close(); }
+    function close_self() { if (window.parent.$("#dialog_ta_legal_jenis_izin_ehs_lb3").data("kendoWindow")) { window.parent.$("#dialog_ta_legal_jenis_izin_ehs_lb3").data("kendoWindow").close(); } else { window.parent.$("#dialog").data("kendoWindow").close(); } }
+</script>

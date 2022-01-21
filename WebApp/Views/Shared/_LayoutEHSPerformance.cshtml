@@ -1,0 +1,45 @@
+﻿@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@{
+    var baseUrl = HttpContextAccessor.HttpContext.Request.Scheme + "://" + HttpContextAccessor.HttpContext.Request.Host + "" + HttpContextAccessor.HttpContext.Request.PathBase;
+}
+<!DOCTYPE html>
+<partial name="_CopyrightHeader" />
+<html lang="en">
+<head>
+    <partial name="_Head" />
+    @RenderSection("HeadBlock", required: false)
+</head>
+<body class="mod-bg-1 @ViewBag.PreemptiveClass">
+    <partial name="_ScriptsLoadingSaving" />
+    <div class="page-wrapper">
+        <div class="page-inner">
+            <partial name="_LeftPanel" />
+            <div class="page-content-wrapper">
+                <partial name="_PageHeader" />
+                <main id="js-page-content" role="main" class="page-content">
+                    @if (ViewBag.PreemptiveClass?.Length > 0)
+                    {
+                    }
+                    else
+                    {
+                        <partial name="_PageBreadcrumb" />
+                        <div class="subheader">
+                            <partial name="_PageHeading" />
+                            @RenderSection("SubheaderBlock", required: false)
+                        </div>
+                    }
+                    @RenderSection("GridHeadBlock", required: false)
+                    @RenderBody()
+                </main>
+                <partial name="_PageContentOverlay" />
+                <partial name="_PageFooter" />
+                <partial name="_ShortcutModal" />
+                <partial name="_ColorProfileReference" />
+            </div>
+        </div>
+    </div>
+    @RenderSection("Scripts", required: false)
+    @RenderSection("ScriptsBlock", required: false)
+</body>
+</html>

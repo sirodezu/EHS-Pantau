@@ -1,0 +1,1940 @@
+@using WebApp
+@using Microsoft.AspNetCore.Http;
+@using Newtonsoft.Json
+@{
+	Layout = "~/Views/Shared/_LayoutNoHeader.cshtml";
+	var fieldModel = ViewData["fieldModel"] as WebApp.Models.AuditKriteriaModel.ViewModel;
+	ViewData["Title"] = ViewData["TitleHeader"];
+	ViewData["PageName"] = "auditkriteria";
+	ViewData["Heading"] = ViewData["TitleHeader"];
+	ViewData["Category1"] = "";
+	ViewData["Category2"] = "";
+}
+<div class="panel panel-form">
+	<div class="panel-container">
+		<div class="panel-heading">
+			<div class="title-header">@ViewData["TitleHeader"]</div>
+		</div>
+		<div class="panel-content">
+			<div class="row">
+				<div class="col-lg-12">
+
+					<div id="form_item_id" class="form-group-none">
+						<div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria", "id")</div>
+						<div class="form-item-separator">:</div>
+						<div id="view_item_id" class="form-item-view">@Html.Raw(fieldModel.id)</div>
+					</div>
+
+					<div id="form_item_audit_id" class="form-group-none">
+						<div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria", "audit_id")</div>
+						<div class="form-item-separator">:</div>
+						<div id="view_item_audit_id" class="form-item-view">@Html.Raw(fieldModel.audit_id)</div>
+					</div>
+
+					<div id="form_item_kriteria_audit_id" class="form-group">
+						<div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria", "kriteria_audit_id")</div>
+						<div class="form-item-separator">:</div>
+						<div id="view_item_kriteria_audit_id" class="form-item-view">@Html.Raw(fieldModel.kriteria_audit_id_text)</div>
+					</div>
+
+					<div id="form_item_jumlah_iso_14001_2015" class="form-group-none">
+						<div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria", "jumlah_iso_14001_2015")</div>
+						<div class="form-item-separator">:</div>
+						<div id="view_item_jumlah_iso_14001_2015" class="form-item-view">@Html.Raw(fieldModel.jumlah_iso_14001_2015)</div>
+					</div>
+
+					<div id="form_item_jumlah_iso_45001_2018" class="form-group-none">
+						<div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria", "jumlah_iso_45001_2018")</div>
+						<div class="form-item-separator">:</div>
+						<div id="view_item_jumlah_iso_45001_2018" class="form-item-view">@Html.Raw(fieldModel.jumlah_iso_45001_2018)</div>
+					</div>
+
+				</div>
+			</div>
+
+
+			<div class="row">
+				<div class="col-lg-12">
+					@{
+						//IAMS
+						if (ViewBag.kriteria_audit_id == "1")
+						{
+
+							//AGC
+							<br /><hr /><h4>AGC</h4>
+							<div class="panel">
+								<div class="panel-container">
+									<div class="panel-content">
+										<div id="collapse_filter_ta_audit_kriteria_agc" class="panel panel-collapse collapse">
+											<div class="panel-heading-filter">
+												@ResxHelper.GetValue("Message", "FilterDataHeader", "Filter Data")
+											</div>
+											<div class="panel-body-filter">
+												<section class="filter_cols">
+												</section>
+											</div>
+											<div class="panel-footer-filter">
+												<a id="btnResetFilter_ta_audit_kriteria_agc" onclick="reset_filter_ta_audit_kriteria_agc()" class="k-button" title="Reset Filter">@ResxHelper.GetValue("Message", "ResetFilter", "Reset Filter")</a>
+											</div>
+										</div>
+										<div>
+											<table id="toolbar_panel" style="width:100%;display:none">
+												<tr>
+													<td>
+														<span id="quick_search_template_ta_audit_kriteria_agc" class="k-textbox k-space-right"><input id="txtSearch_ta_audit_kriteria_agc" placeholder="@ResxHelper.GetValue("Message","QuickSearch")" value="" /><a id="btnSearch_ta_audit_kriteria_agc" href="#" class="k-icon k-i-search">&nbsp;</a></span>
+														<img id="btnSearchByColumn_ta_audit_kriteria_agc" title="@ResxHelper.GetValue("Message","ShowSearchByColumn")" style="cursor:pointer" src="~/img/search_by_column.png" width="20">
+														<img id="btnShowHideColumn_ta_audit_kriteria_agc" title="@ResxHelper.GetValue("Message","ShowHideColumn")" style="cursor:pointer" src="~/img/show_hide_column.png" width="20">
+														<a id="btnShowHideFilter_ta_audit_kriteria_agc" data-toggle="collapse" href="#collapse_filter_ta_audit_kriteria_agc" style="display:none">@ResxHelper.GetValue("Message", "ShowFilter", "Tampilkan Filter")</a>
+													</td>
+													<td style="float:right">
+														<img id="btnExportExcel_ta_audit_kriteria_agc" title="@ResxHelper.GetValue("Message","ExportToExcel")" style="cursor:pointer" src="~/img/excel.png" width="20" />&nbsp;
+														<a id="btnAdd_ta_audit_kriteria_agc" onclick="AddData_ta_audit_kriteria_agc()" class="k-button" title="@ResxHelper.GetValue("Message","Add")">@ResxHelper.GetValue("Message", "Add", "Tambah")</a>
+													</td>
+												<tr>
+											</table>
+										</div>
+										<div id="grid_ta_audit_kriteria_agc"></div>
+									</div>
+								</div>
+
+							</div>
+							<div id="WinShowHideColumn_ta_audit_kriteria_agc" style="display: none">
+								<div id="attr_column_show_hide" style="width:auto;height:auto;overflow-y:scroll;"></div>
+							</div>
+
+
+
+
+							//SMK3
+							<br /><hr /><h4>SMK3</h4>
+							<div class="panel">
+								<div class="panel-container">
+									<div class="panel-content">
+										<div id="collapse_filter_ta_audit_kriteria_smk3" class="panel panel-collapse collapse">
+											<div class="panel-heading-filter">
+												@ResxHelper.GetValue("Message", "FilterDataHeader", "Filter Data")
+											</div>
+											<div class="panel-body-filter">
+												<section class="filter_cols">
+												</section>
+											</div>
+											<div class="panel-footer-filter">
+												<a id="btnResetFilter_ta_audit_kriteria_smk3" onclick="reset_filter_ta_audit_kriteria_smk3()" class="k-button" title="Reset Filter">@ResxHelper.GetValue("Message", "ResetFilter", "Reset Filter")</a>
+											</div>
+										</div>
+										<div>
+											<table id="toolbar_panel" style="width:100%;display:none">
+												<tr>
+													<td>
+														<span id="quick_search_template_ta_audit_kriteria_smk3" class="k-textbox k-space-right"><input id="txtSearch_ta_audit_kriteria_smk3" placeholder="@ResxHelper.GetValue("Message","QuickSearch")" value="" /><a id="btnSearch_ta_audit_kriteria_smk3" href="#" class="k-icon k-i-search">&nbsp;</a></span>
+														<img id="btnSearchByColumn_ta_audit_kriteria_smk3" title="@ResxHelper.GetValue("Message","ShowSearchByColumn")" style="cursor:pointer" src="~/img/search_by_column.png" width="20">
+														<img id="btnShowHideColumn_ta_audit_kriteria_smk3" title="@ResxHelper.GetValue("Message","ShowHideColumn")" style="cursor:pointer" src="~/img/show_hide_column.png" width="20">
+														<a id="btnShowHideFilter_ta_audit_kriteria_smk3" data-toggle="collapse" href="#collapse_filter_ta_audit_kriteria_smk3" style="display:none">@ResxHelper.GetValue("Message", "ShowFilter", "Tampilkan Filter")</a>
+													</td>
+													<td style="float:right">
+														<img id="btnExportExcel_ta_audit_kriteria_smk3" title="@ResxHelper.GetValue("Message","ExportToExcel")" style="cursor:pointer" src="~/img/excel.png" width="20" />&nbsp;
+														<a id="btnAdd_ta_audit_kriteria_smk3" onclick="AddData_ta_audit_kriteria_smk3()" class="k-button" title="@ResxHelper.GetValue("Message","Add")">@ResxHelper.GetValue("Message", "Add", "Tambah")</a>
+													</td>
+												<tr>
+											</table>
+										</div>
+										<div id="grid_ta_audit_kriteria_smk3"></div>
+									</div>
+								</div>
+
+							</div>
+							<div id="WinShowHideColumn_ta_audit_kriteria_smk3" style="display: none">
+								<div id="attr_column_show_hide" style="width:auto;height:auto;overflow-y:scroll;"></div>
+							</div>
+
+
+
+							//SMKP
+							<br /><hr /><h4>SMKP</h4>
+							<div class="panel">
+								<div class="panel-container">
+									<div class="panel-content">
+										<div id="collapse_filter_ta_audit_kriteria_smkp" class="panel panel-collapse collapse">
+											<div class="panel-heading-filter">
+												@ResxHelper.GetValue("Message", "FilterDataHeader", "Filter Data")
+											</div>
+											<div class="panel-body-filter">
+												<section class="filter_cols">
+												</section>
+											</div>
+											<div class="panel-footer-filter">
+												<a id="btnResetFilter_ta_audit_kriteria_smkp" onclick="reset_filter_ta_audit_kriteria_smkp()" class="k-button" title="Reset Filter">@ResxHelper.GetValue("Message", "ResetFilter", "Reset Filter")</a>
+											</div>
+										</div>
+										<div>
+											<table id="toolbar_panel" style="width:100%;display:none">
+												<tr>
+													<td>
+														<span id="quick_search_template_ta_audit_kriteria_smkp" class="k-textbox k-space-right"><input id="txtSearch_ta_audit_kriteria_smkp" placeholder="@ResxHelper.GetValue("Message","QuickSearch")" value="" /><a id="btnSearch_ta_audit_kriteria_smkp" href="#" class="k-icon k-i-search">&nbsp;</a></span>
+														<img id="btnSearchByColumn_ta_audit_kriteria_smkp" title="@ResxHelper.GetValue("Message","ShowSearchByColumn")" style="cursor:pointer" src="~/img/search_by_column.png" width="20">
+														<img id="btnShowHideColumn_ta_audit_kriteria_smkp" title="@ResxHelper.GetValue("Message","ShowHideColumn")" style="cursor:pointer" src="~/img/show_hide_column.png" width="20">
+														<a id="btnShowHideFilter_ta_audit_kriteria_smkp" data-toggle="collapse" href="#collapse_filter_ta_audit_kriteria_smkp" style="display:none">@ResxHelper.GetValue("Message", "ShowFilter", "Tampilkan Filter")</a>
+													</td>
+													<td style="float:right">
+														<img id="btnExportExcel_ta_audit_kriteria_smkp" title="@ResxHelper.GetValue("Message","ExportToExcel")" style="cursor:pointer" src="~/img/excel.png" width="20" />&nbsp;
+														<a id="btnAdd_ta_audit_kriteria_smkp" onclick="AddData_ta_audit_kriteria_smkp()" class="k-button" title="@ResxHelper.GetValue("Message","Add")">@ResxHelper.GetValue("Message", "Add", "Tambah")</a>
+													</td>
+												<tr>
+											</table>
+										</div>
+										<div id="grid_ta_audit_kriteria_smkp"></div>
+									</div>
+								</div>
+
+							</div>
+							<div id="WinShowHideColumn_ta_audit_kriteria_smkp" style="display: none">
+								<div id="attr_column_show_hide" style="width:auto;height:auto;overflow-y:scroll;"></div>
+							</div>
+						}
+
+
+
+
+
+						//Kantor, SOHE, Gudang, Konstruksi
+						if (ViewBag.kriteria_audit_id == "2" || ViewBag.kriteria_audit_id == "3" || ViewBag.kriteria_audit_id == "6" || ViewBag.kriteria_audit_id == "7")
+						{
+
+							//AGC
+							<div class="panel">
+								<div class="panel-container">
+									<div class="panel-content">
+										<div id="collapse_filter_ta_audit_kriteria_agc" class="panel panel-collapse collapse">
+											<div class="panel-heading-filter">
+												@ResxHelper.GetValue("Message", "FilterDataHeader", "Filter Data")
+											</div>
+											<div class="panel-body-filter">
+												<section class="filter_cols">
+												</section>
+											</div>
+											<div class="panel-footer-filter">
+												<a id="btnResetFilter_ta_audit_kriteria_agc" onclick="reset_filter_ta_audit_kriteria_agc()" class="k-button" title="Reset Filter">@ResxHelper.GetValue("Message", "ResetFilter", "Reset Filter")</a>
+											</div>
+										</div>
+										<div>
+											<table id="toolbar_panel" style="width:100%;display:none">
+												<tr>
+													<td>
+														<span id="quick_search_template_ta_audit_kriteria_agc" class="k-textbox k-space-right"><input id="txtSearch_ta_audit_kriteria_agc" placeholder="@ResxHelper.GetValue("Message","QuickSearch")" value="" /><a id="btnSearch_ta_audit_kriteria_agc" href="#" class="k-icon k-i-search">&nbsp;</a></span>
+														<img id="btnSearchByColumn_ta_audit_kriteria_agc" title="@ResxHelper.GetValue("Message","ShowSearchByColumn")" style="cursor:pointer" src="~/img/search_by_column.png" width="20">
+														<img id="btnShowHideColumn_ta_audit_kriteria_agc" title="@ResxHelper.GetValue("Message","ShowHideColumn")" style="cursor:pointer" src="~/img/show_hide_column.png" width="20">
+														<a id="btnShowHideFilter_ta_audit_kriteria_agc" data-toggle="collapse" href="#collapse_filter_ta_audit_kriteria_agc" style="display:none">@ResxHelper.GetValue("Message", "ShowFilter", "Tampilkan Filter")</a>
+													</td>
+													<td style="float:right">
+														<img id="btnExportExcel_ta_audit_kriteria_agc" title="@ResxHelper.GetValue("Message","ExportToExcel")" style="cursor:pointer" src="~/img/excel.png" width="20" />&nbsp;
+														<a id="btnAdd_ta_audit_kriteria_agc" onclick="AddData_ta_audit_kriteria_agc()" class="k-button" title="@ResxHelper.GetValue("Message","Add")">@ResxHelper.GetValue("Message", "Add", "Tambah")</a>
+													</td>
+												<tr>
+											</table>
+										</div>
+										<div id="grid_ta_audit_kriteria_agc"></div>
+									</div>
+								</div>
+
+							</div>
+							<div id="WinShowHideColumn_ta_audit_kriteria_agc" style="display: none">
+								<div id="attr_column_show_hide" style="width:auto;height:auto;overflow-y:scroll;"></div>
+							</div>
+
+						}
+
+
+
+
+
+						//Tambang, Manufaktur
+						if (ViewBag.kriteria_audit_id == "4" || ViewBag.kriteria_audit_id == "5")
+						{
+							<div class="panel">
+								<div class="panel-container">
+									<div class="panel-content">
+										<div id="collapse_filter_ta_audit_kriteria_agc_tm" class="panel panel-collapse collapse">
+											<div class="panel-heading-filter">
+												@ResxHelper.GetValue("Message", "FilterDataHeader", "Filter Data")
+											</div>
+											<div class="panel-body-filter">
+												<section class="filter_cols">
+												</section>
+											</div>
+											<div class="panel-footer-filter">
+												<a id="btnResetFilter_ta_audit_kriteria_agc_tm" onclick="reset_filter_ta_audit_kriteria_agc_tm()" class="k-button" title="Reset Filter">@ResxHelper.GetValue("Message", "ResetFilter", "Reset Filter")</a>
+											</div>
+										</div>
+										<div>
+											<table id="toolbar_panel" style="width:100%;display:none">
+												<tr>
+													<td>
+														<span id="quick_search_template_ta_audit_kriteria_agc_tm" class="k-textbox k-space-right"><input id="txtSearch_ta_audit_kriteria_agc_tm" placeholder="@ResxHelper.GetValue("Message","QuickSearch")" value="" /><a id="btnSearch_ta_audit_kriteria_agc_tm" href="#" class="k-icon k-i-search">&nbsp;</a></span>
+														<img id="btnSearchByColumn_ta_audit_kriteria_agc_tm" title="@ResxHelper.GetValue("Message","ShowSearchByColumn")" style="cursor:pointer" src="~/img/search_by_column.png" width="20">
+														<img id="btnShowHideColumn_ta_audit_kriteria_agc_tm" title="@ResxHelper.GetValue("Message","ShowHideColumn")" style="cursor:pointer" src="~/img/show_hide_column.png" width="20">
+														<a id="btnShowHideFilter_ta_audit_kriteria_agc_tm" data-toggle="collapse" href="#collapse_filter_ta_audit_kriteria_agc_tm" style="display:none">@ResxHelper.GetValue("Message", "ShowFilter", "Tampilkan Filter")</a>
+													</td>
+													<td style="float:right">
+														<img id="btnExportExcel_ta_audit_kriteria_agc_tm" title="@ResxHelper.GetValue("Message","ExportToExcel")" style="cursor:pointer" src="~/img/excel.png" width="20" />&nbsp;
+														<a id="btnAdd_ta_audit_kriteria_agc_tm" onclick="AddData_ta_audit_kriteria_agc_tm()" class="k-button" title="@ResxHelper.GetValue("Message","Add")">@ResxHelper.GetValue("Message", "Add", "Tambah")</a>
+													</td>
+												<tr>
+											</table>
+										</div>
+										<div id="grid_ta_audit_kriteria_agc_tm"></div>
+									</div>
+								</div>
+
+							</div>
+							<div id="WinShowHideColumn_ta_audit_kriteria_agc_tm" style="display: none">
+								<div id="attr_column_show_hide" style="width:auto;height:auto;overflow-y:scroll;"></div>
+							</div>
+						}
+
+
+
+
+
+
+						//SMK3
+						if (ViewBag.kriteria_audit_id == "8")
+						{
+							<div class="panel">
+								<div class="panel-container">
+									<div class="panel-content">
+										<div id="collapse_filter_ta_audit_kriteria_smk3" class="panel panel-collapse collapse">
+											<div class="panel-heading-filter">
+												@ResxHelper.GetValue("Message", "FilterDataHeader", "Filter Data")
+											</div>
+											<div class="panel-body-filter">
+												<section class="filter_cols">
+												</section>
+											</div>
+											<div class="panel-footer-filter">
+												<a id="btnResetFilter_ta_audit_kriteria_smk3" onclick="reset_filter_ta_audit_kriteria_smk3()" class="k-button" title="Reset Filter">@ResxHelper.GetValue("Message", "ResetFilter", "Reset Filter")</a>
+											</div>
+										</div>
+										<div>
+											<table id="toolbar_panel" style="width:100%;display:none">
+												<tr>
+													<td>
+														<span id="quick_search_template_ta_audit_kriteria_smk3" class="k-textbox k-space-right"><input id="txtSearch_ta_audit_kriteria_smk3" placeholder="@ResxHelper.GetValue("Message","QuickSearch")" value="" /><a id="btnSearch_ta_audit_kriteria_smk3" href="#" class="k-icon k-i-search">&nbsp;</a></span>
+														<img id="btnSearchByColumn_ta_audit_kriteria_smk3" title="@ResxHelper.GetValue("Message","ShowSearchByColumn")" style="cursor:pointer" src="~/img/search_by_column.png" width="20">
+														<img id="btnShowHideColumn_ta_audit_kriteria_smk3" title="@ResxHelper.GetValue("Message","ShowHideColumn")" style="cursor:pointer" src="~/img/show_hide_column.png" width="20">
+														<a id="btnShowHideFilter_ta_audit_kriteria_smk3" data-toggle="collapse" href="#collapse_filter_ta_audit_kriteria_smk3" style="display:none">@ResxHelper.GetValue("Message", "ShowFilter", "Tampilkan Filter")</a>
+													</td>
+													<td style="float:right">
+														<img id="btnExportExcel_ta_audit_kriteria_smk3" title="@ResxHelper.GetValue("Message","ExportToExcel")" style="cursor:pointer" src="~/img/excel.png" width="20" />&nbsp;
+														<a id="btnAdd_ta_audit_kriteria_smk3" onclick="AddData_ta_audit_kriteria_smk3()" class="k-button" title="@ResxHelper.GetValue("Message","Add")">@ResxHelper.GetValue("Message", "Add", "Tambah")</a>
+													</td>
+												<tr>
+											</table>
+										</div>
+										<div id="grid_ta_audit_kriteria_smk3"></div>
+									</div>
+								</div>
+
+							</div>
+							<div id="WinShowHideColumn_ta_audit_kriteria_smk3" style="display: none">
+								<div id="attr_column_show_hide" style="width:auto;height:auto;overflow-y:scroll;"></div>
+							</div>
+
+						}
+
+
+
+
+
+						//SMKP
+						if (ViewBag.kriteria_audit_id == "9")
+						{
+							<div class="panel">
+								<div class="panel-container">
+									<div class="panel-content">
+										<div id="collapse_filter_ta_audit_kriteria_smkp" class="panel panel-collapse collapse">
+											<div class="panel-heading-filter">
+												@ResxHelper.GetValue("Message", "FilterDataHeader", "Filter Data")
+											</div>
+											<div class="panel-body-filter">
+												<section class="filter_cols">
+												</section>
+											</div>
+											<div class="panel-footer-filter">
+												<a id="btnResetFilter_ta_audit_kriteria_smkp" onclick="reset_filter_ta_audit_kriteria_smkp()" class="k-button" title="Reset Filter">@ResxHelper.GetValue("Message", "ResetFilter", "Reset Filter")</a>
+											</div>
+										</div>
+										<div>
+											<table id="toolbar_panel" style="width:100%;display:none">
+												<tr>
+													<td>
+														<span id="quick_search_template_ta_audit_kriteria_smkp" class="k-textbox k-space-right"><input id="txtSearch_ta_audit_kriteria_smkp" placeholder="@ResxHelper.GetValue("Message","QuickSearch")" value="" /><a id="btnSearch_ta_audit_kriteria_smkp" href="#" class="k-icon k-i-search">&nbsp;</a></span>
+														<img id="btnSearchByColumn_ta_audit_kriteria_smkp" title="@ResxHelper.GetValue("Message","ShowSearchByColumn")" style="cursor:pointer" src="~/img/search_by_column.png" width="20">
+														<img id="btnShowHideColumn_ta_audit_kriteria_smkp" title="@ResxHelper.GetValue("Message","ShowHideColumn")" style="cursor:pointer" src="~/img/show_hide_column.png" width="20">
+														<a id="btnShowHideFilter_ta_audit_kriteria_smkp" data-toggle="collapse" href="#collapse_filter_ta_audit_kriteria_smkp" style="display:none">@ResxHelper.GetValue("Message", "ShowFilter", "Tampilkan Filter")</a>
+													</td>
+													<td style="float:right">
+														<img id="btnExportExcel_ta_audit_kriteria_smkp" title="@ResxHelper.GetValue("Message","ExportToExcel")" style="cursor:pointer" src="~/img/excel.png" width="20" />&nbsp;
+														<a id="btnAdd_ta_audit_kriteria_smkp" onclick="AddData_ta_audit_kriteria_smkp()" class="k-button" title="@ResxHelper.GetValue("Message","Add")">@ResxHelper.GetValue("Message", "Add", "Tambah")</a>
+													</td>
+												<tr>
+											</table>
+										</div>
+										<div id="grid_ta_audit_kriteria_smkp"></div>
+									</div>
+								</div>
+
+							</div>
+							<div id="WinShowHideColumn_ta_audit_kriteria_smkp" style="display: none">
+								<div id="attr_column_show_hide" style="width:auto;height:auto;overflow-y:scroll;"></div>
+							</div>
+
+						}
+
+
+
+
+
+						//CSMS
+						if (ViewBag.kriteria_audit_id == "10")
+						{
+							<div class="panel">
+								<div class="panel-container">
+									<div class="panel-content">
+										<div id="collapse_filter_ta_audit_kriteria_csms" class="panel panel-collapse collapse">
+											<div class="panel-heading-filter">
+												@ResxHelper.GetValue("Message", "FilterDataHeader", "Filter Data")
+											</div>
+											<div class="panel-body-filter">
+												<section class="filter_cols">
+												</section>
+											</div>
+											<div class="panel-footer-filter">
+												<a id="btnResetFilter_ta_audit_kriteria_csms" onclick="reset_filter_ta_audit_kriteria_csms()" class="k-button" title="Reset Filter">@ResxHelper.GetValue("Message", "ResetFilter", "Reset Filter")</a>
+											</div>
+										</div>
+										<div>
+											<table id="toolbar_panel" style="width:100%;display:none">
+												<tr>
+													<td>
+														<span id="quick_search_template_ta_audit_kriteria_csms" class="k-textbox k-space-right"><input id="txtSearch_ta_audit_kriteria_csms" placeholder="@ResxHelper.GetValue("Message","QuickSearch")" value="" /><a id="btnSearch_ta_audit_kriteria_csms" href="#" class="k-icon k-i-search">&nbsp;</a></span>
+														<img id="btnSearchByColumn_ta_audit_kriteria_csms" title="@ResxHelper.GetValue("Message","ShowSearchByColumn")" style="cursor:pointer" src="~/img/search_by_column.png" width="20">
+														<img id="btnShowHideColumn_ta_audit_kriteria_csms" title="@ResxHelper.GetValue("Message","ShowHideColumn")" style="cursor:pointer" src="~/img/show_hide_column.png" width="20">
+														<a id="btnShowHideFilter_ta_audit_kriteria_csms" data-toggle="collapse" href="#collapse_filter_ta_audit_kriteria_csms" style="display:none">@ResxHelper.GetValue("Message", "ShowFilter", "Tampilkan Filter")</a>
+													</td>
+													<td style="float:right">
+														<img id="btnExportExcel_ta_audit_kriteria_csms" title="@ResxHelper.GetValue("Message","ExportToExcel")" style="cursor:pointer" src="~/img/excel.png" width="20" />&nbsp;
+														<a id="btnAdd_ta_audit_kriteria_csms" onclick="AddData_ta_audit_kriteria_csms()" class="k-button" title="@ResxHelper.GetValue("Message","Add")">@ResxHelper.GetValue("Message", "Add", "Tambah")</a>
+													</td>
+												<tr>
+											</table>
+										</div>
+										<div id="grid_ta_audit_kriteria_csms"></div>
+									</div>
+								</div>
+
+							</div>
+							<div id="WinShowHideColumn_ta_audit_kriteria_csms" style="display: none">
+								<div id="attr_column_show_hide" style="width:auto;height:auto;overflow-y:scroll;"></div>
+							</div>
+
+						}
+					}
+				</div>
+			</div>
+		</div>
+		<div class="panel-footer">
+			<a id="close" class="k-button k-button-icontext" href="#"><i class="far fa-times-circle"></i>&nbsp;<span id="btnCloseText">@ResxHelper.GetValue("Message", "Close", "Tutup")</span></a>
+		</div>
+	</div>
+</div>
+<script>
+	$("#close").kendoButton();
+	$("#close").click(function (e) {
+		close_self();
+	});
+	function onCloseDialog(e) { $('#dialog').html(''); }
+	function closeDialog() { $("#dialog").data("kendoWindow").close(); }
+	function close_self() { if (window.parent.$("#dialog_ta_audit_kriteria").data("kendoWindow")) { window.parent.$("#dialog_ta_audit_kriteria").data("kendoWindow").close(); } else { window.parent.$("#dialog").data("kendoWindow").close(); } }
+
+	function display_by_type() {
+        var k = '@Html.Raw(fieldModel.kriteria_audit_id)';
+		if (k == '1') {
+			$('#form_item_jumlah_iso_14001_2015').show();
+			$('#form_item_jumlah_iso_45001_2018').show();
+		} else {
+			$('#form_item_jumlah_iso_14001_2015').hide();
+			$('#form_item_jumlah_iso_45001_2018').hide();
+		}
+
+	}
+	$(document).ready(function () {
+		display_by_type();
+	});
+</script>
+
+
+
+@{
+	//IAMS
+	if (ViewBag.kriteria_audit_id == "1")
+	{
+
+		//AGC
+		<script>
+		var param_ta_audit_kriteria_agc = @Html.Raw(JsonConvert.SerializeObject(WebApp.Models.AuditKriteriaAgcModel.GetListParam()));
+		var displayName_ta_audit_kriteria_agc = @Html.Raw(JsonConvert.SerializeObject(WebApp.Models.AuditKriteriaAgcModel.GetDisplayItem()));
+		var pkKey_ta_audit_kriteria_agc = @Html.Raw(JsonConvert.SerializeObject(WebApp.Models.AuditKriteriaAgcModel._pkKey));
+		var j_data_ta_audit_kriteria_agc = @Html.Raw(JsonConvert.SerializeObject(WebApp.Models.AuditKriteriaAgcModel.GetGridColumn()));
+		var colNameTooltip_ta_audit_kriteria_agc = [];
+		var colbuttonCount_ta_audit_kriteria_agc = 0;
+		var columnWidth = 40;
+		colbuttonCount_ta_audit_kriteria_agc += param_ta_audit_kriteria_agc.btnView == 1 ? 1 : 0;
+		colbuttonCount_ta_audit_kriteria_agc += param_ta_audit_kriteria_agc.btnEdit== "1" ? 1 : 0;
+		colbuttonCount_ta_audit_kriteria_agc += param_ta_audit_kriteria_agc.btnDelete == "1" ? 1 : 0;
+		colbuttonCount_ta_audit_kriteria_agc += param_ta_audit_kriteria_agc.btnCopy  == "1" ? 1 : 0;
+		if (colbuttonCount_ta_audit_kriteria_agc == 1) { columnWidth = 40; } else if (colbuttonCount_ta_audit_kriteria_agc == 2) { columnWidth = 60; } else if (colbuttonCount_ta_audit_kriteria_agc == 3) { columnWidth = 95; } else if (colbuttonCount_ta_audit_kriteria_agc == 4) { columnWidth = 120; }
+		var columnActionWidth_ta_audit_kriteria_agc = columnWidth + "px";
+		var item_data = "";
+		var col_att = [];
+		var showhide_column = "";
+		var j = 0;
+		var checked = '';
+		var aggregate_data_ta_audit_kriteria_agc = [];
+		var agg_i = 0
+		jQuery.each(j_data_ta_audit_kriteria_agc, function (i, val) {
+			var footerTemplate = "";
+			if (val.aggregate != "") {
+				footerTemplate = val.footerTemplate!="" ? val.footerTemplate : '#='+val.aggregate+'#';
+				aggregate_data_ta_audit_kriteria_agc[agg_i] = { field: val.name, aggregate: val.aggregate };
+				agg_i++;
+			}
+			item_data += item_data != "" ? "," : "";
+			item_data += '"' + val.name + '" : { "type": "' + val.type + '" } ';
+			if (val.display) {
+				col_att[j] = { field: val.name, title: val.title, hidden: JSON.parse(val.hidden), width: val.width, format: val.format, attributes: JSON.parse(val.attributes), encoded: JSON.parse(val.encoded), filterable: JSON.parse(val.filterable), sortable: JSON.parse(val.sortable), headerAttributes: { style: "white-space: normal;vertical-align:middle;text-align:center" },aggregates: [val.aggregate], footerTemplate: footerTemplate };
+				j++;
+				checked = '';if (val.hidden.toString() == 'false') {checked = 'checked';}
+				showhide_column += '<div><input type="checkbox" onclick="ShowHideColumn_ta_audit_kriteria_agc(this)" '+ checked +' value="' + val.name + '" /> ' + val.title + '</div>';
+			}
+		});
+		showhide_column += '<div><input type="checkbox" onclick="ShowHideColumn_ta_audit_kriteria_agc(this)" checked value="' + j + '" /> Action</div>';
+		item_data = '{' + item_data + '}';
+		var field_data = JSON.parse(item_data);
+		var columns_data = col_att;
+		var col_command = [];
+		var k = 0;
+		if (param_ta_audit_kriteria_agc.btnView== 1) {col_command[k] = { name: "View", text: "", className: "v-view", click: function (e) { var tr = $(e.target).closest("tr"); var data = this.dataItem(tr); ViewItem_ta_audit_kriteria_agc(data); } };k++;}
+		if (param_ta_audit_kriteria_agc.btnEdit== 1) {col_command[k] = { name: "Edit", text: "", className: "v-pencil", click: function (e) { var tr = $(e.target).closest("tr"); var data = this.dataItem(tr); EditData_ta_audit_kriteria_agc(data); } };k++;}
+		if (param_ta_audit_kriteria_agc.btnDelete== 1) {col_command[k] = { name: "Delete", text: "", className: "v-close", click: function (e) { var tr = $(e.target).closest("tr"); var data = this.dataItem(tr); DeleteData_ta_audit_kriteria_agc(data); } };k++;}
+		if (param_ta_audit_kriteria_agc.btnCopy == 1) { col_command[k] = { name: "Copy", text: "", className: "v-copy", click: function (e) { var tr = $(e.target).closest("tr"); var data = this.dataItem(tr); CopyData_ta_audit_kriteria_agc(data); } }; k++; }
+		if (colbuttonCount_ta_audit_kriteria_agc > 0) {
+			columns_data[j] = {command: col_command, width: columnActionWidth_ta_audit_kriteria_agc, attributes: " style=\"vertical-align:top;\""};
+		}
+		//==============================
+
+		//==============================
+		$("#collapse_filter_ta_audit_kriteria_agc").on('shown.bs.collapse', function () {
+			$("#btnShowHideFilter_ta_audit_kriteria_agc").html('@ResxHelper.GetValue("Message","HideFilter")');
+		});
+		$("#collapse_filter_ta_audit_kriteria_agc").on('hidden.bs.collapse', function () {
+			$("#btnShowHideFilter_ta_audit_kriteria_agc").html('@ResxHelper.GetValue("Message","ShowFilter")');
+		});
+		//==============================
+		var record_ta_audit_kriteria_agc = 0;
+		var grid_ta_audit_kriteria_agc_heigth = 0;
+		var ds_ta_audit_kriteria_agc_filter = { filter_by_column: [{name:"audit_id",opr:"=",value:"@ViewBag.audit_id"}, {name:"kriteria_audit_id",opr:"=",value:"@ViewBag.kriteria_audit_id"}] };
+		var ds_ta_audit_kriteria_agc = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/AuditKriteriaAgc/GetListData", dataType: "json", type: "POST", data: ds_ta_audit_kriteria_agc_filter }, parameterMap: function (options) { if (options.filter) { for (var i = 0; i < options.filter.filters.length; i++) { if (options.filter.filters[i].field == 'tanggal') { options.filter.filters[i].value = kendo.toString(options.filter.filters[i].value, "yyyy-MM-dd"); } } } return options; } }, schema: { data: "data", total: "total", aggregates: "aggregates", model: { fields: field_data } }, aggregate: aggregate_data_ta_audit_kriteria_agc, pageSize: 10, serverAggregates: true, serverPaging: true, serverFiltering: true, serverSorting: true });
+		var list_ta_audit_kriteria_agc = $("#grid_ta_audit_kriteria_agc").kendoGrid({
+			excel: { allPages: true, fileName: '@ViewData["TitleHeader"]'+'.xlsx' },
+			dataSource: ds_ta_audit_kriteria_agc, dataBound: onDataBound_ta_audit_kriteria_agc, height: grid_ta_audit_kriteria_agc_heigth, scrollable: true, groupable: false, columnMenu: false, menu: true, resizable: true, filterable: false, sortable: { mode: "multiple", allowUnsort: true }, pageable: { refresh: true, pageSizes: [5, 10, 20, 50, 100, 200], buttonCount: 5 },
+			columns: columns_data, editable: false, dataBinding: function () { record_ta_audit_kriteria_agc = (this.dataSource.page() - 1) * this.dataSource.pageSize(); }
+		});
+		function getParamgrid_ta_audit_kriteria_agc() {
+			var filter_by_column= [];var k = 0;
+
+			return { filter_by_column:filter_by_column };
+		}
+		function reset_filter_ta_audit_kriteria_agc() {
+
+			onFilterHeader_ta_audit_kriteria_agc();
+		}
+		function onFilterHeader_ta_audit_kriteria_agc() {
+			$("#txtSearch_ta_audit_kriteria_agc").val('');
+			paramValue = getParamgrid_ta_audit_kriteria_agc();
+			if (list_ta_audit_kriteria_agc.data('kendoGrid').dataSource.page() > 1) {
+				list_ta_audit_kriteria_agc.data('kendoGrid').dataSource.page(0);
+			}
+			list_ta_audit_kriteria_agc.data('kendoGrid').dataSource.transport.options.read.data = paramValue;
+			list_ta_audit_kriteria_agc.data("kendoGrid").dataSource.filter([]);
+		};
+		$("#btnSearchByColumn_ta_audit_kriteria_agc").click(function () { var grid_ta_audit_kriteria_agc_heigth_filter = grid_ta_audit_kriteria_agc_heigth + 38; if (list_ta_audit_kriteria_agc.data("kendoGrid").options.filterable == false) { $('#btnSearchByColumn_ta_audit_kriteria_agc').prop('title', '@ResxHelper.GetValue("Message","HideSearchByColumn")'); $("#txtSearch_ta_audit_kriteria_agc").val(''); if ('1' == '1') { $("#quick_search_template_ta_audit_kriteria_agc").hide(); }; QuickSearch_ta_audit_kriteria_agc(); list_ta_audit_kriteria_agc.data("kendoGrid").setOptions({ height: grid_ta_audit_kriteria_agc_heigth_filter, filterable: { mode: "row" }, }); } else { $('#btnSearchByColumn_ta_audit_kriteria_agc').prop('title', '@ResxHelper.GetValue("Message","ShowSearchByColumn")'); $("#txtSearch_ta_audit_kriteria_agc").val(''); if ('1' == '1') { $("#quick_search_template_ta_audit_kriteria_agc").show(); }; QuickSearch_ta_audit_kriteria_agc(); list_ta_audit_kriteria_agc.data("kendoGrid").setOptions({ height: grid_ta_audit_kriteria_agc_heigth, filterable: false, }); } });
+		$("#btnSearch_ta_audit_kriteria_agc").click(function () { QuickSearch_ta_audit_kriteria_agc(); });
+		$('#txtSearch_ta_audit_kriteria_agc').keypress(function (e) { if (e.keyCode == 13) { QuickSearch_ta_audit_kriteria_agc(); } });
+		function QuickSearch_ta_audit_kriteria_agc() {
+			$filter = new Array();
+			$x = $("#txtSearch_ta_audit_kriteria_agc").val();
+			if ($x) {jQuery.each(j_data_ta_audit_kriteria_agc, function (i, val) {if (val.display && val.qsearch && val.type =='string') {$filter.push({ name: val.name, opr: "contains", value: $x });}});}
+			if ($filter.length > 0) {list_ta_audit_kriteria_agc.data("kendoGrid").dataSource.filter({ logic: "or", filters: $filter });}else {list_ta_audit_kriteria_agc.data("kendoGrid").dataSource.filter([]);}
+		}
+		function Reload_list_ta_audit_kriteria_agc() { list_ta_audit_kriteria_agc.data('kendoGrid').dataSource.read(); list_ta_audit_kriteria_agc.data('kendoGrid').refresh(); }
+		function onDataBound_ta_audit_kriteria_agc(e) {
+			if (colbuttonCount_ta_audit_kriteria_agc > 0) {
+				var grid = $("#grid_ta_audit_kriteria_agc").data("kendoGrid"); var list_ta_audit_kriteria_agc = grid.dataSource.view();
+				for (var i = 0; i < list_ta_audit_kriteria_agc.length; i++) {
+					var currentUid = list_ta_audit_kriteria_agc[i].uid; var currenRow = grid.table.find("tr[data-uid='" + currentUid + "']");
+					if (param_ta_audit_kriteria_agc.btnView == 1) {
+						var viewButton = $(currenRow).find(".k-grid-View"); viewButton.attr("title", "@ResxHelper.GetValue("Message","View")");
+						if ("@ViewData["AllowView"]" == "1") {} else {viewButton.hide();}
+					}
+					if (param_ta_audit_kriteria_agc.btnEdit == 1) {
+						var editButton = $(currenRow).find(".k-grid-Edit"); editButton.attr("title", "@ResxHelper.GetValue("Message","Edit")");
+						if ("@ViewData["AllowEdit"]" == "1") {} else {editButton.hide();}
+					}
+					if (param_ta_audit_kriteria_agc.btnDelete == 1) {
+						var deleteButton = $(currenRow).find(".k-grid-Delete"); deleteButton.attr("title", "@ResxHelper.GetValue("Message","Delete")");
+                        if ("@ViewData["AllowDelete"]" == "1") { } else { deleteButton.hide(); }
+						deleteButton.hide();
+					}
+					if (param_ta_audit_kriteria_agc.btnCopy == 1) {
+						var copyButton = $(currenRow).find(".k-grid-Copy"); copyButton.attr("title", "@ResxHelper.GetValue("Message","Copy")");
+						if ("@ViewData["AllowAdd"]" == "1") {} else {copyButton.hide();}
+					}
+				}
+			}
+		}
+		function AddData_ta_audit_kriteria_agc() {var contentUrl = '@ViewBag.BaseUrl/AuditKriteriaAgc/Add?audit_id=@ViewBag.audit_id&kriteria_audit_id=@ViewBag.kriteria_audit_id'; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog, }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: param_ta_audit_kriteria_agc.btn_add_modal_width, height: param_ta_audit_kriteria_agc.btn_add_modal_height, minHeight: 300, });if(param_ta_audit_kriteria_agc.btn_add_modal_width == 0) {form_edit.data("kendoWindow").center().open().maximize()} else {form_edit.data("kendoWindow").center().open();}}
+		function ViewItem_ta_audit_kriteria_agc(data) { var qs = '';jQuery.each(pkKey_ta_audit_kriteria_agc, function (i, val) {qs += qs != "" ? "&" : "";qs += val+'=' + data[val];});var contentUrl = '@ViewBag.BaseUrl/AuditKriteriaAgc/ViewItem?' + qs; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: param_ta_audit_kriteria_agc.btn_view_modal_width, height: param_ta_audit_kriteria_agc.btn_view_modal_height, minHeight: 300, }); if (param_ta_audit_kriteria_agc.btn_view_modal_width == 0) { form_edit.data("kendoWindow").center().open().maximize() } else { form_edit.data("kendoWindow").center().open(); }}
+		function EditData_ta_audit_kriteria_agc(data) { var qs = '';jQuery.each(pkKey_ta_audit_kriteria_agc, function (i, val) {qs += qs != "" ? "&" : "";qs += val+'=' + data[val];}); var contentUrl = '@ViewBag.BaseUrl/AuditKriteriaAgc/Edit?' + qs; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: param_ta_audit_kriteria_agc.btn_edit_modal_width, height: param_ta_audit_kriteria_agc.btn_edit_modal_height, minHeight: 300, }); if(param_ta_audit_kriteria_agc.btn_edit_modal_width == 0) {form_edit.data("kendoWindow").center().open().maximize()} else {form_edit.data("kendoWindow").center().open();} }
+		function CopyData_ta_audit_kriteria_agc(data) { var qs = '';jQuery.each(pkKey_ta_audit_kriteria_agc, function (i, val) {qs += qs != "" ? "&" : "";qs += val+'=' + data[val];}); var contentUrl = '@ViewBag.BaseUrl/AuditKriteriaAgc/Copy?' + qs; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: param_ta_audit_kriteria_agc.btn_edit_modal_width, height: param_ta_audit_kriteria_agc.btn_edit_modal_height, minHeight: 300, }); if(param_ta_audit_kriteria_agc.btn_edit_modal_width == 0) {form_edit.data("kendoWindow").center().open().maximize()} else {form_edit.data("kendoWindow").center().open();} }
+		function DeleteData_ta_audit_kriteria_agc(data) {
+			var keyValue = '';
+			jQuery.each(displayName_ta_audit_kriteria_agc, function (i, val) {
+				keyValue += keyValue != "" ? "<br />" : "";
+				keyValue += val.label+ ": " + data[val.name];
+			});
+			var pkItem = "";
+			jQuery.each(pkKey_ta_audit_kriteria_agc, function (i, val) {
+				pkItem += pkItem != "" ? ", " : "";
+				pkItem += '"'+val+'":"'+data[val]+'" ';
+			});
+			var pkVal = jQuery.parseJSON("{" + pkItem + "}");
+			var data2 = { title: '@ResxHelper.GetValue("Message","ConfirmDelete")', msg: keyValue };
+			var winconfirm = $("#dialogconfirm").kendoWindow({ title: "@ResxHelper.GetValue("Message","DeleteData")", modal: true, visible: false, resizable: true, draggable: true, width: "500px", height: "200px" }).data("kendoWindow");
+			winconfirm.content(confirmTemplate(data2));
+			winconfirm.center(); winconfirm.open();
+			$("#yesButton").click(function () {
+				$.ajax({
+					data: pkVal, url: '@ViewBag.BaseUrl/AuditKriteriaAgc/Delete', type: 'POST'
+					, success: function (data) {
+						if (data.status != 1) {
+							notification.show({ title: data.title, message: kendo.toString(data.message) }, "error");
+							winconfirm.close();
+						} else {
+							notification.show({ message: kendo.toString(data.message) }, "success");
+							Reload_list_ta_audit_kriteria_agc();
+							winconfirm.close();
+						}
+					}
+				});
+			});
+			$("#noButton").click(function () { winconfirm.close(); });
+		}
+		function onCloseDialog(e) { $('#dialog').html(''); }
+		function closeDialog() { $("#dialog").data("kendoWindow").close(); }
+		$("#btnExportExcel_ta_audit_kriteria_agc").click(function (e) { var grid = $("#grid_ta_audit_kriteria_agc").data("kendoGrid"); grid.saveAsExcel(); });
+		function ShowHideColumn_ta_audit_kriteria_agc(e) { colname = $.isNumeric(e.value) ? parseInt(e.value) : e.value; if (e.checked) { $("#grid_ta_audit_kriteria_agc").data("kendoGrid").showColumn(colname); } else { $("#grid_ta_audit_kriteria_agc").data("kendoGrid").hideColumn(colname); } }
+		$(document).ready(function () {
+			$("#attr_column_show_hide").html(showhide_column);
+			if (param_ta_audit_kriteria_agc.ShowFilter == 1) { $("#btnShowHideFilter_ta_audit_kriteria_agc").show(); }
+			if (param_ta_audit_kriteria_agc.btnAdd == 1 && @ViewData["AllowAdd"]== "1") { }else{ $("#btnAdd_ta_audit_kriteria_agc").hide(); }
+			if (param_ta_audit_kriteria_agc.quick_search != 1) { $("#quick_search_template_ta_audit_kriteria_agc").hide(); }
+			if (param_ta_audit_kriteria_agc.search_by_column  != 1) { $("#btnSearchByColumn_ta_audit_kriteria_agc").hide(); }
+			if (param_ta_audit_kriteria_agc.show_hide_column != 1) { $("#btnShowHideColumn_ta_audit_kriteria_agc").hide(); }
+			if (param_ta_audit_kriteria_agc.export_exl != 1) { $("#btnExportExcel_ta_audit_kriteria_agc").hide(); }
+			$("#btnShowHideColumn_ta_audit_kriteria_agc").click(function () { var x = $("#btnShowHideColumn_ta_audit_kriteria_agc").offset().left; var y = $("#btnShowHideColumn_ta_audit_kriteria_agc").offset().top; if (!WinShowHideColumn_ta_audit_kriteria_agc) { var WinShowHideColumn_ta_audit_kriteria_agc = $("#WinShowHideColumn_ta_audit_kriteria_agc").kendoWindow({ width: "300px", position: { left: x, top: y }, title: "@ResxHelper.GetValue("Message","ShowHideColumn")", actions: ["Close"] }); } WinShowHideColumn_ta_audit_kriteria_agc.data("kendoWindow").open(); });
+		});
+		</script>
+
+
+
+		//SMK3
+		<script>
+		var param_ta_audit_kriteria_smk3 = @Html.Raw(JsonConvert.SerializeObject(WebApp.Models.AuditKriteriaSmk3Model.GetListParam()));
+		var displayName_ta_audit_kriteria_smk3 = @Html.Raw(JsonConvert.SerializeObject(WebApp.Models.AuditKriteriaSmk3Model.GetDisplayItem()));
+		var pkKey_ta_audit_kriteria_smk3 = @Html.Raw(JsonConvert.SerializeObject(WebApp.Models.AuditKriteriaSmk3Model._pkKey));
+		var j_data_ta_audit_kriteria_smk3 = @Html.Raw(JsonConvert.SerializeObject(WebApp.Models.AuditKriteriaSmk3Model.GetGridColumn()));
+		var colNameTooltip_ta_audit_kriteria_smk3 = [];
+		var colbuttonCount_ta_audit_kriteria_smk3 = 0;
+		var columnWidth = 40;
+		colbuttonCount_ta_audit_kriteria_smk3 += param_ta_audit_kriteria_smk3.btnView == 1 ? 1 : 0;
+		colbuttonCount_ta_audit_kriteria_smk3 += param_ta_audit_kriteria_smk3.btnEdit== "1" ? 1 : 0;
+		colbuttonCount_ta_audit_kriteria_smk3 += param_ta_audit_kriteria_smk3.btnDelete == "1" ? 1 : 0;
+		colbuttonCount_ta_audit_kriteria_smk3 += param_ta_audit_kriteria_smk3.btnCopy  == "1" ? 1 : 0;
+		if (colbuttonCount_ta_audit_kriteria_smk3 == 1) { columnWidth = 40; } else if (colbuttonCount_ta_audit_kriteria_smk3 == 2) { columnWidth = 60; } else if (colbuttonCount_ta_audit_kriteria_smk3 == 3) { columnWidth = 95; } else if (colbuttonCount_ta_audit_kriteria_smk3 == 4) { columnWidth = 120; }
+		var columnActionWidth_ta_audit_kriteria_smk3 = columnWidth + "px";
+		var item_data = "";
+		var col_att = [];
+		var showhide_column = "";
+		var j = 0;
+		var checked = '';
+		var aggregate_data_ta_audit_kriteria_smk3 = [];
+		var agg_i = 0
+		jQuery.each(j_data_ta_audit_kriteria_smk3, function (i, val) {
+			var footerTemplate = "";
+			if (val.aggregate != "") {
+				footerTemplate = val.footerTemplate!="" ? val.footerTemplate : '#='+val.aggregate+'#';
+				aggregate_data_ta_audit_kriteria_smk3[agg_i] = { field: val.name, aggregate: val.aggregate };
+				agg_i++;
+			}
+			item_data += item_data != "" ? "," : "";
+			item_data += '"' + val.name + '" : { "type": "' + val.type + '" } ';
+			if (val.display) {
+				col_att[j] = { field: val.name, title: val.title, hidden: JSON.parse(val.hidden), width: val.width, format: val.format, attributes: JSON.parse(val.attributes), encoded: JSON.parse(val.encoded), filterable: JSON.parse(val.filterable), sortable: JSON.parse(val.sortable), headerAttributes: { style: "white-space: normal;vertical-align:middle;text-align:center" },aggregates: [val.aggregate], footerTemplate: footerTemplate };
+				j++;
+				checked = '';if (val.hidden.toString() == 'false') {checked = 'checked';}
+				showhide_column += '<div><input type="checkbox" onclick="ShowHideColumn_ta_audit_kriteria_smk3(this)" '+ checked +' value="' + val.name + '" /> ' + val.title + '</div>';
+			}
+		});
+		showhide_column += '<div><input type="checkbox" onclick="ShowHideColumn_ta_audit_kriteria_smk3(this)" checked value="' + j + '" /> Action</div>';
+		item_data = '{' + item_data + '}';
+		var field_data = JSON.parse(item_data);
+		var columns_data = col_att;
+		var col_command = [];
+		var k = 0;
+		if (param_ta_audit_kriteria_smk3.btnView== 1) {col_command[k] = { name: "View", text: "", className: "v-view", click: function (e) { var tr = $(e.target).closest("tr"); var data = this.dataItem(tr); ViewItem_ta_audit_kriteria_smk3(data); } };k++;}
+		if (param_ta_audit_kriteria_smk3.btnEdit== 1) {col_command[k] = { name: "Edit", text: "", className: "v-pencil", click: function (e) { var tr = $(e.target).closest("tr"); var data = this.dataItem(tr); EditData_ta_audit_kriteria_smk3(data); } };k++;}
+		if (param_ta_audit_kriteria_smk3.btnDelete== 1) {col_command[k] = { name: "Delete", text: "", className: "v-close", click: function (e) { var tr = $(e.target).closest("tr"); var data = this.dataItem(tr); DeleteData_ta_audit_kriteria_smk3(data); } };k++;}
+		if (param_ta_audit_kriteria_smk3.btnCopy == 1) { col_command[k] = { name: "Copy", text: "", className: "v-copy", click: function (e) { var tr = $(e.target).closest("tr"); var data = this.dataItem(tr); CopyData_ta_audit_kriteria_smk3(data); } }; k++; }
+		if (colbuttonCount_ta_audit_kriteria_smk3 > 0) {
+			columns_data[j] = {command: col_command, width: columnActionWidth_ta_audit_kriteria_smk3, attributes: " style=\"vertical-align:top;\""};
+		}
+		//==============================
+
+		//==============================
+		$("#collapse_filter_ta_audit_kriteria_smk3").on('shown.bs.collapse', function () {
+			$("#btnShowHideFilter_ta_audit_kriteria_smk3").html('@ResxHelper.GetValue("Message","HideFilter")');
+		});
+		$("#collapse_filter_ta_audit_kriteria_smk3").on('hidden.bs.collapse', function () {
+			$("#btnShowHideFilter_ta_audit_kriteria_smk3").html('@ResxHelper.GetValue("Message","ShowFilter")');
+		});
+		//==============================
+		var record_ta_audit_kriteria_smk3 = 0;
+		var grid_ta_audit_kriteria_smk3_heigth = 0;
+		var ds_ta_audit_kriteria_smk3_filter = { filter_by_column: [{name:"audit_id",opr:"=",value:"@ViewBag.audit_id"}, {name:"kriteria_audit_id",opr:"=",value:"@ViewBag.kriteria_audit_id"}] };
+		var ds_ta_audit_kriteria_smk3 = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/AuditKriteriaSmk3/GetListData", dataType: "json", type: "POST", data: ds_ta_audit_kriteria_smk3_filter }, parameterMap: function (options) { if (options.filter) { for (var i = 0; i < options.filter.filters.length; i++) { if (options.filter.filters[i].field == 'tanggal') { options.filter.filters[i].value = kendo.toString(options.filter.filters[i].value, "yyyy-MM-dd"); } } } return options; } }, schema: { data: "data", total: "total", aggregates: "aggregates", model: { fields: field_data } }, aggregate: aggregate_data_ta_audit_kriteria_smk3, pageSize: 10, serverAggregates: true, serverPaging: true, serverFiltering: true, serverSorting: true });
+		var list_ta_audit_kriteria_smk3 = $("#grid_ta_audit_kriteria_smk3").kendoGrid({
+			excel: { allPages: true, fileName: '@ViewData["TitleHeader"]'+'.xlsx' },
+			dataSource: ds_ta_audit_kriteria_smk3, dataBound: onDataBound_ta_audit_kriteria_smk3, height: grid_ta_audit_kriteria_smk3_heigth, scrollable: true, groupable: false, columnMenu: false, menu: true, resizable: true, filterable: false, sortable: { mode: "multiple", allowUnsort: true }, pageable: { refresh: true, pageSizes: [5, 10, 20, 50, 100, 200], buttonCount: 5 },
+			columns: columns_data, editable: false, dataBinding: function () { record_ta_audit_kriteria_smk3 = (this.dataSource.page() - 1) * this.dataSource.pageSize(); }
+		});
+		function getParamgrid_ta_audit_kriteria_smk3() {
+			var filter_by_column= [];var k = 0;
+
+			return { filter_by_column:filter_by_column };
+		}
+		function reset_filter_ta_audit_kriteria_smk3() {
+
+			onFilterHeader_ta_audit_kriteria_smk3();
+		}
+		function onFilterHeader_ta_audit_kriteria_smk3() {
+			$("#txtSearch_ta_audit_kriteria_smk3").val('');
+			paramValue = getParamgrid_ta_audit_kriteria_smk3();
+			if (list_ta_audit_kriteria_smk3.data('kendoGrid').dataSource.page() > 1) {
+				list_ta_audit_kriteria_smk3.data('kendoGrid').dataSource.page(0);
+			}
+			list_ta_audit_kriteria_smk3.data('kendoGrid').dataSource.transport.options.read.data = paramValue;
+			list_ta_audit_kriteria_smk3.data("kendoGrid").dataSource.filter([]);
+		};
+		$("#btnSearchByColumn_ta_audit_kriteria_smk3").click(function () { var grid_ta_audit_kriteria_smk3_heigth_filter = grid_ta_audit_kriteria_smk3_heigth + 38; if (list_ta_audit_kriteria_smk3.data("kendoGrid").options.filterable == false) { $('#btnSearchByColumn_ta_audit_kriteria_smk3').prop('title', '@ResxHelper.GetValue("Message","HideSearchByColumn")'); $("#txtSearch_ta_audit_kriteria_smk3").val(''); if ('1' == '1') { $("#quick_search_template_ta_audit_kriteria_smk3").hide(); }; QuickSearch_ta_audit_kriteria_smk3(); list_ta_audit_kriteria_smk3.data("kendoGrid").setOptions({ height: grid_ta_audit_kriteria_smk3_heigth_filter, filterable: { mode: "row" }, }); } else { $('#btnSearchByColumn_ta_audit_kriteria_smk3').prop('title', '@ResxHelper.GetValue("Message","ShowSearchByColumn")'); $("#txtSearch_ta_audit_kriteria_smk3").val(''); if ('1' == '1') { $("#quick_search_template_ta_audit_kriteria_smk3").show(); }; QuickSearch_ta_audit_kriteria_smk3(); list_ta_audit_kriteria_smk3.data("kendoGrid").setOptions({ height: grid_ta_audit_kriteria_smk3_heigth, filterable: false, }); } });
+		$("#btnSearch_ta_audit_kriteria_smk3").click(function () { QuickSearch_ta_audit_kriteria_smk3(); });
+		$('#txtSearch_ta_audit_kriteria_smk3').keypress(function (e) { if (e.keyCode == 13) { QuickSearch_ta_audit_kriteria_smk3(); } });
+		function QuickSearch_ta_audit_kriteria_smk3() {
+			$filter = new Array();
+			$x = $("#txtSearch_ta_audit_kriteria_smk3").val();
+			if ($x) {jQuery.each(j_data_ta_audit_kriteria_smk3, function (i, val) {if (val.display && val.qsearch && val.type =='string') {$filter.push({ name: val.name, opr: "contains", value: $x });}});}
+			if ($filter.length > 0) {list_ta_audit_kriteria_smk3.data("kendoGrid").dataSource.filter({ logic: "or", filters: $filter });}else {list_ta_audit_kriteria_smk3.data("kendoGrid").dataSource.filter([]);}
+		}
+		function Reload_list_ta_audit_kriteria_smk3() { list_ta_audit_kriteria_smk3.data('kendoGrid').dataSource.read(); list_ta_audit_kriteria_smk3.data('kendoGrid').refresh(); }
+		function onDataBound_ta_audit_kriteria_smk3(e) {
+			if (colbuttonCount_ta_audit_kriteria_smk3 > 0) {
+				var grid = $("#grid_ta_audit_kriteria_smk3").data("kendoGrid"); var list_ta_audit_kriteria_smk3 = grid.dataSource.view();
+				for (var i = 0; i < list_ta_audit_kriteria_smk3.length; i++) {
+					var currentUid = list_ta_audit_kriteria_smk3[i].uid; var currenRow = grid.table.find("tr[data-uid='" + currentUid + "']");
+					if (param_ta_audit_kriteria_smk3.btnView == 1) {
+						var viewButton = $(currenRow).find(".k-grid-View"); viewButton.attr("title", "@ResxHelper.GetValue("Message","View")");
+						if ("@ViewData["AllowView"]" == "1") {} else {viewButton.hide();}
+					}
+					if (param_ta_audit_kriteria_smk3.btnEdit == 1) {
+						var editButton = $(currenRow).find(".k-grid-Edit"); editButton.attr("title", "@ResxHelper.GetValue("Message","Edit")");
+						if ("@ViewData["AllowEdit"]" == "1") {} else {editButton.hide();}
+					}
+					if (param_ta_audit_kriteria_smk3.btnDelete == 1) {
+						var deleteButton = $(currenRow).find(".k-grid-Delete"); deleteButton.attr("title", "@ResxHelper.GetValue("Message","Delete")");
+                        if ("@ViewData["AllowDelete"]" == "1") { } else { deleteButton.hide(); }
+						deleteButton.hide();
+					}
+					if (param_ta_audit_kriteria_smk3.btnCopy == 1) {
+						var copyButton = $(currenRow).find(".k-grid-Copy"); copyButton.attr("title", "@ResxHelper.GetValue("Message","Copy")");
+						if ("@ViewData["AllowAdd"]" == "1") {} else {copyButton.hide();}
+					}
+				}
+			}
+		}
+		function AddData_ta_audit_kriteria_smk3() {var contentUrl = '@ViewBag.BaseUrl/AuditKriteriaSmk3/Add?audit_id=@ViewBag.audit_id&kriteria_audit_id=@ViewBag.kriteria_audit_id'; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog, }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: param_ta_audit_kriteria_smk3.btn_add_modal_width, height: param_ta_audit_kriteria_smk3.btn_add_modal_height, minHeight: 300, });if(param_ta_audit_kriteria_smk3.btn_add_modal_width == 0) {form_edit.data("kendoWindow").center().open().maximize()} else {form_edit.data("kendoWindow").center().open();}}
+		function ViewItem_ta_audit_kriteria_smk3(data) { var qs = '';jQuery.each(pkKey_ta_audit_kriteria_smk3, function (i, val) {qs += qs != "" ? "&" : "";qs += val+'=' + data[val];});var contentUrl = '@ViewBag.BaseUrl/AuditKriteriaSmk3/ViewItem?' + qs; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: param_ta_audit_kriteria_smk3.btn_view_modal_width, height: param_ta_audit_kriteria_smk3.btn_view_modal_height, minHeight: 300, }); if (param_ta_audit_kriteria_smk3.btn_view_modal_width == 0) { form_edit.data("kendoWindow").center().open().maximize() } else { form_edit.data("kendoWindow").center().open(); }}
+		function EditData_ta_audit_kriteria_smk3(data) { var qs = '';jQuery.each(pkKey_ta_audit_kriteria_smk3, function (i, val) {qs += qs != "" ? "&" : "";qs += val+'=' + data[val];}); var contentUrl = '@ViewBag.BaseUrl/AuditKriteriaSmk3/Edit?' + qs; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: param_ta_audit_kriteria_smk3.btn_edit_modal_width, height: param_ta_audit_kriteria_smk3.btn_edit_modal_height, minHeight: 300, }); if(param_ta_audit_kriteria_smk3.btn_edit_modal_width == 0) {form_edit.data("kendoWindow").center().open().maximize()} else {form_edit.data("kendoWindow").center().open();} }
+		function CopyData_ta_audit_kriteria_smk3(data) { var qs = '';jQuery.each(pkKey_ta_audit_kriteria_smk3, function (i, val) {qs += qs != "" ? "&" : "";qs += val+'=' + data[val];}); var contentUrl = '@ViewBag.BaseUrl/AuditKriteriaSmk3/Copy?' + qs; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: param_ta_audit_kriteria_smk3.btn_edit_modal_width, height: param_ta_audit_kriteria_smk3.btn_edit_modal_height, minHeight: 300, }); if(param_ta_audit_kriteria_smk3.btn_edit_modal_width == 0) {form_edit.data("kendoWindow").center().open().maximize()} else {form_edit.data("kendoWindow").center().open();} }
+		function DeleteData_ta_audit_kriteria_smk3(data) {
+			var keyValue = '';
+			jQuery.each(displayName_ta_audit_kriteria_smk3, function (i, val) {
+				keyValue += keyValue != "" ? "<br />" : "";
+				keyValue += val.label+ ": " + data[val.name];
+			});
+			var pkItem = "";
+			jQuery.each(pkKey_ta_audit_kriteria_smk3, function (i, val) {
+				pkItem += pkItem != "" ? ", " : "";
+				pkItem += '"'+val+'":"'+data[val]+'" ';
+			});
+			var pkVal = jQuery.parseJSON("{" + pkItem + "}");
+			var data2 = { title: '@ResxHelper.GetValue("Message","ConfirmDelete")', msg: keyValue };
+			var winconfirm = $("#dialogconfirm").kendoWindow({ title: "@ResxHelper.GetValue("Message","DeleteData")", modal: true, visible: false, resizable: true, draggable: true, width: "500px", height: "200px" }).data("kendoWindow");
+			winconfirm.content(confirmTemplate(data2));
+			winconfirm.center(); winconfirm.open();
+			$("#yesButton").click(function () {
+				$.ajax({
+					data: pkVal, url: '@ViewBag.BaseUrl/AuditKriteriaSmk3/Delete', type: 'POST'
+					, success: function (data) {
+						if (data.status != 1) {
+							notification.show({ title: data.title, message: kendo.toString(data.message) }, "error");
+							winconfirm.close();
+						} else {
+							notification.show({ message: kendo.toString(data.message) }, "success");
+							Reload_list_ta_audit_kriteria_smk3();
+							winconfirm.close();
+						}
+					}
+				});
+			});
+			$("#noButton").click(function () { winconfirm.close(); });
+		}
+		function onCloseDialog(e) { $('#dialog').html(''); }
+		function closeDialog() { $("#dialog").data("kendoWindow").close(); }
+		$("#btnExportExcel_ta_audit_kriteria_smk3").click(function (e) { var grid = $("#grid_ta_audit_kriteria_smk3").data("kendoGrid"); grid.saveAsExcel(); });
+		function ShowHideColumn_ta_audit_kriteria_smk3(e) { colname = $.isNumeric(e.value) ? parseInt(e.value) : e.value; if (e.checked) { $("#grid_ta_audit_kriteria_smk3").data("kendoGrid").showColumn(colname); } else { $("#grid_ta_audit_kriteria_smk3").data("kendoGrid").hideColumn(colname); } }
+		$(document).ready(function () {
+			$("#attr_column_show_hide").html(showhide_column);
+			if (param_ta_audit_kriteria_smk3.ShowFilter == 1) { $("#btnShowHideFilter_ta_audit_kriteria_smk3").show(); }
+			if (param_ta_audit_kriteria_smk3.btnAdd == 1 && @ViewData["AllowAdd"]== "1") { }else{ $("#btnAdd_ta_audit_kriteria_smk3").hide(); }
+			if (param_ta_audit_kriteria_smk3.quick_search != 1) { $("#quick_search_template_ta_audit_kriteria_smk3").hide(); }
+			if (param_ta_audit_kriteria_smk3.search_by_column  != 1) { $("#btnSearchByColumn_ta_audit_kriteria_smk3").hide(); }
+			if (param_ta_audit_kriteria_smk3.show_hide_column != 1) { $("#btnShowHideColumn_ta_audit_kriteria_smk3").hide(); }
+			if (param_ta_audit_kriteria_smk3.export_exl != 1) { $("#btnExportExcel_ta_audit_kriteria_smk3").hide(); }
+			$("#btnShowHideColumn_ta_audit_kriteria_smk3").click(function () { var x = $("#btnShowHideColumn_ta_audit_kriteria_smk3").offset().left; var y = $("#btnShowHideColumn_ta_audit_kriteria_smk3").offset().top; if (!WinShowHideColumn_ta_audit_kriteria_smk3) { var WinShowHideColumn_ta_audit_kriteria_smk3 = $("#WinShowHideColumn_ta_audit_kriteria_smk3").kendoWindow({ width: "300px", position: { left: x, top: y }, title: "@ResxHelper.GetValue("Message","ShowHideColumn")", actions: ["Close"] }); } WinShowHideColumn_ta_audit_kriteria_smk3.data("kendoWindow").open(); });
+		});
+		</script>
+
+
+		//SMKP
+		<script>
+		var param_ta_audit_kriteria_smkp = @Html.Raw(JsonConvert.SerializeObject(WebApp.Models.AuditKriteriaSmkpModel.GetListParam()));
+		var displayName_ta_audit_kriteria_smkp = @Html.Raw(JsonConvert.SerializeObject(WebApp.Models.AuditKriteriaSmkpModel.GetDisplayItem()));
+		var pkKey_ta_audit_kriteria_smkp = @Html.Raw(JsonConvert.SerializeObject(WebApp.Models.AuditKriteriaSmkpModel._pkKey));
+		var j_data_ta_audit_kriteria_smkp = @Html.Raw(JsonConvert.SerializeObject(WebApp.Models.AuditKriteriaSmkpModel.GetGridColumn()));
+		var colNameTooltip_ta_audit_kriteria_smkp = [];
+		var colbuttonCount_ta_audit_kriteria_smkp = 0;
+		var columnWidth = 40;
+		colbuttonCount_ta_audit_kriteria_smkp += param_ta_audit_kriteria_smkp.btnView == 1 ? 1 : 0;
+		colbuttonCount_ta_audit_kriteria_smkp += param_ta_audit_kriteria_smkp.btnEdit== "1" ? 1 : 0;
+		colbuttonCount_ta_audit_kriteria_smkp += param_ta_audit_kriteria_smkp.btnDelete == "1" ? 1 : 0;
+		colbuttonCount_ta_audit_kriteria_smkp += param_ta_audit_kriteria_smkp.btnCopy  == "1" ? 1 : 0;
+		if (colbuttonCount_ta_audit_kriteria_smkp == 1) { columnWidth = 40; } else if (colbuttonCount_ta_audit_kriteria_smkp == 2) { columnWidth = 60; } else if (colbuttonCount_ta_audit_kriteria_smkp == 3) { columnWidth = 95; } else if (colbuttonCount_ta_audit_kriteria_smkp == 4) { columnWidth = 120; }
+		var columnActionWidth_ta_audit_kriteria_smkp = columnWidth + "px";
+		var item_data = "";
+		var col_att = [];
+		var showhide_column = "";
+		var j = 0;
+		var checked = '';
+		var aggregate_data_ta_audit_kriteria_smkp = [];
+		var agg_i = 0
+		jQuery.each(j_data_ta_audit_kriteria_smkp, function (i, val) {
+			var footerTemplate = "";
+			if (val.aggregate != "") {
+				footerTemplate = val.footerTemplate!="" ? val.footerTemplate : '#='+val.aggregate+'#';
+				aggregate_data_ta_audit_kriteria_smkp[agg_i] = { field: val.name, aggregate: val.aggregate };
+				agg_i++;
+			}
+			item_data += item_data != "" ? "," : "";
+			item_data += '"' + val.name + '" : { "type": "' + val.type + '" } ';
+			if (val.display) {
+				col_att[j] = { field: val.name, title: val.title, hidden: JSON.parse(val.hidden), width: val.width, format: val.format, attributes: JSON.parse(val.attributes), encoded: JSON.parse(val.encoded), filterable: JSON.parse(val.filterable), sortable: JSON.parse(val.sortable), headerAttributes: { style: "white-space: normal;vertical-align:middle;text-align:center" },aggregates: [val.aggregate], footerTemplate: footerTemplate };
+				j++;
+				checked = '';if (val.hidden.toString() == 'false') {checked = 'checked';}
+				showhide_column += '<div><input type="checkbox" onclick="ShowHideColumn_ta_audit_kriteria_smkp(this)" '+ checked +' value="' + val.name + '" /> ' + val.title + '</div>';
+			}
+		});
+		showhide_column += '<div><input type="checkbox" onclick="ShowHideColumn_ta_audit_kriteria_smkp(this)" checked value="' + j + '" /> Action</div>';
+		item_data = '{' + item_data + '}';
+		var field_data = JSON.parse(item_data);
+		var columns_data = col_att;
+		var col_command = [];
+		var k = 0;
+		if (param_ta_audit_kriteria_smkp.btnView== 1) {col_command[k] = { name: "View", text: "", className: "v-view", click: function (e) { var tr = $(e.target).closest("tr"); var data = this.dataItem(tr); ViewItem_ta_audit_kriteria_smkp(data); } };k++;}
+		if (param_ta_audit_kriteria_smkp.btnEdit== 1) {col_command[k] = { name: "Edit", text: "", className: "v-pencil", click: function (e) { var tr = $(e.target).closest("tr"); var data = this.dataItem(tr); EditData_ta_audit_kriteria_smkp(data); } };k++;}
+		if (param_ta_audit_kriteria_smkp.btnDelete== 1) {col_command[k] = { name: "Delete", text: "", className: "v-close", click: function (e) { var tr = $(e.target).closest("tr"); var data = this.dataItem(tr); DeleteData_ta_audit_kriteria_smkp(data); } };k++;}
+		if (param_ta_audit_kriteria_smkp.btnCopy == 1) { col_command[k] = { name: "Copy", text: "", className: "v-copy", click: function (e) { var tr = $(e.target).closest("tr"); var data = this.dataItem(tr); CopyData_ta_audit_kriteria_smkp(data); } }; k++; }
+		if (colbuttonCount_ta_audit_kriteria_smkp > 0) {
+			columns_data[j] = {command: col_command, width: columnActionWidth_ta_audit_kriteria_smkp, attributes: " style=\"vertical-align:top;\""};
+		}
+		//==============================
+
+		//==============================
+		$("#collapse_filter_ta_audit_kriteria_smkp").on('shown.bs.collapse', function () {
+			$("#btnShowHideFilter_ta_audit_kriteria_smkp").html('@ResxHelper.GetValue("Message","HideFilter")');
+		});
+		$("#collapse_filter_ta_audit_kriteria_smkp").on('hidden.bs.collapse', function () {
+			$("#btnShowHideFilter_ta_audit_kriteria_smkp").html('@ResxHelper.GetValue("Message","ShowFilter")');
+		});
+		//==============================
+		var record_ta_audit_kriteria_smkp = 0;
+		var grid_ta_audit_kriteria_smkp_heigth = 0;
+		var ds_ta_audit_kriteria_smkp_filter = { filter_by_column: [{name:"audit_id",opr:"=",value:"@ViewBag.audit_id"}, {name:"kriteria_audit_id",opr:"=",value:"@ViewBag.kriteria_audit_id"}] };
+		var ds_ta_audit_kriteria_smkp = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/AuditKriteriaSmkp/GetListData", dataType: "json", type: "POST", data: ds_ta_audit_kriteria_smkp_filter }, parameterMap: function (options) { if (options.filter) { for (var i = 0; i < options.filter.filters.length; i++) { if (options.filter.filters[i].field == 'tanggal') { options.filter.filters[i].value = kendo.toString(options.filter.filters[i].value, "yyyy-MM-dd"); } } } return options; } }, schema: { data: "data", total: "total", aggregates: "aggregates", model: { fields: field_data } }, aggregate: aggregate_data_ta_audit_kriteria_smkp, pageSize: 10, serverAggregates: true, serverPaging: true, serverFiltering: true, serverSorting: true });
+		var list_ta_audit_kriteria_smkp = $("#grid_ta_audit_kriteria_smkp").kendoGrid({
+			excel: { allPages: true, fileName: '@ViewData["TitleHeader"]'+'.xlsx' },
+			dataSource: ds_ta_audit_kriteria_smkp, dataBound: onDataBound_ta_audit_kriteria_smkp, height: grid_ta_audit_kriteria_smkp_heigth, scrollable: true, groupable: false, columnMenu: false, menu: true, resizable: true, filterable: false, sortable: { mode: "multiple", allowUnsort: true }, pageable: { refresh: true, pageSizes: [5, 10, 20, 50, 100, 200], buttonCount: 5 },
+			columns: columns_data, editable: false, dataBinding: function () { record_ta_audit_kriteria_smkp = (this.dataSource.page() - 1) * this.dataSource.pageSize(); }
+		});
+		function getParamgrid_ta_audit_kriteria_smkp() {
+			var filter_by_column= [];var k = 0;
+
+			return { filter_by_column:filter_by_column };
+		}
+		function reset_filter_ta_audit_kriteria_smkp() {
+
+			onFilterHeader_ta_audit_kriteria_smkp();
+		}
+		function onFilterHeader_ta_audit_kriteria_smkp() {
+			$("#txtSearch_ta_audit_kriteria_smkp").val('');
+			paramValue = getParamgrid_ta_audit_kriteria_smkp();
+			if (list_ta_audit_kriteria_smkp.data('kendoGrid').dataSource.page() > 1) {
+				list_ta_audit_kriteria_smkp.data('kendoGrid').dataSource.page(0);
+			}
+			list_ta_audit_kriteria_smkp.data('kendoGrid').dataSource.transport.options.read.data = paramValue;
+			list_ta_audit_kriteria_smkp.data("kendoGrid").dataSource.filter([]);
+		};
+		$("#btnSearchByColumn_ta_audit_kriteria_smkp").click(function () { var grid_ta_audit_kriteria_smkp_heigth_filter = grid_ta_audit_kriteria_smkp_heigth + 38; if (list_ta_audit_kriteria_smkp.data("kendoGrid").options.filterable == false) { $('#btnSearchByColumn_ta_audit_kriteria_smkp').prop('title', '@ResxHelper.GetValue("Message","HideSearchByColumn")'); $("#txtSearch_ta_audit_kriteria_smkp").val(''); if ('1' == '1') { $("#quick_search_template_ta_audit_kriteria_smkp").hide(); }; QuickSearch_ta_audit_kriteria_smkp(); list_ta_audit_kriteria_smkp.data("kendoGrid").setOptions({ height: grid_ta_audit_kriteria_smkp_heigth_filter, filterable: { mode: "row" }, }); } else { $('#btnSearchByColumn_ta_audit_kriteria_smkp').prop('title', '@ResxHelper.GetValue("Message","ShowSearchByColumn")'); $("#txtSearch_ta_audit_kriteria_smkp").val(''); if ('1' == '1') { $("#quick_search_template_ta_audit_kriteria_smkp").show(); }; QuickSearch_ta_audit_kriteria_smkp(); list_ta_audit_kriteria_smkp.data("kendoGrid").setOptions({ height: grid_ta_audit_kriteria_smkp_heigth, filterable: false, }); } });
+		$("#btnSearch_ta_audit_kriteria_smkp").click(function () { QuickSearch_ta_audit_kriteria_smkp(); });
+		$('#txtSearch_ta_audit_kriteria_smkp').keypress(function (e) { if (e.keyCode == 13) { QuickSearch_ta_audit_kriteria_smkp(); } });
+		function QuickSearch_ta_audit_kriteria_smkp() {
+			$filter = new Array();
+			$x = $("#txtSearch_ta_audit_kriteria_smkp").val();
+			if ($x) {jQuery.each(j_data_ta_audit_kriteria_smkp, function (i, val) {if (val.display && val.qsearch && val.type =='string') {$filter.push({ name: val.name, opr: "contains", value: $x });}});}
+			if ($filter.length > 0) {list_ta_audit_kriteria_smkp.data("kendoGrid").dataSource.filter({ logic: "or", filters: $filter });}else {list_ta_audit_kriteria_smkp.data("kendoGrid").dataSource.filter([]);}
+		}
+		function Reload_list_ta_audit_kriteria_smkp() { list_ta_audit_kriteria_smkp.data('kendoGrid').dataSource.read(); list_ta_audit_kriteria_smkp.data('kendoGrid').refresh(); }
+		function onDataBound_ta_audit_kriteria_smkp(e) {
+			if (colbuttonCount_ta_audit_kriteria_smkp > 0) {
+				var grid = $("#grid_ta_audit_kriteria_smkp").data("kendoGrid"); var list_ta_audit_kriteria_smkp = grid.dataSource.view();
+				for (var i = 0; i < list_ta_audit_kriteria_smkp.length; i++) {
+					var currentUid = list_ta_audit_kriteria_smkp[i].uid; var currenRow = grid.table.find("tr[data-uid='" + currentUid + "']");
+					if (param_ta_audit_kriteria_smkp.btnView == 1) {
+						var viewButton = $(currenRow).find(".k-grid-View"); viewButton.attr("title", "@ResxHelper.GetValue("Message","View")");
+						if ("@ViewData["AllowView"]" == "1") {} else {viewButton.hide();}
+					}
+					if (param_ta_audit_kriteria_smkp.btnEdit == 1) {
+						var editButton = $(currenRow).find(".k-grid-Edit"); editButton.attr("title", "@ResxHelper.GetValue("Message","Edit")");
+						if ("@ViewData["AllowEdit"]" == "1") {} else {editButton.hide();}
+					}
+					if (param_ta_audit_kriteria_smkp.btnDelete == 1) {
+						var deleteButton = $(currenRow).find(".k-grid-Delete"); deleteButton.attr("title", "@ResxHelper.GetValue("Message","Delete")");
+                        if ("@ViewData["AllowDelete"]" == "1") { } else { deleteButton.hide(); }
+						deleteButton.hide();
+					}
+					if (param_ta_audit_kriteria_smkp.btnCopy == 1) {
+						var copyButton = $(currenRow).find(".k-grid-Copy"); copyButton.attr("title", "@ResxHelper.GetValue("Message","Copy")");
+						if ("@ViewData["AllowAdd"]" == "1") {} else {copyButton.hide();}
+					}
+				}
+			}
+		}
+		function AddData_ta_audit_kriteria_smkp() {var contentUrl = '@ViewBag.BaseUrl/AuditKriteriaSmkp/Add?audit_id=@ViewBag.audit_id&kriteria_audit_id=@ViewBag.kriteria_audit_id'; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog, }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: param_ta_audit_kriteria_smkp.btn_add_modal_width, height: param_ta_audit_kriteria_smkp.btn_add_modal_height, minHeight: 300, });if(param_ta_audit_kriteria_smkp.btn_add_modal_width == 0) {form_edit.data("kendoWindow").center().open().maximize()} else {form_edit.data("kendoWindow").center().open();}}
+		function ViewItem_ta_audit_kriteria_smkp(data) { var qs = '';jQuery.each(pkKey_ta_audit_kriteria_smkp, function (i, val) {qs += qs != "" ? "&" : "";qs += val+'=' + data[val];});var contentUrl = '@ViewBag.BaseUrl/AuditKriteriaSmkp/ViewItem?' + qs; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: param_ta_audit_kriteria_smkp.btn_view_modal_width, height: param_ta_audit_kriteria_smkp.btn_view_modal_height, minHeight: 300, }); if (param_ta_audit_kriteria_smkp.btn_view_modal_width == 0) { form_edit.data("kendoWindow").center().open().maximize() } else { form_edit.data("kendoWindow").center().open(); }}
+		function EditData_ta_audit_kriteria_smkp(data) { var qs = '';jQuery.each(pkKey_ta_audit_kriteria_smkp, function (i, val) {qs += qs != "" ? "&" : "";qs += val+'=' + data[val];}); var contentUrl = '@ViewBag.BaseUrl/AuditKriteriaSmkp/Edit?' + qs; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: param_ta_audit_kriteria_smkp.btn_edit_modal_width, height: param_ta_audit_kriteria_smkp.btn_edit_modal_height, minHeight: 300, }); if(param_ta_audit_kriteria_smkp.btn_edit_modal_width == 0) {form_edit.data("kendoWindow").center().open().maximize()} else {form_edit.data("kendoWindow").center().open();} }
+		function CopyData_ta_audit_kriteria_smkp(data) { var qs = '';jQuery.each(pkKey_ta_audit_kriteria_smkp, function (i, val) {qs += qs != "" ? "&" : "";qs += val+'=' + data[val];}); var contentUrl = '@ViewBag.BaseUrl/AuditKriteriaSmkp/Copy?' + qs; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: param_ta_audit_kriteria_smkp.btn_edit_modal_width, height: param_ta_audit_kriteria_smkp.btn_edit_modal_height, minHeight: 300, }); if(param_ta_audit_kriteria_smkp.btn_edit_modal_width == 0) {form_edit.data("kendoWindow").center().open().maximize()} else {form_edit.data("kendoWindow").center().open();} }
+		function DeleteData_ta_audit_kriteria_smkp(data) {
+			var keyValue = '';
+			jQuery.each(displayName_ta_audit_kriteria_smkp, function (i, val) {
+				keyValue += keyValue != "" ? "<br />" : "";
+				keyValue += val.label+ ": " + data[val.name];
+			});
+			var pkItem = "";
+			jQuery.each(pkKey_ta_audit_kriteria_smkp, function (i, val) {
+				pkItem += pkItem != "" ? ", " : "";
+				pkItem += '"'+val+'":"'+data[val]+'" ';
+			});
+			var pkVal = jQuery.parseJSON("{" + pkItem + "}");
+			var data2 = { title: '@ResxHelper.GetValue("Message","ConfirmDelete")', msg: keyValue };
+			var winconfirm = $("#dialogconfirm").kendoWindow({ title: "@ResxHelper.GetValue("Message","DeleteData")", modal: true, visible: false, resizable: true, draggable: true, width: "500px", height: "200px" }).data("kendoWindow");
+			winconfirm.content(confirmTemplate(data2));
+			winconfirm.center(); winconfirm.open();
+			$("#yesButton").click(function () {
+				$.ajax({
+					data: pkVal, url: '@ViewBag.BaseUrl/AuditKriteriaSmkp/Delete', type: 'POST'
+					, success: function (data) {
+						if (data.status != 1) {
+							notification.show({ title: data.title, message: kendo.toString(data.message) }, "error");
+							winconfirm.close();
+						} else {
+							notification.show({ message: kendo.toString(data.message) }, "success");
+							Reload_list_ta_audit_kriteria_smkp();
+							winconfirm.close();
+						}
+					}
+				});
+			});
+			$("#noButton").click(function () { winconfirm.close(); });
+		}
+		function onCloseDialog(e) { $('#dialog').html(''); }
+		function closeDialog() { $("#dialog").data("kendoWindow").close(); }
+		$("#btnExportExcel_ta_audit_kriteria_smkp").click(function (e) { var grid = $("#grid_ta_audit_kriteria_smkp").data("kendoGrid"); grid.saveAsExcel(); });
+		function ShowHideColumn_ta_audit_kriteria_smkp(e) { colname = $.isNumeric(e.value) ? parseInt(e.value) : e.value; if (e.checked) { $("#grid_ta_audit_kriteria_smkp").data("kendoGrid").showColumn(colname); } else { $("#grid_ta_audit_kriteria_smkp").data("kendoGrid").hideColumn(colname); } }
+		$(document).ready(function () {
+			$("#attr_column_show_hide").html(showhide_column);
+			if (param_ta_audit_kriteria_smkp.ShowFilter == 1) { $("#btnShowHideFilter_ta_audit_kriteria_smkp").show(); }
+			if (param_ta_audit_kriteria_smkp.btnAdd == 1 && @ViewData["AllowAdd"]== "1") { }else{ $("#btnAdd_ta_audit_kriteria_smkp").hide(); }
+			if (param_ta_audit_kriteria_smkp.quick_search != 1) { $("#quick_search_template_ta_audit_kriteria_smkp").hide(); }
+			if (param_ta_audit_kriteria_smkp.search_by_column  != 1) { $("#btnSearchByColumn_ta_audit_kriteria_smkp").hide(); }
+			if (param_ta_audit_kriteria_smkp.show_hide_column != 1) { $("#btnShowHideColumn_ta_audit_kriteria_smkp").hide(); }
+			if (param_ta_audit_kriteria_smkp.export_exl != 1) { $("#btnExportExcel_ta_audit_kriteria_smkp").hide(); }
+			$("#btnShowHideColumn_ta_audit_kriteria_smkp").click(function () { var x = $("#btnShowHideColumn_ta_audit_kriteria_smkp").offset().left; var y = $("#btnShowHideColumn_ta_audit_kriteria_smkp").offset().top; if (!WinShowHideColumn_ta_audit_kriteria_smkp) { var WinShowHideColumn_ta_audit_kriteria_smkp = $("#WinShowHideColumn_ta_audit_kriteria_smkp").kendoWindow({ width: "300px", position: { left: x, top: y }, title: "@ResxHelper.GetValue("Message","ShowHideColumn")", actions: ["Close"] }); } WinShowHideColumn_ta_audit_kriteria_smkp.data("kendoWindow").open(); });
+		});
+		</script>
+
+	}
+
+
+
+
+
+	//Kantor, SOHE, Gudang, Konstruksi
+	if (ViewBag.kriteria_audit_id == "2" || ViewBag.kriteria_audit_id == "3" || ViewBag.kriteria_audit_id == "6" || ViewBag.kriteria_audit_id == "7")
+	{
+
+		//AGC
+		<script>
+		var param_ta_audit_kriteria_agc = @Html.Raw(JsonConvert.SerializeObject(WebApp.Models.AuditKriteriaAgcModel.GetListParam()));
+		var displayName_ta_audit_kriteria_agc = @Html.Raw(JsonConvert.SerializeObject(WebApp.Models.AuditKriteriaAgcModel.GetDisplayItem()));
+		var pkKey_ta_audit_kriteria_agc = @Html.Raw(JsonConvert.SerializeObject(WebApp.Models.AuditKriteriaAgcModel._pkKey));
+		var j_data_ta_audit_kriteria_agc = @Html.Raw(JsonConvert.SerializeObject(WebApp.Models.AuditKriteriaAgcModel.GetGridColumn()));
+		var colNameTooltip_ta_audit_kriteria_agc = [];
+		var colbuttonCount_ta_audit_kriteria_agc = 0;
+		var columnWidth = 40;
+		colbuttonCount_ta_audit_kriteria_agc += param_ta_audit_kriteria_agc.btnView == 1 ? 1 : 0;
+		colbuttonCount_ta_audit_kriteria_agc += param_ta_audit_kriteria_agc.btnEdit== "1" ? 1 : 0;
+		colbuttonCount_ta_audit_kriteria_agc += param_ta_audit_kriteria_agc.btnDelete == "1" ? 1 : 0;
+		colbuttonCount_ta_audit_kriteria_agc += param_ta_audit_kriteria_agc.btnCopy  == "1" ? 1 : 0;
+		if (colbuttonCount_ta_audit_kriteria_agc == 1) { columnWidth = 40; } else if (colbuttonCount_ta_audit_kriteria_agc == 2) { columnWidth = 60; } else if (colbuttonCount_ta_audit_kriteria_agc == 3) { columnWidth = 95; } else if (colbuttonCount_ta_audit_kriteria_agc == 4) { columnWidth = 120; }
+		var columnActionWidth_ta_audit_kriteria_agc = columnWidth + "px";
+		var item_data = "";
+		var col_att = [];
+		var showhide_column = "";
+		var j = 0;
+		var checked = '';
+		var aggregate_data_ta_audit_kriteria_agc = [];
+		var agg_i = 0
+		jQuery.each(j_data_ta_audit_kriteria_agc, function (i, val) {
+			var footerTemplate = "";
+			if (val.aggregate != "") {
+				footerTemplate = val.footerTemplate!="" ? val.footerTemplate : '#='+val.aggregate+'#';
+				aggregate_data_ta_audit_kriteria_agc[agg_i] = { field: val.name, aggregate: val.aggregate };
+				agg_i++;
+			}
+			item_data += item_data != "" ? "," : "";
+			item_data += '"' + val.name + '" : { "type": "' + val.type + '" } ';
+			if (val.display) {
+				col_att[j] = { field: val.name, title: val.title, hidden: JSON.parse(val.hidden), width: val.width, format: val.format, attributes: JSON.parse(val.attributes), encoded: JSON.parse(val.encoded), filterable: JSON.parse(val.filterable), sortable: JSON.parse(val.sortable), headerAttributes: { style: "white-space: normal;vertical-align:middle;text-align:center" },aggregates: [val.aggregate], footerTemplate: footerTemplate };
+				j++;
+				checked = '';if (val.hidden.toString() == 'false') {checked = 'checked';}
+				showhide_column += '<div><input type="checkbox" onclick="ShowHideColumn_ta_audit_kriteria_agc(this)" '+ checked +' value="' + val.name + '" /> ' + val.title + '</div>';
+			}
+		});
+		showhide_column += '<div><input type="checkbox" onclick="ShowHideColumn_ta_audit_kriteria_agc(this)" checked value="' + j + '" /> Action</div>';
+		item_data = '{' + item_data + '}';
+		var field_data = JSON.parse(item_data);
+		var columns_data = col_att;
+		var col_command = [];
+		var k = 0;
+		if (param_ta_audit_kriteria_agc.btnView== 1) {col_command[k] = { name: "View", text: "", className: "v-view", click: function (e) { var tr = $(e.target).closest("tr"); var data = this.dataItem(tr); ViewItem_ta_audit_kriteria_agc(data); } };k++;}
+		if (param_ta_audit_kriteria_agc.btnEdit== 1) {col_command[k] = { name: "Edit", text: "", className: "v-pencil", click: function (e) { var tr = $(e.target).closest("tr"); var data = this.dataItem(tr); EditData_ta_audit_kriteria_agc(data); } };k++;}
+		if (param_ta_audit_kriteria_agc.btnDelete== 1) {col_command[k] = { name: "Delete", text: "", className: "v-close", click: function (e) { var tr = $(e.target).closest("tr"); var data = this.dataItem(tr); DeleteData_ta_audit_kriteria_agc(data); } };k++;}
+		if (param_ta_audit_kriteria_agc.btnCopy == 1) { col_command[k] = { name: "Copy", text: "", className: "v-copy", click: function (e) { var tr = $(e.target).closest("tr"); var data = this.dataItem(tr); CopyData_ta_audit_kriteria_agc(data); } }; k++; }
+		if (colbuttonCount_ta_audit_kriteria_agc > 0) {
+			columns_data[j] = {command: col_command, width: columnActionWidth_ta_audit_kriteria_agc, attributes: " style=\"vertical-align:top;\""};
+		}
+		//==============================
+
+		//==============================
+		$("#collapse_filter_ta_audit_kriteria_agc").on('shown.bs.collapse', function () {
+			$("#btnShowHideFilter_ta_audit_kriteria_agc").html('@ResxHelper.GetValue("Message","HideFilter")');
+		});
+		$("#collapse_filter_ta_audit_kriteria_agc").on('hidden.bs.collapse', function () {
+			$("#btnShowHideFilter_ta_audit_kriteria_agc").html('@ResxHelper.GetValue("Message","ShowFilter")');
+		});
+		//==============================
+		var record_ta_audit_kriteria_agc = 0;
+		var grid_ta_audit_kriteria_agc_heigth = 0;
+		var ds_ta_audit_kriteria_agc_filter = { filter_by_column: [{name:"audit_id",opr:"=",value:"@ViewBag.audit_id"}, {name:"kriteria_audit_id",opr:"=",value:"@ViewBag.kriteria_audit_id"}] };
+		var ds_ta_audit_kriteria_agc = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/AuditKriteriaAgc/GetListData", dataType: "json", type: "POST", data: ds_ta_audit_kriteria_agc_filter }, parameterMap: function (options) { if (options.filter) { for (var i = 0; i < options.filter.filters.length; i++) { if (options.filter.filters[i].field == 'tanggal') { options.filter.filters[i].value = kendo.toString(options.filter.filters[i].value, "yyyy-MM-dd"); } } } return options; } }, schema: { data: "data", total: "total", aggregates: "aggregates", model: { fields: field_data } }, aggregate: aggregate_data_ta_audit_kriteria_agc, pageSize: 10, serverAggregates: true, serverPaging: true, serverFiltering: true, serverSorting: true });
+		var list_ta_audit_kriteria_agc = $("#grid_ta_audit_kriteria_agc").kendoGrid({
+			excel: { allPages: true, fileName: '@ViewData["TitleHeader"]'+'.xlsx' },
+			dataSource: ds_ta_audit_kriteria_agc, dataBound: onDataBound_ta_audit_kriteria_agc, height: grid_ta_audit_kriteria_agc_heigth, scrollable: true, groupable: false, columnMenu: false, menu: true, resizable: true, filterable: false, sortable: { mode: "multiple", allowUnsort: true }, pageable: { refresh: true, pageSizes: [5, 10, 20, 50, 100, 200], buttonCount: 5 },
+			columns: columns_data, editable: false, dataBinding: function () { record_ta_audit_kriteria_agc = (this.dataSource.page() - 1) * this.dataSource.pageSize(); }
+		});
+		function getParamgrid_ta_audit_kriteria_agc() {
+			var filter_by_column= [];var k = 0;
+
+			return { filter_by_column:filter_by_column };
+		}
+		function reset_filter_ta_audit_kriteria_agc() {
+
+			onFilterHeader_ta_audit_kriteria_agc();
+		}
+		function onFilterHeader_ta_audit_kriteria_agc() {
+			$("#txtSearch_ta_audit_kriteria_agc").val('');
+			paramValue = getParamgrid_ta_audit_kriteria_agc();
+			if (list_ta_audit_kriteria_agc.data('kendoGrid').dataSource.page() > 1) {
+				list_ta_audit_kriteria_agc.data('kendoGrid').dataSource.page(0);
+			}
+			list_ta_audit_kriteria_agc.data('kendoGrid').dataSource.transport.options.read.data = paramValue;
+			list_ta_audit_kriteria_agc.data("kendoGrid").dataSource.filter([]);
+		};
+		$("#btnSearchByColumn_ta_audit_kriteria_agc").click(function () { var grid_ta_audit_kriteria_agc_heigth_filter = grid_ta_audit_kriteria_agc_heigth + 38; if (list_ta_audit_kriteria_agc.data("kendoGrid").options.filterable == false) { $('#btnSearchByColumn_ta_audit_kriteria_agc').prop('title', '@ResxHelper.GetValue("Message","HideSearchByColumn")'); $("#txtSearch_ta_audit_kriteria_agc").val(''); if ('1' == '1') { $("#quick_search_template_ta_audit_kriteria_agc").hide(); }; QuickSearch_ta_audit_kriteria_agc(); list_ta_audit_kriteria_agc.data("kendoGrid").setOptions({ height: grid_ta_audit_kriteria_agc_heigth_filter, filterable: { mode: "row" }, }); } else { $('#btnSearchByColumn_ta_audit_kriteria_agc').prop('title', '@ResxHelper.GetValue("Message","ShowSearchByColumn")'); $("#txtSearch_ta_audit_kriteria_agc").val(''); if ('1' == '1') { $("#quick_search_template_ta_audit_kriteria_agc").show(); }; QuickSearch_ta_audit_kriteria_agc(); list_ta_audit_kriteria_agc.data("kendoGrid").setOptions({ height: grid_ta_audit_kriteria_agc_heigth, filterable: false, }); } });
+		$("#btnSearch_ta_audit_kriteria_agc").click(function () { QuickSearch_ta_audit_kriteria_agc(); });
+		$('#txtSearch_ta_audit_kriteria_agc').keypress(function (e) { if (e.keyCode == 13) { QuickSearch_ta_audit_kriteria_agc(); } });
+		function QuickSearch_ta_audit_kriteria_agc() {
+			$filter = new Array();
+			$x = $("#txtSearch_ta_audit_kriteria_agc").val();
+			if ($x) {jQuery.each(j_data_ta_audit_kriteria_agc, function (i, val) {if (val.display && val.qsearch && val.type =='string') {$filter.push({ name: val.name, opr: "contains", value: $x });}});}
+			if ($filter.length > 0) {list_ta_audit_kriteria_agc.data("kendoGrid").dataSource.filter({ logic: "or", filters: $filter });}else {list_ta_audit_kriteria_agc.data("kendoGrid").dataSource.filter([]);}
+		}
+		function Reload_list_ta_audit_kriteria_agc() { list_ta_audit_kriteria_agc.data('kendoGrid').dataSource.read(); list_ta_audit_kriteria_agc.data('kendoGrid').refresh(); }
+		function onDataBound_ta_audit_kriteria_agc(e) {
+			if (colbuttonCount_ta_audit_kriteria_agc > 0) {
+				var grid = $("#grid_ta_audit_kriteria_agc").data("kendoGrid"); var list_ta_audit_kriteria_agc = grid.dataSource.view();
+				for (var i = 0; i < list_ta_audit_kriteria_agc.length; i++) {
+					var currentUid = list_ta_audit_kriteria_agc[i].uid; var currenRow = grid.table.find("tr[data-uid='" + currentUid + "']");
+					if (param_ta_audit_kriteria_agc.btnView == 1) {
+						var viewButton = $(currenRow).find(".k-grid-View"); viewButton.attr("title", "@ResxHelper.GetValue("Message","View")");
+						if ("@ViewData["AllowView"]" == "1") {} else {viewButton.hide();}
+					}
+					if (param_ta_audit_kriteria_agc.btnEdit == 1) {
+						var editButton = $(currenRow).find(".k-grid-Edit"); editButton.attr("title", "@ResxHelper.GetValue("Message","Edit")");
+						if ("@ViewData["AllowEdit"]" == "1") {} else {editButton.hide();}
+					}
+					if (param_ta_audit_kriteria_agc.btnDelete == 1) {
+						var deleteButton = $(currenRow).find(".k-grid-Delete"); deleteButton.attr("title", "@ResxHelper.GetValue("Message","Delete")");
+                        if ("@ViewData["AllowDelete"]" == "1") { } else { deleteButton.hide(); }
+						deleteButton.hide();
+					}
+					if (param_ta_audit_kriteria_agc.btnCopy == 1) {
+						var copyButton = $(currenRow).find(".k-grid-Copy"); copyButton.attr("title", "@ResxHelper.GetValue("Message","Copy")");
+						if ("@ViewData["AllowAdd"]" == "1") {} else {copyButton.hide();}
+					}
+				}
+			}
+		}
+		function AddData_ta_audit_kriteria_agc() {var contentUrl = '@ViewBag.BaseUrl/AuditKriteriaAgc/Add?audit_id=@ViewBag.audit_id&kriteria_audit_id=@ViewBag.kriteria_audit_id'; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog, }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: param_ta_audit_kriteria_agc.btn_add_modal_width, height: param_ta_audit_kriteria_agc.btn_add_modal_height, minHeight: 300, });if(param_ta_audit_kriteria_agc.btn_add_modal_width == 0) {form_edit.data("kendoWindow").center().open().maximize()} else {form_edit.data("kendoWindow").center().open();}}
+		function ViewItem_ta_audit_kriteria_agc(data) { var qs = '';jQuery.each(pkKey_ta_audit_kriteria_agc, function (i, val) {qs += qs != "" ? "&" : "";qs += val+'=' + data[val];});var contentUrl = '@ViewBag.BaseUrl/AuditKriteriaAgc/ViewItem?' + qs; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: param_ta_audit_kriteria_agc.btn_view_modal_width, height: param_ta_audit_kriteria_agc.btn_view_modal_height, minHeight: 300, }); if (param_ta_audit_kriteria_agc.btn_view_modal_width == 0) { form_edit.data("kendoWindow").center().open().maximize() } else { form_edit.data("kendoWindow").center().open(); }}
+		function EditData_ta_audit_kriteria_agc(data) { var qs = '';jQuery.each(pkKey_ta_audit_kriteria_agc, function (i, val) {qs += qs != "" ? "&" : "";qs += val+'=' + data[val];}); var contentUrl = '@ViewBag.BaseUrl/AuditKriteriaAgc/Edit?' + qs; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: param_ta_audit_kriteria_agc.btn_edit_modal_width, height: param_ta_audit_kriteria_agc.btn_edit_modal_height, minHeight: 300, }); if(param_ta_audit_kriteria_agc.btn_edit_modal_width == 0) {form_edit.data("kendoWindow").center().open().maximize()} else {form_edit.data("kendoWindow").center().open();} }
+		function CopyData_ta_audit_kriteria_agc(data) { var qs = '';jQuery.each(pkKey_ta_audit_kriteria_agc, function (i, val) {qs += qs != "" ? "&" : "";qs += val+'=' + data[val];}); var contentUrl = '@ViewBag.BaseUrl/AuditKriteriaAgc/Copy?' + qs; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: param_ta_audit_kriteria_agc.btn_edit_modal_width, height: param_ta_audit_kriteria_agc.btn_edit_modal_height, minHeight: 300, }); if(param_ta_audit_kriteria_agc.btn_edit_modal_width == 0) {form_edit.data("kendoWindow").center().open().maximize()} else {form_edit.data("kendoWindow").center().open();} }
+		function DeleteData_ta_audit_kriteria_agc(data) {
+			var keyValue = '';
+			jQuery.each(displayName_ta_audit_kriteria_agc, function (i, val) {
+				keyValue += keyValue != "" ? "<br />" : "";
+				keyValue += val.label+ ": " + data[val.name];
+			});
+			var pkItem = "";
+			jQuery.each(pkKey_ta_audit_kriteria_agc, function (i, val) {
+				pkItem += pkItem != "" ? ", " : "";
+				pkItem += '"'+val+'":"'+data[val]+'" ';
+			});
+			var pkVal = jQuery.parseJSON("{" + pkItem + "}");
+			var data2 = { title: '@ResxHelper.GetValue("Message","ConfirmDelete")', msg: keyValue };
+			var winconfirm = $("#dialogconfirm").kendoWindow({ title: "@ResxHelper.GetValue("Message","DeleteData")", modal: true, visible: false, resizable: true, draggable: true, width: "500px", height: "200px" }).data("kendoWindow");
+			winconfirm.content(confirmTemplate(data2));
+			winconfirm.center(); winconfirm.open();
+			$("#yesButton").click(function () {
+				$.ajax({
+					data: pkVal, url: '@ViewBag.BaseUrl/AuditKriteriaAgc/Delete', type: 'POST'
+					, success: function (data) {
+						if (data.status != 1) {
+							notification.show({ title: data.title, message: kendo.toString(data.message) }, "error");
+							winconfirm.close();
+						} else {
+							notification.show({ message: kendo.toString(data.message) }, "success");
+							Reload_list_ta_audit_kriteria_agc();
+							winconfirm.close();
+						}
+					}
+				});
+			});
+			$("#noButton").click(function () { winconfirm.close(); });
+		}
+		function onCloseDialog(e) { $('#dialog').html(''); }
+		function closeDialog() { $("#dialog").data("kendoWindow").close(); }
+		$("#btnExportExcel_ta_audit_kriteria_agc").click(function (e) { var grid = $("#grid_ta_audit_kriteria_agc").data("kendoGrid"); grid.saveAsExcel(); });
+		function ShowHideColumn_ta_audit_kriteria_agc(e) { colname = $.isNumeric(e.value) ? parseInt(e.value) : e.value; if (e.checked) { $("#grid_ta_audit_kriteria_agc").data("kendoGrid").showColumn(colname); } else { $("#grid_ta_audit_kriteria_agc").data("kendoGrid").hideColumn(colname); } }
+		$(document).ready(function () {
+			$("#attr_column_show_hide").html(showhide_column);
+			if (param_ta_audit_kriteria_agc.ShowFilter == 1) { $("#btnShowHideFilter_ta_audit_kriteria_agc").show(); }
+			if (param_ta_audit_kriteria_agc.btnAdd == 1 && @ViewData["AllowAdd"]== "1") { }else{ $("#btnAdd_ta_audit_kriteria_agc").hide(); }
+			if (param_ta_audit_kriteria_agc.quick_search != 1) { $("#quick_search_template_ta_audit_kriteria_agc").hide(); }
+			if (param_ta_audit_kriteria_agc.search_by_column  != 1) { $("#btnSearchByColumn_ta_audit_kriteria_agc").hide(); }
+			if (param_ta_audit_kriteria_agc.show_hide_column != 1) { $("#btnShowHideColumn_ta_audit_kriteria_agc").hide(); }
+			if (param_ta_audit_kriteria_agc.export_exl != 1) { $("#btnExportExcel_ta_audit_kriteria_agc").hide(); }
+			$("#btnShowHideColumn_ta_audit_kriteria_agc").click(function () { var x = $("#btnShowHideColumn_ta_audit_kriteria_agc").offset().left; var y = $("#btnShowHideColumn_ta_audit_kriteria_agc").offset().top; if (!WinShowHideColumn_ta_audit_kriteria_agc) { var WinShowHideColumn_ta_audit_kriteria_agc = $("#WinShowHideColumn_ta_audit_kriteria_agc").kendoWindow({ width: "300px", position: { left: x, top: y }, title: "@ResxHelper.GetValue("Message","ShowHideColumn")", actions: ["Close"] }); } WinShowHideColumn_ta_audit_kriteria_agc.data("kendoWindow").open(); });
+		});
+		</script>
+	}
+
+
+
+
+
+
+
+	//Tambang, Manufaktur
+	if (ViewBag.kriteria_audit_id == "4" || ViewBag.kriteria_audit_id == "5")
+	{
+
+		//AGC TM
+		<script>
+		var param_ta_audit_kriteria_agc_tm = @Html.Raw(JsonConvert.SerializeObject(WebApp.Models.AuditKriteriaAgcTmModel.GetListParam()));
+		var displayName_ta_audit_kriteria_agc_tm = @Html.Raw(JsonConvert.SerializeObject(WebApp.Models.AuditKriteriaAgcTmModel.GetDisplayItem()));
+		var pkKey_ta_audit_kriteria_agc_tm = @Html.Raw(JsonConvert.SerializeObject(WebApp.Models.AuditKriteriaAgcTmModel._pkKey));
+		var j_data_ta_audit_kriteria_agc_tm = @Html.Raw(JsonConvert.SerializeObject(WebApp.Models.AuditKriteriaAgcTmModel.GetGridColumn()));
+		var colNameTooltip_ta_audit_kriteria_agc_tm = [];
+		var colbuttonCount_ta_audit_kriteria_agc_tm = 0;
+		var columnWidth = 40;
+		colbuttonCount_ta_audit_kriteria_agc_tm += param_ta_audit_kriteria_agc_tm.btnView == 1 ? 1 : 0;
+		colbuttonCount_ta_audit_kriteria_agc_tm += param_ta_audit_kriteria_agc_tm.btnEdit== "1" ? 1 : 0;
+		colbuttonCount_ta_audit_kriteria_agc_tm += param_ta_audit_kriteria_agc_tm.btnDelete == "1" ? 1 : 0;
+		colbuttonCount_ta_audit_kriteria_agc_tm += param_ta_audit_kriteria_agc_tm.btnCopy  == "1" ? 1 : 0;
+		if (colbuttonCount_ta_audit_kriteria_agc_tm == 1) { columnWidth = 40; } else if (colbuttonCount_ta_audit_kriteria_agc_tm == 2) { columnWidth = 60; } else if (colbuttonCount_ta_audit_kriteria_agc_tm == 3) { columnWidth = 95; } else if (colbuttonCount_ta_audit_kriteria_agc_tm == 4) { columnWidth = 120; }
+		var columnActionWidth_ta_audit_kriteria_agc_tm = columnWidth + "px";
+		var item_data = "";
+		var col_att = [];
+		var showhide_column = "";
+		var j = 0;
+		var checked = '';
+		var aggregate_data_ta_audit_kriteria_agc_tm = [];
+		var agg_i = 0
+		jQuery.each(j_data_ta_audit_kriteria_agc_tm, function (i, val) {
+			var footerTemplate = "";
+			if (val.aggregate != "") {
+				footerTemplate = val.footerTemplate!="" ? val.footerTemplate : '#='+val.aggregate+'#';
+				aggregate_data_ta_audit_kriteria_agc_tm[agg_i] = { field: val.name, aggregate: val.aggregate };
+				agg_i++;
+			}
+			item_data += item_data != "" ? "," : "";
+			item_data += '"' + val.name + '" : { "type": "' + val.type + '" } ';
+			if (val.display) {
+				col_att[j] = { field: val.name, title: val.title, hidden: JSON.parse(val.hidden), width: val.width, format: val.format, attributes: JSON.parse(val.attributes), encoded: JSON.parse(val.encoded), filterable: JSON.parse(val.filterable), sortable: JSON.parse(val.sortable), headerAttributes: { style: "white-space: normal;vertical-align:middle;text-align:center" },aggregates: [val.aggregate], footerTemplate: footerTemplate };
+				j++;
+				checked = '';if (val.hidden.toString() == 'false') {checked = 'checked';}
+				showhide_column += '<div><input type="checkbox" onclick="ShowHideColumn_ta_audit_kriteria_agc_tm(this)" '+ checked +' value="' + val.name + '" /> ' + val.title + '</div>';
+			}
+		});
+		showhide_column += '<div><input type="checkbox" onclick="ShowHideColumn_ta_audit_kriteria_agc_tm(this)" checked value="' + j + '" /> Action</div>';
+		item_data = '{' + item_data + '}';
+		var field_data = JSON.parse(item_data);
+		var columns_data = col_att;
+		var col_command = [];
+		var k = 0;
+		if (param_ta_audit_kriteria_agc_tm.btnView== 1) {col_command[k] = { name: "View", text: "", className: "v-view", click: function (e) { var tr = $(e.target).closest("tr"); var data = this.dataItem(tr); ViewItem_ta_audit_kriteria_agc_tm(data); } };k++;}
+		if (param_ta_audit_kriteria_agc_tm.btnEdit== 1) {col_command[k] = { name: "Edit", text: "", className: "v-pencil", click: function (e) { var tr = $(e.target).closest("tr"); var data = this.dataItem(tr); EditData_ta_audit_kriteria_agc_tm(data); } };k++;}
+		if (param_ta_audit_kriteria_agc_tm.btnDelete== 1) {col_command[k] = { name: "Delete", text: "", className: "v-close", click: function (e) { var tr = $(e.target).closest("tr"); var data = this.dataItem(tr); DeleteData_ta_audit_kriteria_agc_tm(data); } };k++;}
+		if (param_ta_audit_kriteria_agc_tm.btnCopy == 1) { col_command[k] = { name: "Copy", text: "", className: "v-copy", click: function (e) { var tr = $(e.target).closest("tr"); var data = this.dataItem(tr); CopyData_ta_audit_kriteria_agc_tm(data); } }; k++; }
+		if (colbuttonCount_ta_audit_kriteria_agc_tm > 0) {
+			columns_data[j] = {command: col_command, width: columnActionWidth_ta_audit_kriteria_agc_tm, attributes: " style=\"vertical-align:top;\""};
+		}
+		//==============================
+
+		//==============================
+		$("#collapse_filter_ta_audit_kriteria_agc_tm").on('shown.bs.collapse', function () {
+			$("#btnShowHideFilter_ta_audit_kriteria_agc_tm").html('@ResxHelper.GetValue("Message","HideFilter")');
+		});
+		$("#collapse_filter_ta_audit_kriteria_agc_tm").on('hidden.bs.collapse', function () {
+			$("#btnShowHideFilter_ta_audit_kriteria_agc_tm").html('@ResxHelper.GetValue("Message","ShowFilter")');
+		});
+		//==============================
+		var record_ta_audit_kriteria_agc_tm = 0;
+		var grid_ta_audit_kriteria_agc_tm_heigth = 0;
+		var ds_ta_audit_kriteria_agc_tm_filter = { filter_by_column: [{name:"audit_id",opr:"=",value:"@ViewBag.audit_id"}, {name:"kriteria_audit_id",opr:"=",value:"@ViewBag.kriteria_audit_id"}] };
+		var ds_ta_audit_kriteria_agc_tm = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/AuditKriteriaAgcTm/GetListData", dataType: "json", type: "POST", data: ds_ta_audit_kriteria_agc_tm_filter }, parameterMap: function (options) { if (options.filter) { for (var i = 0; i < options.filter.filters.length; i++) { if (options.filter.filters[i].field == 'tanggal') { options.filter.filters[i].value = kendo.toString(options.filter.filters[i].value, "yyyy-MM-dd"); } } } return options; } }, schema: { data: "data", total: "total", aggregates: "aggregates", model: { fields: field_data } }, aggregate: aggregate_data_ta_audit_kriteria_agc_tm, pageSize: 10, serverAggregates: true, serverPaging: true, serverFiltering: true, serverSorting: true });
+		var list_ta_audit_kriteria_agc_tm = $("#grid_ta_audit_kriteria_agc_tm").kendoGrid({
+			excel: { allPages: true, fileName: '@ViewData["TitleHeader"]'+'.xlsx' },
+			dataSource: ds_ta_audit_kriteria_agc_tm, dataBound: onDataBound_ta_audit_kriteria_agc_tm, height: grid_ta_audit_kriteria_agc_tm_heigth, scrollable: true, groupable: false, columnMenu: false, menu: true, resizable: true, filterable: false, sortable: { mode: "multiple", allowUnsort: true }, pageable: { refresh: true, pageSizes: [5, 10, 20, 50, 100, 200], buttonCount: 5 },
+			columns: columns_data, editable: false, dataBinding: function () { record_ta_audit_kriteria_agc_tm = (this.dataSource.page() - 1) * this.dataSource.pageSize(); }
+		});
+		function getParamgrid_ta_audit_kriteria_agc_tm() {
+			var filter_by_column= [];var k = 0;
+
+			return { filter_by_column:filter_by_column };
+		}
+		function reset_filter_ta_audit_kriteria_agc_tm() {
+
+			onFilterHeader_ta_audit_kriteria_agc_tm();
+		}
+		function onFilterHeader_ta_audit_kriteria_agc_tm() {
+			$("#txtSearch_ta_audit_kriteria_agc_tm").val('');
+			paramValue = getParamgrid_ta_audit_kriteria_agc_tm();
+			if (list_ta_audit_kriteria_agc_tm.data('kendoGrid').dataSource.page() > 1) {
+				list_ta_audit_kriteria_agc_tm.data('kendoGrid').dataSource.page(0);
+			}
+			list_ta_audit_kriteria_agc_tm.data('kendoGrid').dataSource.transport.options.read.data = paramValue;
+			list_ta_audit_kriteria_agc_tm.data("kendoGrid").dataSource.filter([]);
+		};
+		$("#btnSearchByColumn_ta_audit_kriteria_agc_tm").click(function () { var grid_ta_audit_kriteria_agc_tm_heigth_filter = grid_ta_audit_kriteria_agc_tm_heigth + 38; if (list_ta_audit_kriteria_agc_tm.data("kendoGrid").options.filterable == false) { $('#btnSearchByColumn_ta_audit_kriteria_agc_tm').prop('title', '@ResxHelper.GetValue("Message","HideSearchByColumn")'); $("#txtSearch_ta_audit_kriteria_agc_tm").val(''); if ('1' == '1') { $("#quick_search_template_ta_audit_kriteria_agc_tm").hide(); }; QuickSearch_ta_audit_kriteria_agc_tm(); list_ta_audit_kriteria_agc_tm.data("kendoGrid").setOptions({ height: grid_ta_audit_kriteria_agc_tm_heigth_filter, filterable: { mode: "row" }, }); } else { $('#btnSearchByColumn_ta_audit_kriteria_agc_tm').prop('title', '@ResxHelper.GetValue("Message","ShowSearchByColumn")'); $("#txtSearch_ta_audit_kriteria_agc_tm").val(''); if ('1' == '1') { $("#quick_search_template_ta_audit_kriteria_agc_tm").show(); }; QuickSearch_ta_audit_kriteria_agc_tm(); list_ta_audit_kriteria_agc_tm.data("kendoGrid").setOptions({ height: grid_ta_audit_kriteria_agc_tm_heigth, filterable: false, }); } });
+		$("#btnSearch_ta_audit_kriteria_agc_tm").click(function () { QuickSearch_ta_audit_kriteria_agc_tm(); });
+		$('#txtSearch_ta_audit_kriteria_agc_tm').keypress(function (e) { if (e.keyCode == 13) { QuickSearch_ta_audit_kriteria_agc_tm(); } });
+		function QuickSearch_ta_audit_kriteria_agc_tm() {
+			$filter = new Array();
+			$x = $("#txtSearch_ta_audit_kriteria_agc_tm").val();
+			if ($x) {jQuery.each(j_data_ta_audit_kriteria_agc_tm, function (i, val) {if (val.display && val.qsearch && val.type =='string') {$filter.push({ name: val.name, opr: "contains", value: $x });}});}
+			if ($filter.length > 0) {list_ta_audit_kriteria_agc_tm.data("kendoGrid").dataSource.filter({ logic: "or", filters: $filter });}else {list_ta_audit_kriteria_agc_tm.data("kendoGrid").dataSource.filter([]);}
+		}
+		function Reload_list_ta_audit_kriteria_agc_tm() { list_ta_audit_kriteria_agc_tm.data('kendoGrid').dataSource.read(); list_ta_audit_kriteria_agc_tm.data('kendoGrid').refresh(); }
+		function onDataBound_ta_audit_kriteria_agc_tm(e) {
+			if (colbuttonCount_ta_audit_kriteria_agc_tm > 0) {
+				var grid = $("#grid_ta_audit_kriteria_agc_tm").data("kendoGrid"); var list_ta_audit_kriteria_agc_tm = grid.dataSource.view();
+				for (var i = 0; i < list_ta_audit_kriteria_agc_tm.length; i++) {
+					var currentUid = list_ta_audit_kriteria_agc_tm[i].uid; var currenRow = grid.table.find("tr[data-uid='" + currentUid + "']");
+					if (param_ta_audit_kriteria_agc_tm.btnView == 1) {
+						var viewButton = $(currenRow).find(".k-grid-View"); viewButton.attr("title", "@ResxHelper.GetValue("Message","View")");
+						if ("@ViewData["AllowView"]" == "1") {} else {viewButton.hide();}
+					}
+					if (param_ta_audit_kriteria_agc_tm.btnEdit == 1) {
+						var editButton = $(currenRow).find(".k-grid-Edit"); editButton.attr("title", "@ResxHelper.GetValue("Message","Edit")");
+						if ("@ViewData["AllowEdit"]" == "1") {} else {editButton.hide();}
+					}
+					if (param_ta_audit_kriteria_agc_tm.btnDelete == 1) {
+						var deleteButton = $(currenRow).find(".k-grid-Delete"); deleteButton.attr("title", "@ResxHelper.GetValue("Message","Delete")");
+                        if ("@ViewData["AllowDelete"]" == "1") { } else { deleteButton.hide(); }
+						deleteButton.hide();
+					}
+					if (param_ta_audit_kriteria_agc_tm.btnCopy == 1) {
+						var copyButton = $(currenRow).find(".k-grid-Copy"); copyButton.attr("title", "@ResxHelper.GetValue("Message","Copy")");
+						if ("@ViewData["AllowAdd"]" == "1") {} else {copyButton.hide();}
+					}
+				}
+			}
+		}
+		function AddData_ta_audit_kriteria_agc_tm() {var contentUrl = '@ViewBag.BaseUrl/AuditKriteriaAgcTm/Add?audit_id=@ViewBag.audit_id&kriteria_audit_id=@ViewBag.kriteria_audit_id'; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog, }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: param_ta_audit_kriteria_agc_tm.btn_add_modal_width, height: param_ta_audit_kriteria_agc_tm.btn_add_modal_height, minHeight: 300, });if(param_ta_audit_kriteria_agc_tm.btn_add_modal_width == 0) {form_edit.data("kendoWindow").center().open().maximize()} else {form_edit.data("kendoWindow").center().open();}}
+		function ViewItem_ta_audit_kriteria_agc_tm(data) { var qs = '';jQuery.each(pkKey_ta_audit_kriteria_agc_tm, function (i, val) {qs += qs != "" ? "&" : "";qs += val+'=' + data[val];});var contentUrl = '@ViewBag.BaseUrl/AuditKriteriaAgcTm/ViewItem?' + qs; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: param_ta_audit_kriteria_agc_tm.btn_view_modal_width, height: param_ta_audit_kriteria_agc_tm.btn_view_modal_height, minHeight: 300, }); if (param_ta_audit_kriteria_agc_tm.btn_view_modal_width == 0) { form_edit.data("kendoWindow").center().open().maximize() } else { form_edit.data("kendoWindow").center().open(); }}
+		function EditData_ta_audit_kriteria_agc_tm(data) { var qs = '';jQuery.each(pkKey_ta_audit_kriteria_agc_tm, function (i, val) {qs += qs != "" ? "&" : "";qs += val+'=' + data[val];}); var contentUrl = '@ViewBag.BaseUrl/AuditKriteriaAgcTm/Edit?' + qs; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: param_ta_audit_kriteria_agc_tm.btn_edit_modal_width, height: param_ta_audit_kriteria_agc_tm.btn_edit_modal_height, minHeight: 300, }); if(param_ta_audit_kriteria_agc_tm.btn_edit_modal_width == 0) {form_edit.data("kendoWindow").center().open().maximize()} else {form_edit.data("kendoWindow").center().open();} }
+		function CopyData_ta_audit_kriteria_agc_tm(data) { var qs = '';jQuery.each(pkKey_ta_audit_kriteria_agc_tm, function (i, val) {qs += qs != "" ? "&" : "";qs += val+'=' + data[val];}); var contentUrl = '@ViewBag.BaseUrl/AuditKriteriaAgcTm/Copy?' + qs; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: param_ta_audit_kriteria_agc_tm.btn_edit_modal_width, height: param_ta_audit_kriteria_agc_tm.btn_edit_modal_height, minHeight: 300, }); if(param_ta_audit_kriteria_agc_tm.btn_edit_modal_width == 0) {form_edit.data("kendoWindow").center().open().maximize()} else {form_edit.data("kendoWindow").center().open();} }
+		function DeleteData_ta_audit_kriteria_agc_tm(data) {
+			var keyValue = '';
+			jQuery.each(displayName_ta_audit_kriteria_agc_tm, function (i, val) {
+				keyValue += keyValue != "" ? "<br />" : "";
+				keyValue += val.label+ ": " + data[val.name];
+			});
+			var pkItem = "";
+			jQuery.each(pkKey_ta_audit_kriteria_agc_tm, function (i, val) {
+				pkItem += pkItem != "" ? ", " : "";
+				pkItem += '"'+val+'":"'+data[val]+'" ';
+			});
+			var pkVal = jQuery.parseJSON("{" + pkItem + "}");
+			var data2 = { title: '@ResxHelper.GetValue("Message","ConfirmDelete")', msg: keyValue };
+			var winconfirm = $("#dialogconfirm").kendoWindow({ title: "@ResxHelper.GetValue("Message","DeleteData")", modal: true, visible: false, resizable: true, draggable: true, width: "500px", height: "200px" }).data("kendoWindow");
+			winconfirm.content(confirmTemplate(data2));
+			winconfirm.center(); winconfirm.open();
+			$("#yesButton").click(function () {
+				$.ajax({
+					data: pkVal, url: '@ViewBag.BaseUrl/AuditKriteriaAgcTm/Delete', type: 'POST'
+					, success: function (data) {
+						if (data.status != 1) {
+							notification.show({ title: data.title, message: kendo.toString(data.message) }, "error");
+							winconfirm.close();
+						} else {
+							notification.show({ message: kendo.toString(data.message) }, "success");
+							Reload_list_ta_audit_kriteria_agc_tm();
+							winconfirm.close();
+						}
+					}
+				});
+			});
+			$("#noButton").click(function () { winconfirm.close(); });
+		}
+		function onCloseDialog(e) { $('#dialog').html(''); }
+		function closeDialog() { $("#dialog").data("kendoWindow").close(); }
+		$("#btnExportExcel_ta_audit_kriteria_agc_tm").click(function (e) { var grid = $("#grid_ta_audit_kriteria_agc_tm").data("kendoGrid"); grid.saveAsExcel(); });
+		function ShowHideColumn_ta_audit_kriteria_agc_tm(e) { colname = $.isNumeric(e.value) ? parseInt(e.value) : e.value; if (e.checked) { $("#grid_ta_audit_kriteria_agc_tm").data("kendoGrid").showColumn(colname); } else { $("#grid_ta_audit_kriteria_agc_tm").data("kendoGrid").hideColumn(colname); } }
+		$(document).ready(function () {
+			$("#attr_column_show_hide").html(showhide_column);
+			if (param_ta_audit_kriteria_agc_tm.ShowFilter == 1) { $("#btnShowHideFilter_ta_audit_kriteria_agc_tm").show(); }
+			if (param_ta_audit_kriteria_agc_tm.btnAdd == 1 && @ViewData["AllowAdd"]== "1") { }else{ $("#btnAdd_ta_audit_kriteria_agc_tm").hide(); }
+			if (param_ta_audit_kriteria_agc_tm.quick_search != 1) { $("#quick_search_template_ta_audit_kriteria_agc_tm").hide(); }
+			if (param_ta_audit_kriteria_agc_tm.search_by_column  != 1) { $("#btnSearchByColumn_ta_audit_kriteria_agc_tm").hide(); }
+			if (param_ta_audit_kriteria_agc_tm.show_hide_column != 1) { $("#btnShowHideColumn_ta_audit_kriteria_agc_tm").hide(); }
+			if (param_ta_audit_kriteria_agc_tm.export_exl != 1) { $("#btnExportExcel_ta_audit_kriteria_agc_tm").hide(); }
+			$("#btnShowHideColumn_ta_audit_kriteria_agc_tm").click(function () { var x = $("#btnShowHideColumn_ta_audit_kriteria_agc_tm").offset().left; var y = $("#btnShowHideColumn_ta_audit_kriteria_agc_tm").offset().top; if (!WinShowHideColumn_ta_audit_kriteria_agc_tm) { var WinShowHideColumn_ta_audit_kriteria_agc_tm = $("#WinShowHideColumn_ta_audit_kriteria_agc_tm").kendoWindow({ width: "300px", position: { left: x, top: y }, title: "@ResxHelper.GetValue("Message","ShowHideColumn")", actions: ["Close"] }); } WinShowHideColumn_ta_audit_kriteria_agc_tm.data("kendoWindow").open(); });
+		});
+		</script>
+	}
+
+
+
+
+
+	//SMK3
+	if (ViewBag.kriteria_audit_id == "8")
+	{
+		<script>
+		var param_ta_audit_kriteria_smk3 = @Html.Raw(JsonConvert.SerializeObject(WebApp.Models.AuditKriteriaSmk3Model.GetListParam()));
+		var displayName_ta_audit_kriteria_smk3 = @Html.Raw(JsonConvert.SerializeObject(WebApp.Models.AuditKriteriaSmk3Model.GetDisplayItem()));
+		var pkKey_ta_audit_kriteria_smk3 = @Html.Raw(JsonConvert.SerializeObject(WebApp.Models.AuditKriteriaSmk3Model._pkKey));
+		var j_data_ta_audit_kriteria_smk3 = @Html.Raw(JsonConvert.SerializeObject(WebApp.Models.AuditKriteriaSmk3Model.GetGridColumn()));
+		var colNameTooltip_ta_audit_kriteria_smk3 = [];
+		var colbuttonCount_ta_audit_kriteria_smk3 = 0;
+		var columnWidth = 40;
+		colbuttonCount_ta_audit_kriteria_smk3 += param_ta_audit_kriteria_smk3.btnView == 1 ? 1 : 0;
+		colbuttonCount_ta_audit_kriteria_smk3 += param_ta_audit_kriteria_smk3.btnEdit== "1" ? 1 : 0;
+		colbuttonCount_ta_audit_kriteria_smk3 += param_ta_audit_kriteria_smk3.btnDelete == "1" ? 1 : 0;
+		colbuttonCount_ta_audit_kriteria_smk3 += param_ta_audit_kriteria_smk3.btnCopy  == "1" ? 1 : 0;
+		if (colbuttonCount_ta_audit_kriteria_smk3 == 1) { columnWidth = 40; } else if (colbuttonCount_ta_audit_kriteria_smk3 == 2) { columnWidth = 60; } else if (colbuttonCount_ta_audit_kriteria_smk3 == 3) { columnWidth = 95; } else if (colbuttonCount_ta_audit_kriteria_smk3 == 4) { columnWidth = 120; }
+		var columnActionWidth_ta_audit_kriteria_smk3 = columnWidth + "px";
+		var item_data = "";
+		var col_att = [];
+		var showhide_column = "";
+		var j = 0;
+		var checked = '';
+		var aggregate_data_ta_audit_kriteria_smk3 = [];
+		var agg_i = 0
+		jQuery.each(j_data_ta_audit_kriteria_smk3, function (i, val) {
+			var footerTemplate = "";
+			if (val.aggregate != "") {
+				footerTemplate = val.footerTemplate!="" ? val.footerTemplate : '#='+val.aggregate+'#';
+				aggregate_data_ta_audit_kriteria_smk3[agg_i] = { field: val.name, aggregate: val.aggregate };
+				agg_i++;
+			}
+			item_data += item_data != "" ? "," : "";
+			item_data += '"' + val.name + '" : { "type": "' + val.type + '" } ';
+			if (val.display) {
+				col_att[j] = { field: val.name, title: val.title, hidden: JSON.parse(val.hidden), width: val.width, format: val.format, attributes: JSON.parse(val.attributes), encoded: JSON.parse(val.encoded), filterable: JSON.parse(val.filterable), sortable: JSON.parse(val.sortable), headerAttributes: { style: "white-space: normal;vertical-align:middle;text-align:center" },aggregates: [val.aggregate], footerTemplate: footerTemplate };
+				j++;
+				checked = '';if (val.hidden.toString() == 'false') {checked = 'checked';}
+				showhide_column += '<div><input type="checkbox" onclick="ShowHideColumn_ta_audit_kriteria_smk3(this)" '+ checked +' value="' + val.name + '" /> ' + val.title + '</div>';
+			}
+		});
+		showhide_column += '<div><input type="checkbox" onclick="ShowHideColumn_ta_audit_kriteria_smk3(this)" checked value="' + j + '" /> Action</div>';
+		item_data = '{' + item_data + '}';
+		var field_data = JSON.parse(item_data);
+		var columns_data = col_att;
+		var col_command = [];
+		var k = 0;
+		if (param_ta_audit_kriteria_smk3.btnView== 1) {col_command[k] = { name: "View", text: "", className: "v-view", click: function (e) { var tr = $(e.target).closest("tr"); var data = this.dataItem(tr); ViewItem_ta_audit_kriteria_smk3(data); } };k++;}
+		if (param_ta_audit_kriteria_smk3.btnEdit== 1) {col_command[k] = { name: "Edit", text: "", className: "v-pencil", click: function (e) { var tr = $(e.target).closest("tr"); var data = this.dataItem(tr); EditData_ta_audit_kriteria_smk3(data); } };k++;}
+		if (param_ta_audit_kriteria_smk3.btnDelete== 1) {col_command[k] = { name: "Delete", text: "", className: "v-close", click: function (e) { var tr = $(e.target).closest("tr"); var data = this.dataItem(tr); DeleteData_ta_audit_kriteria_smk3(data); } };k++;}
+		if (param_ta_audit_kriteria_smk3.btnCopy == 1) { col_command[k] = { name: "Copy", text: "", className: "v-copy", click: function (e) { var tr = $(e.target).closest("tr"); var data = this.dataItem(tr); CopyData_ta_audit_kriteria_smk3(data); } }; k++; }
+		if (colbuttonCount_ta_audit_kriteria_smk3 > 0) {
+			columns_data[j] = {command: col_command, width: columnActionWidth_ta_audit_kriteria_smk3, attributes: " style=\"vertical-align:top;\""};
+		}
+		//==============================
+
+		//==============================
+		$("#collapse_filter_ta_audit_kriteria_smk3").on('shown.bs.collapse', function () {
+			$("#btnShowHideFilter_ta_audit_kriteria_smk3").html('@ResxHelper.GetValue("Message","HideFilter")');
+		});
+		$("#collapse_filter_ta_audit_kriteria_smk3").on('hidden.bs.collapse', function () {
+			$("#btnShowHideFilter_ta_audit_kriteria_smk3").html('@ResxHelper.GetValue("Message","ShowFilter")');
+		});
+		//==============================
+		var record_ta_audit_kriteria_smk3 = 0;
+		var grid_ta_audit_kriteria_smk3_heigth = 0;
+		var ds_ta_audit_kriteria_smk3_filter = { filter_by_column: [{name:"audit_id",opr:"=",value:"@ViewBag.audit_id"}, {name:"kriteria_audit_id",opr:"=",value:"@ViewBag.kriteria_audit_id"}] };
+		var ds_ta_audit_kriteria_smk3 = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/AuditKriteriaSmk3/GetListData", dataType: "json", type: "POST", data: ds_ta_audit_kriteria_smk3_filter }, parameterMap: function (options) { if (options.filter) { for (var i = 0; i < options.filter.filters.length; i++) { if (options.filter.filters[i].field == 'tanggal') { options.filter.filters[i].value = kendo.toString(options.filter.filters[i].value, "yyyy-MM-dd"); } } } return options; } }, schema: { data: "data", total: "total", aggregates: "aggregates", model: { fields: field_data } }, aggregate: aggregate_data_ta_audit_kriteria_smk3, pageSize: 10, serverAggregates: true, serverPaging: true, serverFiltering: true, serverSorting: true });
+		var list_ta_audit_kriteria_smk3 = $("#grid_ta_audit_kriteria_smk3").kendoGrid({
+			excel: { allPages: true, fileName: '@ViewData["TitleHeader"]'+'.xlsx' },
+			dataSource: ds_ta_audit_kriteria_smk3, dataBound: onDataBound_ta_audit_kriteria_smk3, height: grid_ta_audit_kriteria_smk3_heigth, scrollable: true, groupable: false, columnMenu: false, menu: true, resizable: true, filterable: false, sortable: { mode: "multiple", allowUnsort: true }, pageable: { refresh: true, pageSizes: [5, 10, 20, 50, 100, 200], buttonCount: 5 },
+			columns: columns_data, editable: false, dataBinding: function () { record_ta_audit_kriteria_smk3 = (this.dataSource.page() - 1) * this.dataSource.pageSize(); }
+		});
+		function getParamgrid_ta_audit_kriteria_smk3() {
+			var filter_by_column= [];var k = 0;
+
+			return { filter_by_column:filter_by_column };
+		}
+		function reset_filter_ta_audit_kriteria_smk3() {
+
+			onFilterHeader_ta_audit_kriteria_smk3();
+		}
+		function onFilterHeader_ta_audit_kriteria_smk3() {
+			$("#txtSearch_ta_audit_kriteria_smk3").val('');
+			paramValue = getParamgrid_ta_audit_kriteria_smk3();
+			if (list_ta_audit_kriteria_smk3.data('kendoGrid').dataSource.page() > 1) {
+				list_ta_audit_kriteria_smk3.data('kendoGrid').dataSource.page(0);
+			}
+			list_ta_audit_kriteria_smk3.data('kendoGrid').dataSource.transport.options.read.data = paramValue;
+			list_ta_audit_kriteria_smk3.data("kendoGrid").dataSource.filter([]);
+		};
+		$("#btnSearchByColumn_ta_audit_kriteria_smk3").click(function () { var grid_ta_audit_kriteria_smk3_heigth_filter = grid_ta_audit_kriteria_smk3_heigth + 38; if (list_ta_audit_kriteria_smk3.data("kendoGrid").options.filterable == false) { $('#btnSearchByColumn_ta_audit_kriteria_smk3').prop('title', '@ResxHelper.GetValue("Message","HideSearchByColumn")'); $("#txtSearch_ta_audit_kriteria_smk3").val(''); if ('1' == '1') { $("#quick_search_template_ta_audit_kriteria_smk3").hide(); }; QuickSearch_ta_audit_kriteria_smk3(); list_ta_audit_kriteria_smk3.data("kendoGrid").setOptions({ height: grid_ta_audit_kriteria_smk3_heigth_filter, filterable: { mode: "row" }, }); } else { $('#btnSearchByColumn_ta_audit_kriteria_smk3').prop('title', '@ResxHelper.GetValue("Message","ShowSearchByColumn")'); $("#txtSearch_ta_audit_kriteria_smk3").val(''); if ('1' == '1') { $("#quick_search_template_ta_audit_kriteria_smk3").show(); }; QuickSearch_ta_audit_kriteria_smk3(); list_ta_audit_kriteria_smk3.data("kendoGrid").setOptions({ height: grid_ta_audit_kriteria_smk3_heigth, filterable: false, }); } });
+		$("#btnSearch_ta_audit_kriteria_smk3").click(function () { QuickSearch_ta_audit_kriteria_smk3(); });
+		$('#txtSearch_ta_audit_kriteria_smk3').keypress(function (e) { if (e.keyCode == 13) { QuickSearch_ta_audit_kriteria_smk3(); } });
+		function QuickSearch_ta_audit_kriteria_smk3() {
+			$filter = new Array();
+			$x = $("#txtSearch_ta_audit_kriteria_smk3").val();
+			if ($x) {jQuery.each(j_data_ta_audit_kriteria_smk3, function (i, val) {if (val.display && val.qsearch && val.type =='string') {$filter.push({ name: val.name, opr: "contains", value: $x });}});}
+			if ($filter.length > 0) {list_ta_audit_kriteria_smk3.data("kendoGrid").dataSource.filter({ logic: "or", filters: $filter });}else {list_ta_audit_kriteria_smk3.data("kendoGrid").dataSource.filter([]);}
+		}
+		function Reload_list_ta_audit_kriteria_smk3() { list_ta_audit_kriteria_smk3.data('kendoGrid').dataSource.read(); list_ta_audit_kriteria_smk3.data('kendoGrid').refresh(); }
+		function onDataBound_ta_audit_kriteria_smk3(e) {
+			if (colbuttonCount_ta_audit_kriteria_smk3 > 0) {
+				var grid = $("#grid_ta_audit_kriteria_smk3").data("kendoGrid"); var list_ta_audit_kriteria_smk3 = grid.dataSource.view();
+				for (var i = 0; i < list_ta_audit_kriteria_smk3.length; i++) {
+					var currentUid = list_ta_audit_kriteria_smk3[i].uid; var currenRow = grid.table.find("tr[data-uid='" + currentUid + "']");
+					if (param_ta_audit_kriteria_smk3.btnView == 1) {
+						var viewButton = $(currenRow).find(".k-grid-View"); viewButton.attr("title", "@ResxHelper.GetValue("Message","View")");
+						if ("@ViewData["AllowView"]" == "1") {} else {viewButton.hide();}
+					}
+					if (param_ta_audit_kriteria_smk3.btnEdit == 1) {
+						var editButton = $(currenRow).find(".k-grid-Edit"); editButton.attr("title", "@ResxHelper.GetValue("Message","Edit")");
+						if ("@ViewData["AllowEdit"]" == "1") {} else {editButton.hide();}
+					}
+					if (param_ta_audit_kriteria_smk3.btnDelete == 1) {
+						var deleteButton = $(currenRow).find(".k-grid-Delete"); deleteButton.attr("title", "@ResxHelper.GetValue("Message","Delete")");
+                        if ("@ViewData["AllowDelete"]" == "1") { } else { deleteButton.hide(); }
+						deleteButton.hide();
+					}
+					if (param_ta_audit_kriteria_smk3.btnCopy == 1) {
+						var copyButton = $(currenRow).find(".k-grid-Copy"); copyButton.attr("title", "@ResxHelper.GetValue("Message","Copy")");
+						if ("@ViewData["AllowAdd"]" == "1") {} else {copyButton.hide();}
+					}
+				}
+			}
+		}
+		function AddData_ta_audit_kriteria_smk3() {var contentUrl = '@ViewBag.BaseUrl/AuditKriteriaSmk3/Add?audit_id=@ViewBag.audit_id&kriteria_audit_id=@ViewBag.kriteria_audit_id'; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog, }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: param_ta_audit_kriteria_smk3.btn_add_modal_width, height: param_ta_audit_kriteria_smk3.btn_add_modal_height, minHeight: 300, });if(param_ta_audit_kriteria_smk3.btn_add_modal_width == 0) {form_edit.data("kendoWindow").center().open().maximize()} else {form_edit.data("kendoWindow").center().open();}}
+		function ViewItem_ta_audit_kriteria_smk3(data) { var qs = '';jQuery.each(pkKey_ta_audit_kriteria_smk3, function (i, val) {qs += qs != "" ? "&" : "";qs += val+'=' + data[val];});var contentUrl = '@ViewBag.BaseUrl/AuditKriteriaSmk3/ViewItem?' + qs; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: param_ta_audit_kriteria_smk3.btn_view_modal_width, height: param_ta_audit_kriteria_smk3.btn_view_modal_height, minHeight: 300, }); if (param_ta_audit_kriteria_smk3.btn_view_modal_width == 0) { form_edit.data("kendoWindow").center().open().maximize() } else { form_edit.data("kendoWindow").center().open(); }}
+		function EditData_ta_audit_kriteria_smk3(data) { var qs = '';jQuery.each(pkKey_ta_audit_kriteria_smk3, function (i, val) {qs += qs != "" ? "&" : "";qs += val+'=' + data[val];}); var contentUrl = '@ViewBag.BaseUrl/AuditKriteriaSmk3/Edit?' + qs; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: param_ta_audit_kriteria_smk3.btn_edit_modal_width, height: param_ta_audit_kriteria_smk3.btn_edit_modal_height, minHeight: 300, }); if(param_ta_audit_kriteria_smk3.btn_edit_modal_width == 0) {form_edit.data("kendoWindow").center().open().maximize()} else {form_edit.data("kendoWindow").center().open();} }
+		function CopyData_ta_audit_kriteria_smk3(data) { var qs = '';jQuery.each(pkKey_ta_audit_kriteria_smk3, function (i, val) {qs += qs != "" ? "&" : "";qs += val+'=' + data[val];}); var contentUrl = '@ViewBag.BaseUrl/AuditKriteriaSmk3/Copy?' + qs; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: param_ta_audit_kriteria_smk3.btn_edit_modal_width, height: param_ta_audit_kriteria_smk3.btn_edit_modal_height, minHeight: 300, }); if(param_ta_audit_kriteria_smk3.btn_edit_modal_width == 0) {form_edit.data("kendoWindow").center().open().maximize()} else {form_edit.data("kendoWindow").center().open();} }
+		function DeleteData_ta_audit_kriteria_smk3(data) {
+			var keyValue = '';
+			jQuery.each(displayName_ta_audit_kriteria_smk3, function (i, val) {
+				keyValue += keyValue != "" ? "<br />" : "";
+				keyValue += val.label+ ": " + data[val.name];
+			});
+			var pkItem = "";
+			jQuery.each(pkKey_ta_audit_kriteria_smk3, function (i, val) {
+				pkItem += pkItem != "" ? ", " : "";
+				pkItem += '"'+val+'":"'+data[val]+'" ';
+			});
+			var pkVal = jQuery.parseJSON("{" + pkItem + "}");
+			var data2 = { title: '@ResxHelper.GetValue("Message","ConfirmDelete")', msg: keyValue };
+			var winconfirm = $("#dialogconfirm").kendoWindow({ title: "@ResxHelper.GetValue("Message","DeleteData")", modal: true, visible: false, resizable: true, draggable: true, width: "500px", height: "200px" }).data("kendoWindow");
+			winconfirm.content(confirmTemplate(data2));
+			winconfirm.center(); winconfirm.open();
+			$("#yesButton").click(function () {
+				$.ajax({
+					data: pkVal, url: '@ViewBag.BaseUrl/AuditKriteriaSmk3/Delete', type: 'POST'
+					, success: function (data) {
+						if (data.status != 1) {
+							notification.show({ title: data.title, message: kendo.toString(data.message) }, "error");
+							winconfirm.close();
+						} else {
+							notification.show({ message: kendo.toString(data.message) }, "success");
+							Reload_list_ta_audit_kriteria_smk3();
+							winconfirm.close();
+						}
+					}
+				});
+			});
+			$("#noButton").click(function () { winconfirm.close(); });
+		}
+		function onCloseDialog(e) { $('#dialog').html(''); }
+		function closeDialog() { $("#dialog").data("kendoWindow").close(); }
+		$("#btnExportExcel_ta_audit_kriteria_smk3").click(function (e) { var grid = $("#grid_ta_audit_kriteria_smk3").data("kendoGrid"); grid.saveAsExcel(); });
+		function ShowHideColumn_ta_audit_kriteria_smk3(e) { colname = $.isNumeric(e.value) ? parseInt(e.value) : e.value; if (e.checked) { $("#grid_ta_audit_kriteria_smk3").data("kendoGrid").showColumn(colname); } else { $("#grid_ta_audit_kriteria_smk3").data("kendoGrid").hideColumn(colname); } }
+		$(document).ready(function () {
+			$("#attr_column_show_hide").html(showhide_column);
+			if (param_ta_audit_kriteria_smk3.ShowFilter == 1) { $("#btnShowHideFilter_ta_audit_kriteria_smk3").show(); }
+			if (param_ta_audit_kriteria_smk3.btnAdd == 1 && @ViewData["AllowAdd"]== "1") { }else{ $("#btnAdd_ta_audit_kriteria_smk3").hide(); }
+			if (param_ta_audit_kriteria_smk3.quick_search != 1) { $("#quick_search_template_ta_audit_kriteria_smk3").hide(); }
+			if (param_ta_audit_kriteria_smk3.search_by_column  != 1) { $("#btnSearchByColumn_ta_audit_kriteria_smk3").hide(); }
+			if (param_ta_audit_kriteria_smk3.show_hide_column != 1) { $("#btnShowHideColumn_ta_audit_kriteria_smk3").hide(); }
+			if (param_ta_audit_kriteria_smk3.export_exl != 1) { $("#btnExportExcel_ta_audit_kriteria_smk3").hide(); }
+			$("#btnShowHideColumn_ta_audit_kriteria_smk3").click(function () { var x = $("#btnShowHideColumn_ta_audit_kriteria_smk3").offset().left; var y = $("#btnShowHideColumn_ta_audit_kriteria_smk3").offset().top; if (!WinShowHideColumn_ta_audit_kriteria_smk3) { var WinShowHideColumn_ta_audit_kriteria_smk3 = $("#WinShowHideColumn_ta_audit_kriteria_smk3").kendoWindow({ width: "300px", position: { left: x, top: y }, title: "@ResxHelper.GetValue("Message","ShowHideColumn")", actions: ["Close"] }); } WinShowHideColumn_ta_audit_kriteria_smk3.data("kendoWindow").open(); });
+		});
+		</script>
+	}
+
+
+
+
+
+
+	//SMKP
+	if (ViewBag.kriteria_audit_id == "9")
+	{
+		<script>
+		var param_ta_audit_kriteria_smkp = @Html.Raw(JsonConvert.SerializeObject(WebApp.Models.AuditKriteriaSmkpModel.GetListParam()));
+		var displayName_ta_audit_kriteria_smkp = @Html.Raw(JsonConvert.SerializeObject(WebApp.Models.AuditKriteriaSmkpModel.GetDisplayItem()));
+		var pkKey_ta_audit_kriteria_smkp = @Html.Raw(JsonConvert.SerializeObject(WebApp.Models.AuditKriteriaSmkpModel._pkKey));
+		var j_data_ta_audit_kriteria_smkp = @Html.Raw(JsonConvert.SerializeObject(WebApp.Models.AuditKriteriaSmkpModel.GetGridColumn()));
+		var colNameTooltip_ta_audit_kriteria_smkp = [];
+		var colbuttonCount_ta_audit_kriteria_smkp = 0;
+		var columnWidth = 40;
+		colbuttonCount_ta_audit_kriteria_smkp += param_ta_audit_kriteria_smkp.btnView == 1 ? 1 : 0;
+		colbuttonCount_ta_audit_kriteria_smkp += param_ta_audit_kriteria_smkp.btnEdit== "1" ? 1 : 0;
+		colbuttonCount_ta_audit_kriteria_smkp += param_ta_audit_kriteria_smkp.btnDelete == "1" ? 1 : 0;
+		colbuttonCount_ta_audit_kriteria_smkp += param_ta_audit_kriteria_smkp.btnCopy  == "1" ? 1 : 0;
+		if (colbuttonCount_ta_audit_kriteria_smkp == 1) { columnWidth = 40; } else if (colbuttonCount_ta_audit_kriteria_smkp == 2) { columnWidth = 60; } else if (colbuttonCount_ta_audit_kriteria_smkp == 3) { columnWidth = 95; } else if (colbuttonCount_ta_audit_kriteria_smkp == 4) { columnWidth = 120; }
+		var columnActionWidth_ta_audit_kriteria_smkp = columnWidth + "px";
+		var item_data = "";
+		var col_att = [];
+		var showhide_column = "";
+		var j = 0;
+		var checked = '';
+		var aggregate_data_ta_audit_kriteria_smkp = [];
+		var agg_i = 0
+		jQuery.each(j_data_ta_audit_kriteria_smkp, function (i, val) {
+			var footerTemplate = "";
+			if (val.aggregate != "") {
+				footerTemplate = val.footerTemplate!="" ? val.footerTemplate : '#='+val.aggregate+'#';
+				aggregate_data_ta_audit_kriteria_smkp[agg_i] = { field: val.name, aggregate: val.aggregate };
+				agg_i++;
+			}
+			item_data += item_data != "" ? "," : "";
+			item_data += '"' + val.name + '" : { "type": "' + val.type + '" } ';
+			if (val.display) {
+				col_att[j] = { field: val.name, title: val.title, hidden: JSON.parse(val.hidden), width: val.width, format: val.format, attributes: JSON.parse(val.attributes), encoded: JSON.parse(val.encoded), filterable: JSON.parse(val.filterable), sortable: JSON.parse(val.sortable), headerAttributes: { style: "white-space: normal;vertical-align:middle;text-align:center" },aggregates: [val.aggregate], footerTemplate: footerTemplate };
+				j++;
+				checked = '';if (val.hidden.toString() == 'false') {checked = 'checked';}
+				showhide_column += '<div><input type="checkbox" onclick="ShowHideColumn_ta_audit_kriteria_smkp(this)" '+ checked +' value="' + val.name + '" /> ' + val.title + '</div>';
+			}
+		});
+		showhide_column += '<div><input type="checkbox" onclick="ShowHideColumn_ta_audit_kriteria_smkp(this)" checked value="' + j + '" /> Action</div>';
+		item_data = '{' + item_data + '}';
+		var field_data = JSON.parse(item_data);
+		var columns_data = col_att;
+		var col_command = [];
+		var k = 0;
+		if (param_ta_audit_kriteria_smkp.btnView== 1) {col_command[k] = { name: "View", text: "", className: "v-view", click: function (e) { var tr = $(e.target).closest("tr"); var data = this.dataItem(tr); ViewItem_ta_audit_kriteria_smkp(data); } };k++;}
+		if (param_ta_audit_kriteria_smkp.btnEdit== 1) {col_command[k] = { name: "Edit", text: "", className: "v-pencil", click: function (e) { var tr = $(e.target).closest("tr"); var data = this.dataItem(tr); EditData_ta_audit_kriteria_smkp(data); } };k++;}
+		if (param_ta_audit_kriteria_smkp.btnDelete== 1) {col_command[k] = { name: "Delete", text: "", className: "v-close", click: function (e) { var tr = $(e.target).closest("tr"); var data = this.dataItem(tr); DeleteData_ta_audit_kriteria_smkp(data); } };k++;}
+		if (param_ta_audit_kriteria_smkp.btnCopy == 1) { col_command[k] = { name: "Copy", text: "", className: "v-copy", click: function (e) { var tr = $(e.target).closest("tr"); var data = this.dataItem(tr); CopyData_ta_audit_kriteria_smkp(data); } }; k++; }
+		if (colbuttonCount_ta_audit_kriteria_smkp > 0) {
+			columns_data[j] = {command: col_command, width: columnActionWidth_ta_audit_kriteria_smkp, attributes: " style=\"vertical-align:top;\""};
+		}
+		//==============================
+
+		//==============================
+		$("#collapse_filter_ta_audit_kriteria_smkp").on('shown.bs.collapse', function () {
+			$("#btnShowHideFilter_ta_audit_kriteria_smkp").html('@ResxHelper.GetValue("Message","HideFilter")');
+		});
+		$("#collapse_filter_ta_audit_kriteria_smkp").on('hidden.bs.collapse', function () {
+			$("#btnShowHideFilter_ta_audit_kriteria_smkp").html('@ResxHelper.GetValue("Message","ShowFilter")');
+		});
+		//==============================
+		var record_ta_audit_kriteria_smkp = 0;
+		var grid_ta_audit_kriteria_smkp_heigth = 0;
+		var ds_ta_audit_kriteria_smkp_filter = { filter_by_column: [{name:"audit_id",opr:"=",value:"@ViewBag.audit_id"}, {name:"kriteria_audit_id",opr:"=",value:"@ViewBag.kriteria_audit_id"}] };
+		var ds_ta_audit_kriteria_smkp = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/AuditKriteriaSmkp/GetListData", dataType: "json", type: "POST", data: ds_ta_audit_kriteria_smkp_filter }, parameterMap: function (options) { if (options.filter) { for (var i = 0; i < options.filter.filters.length; i++) { if (options.filter.filters[i].field == 'tanggal') { options.filter.filters[i].value = kendo.toString(options.filter.filters[i].value, "yyyy-MM-dd"); } } } return options; } }, schema: { data: "data", total: "total", aggregates: "aggregates", model: { fields: field_data } }, aggregate: aggregate_data_ta_audit_kriteria_smkp, pageSize: 10, serverAggregates: true, serverPaging: true, serverFiltering: true, serverSorting: true });
+		var list_ta_audit_kriteria_smkp = $("#grid_ta_audit_kriteria_smkp").kendoGrid({
+			excel: { allPages: true, fileName: '@ViewData["TitleHeader"]'+'.xlsx' },
+			dataSource: ds_ta_audit_kriteria_smkp, dataBound: onDataBound_ta_audit_kriteria_smkp, height: grid_ta_audit_kriteria_smkp_heigth, scrollable: true, groupable: false, columnMenu: false, menu: true, resizable: true, filterable: false, sortable: { mode: "multiple", allowUnsort: true }, pageable: { refresh: true, pageSizes: [5, 10, 20, 50, 100, 200], buttonCount: 5 },
+			columns: columns_data, editable: false, dataBinding: function () { record_ta_audit_kriteria_smkp = (this.dataSource.page() - 1) * this.dataSource.pageSize(); }
+		});
+		function getParamgrid_ta_audit_kriteria_smkp() {
+			var filter_by_column= [];var k = 0;
+
+			return { filter_by_column:filter_by_column };
+		}
+		function reset_filter_ta_audit_kriteria_smkp() {
+
+			onFilterHeader_ta_audit_kriteria_smkp();
+		}
+		function onFilterHeader_ta_audit_kriteria_smkp() {
+			$("#txtSearch_ta_audit_kriteria_smkp").val('');
+			paramValue = getParamgrid_ta_audit_kriteria_smkp();
+			if (list_ta_audit_kriteria_smkp.data('kendoGrid').dataSource.page() > 1) {
+				list_ta_audit_kriteria_smkp.data('kendoGrid').dataSource.page(0);
+			}
+			list_ta_audit_kriteria_smkp.data('kendoGrid').dataSource.transport.options.read.data = paramValue;
+			list_ta_audit_kriteria_smkp.data("kendoGrid").dataSource.filter([]);
+		};
+		$("#btnSearchByColumn_ta_audit_kriteria_smkp").click(function () { var grid_ta_audit_kriteria_smkp_heigth_filter = grid_ta_audit_kriteria_smkp_heigth + 38; if (list_ta_audit_kriteria_smkp.data("kendoGrid").options.filterable == false) { $('#btnSearchByColumn_ta_audit_kriteria_smkp').prop('title', '@ResxHelper.GetValue("Message","HideSearchByColumn")'); $("#txtSearch_ta_audit_kriteria_smkp").val(''); if ('1' == '1') { $("#quick_search_template_ta_audit_kriteria_smkp").hide(); }; QuickSearch_ta_audit_kriteria_smkp(); list_ta_audit_kriteria_smkp.data("kendoGrid").setOptions({ height: grid_ta_audit_kriteria_smkp_heigth_filter, filterable: { mode: "row" }, }); } else { $('#btnSearchByColumn_ta_audit_kriteria_smkp').prop('title', '@ResxHelper.GetValue("Message","ShowSearchByColumn")'); $("#txtSearch_ta_audit_kriteria_smkp").val(''); if ('1' == '1') { $("#quick_search_template_ta_audit_kriteria_smkp").show(); }; QuickSearch_ta_audit_kriteria_smkp(); list_ta_audit_kriteria_smkp.data("kendoGrid").setOptions({ height: grid_ta_audit_kriteria_smkp_heigth, filterable: false, }); } });
+		$("#btnSearch_ta_audit_kriteria_smkp").click(function () { QuickSearch_ta_audit_kriteria_smkp(); });
+		$('#txtSearch_ta_audit_kriteria_smkp').keypress(function (e) { if (e.keyCode == 13) { QuickSearch_ta_audit_kriteria_smkp(); } });
+		function QuickSearch_ta_audit_kriteria_smkp() {
+			$filter = new Array();
+			$x = $("#txtSearch_ta_audit_kriteria_smkp").val();
+			if ($x) {jQuery.each(j_data_ta_audit_kriteria_smkp, function (i, val) {if (val.display && val.qsearch && val.type =='string') {$filter.push({ name: val.name, opr: "contains", value: $x });}});}
+			if ($filter.length > 0) {list_ta_audit_kriteria_smkp.data("kendoGrid").dataSource.filter({ logic: "or", filters: $filter });}else {list_ta_audit_kriteria_smkp.data("kendoGrid").dataSource.filter([]);}
+		}
+		function Reload_list_ta_audit_kriteria_smkp() { list_ta_audit_kriteria_smkp.data('kendoGrid').dataSource.read(); list_ta_audit_kriteria_smkp.data('kendoGrid').refresh(); }
+		function onDataBound_ta_audit_kriteria_smkp(e) {
+			if (colbuttonCount_ta_audit_kriteria_smkp > 0) {
+				var grid = $("#grid_ta_audit_kriteria_smkp").data("kendoGrid"); var list_ta_audit_kriteria_smkp = grid.dataSource.view();
+				for (var i = 0; i < list_ta_audit_kriteria_smkp.length; i++) {
+					var currentUid = list_ta_audit_kriteria_smkp[i].uid; var currenRow = grid.table.find("tr[data-uid='" + currentUid + "']");
+					if (param_ta_audit_kriteria_smkp.btnView == 1) {
+						var viewButton = $(currenRow).find(".k-grid-View"); viewButton.attr("title", "@ResxHelper.GetValue("Message","View")");
+						if ("@ViewData["AllowView"]" == "1") {} else {viewButton.hide();}
+					}
+					if (param_ta_audit_kriteria_smkp.btnEdit == 1) {
+						var editButton = $(currenRow).find(".k-grid-Edit"); editButton.attr("title", "@ResxHelper.GetValue("Message","Edit")");
+						if ("@ViewData["AllowEdit"]" == "1") {} else {editButton.hide();}
+					}
+					if (param_ta_audit_kriteria_smkp.btnDelete == 1) {
+						var deleteButton = $(currenRow).find(".k-grid-Delete"); deleteButton.attr("title", "@ResxHelper.GetValue("Message","Delete")");
+                        if ("@ViewData["AllowDelete"]" == "1") { } else { deleteButton.hide(); }
+						deleteButton.hide();
+					}
+					if (param_ta_audit_kriteria_smkp.btnCopy == 1) {
+						var copyButton = $(currenRow).find(".k-grid-Copy"); copyButton.attr("title", "@ResxHelper.GetValue("Message","Copy")");
+						if ("@ViewData["AllowAdd"]" == "1") {} else {copyButton.hide();}
+					}
+				}
+			}
+		}
+		function AddData_ta_audit_kriteria_smkp() {var contentUrl = '@ViewBag.BaseUrl/AuditKriteriaSmkp/Add?audit_id=@ViewBag.audit_id&kriteria_audit_id=@ViewBag.kriteria_audit_id'; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog, }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: param_ta_audit_kriteria_smkp.btn_add_modal_width, height: param_ta_audit_kriteria_smkp.btn_add_modal_height, minHeight: 300, });if(param_ta_audit_kriteria_smkp.btn_add_modal_width == 0) {form_edit.data("kendoWindow").center().open().maximize()} else {form_edit.data("kendoWindow").center().open();}}
+		function ViewItem_ta_audit_kriteria_smkp(data) { var qs = '';jQuery.each(pkKey_ta_audit_kriteria_smkp, function (i, val) {qs += qs != "" ? "&" : "";qs += val+'=' + data[val];});var contentUrl = '@ViewBag.BaseUrl/AuditKriteriaSmkp/ViewItem?' + qs; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: param_ta_audit_kriteria_smkp.btn_view_modal_width, height: param_ta_audit_kriteria_smkp.btn_view_modal_height, minHeight: 300, }); if (param_ta_audit_kriteria_smkp.btn_view_modal_width == 0) { form_edit.data("kendoWindow").center().open().maximize() } else { form_edit.data("kendoWindow").center().open(); }}
+		function EditData_ta_audit_kriteria_smkp(data) { var qs = '';jQuery.each(pkKey_ta_audit_kriteria_smkp, function (i, val) {qs += qs != "" ? "&" : "";qs += val+'=' + data[val];}); var contentUrl = '@ViewBag.BaseUrl/AuditKriteriaSmkp/Edit?' + qs; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: param_ta_audit_kriteria_smkp.btn_edit_modal_width, height: param_ta_audit_kriteria_smkp.btn_edit_modal_height, minHeight: 300, }); if(param_ta_audit_kriteria_smkp.btn_edit_modal_width == 0) {form_edit.data("kendoWindow").center().open().maximize()} else {form_edit.data("kendoWindow").center().open();} }
+		function CopyData_ta_audit_kriteria_smkp(data) { var qs = '';jQuery.each(pkKey_ta_audit_kriteria_smkp, function (i, val) {qs += qs != "" ? "&" : "";qs += val+'=' + data[val];}); var contentUrl = '@ViewBag.BaseUrl/AuditKriteriaSmkp/Copy?' + qs; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: param_ta_audit_kriteria_smkp.btn_edit_modal_width, height: param_ta_audit_kriteria_smkp.btn_edit_modal_height, minHeight: 300, }); if(param_ta_audit_kriteria_smkp.btn_edit_modal_width == 0) {form_edit.data("kendoWindow").center().open().maximize()} else {form_edit.data("kendoWindow").center().open();} }
+		function DeleteData_ta_audit_kriteria_smkp(data) {
+			var keyValue = '';
+			jQuery.each(displayName_ta_audit_kriteria_smkp, function (i, val) {
+				keyValue += keyValue != "" ? "<br />" : "";
+				keyValue += val.label+ ": " + data[val.name];
+			});
+			var pkItem = "";
+			jQuery.each(pkKey_ta_audit_kriteria_smkp, function (i, val) {
+				pkItem += pkItem != "" ? ", " : "";
+				pkItem += '"'+val+'":"'+data[val]+'" ';
+			});
+			var pkVal = jQuery.parseJSON("{" + pkItem + "}");
+			var data2 = { title: '@ResxHelper.GetValue("Message","ConfirmDelete")', msg: keyValue };
+			var winconfirm = $("#dialogconfirm").kendoWindow({ title: "@ResxHelper.GetValue("Message","DeleteData")", modal: true, visible: false, resizable: true, draggable: true, width: "500px", height: "200px" }).data("kendoWindow");
+			winconfirm.content(confirmTemplate(data2));
+			winconfirm.center(); winconfirm.open();
+			$("#yesButton").click(function () {
+				$.ajax({
+					data: pkVal, url: '@ViewBag.BaseUrl/AuditKriteriaSmkp/Delete', type: 'POST'
+					, success: function (data) {
+						if (data.status != 1) {
+							notification.show({ title: data.title, message: kendo.toString(data.message) }, "error");
+							winconfirm.close();
+						} else {
+							notification.show({ message: kendo.toString(data.message) }, "success");
+							Reload_list_ta_audit_kriteria_smkp();
+							winconfirm.close();
+						}
+					}
+				});
+			});
+			$("#noButton").click(function () { winconfirm.close(); });
+		}
+		function onCloseDialog(e) { $('#dialog').html(''); }
+		function closeDialog() { $("#dialog").data("kendoWindow").close(); }
+		$("#btnExportExcel_ta_audit_kriteria_smkp").click(function (e) { var grid = $("#grid_ta_audit_kriteria_smkp").data("kendoGrid"); grid.saveAsExcel(); });
+		function ShowHideColumn_ta_audit_kriteria_smkp(e) { colname = $.isNumeric(e.value) ? parseInt(e.value) : e.value; if (e.checked) { $("#grid_ta_audit_kriteria_smkp").data("kendoGrid").showColumn(colname); } else { $("#grid_ta_audit_kriteria_smkp").data("kendoGrid").hideColumn(colname); } }
+		$(document).ready(function () {
+			$("#attr_column_show_hide").html(showhide_column);
+			if (param_ta_audit_kriteria_smkp.ShowFilter == 1) { $("#btnShowHideFilter_ta_audit_kriteria_smkp").show(); }
+			if (param_ta_audit_kriteria_smkp.btnAdd == 1 && @ViewData["AllowAdd"]== "1") { }else{ $("#btnAdd_ta_audit_kriteria_smkp").hide(); }
+			if (param_ta_audit_kriteria_smkp.quick_search != 1) { $("#quick_search_template_ta_audit_kriteria_smkp").hide(); }
+			if (param_ta_audit_kriteria_smkp.search_by_column  != 1) { $("#btnSearchByColumn_ta_audit_kriteria_smkp").hide(); }
+			if (param_ta_audit_kriteria_smkp.show_hide_column != 1) { $("#btnShowHideColumn_ta_audit_kriteria_smkp").hide(); }
+			if (param_ta_audit_kriteria_smkp.export_exl != 1) { $("#btnExportExcel_ta_audit_kriteria_smkp").hide(); }
+			$("#btnShowHideColumn_ta_audit_kriteria_smkp").click(function () { var x = $("#btnShowHideColumn_ta_audit_kriteria_smkp").offset().left; var y = $("#btnShowHideColumn_ta_audit_kriteria_smkp").offset().top; if (!WinShowHideColumn_ta_audit_kriteria_smkp) { var WinShowHideColumn_ta_audit_kriteria_smkp = $("#WinShowHideColumn_ta_audit_kriteria_smkp").kendoWindow({ width: "300px", position: { left: x, top: y }, title: "@ResxHelper.GetValue("Message","ShowHideColumn")", actions: ["Close"] }); } WinShowHideColumn_ta_audit_kriteria_smkp.data("kendoWindow").open(); });
+		});
+		</script>
+
+	}
+
+
+
+
+
+
+	//CSMS
+	if (ViewBag.kriteria_audit_id == "10")
+	{
+		<script>
+		var param_ta_audit_kriteria_csms = @Html.Raw(JsonConvert.SerializeObject(WebApp.Models.AuditKriteriaCsmsModel.GetListParam()));
+		var displayName_ta_audit_kriteria_csms = @Html.Raw(JsonConvert.SerializeObject(WebApp.Models.AuditKriteriaCsmsModel.GetDisplayItem()));
+		var pkKey_ta_audit_kriteria_csms = @Html.Raw(JsonConvert.SerializeObject(WebApp.Models.AuditKriteriaCsmsModel._pkKey));
+		var j_data_ta_audit_kriteria_csms = @Html.Raw(JsonConvert.SerializeObject(WebApp.Models.AuditKriteriaCsmsModel.GetGridColumn()));
+		var colNameTooltip_ta_audit_kriteria_csms = [];
+		var colbuttonCount_ta_audit_kriteria_csms = 0;
+		var columnWidth = 40;
+		colbuttonCount_ta_audit_kriteria_csms += param_ta_audit_kriteria_csms.btnView == 1 ? 1 : 0;
+		colbuttonCount_ta_audit_kriteria_csms += param_ta_audit_kriteria_csms.btnEdit== "1" ? 1 : 0;
+		colbuttonCount_ta_audit_kriteria_csms += param_ta_audit_kriteria_csms.btnDelete == "1" ? 1 : 0;
+		colbuttonCount_ta_audit_kriteria_csms += param_ta_audit_kriteria_csms.btnCopy  == "1" ? 1 : 0;
+		if (colbuttonCount_ta_audit_kriteria_csms == 1) { columnWidth = 40; } else if (colbuttonCount_ta_audit_kriteria_csms == 2) { columnWidth = 60; } else if (colbuttonCount_ta_audit_kriteria_csms == 3) { columnWidth = 95; } else if (colbuttonCount_ta_audit_kriteria_csms == 4) { columnWidth = 120; }
+		var columnActionWidth_ta_audit_kriteria_csms = columnWidth + "px";
+		var item_data = "";
+		var col_att = [];
+		var showhide_column = "";
+		var j = 0;
+		var checked = '';
+		var aggregate_data_ta_audit_kriteria_csms = [];
+		var agg_i = 0
+		jQuery.each(j_data_ta_audit_kriteria_csms, function (i, val) {
+			var footerTemplate = "";
+			if (val.aggregate != "") {
+				footerTemplate = val.footerTemplate!="" ? val.footerTemplate : '#='+val.aggregate+'#';
+				aggregate_data_ta_audit_kriteria_csms[agg_i] = { field: val.name, aggregate: val.aggregate };
+				agg_i++;
+			}
+			item_data += item_data != "" ? "," : "";
+			item_data += '"' + val.name + '" : { "type": "' + val.type + '" } ';
+			if (val.display) {
+				col_att[j] = { field: val.name, title: val.title, hidden: JSON.parse(val.hidden), width: val.width, format: val.format, attributes: JSON.parse(val.attributes), encoded: JSON.parse(val.encoded), filterable: JSON.parse(val.filterable), sortable: JSON.parse(val.sortable), headerAttributes: { style: "white-space: normal;vertical-align:middle;text-align:center" },aggregates: [val.aggregate], footerTemplate: footerTemplate };
+				j++;
+				checked = '';if (val.hidden.toString() == 'false') {checked = 'checked';}
+				showhide_column += '<div><input type="checkbox" onclick="ShowHideColumn_ta_audit_kriteria_csms(this)" '+ checked +' value="' + val.name + '" /> ' + val.title + '</div>';
+			}
+		});
+		showhide_column += '<div><input type="checkbox" onclick="ShowHideColumn_ta_audit_kriteria_csms(this)" checked value="' + j + '" /> Action</div>';
+		item_data = '{' + item_data + '}';
+		var field_data = JSON.parse(item_data);
+		var columns_data = col_att;
+		var col_command = [];
+		var k = 0;
+		if (param_ta_audit_kriteria_csms.btnView== 1) {col_command[k] = { name: "View", text: "", className: "v-view", click: function (e) { var tr = $(e.target).closest("tr"); var data = this.dataItem(tr); ViewItem_ta_audit_kriteria_csms(data); } };k++;}
+		if (param_ta_audit_kriteria_csms.btnEdit== 1) {col_command[k] = { name: "Edit", text: "", className: "v-pencil", click: function (e) { var tr = $(e.target).closest("tr"); var data = this.dataItem(tr); EditData_ta_audit_kriteria_csms(data); } };k++;}
+		if (param_ta_audit_kriteria_csms.btnDelete== 1) {col_command[k] = { name: "Delete", text: "", className: "v-close", click: function (e) { var tr = $(e.target).closest("tr"); var data = this.dataItem(tr); DeleteData_ta_audit_kriteria_csms(data); } };k++;}
+		if (param_ta_audit_kriteria_csms.btnCopy == 1) { col_command[k] = { name: "Copy", text: "", className: "v-copy", click: function (e) { var tr = $(e.target).closest("tr"); var data = this.dataItem(tr); CopyData_ta_audit_kriteria_csms(data); } }; k++; }
+		if (colbuttonCount_ta_audit_kriteria_csms > 0) {
+			columns_data[j] = {command: col_command, width: columnActionWidth_ta_audit_kriteria_csms, attributes: " style=\"vertical-align:top;\""};
+		}
+		//==============================
+
+		//==============================
+		$("#collapse_filter_ta_audit_kriteria_csms").on('shown.bs.collapse', function () {
+			$("#btnShowHideFilter_ta_audit_kriteria_csms").html('@ResxHelper.GetValue("Message","HideFilter")');
+		});
+		$("#collapse_filter_ta_audit_kriteria_csms").on('hidden.bs.collapse', function () {
+			$("#btnShowHideFilter_ta_audit_kriteria_csms").html('@ResxHelper.GetValue("Message","ShowFilter")');
+		});
+		//==============================
+		var record_ta_audit_kriteria_csms = 0;
+		var grid_ta_audit_kriteria_csms_heigth = 0;
+		var ds_ta_audit_kriteria_csms_filter = { filter_by_column: [{name:"audit_id",opr:"=",value:"@ViewBag.audit_id"}, {name:"kriteria_audit_id",opr:"=",value:"@ViewBag.kriteria_audit_id"}] };
+		var ds_ta_audit_kriteria_csms = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/AuditKriteriaCsms/GetListData", dataType: "json", type: "POST", data: ds_ta_audit_kriteria_csms_filter }, parameterMap: function (options) { if (options.filter) { for (var i = 0; i < options.filter.filters.length; i++) { if (options.filter.filters[i].field == 'tanggal') { options.filter.filters[i].value = kendo.toString(options.filter.filters[i].value, "yyyy-MM-dd"); } } } return options; } }, schema: { data: "data", total: "total", aggregates: "aggregates", model: { fields: field_data } }, aggregate: aggregate_data_ta_audit_kriteria_csms, pageSize: 10, serverAggregates: true, serverPaging: true, serverFiltering: true, serverSorting: true });
+		var list_ta_audit_kriteria_csms = $("#grid_ta_audit_kriteria_csms").kendoGrid({
+			excel: { allPages: true, fileName: '@ViewData["TitleHeader"]'+'.xlsx' },
+			dataSource: ds_ta_audit_kriteria_csms, dataBound: onDataBound_ta_audit_kriteria_csms, height: grid_ta_audit_kriteria_csms_heigth, scrollable: true, groupable: false, columnMenu: false, menu: true, resizable: true, filterable: false, sortable: { mode: "multiple", allowUnsort: true }, pageable: { refresh: true, pageSizes: [5, 10, 20, 50, 100, 200], buttonCount: 5 },
+			columns: columns_data, editable: false, dataBinding: function () { record_ta_audit_kriteria_csms = (this.dataSource.page() - 1) * this.dataSource.pageSize(); }
+		});
+		function getParamgrid_ta_audit_kriteria_csms() {
+			var filter_by_column= [];var k = 0;
+
+			return { filter_by_column:filter_by_column };
+		}
+		function reset_filter_ta_audit_kriteria_csms() {
+
+			onFilterHeader_ta_audit_kriteria_csms();
+		}
+		function onFilterHeader_ta_audit_kriteria_csms() {
+			$("#txtSearch_ta_audit_kriteria_csms").val('');
+			paramValue = getParamgrid_ta_audit_kriteria_csms();
+			if (list_ta_audit_kriteria_csms.data('kendoGrid').dataSource.page() > 1) {
+				list_ta_audit_kriteria_csms.data('kendoGrid').dataSource.page(0);
+			}
+			list_ta_audit_kriteria_csms.data('kendoGrid').dataSource.transport.options.read.data = paramValue;
+			list_ta_audit_kriteria_csms.data("kendoGrid").dataSource.filter([]);
+		};
+		$("#btnSearchByColumn_ta_audit_kriteria_csms").click(function () { var grid_ta_audit_kriteria_csms_heigth_filter = grid_ta_audit_kriteria_csms_heigth + 38; if (list_ta_audit_kriteria_csms.data("kendoGrid").options.filterable == false) { $('#btnSearchByColumn_ta_audit_kriteria_csms').prop('title', '@ResxHelper.GetValue("Message","HideSearchByColumn")'); $("#txtSearch_ta_audit_kriteria_csms").val(''); if ('1' == '1') { $("#quick_search_template_ta_audit_kriteria_csms").hide(); }; QuickSearch_ta_audit_kriteria_csms(); list_ta_audit_kriteria_csms.data("kendoGrid").setOptions({ height: grid_ta_audit_kriteria_csms_heigth_filter, filterable: { mode: "row" }, }); } else { $('#btnSearchByColumn_ta_audit_kriteria_csms').prop('title', '@ResxHelper.GetValue("Message","ShowSearchByColumn")'); $("#txtSearch_ta_audit_kriteria_csms").val(''); if ('1' == '1') { $("#quick_search_template_ta_audit_kriteria_csms").show(); }; QuickSearch_ta_audit_kriteria_csms(); list_ta_audit_kriteria_csms.data("kendoGrid").setOptions({ height: grid_ta_audit_kriteria_csms_heigth, filterable: false, }); } });
+		$("#btnSearch_ta_audit_kriteria_csms").click(function () { QuickSearch_ta_audit_kriteria_csms(); });
+		$('#txtSearch_ta_audit_kriteria_csms').keypress(function (e) { if (e.keyCode == 13) { QuickSearch_ta_audit_kriteria_csms(); } });
+		function QuickSearch_ta_audit_kriteria_csms() {
+			$filter = new Array();
+			$x = $("#txtSearch_ta_audit_kriteria_csms").val();
+			if ($x) {jQuery.each(j_data_ta_audit_kriteria_csms, function (i, val) {if (val.display && val.qsearch && val.type =='string') {$filter.push({ name: val.name, opr: "contains", value: $x });}});}
+			if ($filter.length > 0) {list_ta_audit_kriteria_csms.data("kendoGrid").dataSource.filter({ logic: "or", filters: $filter });}else {list_ta_audit_kriteria_csms.data("kendoGrid").dataSource.filter([]);}
+		}
+		function Reload_list_ta_audit_kriteria_csms() { list_ta_audit_kriteria_csms.data('kendoGrid').dataSource.read(); list_ta_audit_kriteria_csms.data('kendoGrid').refresh(); }
+		function onDataBound_ta_audit_kriteria_csms(e) {
+			if (colbuttonCount_ta_audit_kriteria_csms > 0) {
+				var grid = $("#grid_ta_audit_kriteria_csms").data("kendoGrid"); var list_ta_audit_kriteria_csms = grid.dataSource.view();
+				for (var i = 0; i < list_ta_audit_kriteria_csms.length; i++) {
+					var currentUid = list_ta_audit_kriteria_csms[i].uid; var currenRow = grid.table.find("tr[data-uid='" + currentUid + "']");
+					if (param_ta_audit_kriteria_csms.btnView == 1) {
+						var viewButton = $(currenRow).find(".k-grid-View"); viewButton.attr("title", "@ResxHelper.GetValue("Message","View")");
+						if ("@ViewData["AllowView"]" == "1") {} else {viewButton.hide();}
+					}
+					if (param_ta_audit_kriteria_csms.btnEdit == 1) {
+						var editButton = $(currenRow).find(".k-grid-Edit"); editButton.attr("title", "@ResxHelper.GetValue("Message","Edit")");
+						if ("@ViewData["AllowEdit"]" == "1") {} else {editButton.hide();}
+					}
+					if (param_ta_audit_kriteria_csms.btnDelete == 1) {
+						var deleteButton = $(currenRow).find(".k-grid-Delete"); deleteButton.attr("title", "@ResxHelper.GetValue("Message","Delete")");
+                        if ("@ViewData["AllowDelete"]" == "1") { } else { deleteButton.hide(); }
+						deleteButton.hide();
+					}
+					if (param_ta_audit_kriteria_csms.btnCopy == 1) {
+						var copyButton = $(currenRow).find(".k-grid-Copy"); copyButton.attr("title", "@ResxHelper.GetValue("Message","Copy")");
+						if ("@ViewData["AllowAdd"]" == "1") {} else {copyButton.hide();}
+					}
+				}
+			}
+		}
+		function AddData_ta_audit_kriteria_csms() {var contentUrl = '@ViewBag.BaseUrl/AuditKriteriaCsms/Add?audit_id=@ViewBag.audit_id&kriteria_audit_id=@ViewBag.kriteria_audit_id'; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog, }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: param_ta_audit_kriteria_csms.btn_add_modal_width, height: param_ta_audit_kriteria_csms.btn_add_modal_height, minHeight: 300, });if(param_ta_audit_kriteria_csms.btn_add_modal_width == 0) {form_edit.data("kendoWindow").center().open().maximize()} else {form_edit.data("kendoWindow").center().open();}}
+		function ViewItem_ta_audit_kriteria_csms(data) { var qs = '';jQuery.each(pkKey_ta_audit_kriteria_csms, function (i, val) {qs += qs != "" ? "&" : "";qs += val+'=' + data[val];});var contentUrl = '@ViewBag.BaseUrl/AuditKriteriaCsms/ViewItem?' + qs; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: param_ta_audit_kriteria_csms.btn_view_modal_width, height: param_ta_audit_kriteria_csms.btn_view_modal_height, minHeight: 300, }); if (param_ta_audit_kriteria_csms.btn_view_modal_width == 0) { form_edit.data("kendoWindow").center().open().maximize() } else { form_edit.data("kendoWindow").center().open(); }}
+		function EditData_ta_audit_kriteria_csms(data) { var qs = '';jQuery.each(pkKey_ta_audit_kriteria_csms, function (i, val) {qs += qs != "" ? "&" : "";qs += val+'=' + data[val];}); var contentUrl = '@ViewBag.BaseUrl/AuditKriteriaCsms/Edit?' + qs; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: param_ta_audit_kriteria_csms.btn_edit_modal_width, height: param_ta_audit_kriteria_csms.btn_edit_modal_height, minHeight: 300, }); if(param_ta_audit_kriteria_csms.btn_edit_modal_width == 0) {form_edit.data("kendoWindow").center().open().maximize()} else {form_edit.data("kendoWindow").center().open();} }
+		function CopyData_ta_audit_kriteria_csms(data) { var qs = '';jQuery.each(pkKey_ta_audit_kriteria_csms, function (i, val) {qs += qs != "" ? "&" : "";qs += val+'=' + data[val];}); var contentUrl = '@ViewBag.BaseUrl/AuditKriteriaCsms/Copy?' + qs; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: param_ta_audit_kriteria_csms.btn_edit_modal_width, height: param_ta_audit_kriteria_csms.btn_edit_modal_height, minHeight: 300, }); if(param_ta_audit_kriteria_csms.btn_edit_modal_width == 0) {form_edit.data("kendoWindow").center().open().maximize()} else {form_edit.data("kendoWindow").center().open();} }
+		function DeleteData_ta_audit_kriteria_csms(data) {
+			var keyValue = '';
+			jQuery.each(displayName_ta_audit_kriteria_csms, function (i, val) {
+				keyValue += keyValue != "" ? "<br />" : "";
+				keyValue += val.label+ ": " + data[val.name];
+			});
+			var pkItem = "";
+			jQuery.each(pkKey_ta_audit_kriteria_csms, function (i, val) {
+				pkItem += pkItem != "" ? ", " : "";
+				pkItem += '"'+val+'":"'+data[val]+'" ';
+			});
+			var pkVal = jQuery.parseJSON("{" + pkItem + "}");
+			var data2 = { title: '@ResxHelper.GetValue("Message","ConfirmDelete")', msg: keyValue };
+			var winconfirm = $("#dialogconfirm").kendoWindow({ title: "@ResxHelper.GetValue("Message","DeleteData")", modal: true, visible: false, resizable: true, draggable: true, width: "500px", height: "200px" }).data("kendoWindow");
+			winconfirm.content(confirmTemplate(data2));
+			winconfirm.center(); winconfirm.open();
+			$("#yesButton").click(function () {
+				$.ajax({
+					data: pkVal, url: '@ViewBag.BaseUrl/AuditKriteriaCsms/Delete', type: 'POST'
+					, success: function (data) {
+						if (data.status != 1) {
+							notification.show({ title: data.title, message: kendo.toString(data.message) }, "error");
+							winconfirm.close();
+						} else {
+							notification.show({ message: kendo.toString(data.message) }, "success");
+							Reload_list_ta_audit_kriteria_csms();
+							winconfirm.close();
+						}
+					}
+				});
+			});
+			$("#noButton").click(function () { winconfirm.close(); });
+		}
+		function onCloseDialog(e) { $('#dialog').html(''); }
+		function closeDialog() { $("#dialog").data("kendoWindow").close(); }
+		$("#btnExportExcel_ta_audit_kriteria_csms").click(function (e) { var grid = $("#grid_ta_audit_kriteria_csms").data("kendoGrid"); grid.saveAsExcel(); });
+		function ShowHideColumn_ta_audit_kriteria_csms(e) { colname = $.isNumeric(e.value) ? parseInt(e.value) : e.value; if (e.checked) { $("#grid_ta_audit_kriteria_csms").data("kendoGrid").showColumn(colname); } else { $("#grid_ta_audit_kriteria_csms").data("kendoGrid").hideColumn(colname); } }
+		$(document).ready(function () {
+			$("#attr_column_show_hide").html(showhide_column);
+			if (param_ta_audit_kriteria_csms.ShowFilter == 1) { $("#btnShowHideFilter_ta_audit_kriteria_csms").show(); }
+			if (param_ta_audit_kriteria_csms.btnAdd == 1 && @ViewData["AllowAdd"]== "1") { }else{ $("#btnAdd_ta_audit_kriteria_csms").hide(); }
+			if (param_ta_audit_kriteria_csms.quick_search != 1) { $("#quick_search_template_ta_audit_kriteria_csms").hide(); }
+			if (param_ta_audit_kriteria_csms.search_by_column  != 1) { $("#btnSearchByColumn_ta_audit_kriteria_csms").hide(); }
+			if (param_ta_audit_kriteria_csms.show_hide_column != 1) { $("#btnShowHideColumn_ta_audit_kriteria_csms").hide(); }
+			if (param_ta_audit_kriteria_csms.export_exl != 1) { $("#btnExportExcel_ta_audit_kriteria_csms").hide(); }
+			$("#btnShowHideColumn_ta_audit_kriteria_csms").click(function () { var x = $("#btnShowHideColumn_ta_audit_kriteria_csms").offset().left; var y = $("#btnShowHideColumn_ta_audit_kriteria_csms").offset().top; if (!WinShowHideColumn_ta_audit_kriteria_csms) { var WinShowHideColumn_ta_audit_kriteria_csms = $("#WinShowHideColumn_ta_audit_kriteria_csms").kendoWindow({ width: "300px", position: { left: x, top: y }, title: "@ResxHelper.GetValue("Message","ShowHideColumn")", actions: ["Close"] }); } WinShowHideColumn_ta_audit_kriteria_csms.data("kendoWindow").open(); });
+		});
+		</script>
+
+	}
+
+}

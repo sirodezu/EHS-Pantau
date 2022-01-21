@@ -1,0 +1,639 @@
+@using WebApp
+@using Microsoft.AspNetCore.Http;
+@{
+    Layout = "~/Views/Shared/_LayoutNoHeader.cshtml";
+    var fieldModel = ViewData["fieldModel"] as WebApp.Models.AuditKriteriaAgcTmModel.ViewModel;
+    ViewData["Title"] = ViewData["TitleHeader"];
+    ViewData["PageName"] = "auditkriteriaagctm";
+    ViewData["Heading"] = ViewData["TitleHeader"];
+    ViewData["Category1"] = "";
+    ViewData["Category2"] = "";
+}
+
+<form id="form_edit" method="post" class="panel-form">
+    <div class="panel">
+        <div class="panel-heading">
+            <div class="title-header">@ViewData["TitleHeader"]</div>
+        </div>
+		<div class="panel-container">
+			<div class="panel-content">
+				<div class="row">
+					<div class="col-lg-6">
+
+                        <div id="form_item_id" class="form-group-none">
+                           <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "id")<span id="label_req_id" class="required"> *</span></div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_id" class="form-item-field">
+                               <input type="number" id="id" name="id"  min="0" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_agc_tm","id"))" style ="width:200px;" />
+                               <span class="k-invalid-msg" data-for="id"></span>
+                               <input type="hidden" id="id_old" name="id_old" value="@fieldModel.id" />
+                               <script>
+                                   $("#id").kendoNumericTextBox({ format: "{0:N0}", decimals: 0 });
+                                   $(document).ready(function () {$("#id").data('kendoNumericTextBox').value('@fieldModel.id');})
+                               </script>
+                           </div>
+                       </div>
+
+                        <div id="form_item_audit_id" class="form-group-none">
+                           <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "audit_id")<span id="label_req_audit_id" class="required"> *</span></div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_audit_id" class="form-item-field">
+                               <input type="number" id="audit_id" name="audit_id"  min="0" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_agc_tm","audit_id"))" style ="width:200px;" />
+                               <span class="k-invalid-msg" data-for="audit_id"></span>
+                               <script>
+                                   $("#audit_id").kendoNumericTextBox({ format: "{0:N0}", decimals: 0 });
+                                   $(document).ready(function () {$("#audit_id").data('kendoNumericTextBox').value('@fieldModel.audit_id');})
+                               </script>
+                           </div>
+                       </div>
+
+                        <div id="form_item_kriteria_audit_id" class="form-group-none">
+                           <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "kriteria_audit_id")<span id="label_req_kriteria_audit_id" class="required"> *</span></div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_kriteria_audit_id" class="form-item-field">
+                               <input type="number" id="kriteria_audit_id" name="kriteria_audit_id"  min="0" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_agc_tm","kriteria_audit_id"))" style ="width:200px;" />
+                               <span class="k-invalid-msg" data-for="kriteria_audit_id"></span>
+                               <script>
+                                   $("#kriteria_audit_id").kendoNumericTextBox({ format: "{0:N0}", decimals: 0 });
+                                   $(document).ready(function () {$("#kriteria_audit_id").data('kendoNumericTextBox').value('@fieldModel.kriteria_audit_id');})
+                               </script>
+                           </div>
+                       </div>
+
+                        <div id="form_item_strategy" class="form-group">
+                           <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "strategy")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_strategy" class="form-item-field">
+                               <input type="number" id="strategy" name="strategy"  min="0"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_agc_tm","strategy"))" style ="width:200px;" />
+                               <span class="k-invalid-msg" data-for="strategy"></span>
+                               <script>
+                                   $("#strategy").kendoNumericTextBox({ format: "{0:N2}", decimals: 2 });
+                                   $(document).ready(function () {$("#strategy").data('kendoNumericTextBox').value('@fieldModel.strategy');})
+                               </script>
+                           </div>
+                       </div>
+
+                        <div id="form_item_process" class="form-group">
+                           <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "process")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_process" class="form-item-field">
+                               <input type="number" id="process" name="process"   min="0" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_agc_tm","process"))" style ="width:200px;" />
+                               <span class="k-invalid-msg" data-for="process"></span>
+                               <script>
+                                   $("#process").kendoNumericTextBox({ format: "{0:N2}", decimals: 2 });
+                                   $(document).ready(function () {$("#process").data('kendoNumericTextBox').value('@fieldModel.process');})
+                               </script>
+                           </div>
+                       </div>
+
+                        <div id="form_item_product" class="form-group">
+                           <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "product")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_product" class="form-item-field">
+                               <input type="number" id="product" name="product"  min="0"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_agc_tm","product"))" style ="width:200px;" />
+                               <span class="k-invalid-msg" data-for="product"></span>
+                               <script>
+                                   $("#product").kendoNumericTextBox({ format: "{0:N2}", decimals: 2 });
+                                   $(document).ready(function () {$("#product").data('kendoNumericTextBox').value('@fieldModel.product');})
+                               </script>
+                           </div>
+                       </div>
+
+                        <div id="form_item_employee" class="form-group">
+                           <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "employee")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_employee" class="form-item-field">
+                               <input type="number" id="employee" name="employee"   min="0" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_agc_tm","employee"))" style ="width:200px;" />
+                               <span class="k-invalid-msg" data-for="employee"></span>
+                               <script>
+                                   $("#employee").kendoNumericTextBox({ format: "{0:N2}", decimals: 2 });
+                                   $(document).ready(function () {$("#employee").data('kendoNumericTextBox').value('@fieldModel.employee');})
+                               </script>
+                           </div>
+                       </div>
+
+                       <div id="form_item_status_akhir_acp_id" class="form-group">
+                           <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "status_akhir_acp_id")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_status_akhir_acp_id" class="form-item-field">
+                               <input id="status_akhir_acp_id" name="status_akhir_acp_id"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_agc_tm","status_akhir_acp_id"))" style="width:200px;" />
+                               <span class="k-invalid-msg" data-for="status_akhir_acp_id"></span>
+                               <script>
+                                   var status_akhir_acp_id_param = {item : {value:"id",text:"nama"},parent:[{ field: 'cat_id',opr:'=', value: '49' }], order:[]};
+                                   var status_akhir_acp_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: status_akhir_acp_id_param, type: "POST" } } });
+                                   var status_akhir_acp_id = $("#status_akhir_acp_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: status_akhir_acp_id_ds, change:onChange_status_akhir_acp_id }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#status_akhir_acp_id").data("kendoComboBox").value('@fieldModel.status_akhir_acp_id'); });
+                                   function onChange_status_akhir_acp_id() {if ($("#status_akhir_acp_id").data("kendoComboBox").value() != '' && $("#status_akhir_acp_id").data("kendoComboBox")._oldIndex == -1) {$("#status_akhir_acp_id").data("kendoComboBox").value('');}
+                                   }
+                               </script>
+                           </div>
+                       </div>
+
+
+                        <div><p>&nbsp;</p></div>
+
+                       <div id="form_item_amdal_id" class="form-group">
+                           <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "amdal_id")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_amdal_id" class="form-item-field">
+                               <input id="amdal_id" name="amdal_id"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_agc_tm","amdal_id"))" style="width:200px;" />
+                               <span class="k-invalid-msg" data-for="amdal_id"></span>
+                               <script>
+                                   var amdal_id_param = {item : {value:"id",text:"nama"},parent:[{ field: 'cat_id',opr:'=', value: '49' }], order:[]};
+                                   var amdal_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: amdal_id_param, type: "POST" } } });
+                                   var amdal_id = $("#amdal_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: amdal_id_ds, change:onChange_amdal_id }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#amdal_id").data("kendoComboBox").value('@fieldModel.amdal_id'); });
+                                   function onChange_amdal_id() {if ($("#amdal_id").data("kendoComboBox").value() != '' && $("#amdal_id").data("kendoComboBox")._oldIndex == -1) {$("#amdal_id").data("kendoComboBox").value('');}
+                                   }
+                               </script>
+                           </div>
+                       </div>
+
+                       <div id="form_item_pencemaran_air_id" class="form-group">
+                           <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "pencemaran_air_id")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_pencemaran_air_id" class="form-item-field">
+                               <input id="pencemaran_air_id" name="pencemaran_air_id"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_agc_tm","pencemaran_air_id"))" style="width:200px;" />
+                               <span class="k-invalid-msg" data-for="pencemaran_air_id"></span>
+                               <script>
+                                   var pencemaran_air_id_param = {item : {value:"id",text:"nama"},parent:[{ field: 'cat_id',opr:'=', value: '49' }], order:[]};
+                                   var pencemaran_air_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: pencemaran_air_id_param, type: "POST" } } });
+                                   var pencemaran_air_id = $("#pencemaran_air_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: pencemaran_air_id_ds, change:onChange_pencemaran_air_id }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#pencemaran_air_id").data("kendoComboBox").value('@fieldModel.pencemaran_air_id'); });
+                                   function onChange_pencemaran_air_id() {if ($("#pencemaran_air_id").data("kendoComboBox").value() != '' && $("#pencemaran_air_id").data("kendoComboBox")._oldIndex == -1) {$("#pencemaran_air_id").data("kendoComboBox").value('');}
+                                   }
+                               </script>
+                           </div>
+                       </div>
+
+                       <div id="form_item_pencemaran_udara_id" class="form-group">
+                           <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "pencemaran_udara_id")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_pencemaran_udara_id" class="form-item-field">
+                               <input id="pencemaran_udara_id" name="pencemaran_udara_id"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_agc_tm","pencemaran_udara_id"))" style="width:200px;" />
+                               <span class="k-invalid-msg" data-for="pencemaran_udara_id"></span>
+                               <script>
+                                   var pencemaran_udara_id_param = {item : {value:"id",text:"nama"},parent:[{ field: 'cat_id',opr:'=', value: '49' }], order:[]};
+                                   var pencemaran_udara_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: pencemaran_udara_id_param, type: "POST" } } });
+                                   var pencemaran_udara_id = $("#pencemaran_udara_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: pencemaran_udara_id_ds, change:onChange_pencemaran_udara_id }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#pencemaran_udara_id").data("kendoComboBox").value('@fieldModel.pencemaran_udara_id'); });
+                                   function onChange_pencemaran_udara_id() {if ($("#pencemaran_udara_id").data("kendoComboBox").value() != '' && $("#pencemaran_udara_id").data("kendoComboBox")._oldIndex == -1) {$("#pencemaran_udara_id").data("kendoComboBox").value('');}
+                                   }
+                               </script>
+                           </div>
+                       </div>
+
+                       <div id="form_item_limbah_lb3_id" class="form-group">
+                           <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "limbah_lb3_id")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_limbah_lb3_id" class="form-item-field">
+                               <input id="limbah_lb3_id" name="limbah_lb3_id"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_agc_tm","limbah_lb3_id"))" style="width:200px;" />
+                               <span class="k-invalid-msg" data-for="limbah_lb3_id"></span>
+                               <script>
+                                   var limbah_lb3_id_param = {item : {value:"id",text:"nama"},parent:[{ field: 'cat_id',opr:'=', value: '49' }], order:[]};
+                                   var limbah_lb3_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: limbah_lb3_id_param, type: "POST" } } });
+                                   var limbah_lb3_id = $("#limbah_lb3_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: limbah_lb3_id_ds, change:onChange_limbah_lb3_id }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#limbah_lb3_id").data("kendoComboBox").value('@fieldModel.limbah_lb3_id'); });
+                                   function onChange_limbah_lb3_id() {if ($("#limbah_lb3_id").data("kendoComboBox").value() != '' && $("#limbah_lb3_id").data("kendoComboBox")._oldIndex == -1) {$("#limbah_lb3_id").data("kendoComboBox").value('');}
+                                   }
+                               </script>
+                           </div>
+                       </div>
+
+                       <div id="form_item_land_clearing_id" class="form-group">
+                           <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "land_clearing_id")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_land_clearing_id" class="form-item-field">
+                               <input id="land_clearing_id" name="land_clearing_id"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_agc_tm","land_clearing_id"))" style="width:200px;" />
+                               <span class="k-invalid-msg" data-for="land_clearing_id"></span>
+                               <script>
+                                   var land_clearing_id_param = {item : {value:"id",text:"nama"},parent:[{ field: 'cat_id',opr:'=', value: '49' }], order:[]};
+                                   var land_clearing_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: land_clearing_id_param, type: "POST" } } });
+                                   var land_clearing_id = $("#land_clearing_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: land_clearing_id_ds, change:onChange_land_clearing_id }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#land_clearing_id").data("kendoComboBox").value('@fieldModel.land_clearing_id'); });
+                                   function onChange_land_clearing_id() {if ($("#land_clearing_id").data("kendoComboBox").value() != '' && $("#land_clearing_id").data("kendoComboBox")._oldIndex == -1) {$("#land_clearing_id").data("kendoComboBox").value('');}
+                                   }
+                               </script>
+                           </div>
+                       </div>
+
+                       <div id="form_item_rusak_lahan_id" class="form-group">
+                           <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "rusak_lahan_id")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_rusak_lahan_id" class="form-item-field">
+                               <input id="rusak_lahan_id" name="rusak_lahan_id"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_agc_tm","rusak_lahan_id"))" style="width:200px;" />
+                               <span class="k-invalid-msg" data-for="rusak_lahan_id"></span>
+                               <script>
+                                   var rusak_lahan_id_param = {item : {value:"id",text:"nama"},parent:[{ field: 'cat_id',opr:'=', value: '49' }], order:[]};
+                                   var rusak_lahan_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: rusak_lahan_id_param, type: "POST" } } });
+                                   var rusak_lahan_id = $("#rusak_lahan_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: rusak_lahan_id_ds, change:onChange_rusak_lahan_id }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#rusak_lahan_id").data("kendoComboBox").value('@fieldModel.rusak_lahan_id'); });
+                                   function onChange_rusak_lahan_id() {if ($("#rusak_lahan_id").data("kendoComboBox").value() != '' && $("#rusak_lahan_id").data("kendoComboBox")._oldIndex == -1) {$("#rusak_lahan_id").data("kendoComboBox").value('');}
+                                   }
+                               </script>
+                           </div>
+                       </div>
+
+                       <div id="form_item_efisiensi_energi_id" class="form-group">
+                           <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "efisiensi_energi_id")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_efisiensi_energi_id" class="form-item-field">
+                               <input id="efisiensi_energi_id" name="efisiensi_energi_id"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_agc_tm","efisiensi_energi_id"))" style="width:200px;" />
+                               <span class="k-invalid-msg" data-for="efisiensi_energi_id"></span>
+                               <script>
+                                   var efisiensi_energi_id_param = {item : {value:"id",text:"nama"},parent:[{ field: 'cat_id',opr:'=', value: '49' }], order:[]};
+                                   var efisiensi_energi_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: efisiensi_energi_id_param, type: "POST" } } });
+                                   var efisiensi_energi_id = $("#efisiensi_energi_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: efisiensi_energi_id_ds, change:onChange_efisiensi_energi_id }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#efisiensi_energi_id").data("kendoComboBox").value('@fieldModel.efisiensi_energi_id'); });
+                                   function onChange_efisiensi_energi_id() {if ($("#efisiensi_energi_id").data("kendoComboBox").value() != '' && $("#efisiensi_energi_id").data("kendoComboBox")._oldIndex == -1) {$("#efisiensi_energi_id").data("kendoComboBox").value('');}
+                                   }
+                               </script>
+                           </div>
+                       </div>
+
+                       <div id="form_item_manfaat_lb3_id" class="form-group">
+                           <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "manfaat_lb3_id")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_manfaat_lb3_id" class="form-item-field">
+                               <input id="manfaat_lb3_id" name="manfaat_lb3_id"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_agc_tm","manfaat_lb3_id"))" style="width:200px;" />
+                               <span class="k-invalid-msg" data-for="manfaat_lb3_id"></span>
+                               <script>
+                                   var manfaat_lb3_id_param = {item : {value:"id",text:"nama"},parent:[{ field: 'cat_id',opr:'=', value: '49' }], order:[]};
+                                   var manfaat_lb3_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: manfaat_lb3_id_param, type: "POST" } } });
+                                   var manfaat_lb3_id = $("#manfaat_lb3_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: manfaat_lb3_id_ds, change:onChange_manfaat_lb3_id }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#manfaat_lb3_id").data("kendoComboBox").value('@fieldModel.manfaat_lb3_id'); });
+                                   function onChange_manfaat_lb3_id() {if ($("#manfaat_lb3_id").data("kendoComboBox").value() != '' && $("#manfaat_lb3_id").data("kendoComboBox")._oldIndex == -1) {$("#manfaat_lb3_id").data("kendoComboBox").value('');}
+                                   }
+                               </script>
+                           </div>
+                       </div>
+
+                       <div id="form_item_kelola_non_lb3_id" class="form-group">
+                           <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "kelola_non_lb3_id")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_kelola_non_lb3_id" class="form-item-field">
+                               <input id="kelola_non_lb3_id" name="kelola_non_lb3_id"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_agc_tm","kelola_non_lb3_id"))" style="width:200px;" />
+                               <span class="k-invalid-msg" data-for="kelola_non_lb3_id"></span>
+                               <script>
+                                   var kelola_non_lb3_id_param = {item : {value:"id",text:"nama"},parent:[{ field: 'cat_id',opr:'=', value: '49' }], order:[]};
+                                   var kelola_non_lb3_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: kelola_non_lb3_id_param, type: "POST" } } });
+                                   var kelola_non_lb3_id = $("#kelola_non_lb3_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: kelola_non_lb3_id_ds, change:onChange_kelola_non_lb3_id }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#kelola_non_lb3_id").data("kendoComboBox").value('@fieldModel.kelola_non_lb3_id'); });
+                                   function onChange_kelola_non_lb3_id() {if ($("#kelola_non_lb3_id").data("kendoComboBox").value() != '' && $("#kelola_non_lb3_id").data("kendoComboBox")._oldIndex == -1) {$("#kelola_non_lb3_id").data("kendoComboBox").value('');}
+                                   }
+                               </script>
+                           </div>
+                       </div>
+
+                       <div id="form_item_kurang_cemar_udara_id" class="form-group">
+                           <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "kurang_cemar_udara_id")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_kurang_cemar_udara_id" class="form-item-field">
+                               <input id="kurang_cemar_udara_id" name="kurang_cemar_udara_id"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_agc_tm","kurang_cemar_udara_id"))" style="width:200px;" />
+                               <span class="k-invalid-msg" data-for="kurang_cemar_udara_id"></span>
+                               <script>
+                                   var kurang_cemar_udara_id_param = {item : {value:"id",text:"nama"},parent:[{ field: 'cat_id',opr:'=', value: '49' }], order:[]};
+                                   var kurang_cemar_udara_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: kurang_cemar_udara_id_param, type: "POST" } } });
+                                   var kurang_cemar_udara_id = $("#kurang_cemar_udara_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: kurang_cemar_udara_id_ds, change:onChange_kurang_cemar_udara_id }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#kurang_cemar_udara_id").data("kendoComboBox").value('@fieldModel.kurang_cemar_udara_id'); });
+                                   function onChange_kurang_cemar_udara_id() {if ($("#kurang_cemar_udara_id").data("kendoComboBox").value() != '' && $("#kurang_cemar_udara_id").data("kendoComboBox")._oldIndex == -1) {$("#kurang_cemar_udara_id").data("kendoComboBox").value('');}
+                                   }
+                               </script>
+                           </div>
+                       </div>
+
+                       <div id="form_item_konservasi_air_id" class="form-group">
+                           <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "konservasi_air_id")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_konservasi_air_id" class="form-item-field">
+                               <input id="konservasi_air_id" name="konservasi_air_id"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_agc_tm","konservasi_air_id"))" style="width:200px;" />
+                               <span class="k-invalid-msg" data-for="konservasi_air_id"></span>
+                               <script>
+                                   var konservasi_air_id_param = {item : {value:"id",text:"nama"},parent:[{ field: 'cat_id',opr:'=', value: '49' }], order:[]};
+                                   var konservasi_air_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: konservasi_air_id_param, type: "POST" } } });
+                                   var konservasi_air_id = $("#konservasi_air_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: konservasi_air_id_ds, change:onChange_konservasi_air_id }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#konservasi_air_id").data("kendoComboBox").value('@fieldModel.konservasi_air_id'); });
+                                   function onChange_konservasi_air_id() {if ($("#konservasi_air_id").data("kendoComboBox").value() != '' && $("#konservasi_air_id").data("kendoComboBox")._oldIndex == -1) {$("#konservasi_air_id").data("kendoComboBox").value('');}
+                                   }
+                               </script>
+                           </div>
+                       </div>
+
+                       <div id="form_item_comdev_id" class="form-group">
+                           <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "comdev_id")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_comdev_id" class="form-item-field">
+                               <input id="comdev_id" name="comdev_id"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_agc_tm","comdev_id"))" style="width:200px;" />
+                               <span class="k-invalid-msg" data-for="comdev_id"></span>
+                               <script>
+                                   var comdev_id_param = {item : {value:"id",text:"nama"},parent:[{ field: 'cat_id',opr:'=', value: '49' }], order:[]};
+                                   var comdev_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: comdev_id_param, type: "POST" } } });
+                                   var comdev_id = $("#comdev_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: comdev_id_ds, change:onChange_comdev_id }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#comdev_id").data("kendoComboBox").value('@fieldModel.comdev_id'); });
+                                   function onChange_comdev_id() {if ($("#comdev_id").data("kendoComboBox").value() != '' && $("#comdev_id").data("kendoComboBox")._oldIndex == -1) {$("#comdev_id").data("kendoComboBox").value('');}
+                                   }
+                               </script>
+                           </div>
+                       </div>
+
+                       <div id="form_item_status_akhir_cpproper_id" class="form-group">
+                           <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "status_akhir_cpproper_id")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_status_akhir_cpproper_id" class="form-item-field">
+                               <input id="status_akhir_cpproper_id" name="status_akhir_cpproper_id"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_agc_tm","status_akhir_cpproper_id"))" style="width:200px;" />
+                               <span class="k-invalid-msg" data-for="status_akhir_cpproper_id"></span>
+                               <script>
+                                   var status_akhir_cpproper_id_param = {item : {value:"id",text:"nama"},parent:[{ field: 'cat_id',opr:'=', value: '49' }], order:[]};
+                                   var status_akhir_cpproper_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: status_akhir_cpproper_id_param, type: "POST" } } });
+                                   var status_akhir_cpproper_id = $("#status_akhir_cpproper_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: status_akhir_cpproper_id_ds, change:onChange_status_akhir_cpproper_id }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#status_akhir_cpproper_id").data("kendoComboBox").value('@fieldModel.status_akhir_cpproper_id'); });
+                                   function onChange_status_akhir_cpproper_id() {if ($("#status_akhir_cpproper_id").data("kendoComboBox").value() != '' && $("#status_akhir_cpproper_id").data("kendoComboBox")._oldIndex == -1) {$("#status_akhir_cpproper_id").data("kendoComboBox").value('');}
+                                   }
+                               </script>
+                           </div>
+                       </div>
+
+
+                    </div>
+                    <div class="col-lg-6">
+
+                       <div id="form_item_sarana_k3_id" class="form-group">
+                           <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "sarana_k3_id")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_sarana_k3_id" class="form-item-field">
+                               <input id="sarana_k3_id" name="sarana_k3_id"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_agc_tm","sarana_k3_id"))" style="width:200px;" />
+                               <span class="k-invalid-msg" data-for="sarana_k3_id"></span>
+                               <script>
+                                   var sarana_k3_id_param = {item : {value:"id",text:"nama"},parent:[{ field: 'cat_id',opr:'=', value: '49' }], order:[]};
+                                   var sarana_k3_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: sarana_k3_id_param, type: "POST" } } });
+                                   var sarana_k3_id = $("#sarana_k3_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: sarana_k3_id_ds, change:onChange_sarana_k3_id }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#sarana_k3_id").data("kendoComboBox").value('@fieldModel.sarana_k3_id'); });
+                                   function onChange_sarana_k3_id() {if ($("#sarana_k3_id").data("kendoComboBox").value() != '' && $("#sarana_k3_id").data("kendoComboBox")._oldIndex == -1) {$("#sarana_k3_id").data("kendoComboBox").value('');}
+                                   }
+                               </script>
+                           </div>
+                       </div>
+
+                       <div id="form_item_sarana_ktd_id" class="form-group">
+                           <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "sarana_ktd_id")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_sarana_ktd_id" class="form-item-field">
+                               <input id="sarana_ktd_id" name="sarana_ktd_id"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_agc_tm","sarana_ktd_id"))" style="width:200px;" />
+                               <span class="k-invalid-msg" data-for="sarana_ktd_id"></span>
+                               <script>
+                                   var sarana_ktd_id_param = {item : {value:"id",text:"nama"},parent:[{ field: 'cat_id',opr:'=', value: '49' }], order:[]};
+                                   var sarana_ktd_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: sarana_ktd_id_param, type: "POST" } } });
+                                   var sarana_ktd_id = $("#sarana_ktd_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: sarana_ktd_id_ds, change:onChange_sarana_ktd_id }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#sarana_ktd_id").data("kendoComboBox").value('@fieldModel.sarana_ktd_id'); });
+                                   function onChange_sarana_ktd_id() {if ($("#sarana_ktd_id").data("kendoComboBox").value() != '' && $("#sarana_ktd_id").data("kendoComboBox")._oldIndex == -1) {$("#sarana_ktd_id").data("kendoComboBox").value('');}
+                                   }
+                               </script>
+                           </div>
+                       </div>
+
+                       <div id="form_item_simulasi_ktd_id" class="form-group">
+                           <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "simulasi_ktd_id")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_simulasi_ktd_id" class="form-item-field">
+                               <input id="simulasi_ktd_id" name="simulasi_ktd_id"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_agc_tm","simulasi_ktd_id"))" style="width:200px;" />
+                               <span class="k-invalid-msg" data-for="simulasi_ktd_id"></span>
+                               <script>
+                                   var simulasi_ktd_id_param = {item : {value:"id",text:"nama"},parent:[{ field: 'cat_id',opr:'=', value: '49' }], order:[]};
+                                   var simulasi_ktd_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: simulasi_ktd_id_param, type: "POST" } } });
+                                   var simulasi_ktd_id = $("#simulasi_ktd_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: simulasi_ktd_id_ds, change:onChange_simulasi_ktd_id }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#simulasi_ktd_id").data("kendoComboBox").value('@fieldModel.simulasi_ktd_id'); });
+                                   function onChange_simulasi_ktd_id() {if ($("#simulasi_ktd_id").data("kendoComboBox").value() != '' && $("#simulasi_ktd_id").data("kendoComboBox")._oldIndex == -1) {$("#simulasi_ktd_id").data("kendoComboBox").value('');}
+                                   }
+                               </script>
+                           </div>
+                       </div>
+
+                        <div id="form_item_fr_tk" class="form-group">
+                           <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "fr_tk")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_fr_tk" class="form-item-field">
+                               <input type="number" id="fr_tk" name="fr_tk"   min="0" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_agc_tm","fr_tk"))" style ="width:200px;" />
+                               <span class="k-invalid-msg" data-for="fr_tk"></span>
+                               <script>
+                                   $("#fr_tk").kendoNumericTextBox({ format: "{0:N2}", decimals: 2 });
+                                   $(document).ready(function () {$("#fr_tk").data('kendoNumericTextBox').value('@fieldModel.fr_tk');})
+                               </script>
+                           </div>
+                       </div>
+
+                        <div id="form_item_sr_tf" class="form-group">
+                           <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "sr_tf")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_sr_tf" class="form-item-field">
+                               <input type="number" id="sr_tf" name="sr_tf"   min="0" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_agc_tm","sr_tf"))" style ="width:200px;" />
+                               <span class="k-invalid-msg" data-for="sr_tf"></span>
+                               <script>
+                                   $("#sr_tf").kendoNumericTextBox({ format: "{0:N2}", decimals: 2 });
+                                   $(document).ready(function () {$("#sr_tf").data('kendoNumericTextBox').value('@fieldModel.sr_tf');})
+                               </script>
+                           </div>
+                       </div>
+
+
+                        <div><p>&nbsp;</p></div>
+
+                       <div id="form_item_status_akhir_incident_rate_id" class="form-group">
+                           <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "status_akhir_incident_rate_id")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_status_akhir_incident_rate_id" class="form-item-field">
+                               <input id="status_akhir_incident_rate_id" name="status_akhir_incident_rate_id"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_agc_tm","status_akhir_incident_rate_id"))" style="width:200px;" />
+                               <span class="k-invalid-msg" data-for="status_akhir_incident_rate_id"></span>
+                               <script>
+                                   var status_akhir_incident_rate_id_param = {item : {value:"id",text:"nama"},parent:[{ field: 'cat_id',opr:'=', value: '49' }], order:[]};
+                                   var status_akhir_incident_rate_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: status_akhir_incident_rate_id_param, type: "POST" } } });
+                                   var status_akhir_incident_rate_id = $("#status_akhir_incident_rate_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: status_akhir_incident_rate_id_ds, change:onChange_status_akhir_incident_rate_id }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#status_akhir_incident_rate_id").data("kendoComboBox").value('@fieldModel.status_akhir_incident_rate_id'); });
+                                   function onChange_status_akhir_incident_rate_id() {if ($("#status_akhir_incident_rate_id").data("kendoComboBox").value() != '' && $("#status_akhir_incident_rate_id").data("kendoComboBox")._oldIndex == -1) {$("#status_akhir_incident_rate_id").data("kendoComboBox").value('');}
+                                   }
+                               </script>
+                           </div>
+                       </div>
+
+                       <div id="form_item_status_akhir_cpsafety_id" class="form-group">
+                           <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "status_akhir_cpsafety_id")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_status_akhir_cpsafety_id" class="form-item-field">
+                               <input id="status_akhir_cpsafety_id" name="status_akhir_cpsafety_id"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_agc_tm","status_akhir_cpsafety_id"))" style="width:200px;" />
+                               <span class="k-invalid-msg" data-for="status_akhir_cpsafety_id"></span>
+                               <script>
+                                   var status_akhir_cpsafety_id_param = {item : {value:"id",text:"nama"},parent:[{ field: 'cat_id',opr:'=', value: '49' }], order:[]};
+                                   var status_akhir_cpsafety_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: status_akhir_cpsafety_id_param, type: "POST" } } });
+                                   var status_akhir_cpsafety_id = $("#status_akhir_cpsafety_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: status_akhir_cpsafety_id_ds, change:onChange_status_akhir_cpsafety_id }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#status_akhir_cpsafety_id").data("kendoComboBox").value('@fieldModel.status_akhir_cpsafety_id'); });
+                                   function onChange_status_akhir_cpsafety_id() {if ($("#status_akhir_cpsafety_id").data("kendoComboBox").value() != '' && $("#status_akhir_cpsafety_id").data("kendoComboBox")._oldIndex == -1) {$("#status_akhir_cpsafety_id").data("kendoComboBox").value('');}
+                                   }
+                               </script>
+                           </div>
+                       </div>
+
+                       <div id="form_item_status_akhir_legal_comp_id" class="form-group">
+                           <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "status_akhir_legal_comp_id")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_status_akhir_legal_comp_id" class="form-item-field">
+                               <input id="status_akhir_legal_comp_id" name="status_akhir_legal_comp_id"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_agc_tm","status_akhir_legal_comp_id"))" style="width:200px;" />
+                               <span class="k-invalid-msg" data-for="status_akhir_legal_comp_id"></span>
+                               <script>
+                                   var status_akhir_legal_comp_id_param = {item : {value:"id",text:"nama"},parent:[{ field: 'cat_id',opr:'=', value: '49' }], order:[]};
+                                   var status_akhir_legal_comp_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: status_akhir_legal_comp_id_param, type: "POST" } } });
+                                   var status_akhir_legal_comp_id = $("#status_akhir_legal_comp_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: status_akhir_legal_comp_id_ds, change:onChange_status_akhir_legal_comp_id }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#status_akhir_legal_comp_id").data("kendoComboBox").value('@fieldModel.status_akhir_legal_comp_id'); });
+                                   function onChange_status_akhir_legal_comp_id() {if ($("#status_akhir_legal_comp_id").data("kendoComboBox").value() != '' && $("#status_akhir_legal_comp_id").data("kendoComboBox")._oldIndex == -1) {$("#status_akhir_legal_comp_id").data("kendoComboBox").value('');}
+                                   }
+                               </script>
+                           </div>
+                       </div>
+
+                       <div id="form_item_status_akhir_agc_id" class="form-group">
+                           <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "status_akhir_agc_id")</div>
+                           <div class="form-item-separator">:</div>
+                           <div id="field_item_status_akhir_agc_id" class="form-item-field">
+                               <input id="status_akhir_agc_id" name="status_akhir_agc_id"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_audit_kriteria_agc_tm","status_akhir_agc_id"))" style="width:200px;" />
+                               <span class="k-invalid-msg" data-for="status_akhir_agc_id"></span>
+                               <script>
+                                   var status_akhir_agc_id_param = {item : {value:"id",text:"nama"},parent:[{ field: 'cat_id',opr:'=', value: '49' }], order:[]};
+                                   var status_akhir_agc_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: status_akhir_agc_id_param, type: "POST" } } });
+                                   var status_akhir_agc_id = $("#status_akhir_agc_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: status_akhir_agc_id_ds, change:onChange_status_akhir_agc_id }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#status_akhir_agc_id").data("kendoComboBox").value('@fieldModel.status_akhir_agc_id'); });
+                                   function onChange_status_akhir_agc_id() {if ($("#status_akhir_agc_id").data("kendoComboBox").value() != '' && $("#status_akhir_agc_id").data("kendoComboBox")._oldIndex == -1) {$("#status_akhir_agc_id").data("kendoComboBox").value('');}
+                                   }
+                               </script>
+                           </div>
+                       </div>
+
+                    <div id="form_item_lampiran_file_path" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "lampiran_file_path")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_lampiran_file_path" class="form-item-field">
+                            <input name="lampiran_file_path_file" id="lampiran_file_path_file" type="file" />
+                            <input name="lampiran_file_path" id="lampiran_file_path" type="hidden" value="@fieldModel.lampiran_file_path" data-required-msg="@ResxHelper.GetValue("Message", "RequiredTextFormat").Replace("{0}", @ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "lampiran_file_path"))" />
+                            <script>
+                                var lampiran_file_path_init = @Html.Raw(fieldModel.lampiran_file_path_init);
+                                $("#lampiran_file_path_file").kendoUpload({multiple:true,
+                                    async: {
+                                        saveUrl: "@ViewBag.BaseUrl/AuditKriteriaAgcTm/save_lampiran_file_path",
+                                        removeUrl: "@ViewBag.BaseUrl/AuditKriteriaAgcTm/remove_lampiran_file_path",
+                                        autoUpload: true
+                                    },
+                                    validation: {allowedExtensions: [".jpg", ".jpeg", ".png", ".pdf", ".xls", ".xlsx"], maxFileSize: 2097152},
+                                    files: lampiran_file_path_init,
+                                    success: onSuccessUpload,
+                                    select: OnselectUpload_lampiran_file_path
+                                });
+                                function OnselectUpload_lampiran_file_path(e) {OnselectUpload(e, 2);}
+                            </script>
+                            <span class="k-label k-text-info">Allowed Extensions: ".jpg", ".jpeg", ".png", ".pdf", ".xls", ".xlsx"</span>
+                            <br /><span class="k-label k-text-info">Maximum FileSize: @String.Format("{0:N0}", (2097152 / 1024)) KB</span>
+                        </div>
+                    </div>
+                    
+					</div>
+				</div>
+			</div>
+			<div class="panel-footer">
+				<a id="cancel" class="k-button k-button-icontext" href="#"><i class="far fa-times-circle"></i>&nbsp;<span id="btnCancelText">@ResxHelper.GetValue("Message", "Cancel")</span></a>
+				<a id="save" class="k-button k-button-icontext" href="#"><i class="fas fa-save"></i>&nbsp;<span id="btnSaveText">@ResxHelper.GetValue("Message", "Save")</span></a>
+			</div>
+		</div>
+    </div>
+</form>
+
+<script>
+    var form_type = '@ViewData["form_type"]';
+    function ShowHideColumn(form_type)
+    {
+        if(form_type=='Add')
+        {
+            var hiden_column = [];
+            for (i = 0; i < hiden_column.length; i++) {
+                $("#form_item_"+hiden_column[i]).hide();
+            }
+        }
+        else if(form_type=='Edit')
+        {
+            var hiden_column = [];
+            for (i = 0; i < hiden_column.length; i++) {
+                $("#form_item_"+hiden_column[i]).hide();
+            }
+        }
+    }
+    function setReadOnly(form_type,opt)
+    {
+        if(opt==true)
+        {
+            if(form_type=='Add')
+            {
+
+            }
+            else if(form_type=='Edit')
+            {
+
+            }
+        }
+        else
+        {
+            if(form_type=='Add')
+            {
+
+            }
+            else if(form_type=='Edit')
+            {
+
+            }
+        }
+    }
+    function display_by_type() {
+        $("#status_akhir_acp_id").data("kendoComboBox").enable(false);		
+        $("#status_akhir_cpproper_id").data("kendoComboBox").enable(false);			
+        $("#status_akhir_incident_rate_id").data("kendoComboBox").enable(false);		
+        $("#status_akhir_cpsafety_id").data("kendoComboBox").enable(false);		
+        $("#status_akhir_agc_id").data("kendoComboBox").enable(false);		
+    }
+    $(document).ready(function () {
+        ShowHideColumn(form_type);
+        setReadOnly(form_type, true);
+        display_by_type();
+    });
+    var validatable = $("#form_edit").kendoValidator().data("kendoValidator");
+    $("#save").click(function (e) {
+        getListFileUpload("lampiran_file_path");
+		setReadOnly(form_type, false);
+        if (validatable.validate() === true) {
+            kendo.ui.progress($("#form_edit"), true);
+            $.ajax({
+                url: '@ViewData["UrlAction"]', data: $('#form_edit').serialize(), type: 'POST',
+                success: function (data) {
+                    kendo.ui.progress($("#form_edit"), false);
+                    if (data.status == 1) {
+                        window.parent.notification.show({title: data.title, message: kendo.toString(data.message) }, "success");
+                        if (window.parent.Reload_list_ta_audit_kriteria_agc_tm) {
+                            window.parent.Reload_list_ta_audit_kriteria_agc_tm();
+                        }else if (window.parent.reload_ta_audit_kriteria_agc_tm) {
+                            window.parent.reload_ta_audit_kriteria_agc_tm(data.pk);
+                        }
+                        close_self();
+                    } else if (data.status == 3) {
+                        windows.parent.notification.show({ title: data.title, message: data.message }, "error");
+                        setReadOnly(form_type, true);
+						close_self();
+                    } else {
+						setReadOnly(form_type, true);
+                        notification.show({ title: data.title, message: data.message }, "error");
+                    }
+                }
+            });
+        } else {
+            kendo.ui.progress($("#form_edit"), false);
+        }
+		setReadOnly(form_type, true);
+    });
+    $("#cancel").kendoButton();
+    $("#cancel").click(function (e) {
+        close_self();
+    });
+    function close_self() { if (window.parent.$("#dialog_ta_audit_kriteria_agc_tm").data("kendoWindow")) { window.parent.$("#dialog_ta_audit_kriteria_agc_tm").data("kendoWindow").close(); } else { window.parent.$("#dialog").data("kendoWindow").close(); } }
+</script>

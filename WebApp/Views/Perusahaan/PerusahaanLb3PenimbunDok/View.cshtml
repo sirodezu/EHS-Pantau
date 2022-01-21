@@ -1,0 +1,67 @@
+@using WebApp
+@using Microsoft.AspNetCore.Http;
+@{
+    Layout = "~/Views/Shared/_LayoutNoHeader.cshtml";
+    var fieldModel = ViewData["fieldModel"] as WebApp.Models.PerusahaanLb3PenimbunDokModel.ViewModel;
+	ViewData["Title"] = ViewData["TitleHeader"];
+    ViewData["PageName"] = "perusahaanlb3penimbundok";
+    ViewData["Heading"] = ViewData["TitleHeader"];
+    ViewData["Category1"] = "";
+    ViewData["Category2"] = "";
+}
+<div class="panel panel-form">
+	<div class="panel-container">
+		<div class="panel-heading">
+			<div class="title-header">@ViewData["TitleHeader"]</div>
+		</div>
+		<div class="panel-content">
+			<div class="row">
+				<div class="col-lg-12">
+
+                    <div id="form_item_id" class="form-group-none">
+                      <div class="form-item-label">@ResxHelper.GetValue("ref_lb3_penimbun_dokumen", "id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_id" class="form-item-view">@Html.Raw(fieldModel.id)</div>
+                  </div>
+
+                    <div id="form_item_penimbun_id" class="form-group-none">
+                      <div class="form-item-label">@ResxHelper.GetValue("ref_lb3_penimbun_dokumen", "penimbun_id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_penimbun_id" class="form-item-view">@Html.Raw(fieldModel.penimbun_id)</div>
+                  </div>
+
+                    <div id="form_item_kategori_dokumen_id" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ref_lb3_penimbun_dokumen", "kategori_dokumen_id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_kategori_dokumen_id" class="form-item-view">@Html.Raw(fieldModel.kategori_dokumen_id_text)</div>
+                  </div>
+
+                    <div id="form_item_file_name" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ref_lb3_penimbun_dokumen", "file_name")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_file_name" class="form-item-view">@Html.Raw(fieldModel.file_name)</div>
+                  </div>
+
+                    <div id="form_item_file_path" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ref_lb3_penimbun_dokumen", "file_path")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_file_path" class="form-item-view">@Html.Raw(fieldModel.file_path)</div>
+                  </div>
+
+				</div>
+			</div>
+		</div>
+		<div class="panel-footer">
+			<a id="close" class="k-button k-button-icontext" href="#"><i class="far fa-times-circle"></i>&nbsp;<span id="btnCloseText">@ResxHelper.GetValue("Message", "Close", "Tutup")</span></a>
+		</div>
+	</div>
+</div>
+<script>
+    $("#close").kendoButton();
+    $("#close").click(function (e) {
+        close_self();
+    });
+    function onCloseDialog(e) { $('#dialog').html(''); }
+    function closeDialog() { $("#dialog").data("kendoWindow").close(); }
+    function close_self() { if (window.parent.$("#dialog_ref_lb3_penimbun_dokumen").data("kendoWindow")) { window.parent.$("#dialog_ref_lb3_penimbun_dokumen").data("kendoWindow").close(); } else { window.parent.$("#dialog").data("kendoWindow").close(); } }
+</script>

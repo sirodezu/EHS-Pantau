@@ -1,0 +1,138 @@
+﻿@using WebApp;
+@using Microsoft.AspNetCore.Http;
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@{
+    Layout = "~/Views/Shared/_LayoutNoHeader.cshtml";
+    var fieldModel = ViewData["fieldModel"] as WebApp.Areas.Sys.Models.RolesModel.ViewModel;
+    var baseUrl = HttpContextAccessor.HttpContext.Request.Scheme + "://" + HttpContextAccessor.HttpContext.Request.Host + "" + HttpContextAccessor.HttpContext.Request.PathBase;
+    var display_view = "style=\"display:none;\"";
+    var display_edit = "";
+    if (ViewBag.UserId.ToString() != "-1") {
+        display_view = "";
+        display_edit = "style=\"display:none;\"";
+    }
+}
+
+<form id="form_edit" method="post">
+    <div class="card">
+        <div class="card-header">
+            <div class="title-header">@ViewData["TitleHeader"]</div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-6">
+                    <div id="form_item_id" class="form-item">
+                        <div class="form-item-label">@ResxHelper.GetValue("sys_roles", "id", "ID")<span class="required"> *</span></div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_id" class="form-item-field">
+                            <input type="number" id="id" name="id" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("sys_roles","id"))" style="width:100px;" />
+                            <span class="k-invalid-msg" data-for="id"></span>
+                            <script>
+                            $("#id").kendoNumericTextBox({ format: "#", decimals: 0 });
+                            $(document).ready(function () {$("#id").data('kendoNumericTextBox').value('@fieldModel.id');})
+                            </script>
+                            <input type="hidden" id="id_old" name="id_old" value="@fieldModel.id" />
+                        </div>
+                    </div>
+                    <div id="form_item_kode" class="form-item">
+                        <div class="form-item-label">@ResxHelper.GetValue("sys_roles", "kode")<span class="required"> *</span></div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_kode" class="form-item-field">
+                            <span @Html.Raw(display_view)>@fieldModel.kode</span>
+                            <div  @Html.Raw(display_edit)>
+                                <input type="text" title="@ResxHelper.GetValue("sys_roles", "kode") @ResxHelper.GetValue("Message", "IsNotValidCharacter","is not valid character input")." pattern="@ConfigHelper.GetValue("AllowInputCharacters")" id="kode" name="kode" class="k-textbox" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("sys_roles","kode"))" maxlength="30" style="width:350px;" value="@Html.Raw(fieldModel.kode)" />
+                                <span class="k-invalid-msg" data-for="kode"></span>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div id="form_item_nama" class="form-item">
+                        <div class="form-item-label">@ResxHelper.GetValue("sys_roles", "nama")<span class="required"> *</span></div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_nama" class="form-item-field">
+                            <input type="text" title="@ResxHelper.GetValue("sys_roles", "nama") @ResxHelper.GetValue("Message", "IsNotValidCharacter","is not valid character input")." pattern="@ConfigHelper.GetValue("AllowInputCharacters")" id="nama" name="nama" class="k-textbox" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("sys_roles","nama"))" maxlength="50" style="width:350px;" value="@Html.Raw(fieldModel.nama)" />
+                            <span class="k-invalid-msg" data-for="nama"></span>
+                        </div>
+                    </div>
+                    <div id="form_item_keterangan" class="form-item">
+                        <div class="form-item-label">@ResxHelper.GetValue("sys_roles", "keterangan", "Keterangan")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_keterangan" class="form-item-field">
+                            <textarea type="text" title="@ResxHelper.GetValue("sys_roles", "keterangan") @ResxHelper.GetValue("Message", "IsNotValidCharacter","is not valid character input")." pattern="@ConfigHelper.GetValue("AllowInputCharacters")" id="keterangan" name="keterangan" class="k-textbox" maxlength="500" style="width:350px;">@Html.Raw(fieldModel.keterangan)</textarea>
+                            <span class="k-invalid-msg" data-for="keterangan"></span>
+                        </div>
+                    </div>
+                    <div id="form_item_level_id" class="form-item">
+                        <div class="form-item-label">@ResxHelper.GetValue("sys_roles", "level_id", "Level")<span class="required"> *</span></div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_level_id" class="form-item-field">
+                            <input type="number" id="level_id" name="level_id" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("sys_roles","level_id"))" style="width:100px;" />
+                            <span class="k-invalid-msg" data-for="level_id"></span>
+                            <script>
+                            $("#level_id").kendoNumericTextBox({ format: "#", decimals: 0 });
+                            $(document).ready(function () {$("#level_id").data('kendoNumericTextBox').value('@fieldModel.level_id');})
+                            </script>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div id="form_item_rule_id" class="form-item">
+                        <div >@ResxHelper.GetValue("sys_role_rule", "rule_id", "Kewenangan")</div>
+                        <div id="rule_id_tv" style="width:400px;height:500px"></div>
+                        <input id="rule_id" name="rule_id" class="k-input k-textbox" type="hidden" value="@fieldModel.rule_id" />
+                        <script>
+                            var rule_id_ds = new kendo.data.HierarchicalDataSource({ transport: { read: { data: { role_id: "@fieldModel.id" }, type: 'POST', url: "@baseUrl/Sys/Roles/getItemRuleTreeCheck", dataType: "json" } }, schema: { model: { id: "id", hasChildren: "has_child", children: "item" ,fields: {checked: {from: "check", type: "boolean"}} } } });
+                            var rule_id_tv = $("#rule_id_tv").kendoTreeView({ autoBind: true, dataSource: rule_id_ds, dataTextField: "text", checkboxes: { checkChildren: true }, check: rule_id_onCheckRules, select: function (e) { e.preventDefault(); var checkbox = $(e.node).find(":checkbox"); var checked = checkbox.prop("checked"); checkbox.prop("checked", !checked); } }).data("kendoTreeView");
+                            function rule_id_checkedNodeIds(nodes, checkedNodes, checkedNodesText) { for (var i = 0; i < nodes.length; i++) {if (nodes[i].checked) { checkedNodes.push(nodes[i].id); checkedNodesText.push(nodes[i].text); } if (nodes[i].hasChildren) { rule_id_checkedNodeIds(nodes[i].children.view(), checkedNodes, checkedNodesText); } } }
+                            function rule_id_onCheckRules() { var checkedNodes = [], checkedNodesText = [], treeView = $("#rule_id_tv").data("kendoTreeView"), messageText, messageId; rule_id_checkedNodeIds(treeView.dataSource.view(), checkedNodes, checkedNodesText); if (checkedNodes.length > 0) { messageId = checkedNodes.join(","); messageText = checkedNodesText.join("<br />"); } else { messageId = ""; messageText = ""; } $("#rule_id").val(messageId); }
+                        </script>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer" style="text-align:center">
+            <a id="cancel" class="k-button k-button-icontext" href="#"><i class="far fa-times-circle"></i>&nbsp;<span id="btnCancelText">@ResxHelper.GetValue("Message", "Cancel", "Batal")</span></a>
+            <a id="save" class="k-button k-button-icontext" href="#"><i class="fas fa-save"></i>&nbsp;<span id="btnSaveText">@ResxHelper.GetValue("Message", "Save", "Simpan")</span></a>
+        </div>
+    </div>
+</form>
+
+<script>
+    var validatable = $("#form_edit").kendoValidator().data("kendoValidator");
+    $("#save").click(function (e) {
+        if (validatable.validate() === true) {
+            kendo.ui.progress($("#form_edit"), true);
+            $.ajax({
+                url: '@ViewData["UrlAction"]', data: $('#form_edit').serialize(), type: 'POST',
+                success: function (data) {
+                    kendo.ui.progress($("#form_edit"), false);
+                    console.log(data);
+                    if (data.status == 1) {
+                        window.parent.notification.show({title: data.title, message: kendo.toString(data.message) }, "success");
+                        if (window.parent.Reload_list_sys_roles) {
+                            window.parent.Reload_list_sys_roles();
+                        }else if (window.parent.reload_sys_roles) {
+                            window.parent.reload_sys_roles(data.pk);
+                        }
+                        close_self();
+                    } else if (data.status == 3) {
+                        windows.parent.notification.show({ title: data.title, message: data.message }, "error");
+                        close_self();
+                    } else {
+                        notification.show({ title: data.title, message: data.message }, "error");
+                    }
+                }
+            });
+        } else {
+            kendo.ui.progress($("#form_edit"), false);
+        }
+
+    });
+    $("#cancel").kendoButton();
+    $("#cancel").click(function (e) {
+        close_self();
+    });
+    function close_self() { if (window.parent.$("#dialog_sys_roles").data("kendoWindow")) { window.parent.$("#dialog_sys_roles").data("kendoWindow").close(); } else { window.parent.$("#dialog").data("kendoWindow").close(); } }
+</script>
+

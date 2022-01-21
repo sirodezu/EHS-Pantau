@@ -1,0 +1,121 @@
+@using WebApp
+@using Microsoft.AspNetCore.Http;
+@{
+    Layout = "~/Views/Shared/_LayoutNoHeader.cshtml";
+    var fieldModel = ViewData["fieldModel"] as WebApp.Models.LegalPeriksaUjiModel.ViewModel;
+	ViewData["Title"] = ViewData["TitleHeader"];
+    ViewData["PageName"] = "legalperiksauji";
+    ViewData["Heading"] = ViewData["TitleHeader"];
+    ViewData["Category1"] = "";
+    ViewData["Category2"] = "";
+}
+<div class="panel panel-form">
+	<div class="panel-container">
+		<div class="panel-heading">
+			<div class="title-header">@ViewData["TitleHeader"]</div>
+		</div>
+		<div class="panel-content">
+			<div class="row">
+				<div class="col-lg-12">
+
+                    <div id="form_item_id" class="form-group-none">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_legal_periksa_uji", "id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_id" class="form-item-view">@Html.Raw(fieldModel.id)</div>
+                  </div>
+
+                    <div id="form_item_legal_id" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_legal_periksa_uji", "legal_id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_legal_id" class="form-item-view">@Html.Raw(fieldModel.legal_id_text)</div>
+                  </div>
+
+                    <div id="form_item_jenis_pemeriksaan_pengujian_id" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_legal_periksa_uji", "jenis_pemeriksaan_pengujian_id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_jenis_pemeriksaan_pengujian_id" class="form-item-view">@Html.Raw(fieldModel.jenis_pemeriksaan_pengujian_id_text)</div>
+                  </div>
+
+                    <div id="form_item_keterangan_series_kode" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_legal_periksa_uji", "keterangan_series_kode")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_keterangan_series_kode" class="form-item-view">@Html.Raw(fieldModel.keterangan_series_kode)</div>
+                  </div>
+
+                    <div id="form_item_jumlah_titik_penaatan" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_legal_periksa_uji", "jumlah_titik_penaatan")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_jumlah_titik_penaatan" class="form-item-view">@Html.Raw(fieldModel.jumlah_titik_penaatan)</div>
+                  </div>
+
+                    <div id="form_item_periode_pemeriksaan_pengujian_id" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_legal_periksa_uji", "periode_pemeriksaan_pengujian_id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_periode_pemeriksaan_pengujian_id" class="form-item-view">@Html.Raw(fieldModel.periode_pemeriksaan_pengujian_id_text)</div>
+                  </div>
+
+                    <div id="form_item_status_penaatan_id" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_legal_periksa_uji", "status_penaatan_id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_status_penaatan_id" class="form-item-view">@Html.Raw(fieldModel.status_penaatan_id_text)</div>
+                  </div>
+
+                    <div id="form_item_hasil_pengukuran" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_legal_periksa_uji", "hasil_pengukuran")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_hasil_pengukuran" class="form-item-view">@Html.Raw(fieldModel.hasil_pengukuran)</div>
+                  </div>
+
+                    <div id="form_item_tanggal_pengujian" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_legal_periksa_uji", "tanggal_pengujian")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_tanggal_pengujian" class="form-item-view">@Html.Raw(fieldModel.tanggal_pengujian)</div>
+                  </div>
+
+                    <div id="form_item_file_name_hasil_uji" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_legal_periksa_uji", "file_name_hasil_uji")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_file_name_hasil_uji" class="form-item-view">@Html.Raw(fieldModel.file_name_hasil_uji)</div>
+                  </div>
+
+                    <div id="form_item_file_path_hasil_uji" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_legal_periksa_uji", "file_path_hasil_uji")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_file_path_hasil_uji" class="form-item-view">@Html.Raw(fieldModel.file_path_hasil_uji)</div>
+                  </div>
+
+                    <div id="form_item_file_name_baku_mutu" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_legal_periksa_uji", "file_name_baku_mutu")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_file_name_baku_mutu" class="form-item-view">@Html.Raw(fieldModel.file_name_baku_mutu)</div>
+                  </div>
+
+                    <div id="form_item_file_path_baku_mutu" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_legal_periksa_uji", "file_path_baku_mutu")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_file_path_baku_mutu" class="form-item-view">@Html.Raw(fieldModel.file_path_baku_mutu)</div>
+                  </div>
+
+                    <div id="form_item_keterangan" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ta_legal_periksa_uji", "keterangan")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_keterangan" class="form-item-view">@Html.Raw(fieldModel.keterangan)</div>
+                  </div>
+
+				</div>
+			</div>
+		</div>
+		<div class="panel-footer">
+			<a id="close" class="k-button k-button-icontext" href="#"><i class="far fa-times-circle"></i>&nbsp;<span id="btnCloseText">@ResxHelper.GetValue("Message", "Close", "Tutup")</span></a>
+		</div>
+	</div>
+</div>
+<script>
+    $("#close").kendoButton();
+    $("#close").click(function (e) {
+        close_self();
+    });
+    function onCloseDialog(e) { $('#dialog').html(''); }
+    function closeDialog() { $("#dialog").data("kendoWindow").close(); }
+    function close_self() { if (window.parent.$("#dialog_ta_legal_periksa_uji").data("kendoWindow")) { window.parent.$("#dialog_ta_legal_periksa_uji").data("kendoWindow").close(); } else { window.parent.$("#dialog").data("kendoWindow").close(); } }
+</script>

@@ -1,0 +1,182 @@
+@using WebApp
+@using Microsoft.AspNetCore.Http;
+@{
+    Layout = "~/Views/Shared/_LayoutNoHeader.cshtml";
+    var fieldModel = ViewData["fieldModel"] as WebApp.Models.HealthGcuModel.ViewModel;
+    ViewData["Title"] = ViewData["TitleHeader"];
+    ViewData["PageName"] = "healthgcu";
+    ViewData["Heading"] = ViewData["TitleHeader"];
+    ViewData["Category1"] = "";
+    ViewData["Category2"] = "";
+}
+
+<form id="form_edit" method="post" class="panel-form">
+    <div class="panel">
+        <div class="panel-heading">
+            <div class="title-header">@ViewData["TitleHeader"]</div>
+        </div>
+		<div class="panel-container">
+			<div class="panel-content">
+				<div class="row">
+                    <div class="col-lg-12">
+                        <div id="form_item_id" class="form-group-none">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_health_gcu", "id")<span id="label_req_id" class="required"> *</span></div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_id" class="form-item-field">
+                                <input type="number" id="id" name="id"  min="0" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_health_gcu","id"))" style="width:200px;" />
+                                <span class="k-invalid-msg" data-for="id"></span>
+                                <input type="hidden" id="id_old" name="id_old" value="@fieldModel.id" />
+                                <script>
+                                   $("#id").kendoNumericTextBox({ format: "{0:N0}", decimals: 0 });
+                                   $(document).ready(function () {$("#id").data('kendoNumericTextBox').value('@fieldModel.id');})
+                                </script>
+                            </div>
+                        </div>
+
+                        <div id="form_item_health_id" class="form-group-none">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_health_gcu", "health_id")<span id="label_req_health_id" class="required"> *</span></div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_health_id" class="form-item-field">
+                                <input type="hidden" id="health_id" name="health_id" value="@fieldModel.health_id" />
+                                <span class="k-invalid-msg" data-for="health_id"></span>
+                            </div>
+                        </div>
+
+                        <div id="form_item_gcu_result_id" class="form-group">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_health_gcu", "gcu_result_id")<span id="label_req_gcu_result_id" class="required"> *</span></div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_gcu_result_id" class="form-item-field">
+                                <input id="gcu_result_id" name="gcu_result_id" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_health_gcu","gcu_result_id"))" style="width:350px;" />
+                                <span class="k-invalid-msg" data-for="gcu_result_id"></span>
+                                <script>
+                                   var gcu_result_id_param = {item : {value:"id",text:"nama"},parent:[{ field: 'cat_id',opr:'=', value: '85' }], order:[]};
+                                   var gcu_result_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: gcu_result_id_param, type: "POST" } } });
+                                   var gcu_result_id = $("#gcu_result_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: gcu_result_id_ds, change:onChange_gcu_result_id }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#gcu_result_id").data("kendoComboBox").value('@fieldModel.gcu_result_id'); });
+                                   function onChange_gcu_result_id() {if ($("#gcu_result_id").data("kendoComboBox").value() != '' && $("#gcu_result_id").data("kendoComboBox")._oldIndex == -1) {$("#gcu_result_id").data("kendoComboBox").value('');}
+                                   }
+                                </script>
+                            </div>
+                        </div>
+
+                        <div id="form_item_gcu_result_normal_id" class="form-group">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_health_gcu", "gcu_result_normal_id")<span id="label_req_gcu_result_normal_id" class="required"> *</span></div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_gcu_result_normal_id" class="form-item-field">
+                                <input id="gcu_result_normal_id" name="gcu_result_normal_id" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_health_gcu","gcu_result_normal_id"))" style="width:350px;" />
+                                <span class="k-invalid-msg" data-for="gcu_result_normal_id"></span>
+                                <script>
+                                   var gcu_result_normal_id_param = {item : {value:"id",text:"nama"},parent:[{ field: 'cat_id',opr:'=', value: '86' }], order:[]};
+                                   var gcu_result_normal_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: gcu_result_normal_id_param, type: "POST" } } });
+                                   var gcu_result_normal_id = $("#gcu_result_normal_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: gcu_result_normal_id_ds, change:onChange_gcu_result_normal_id }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#gcu_result_normal_id").data("kendoComboBox").value('@fieldModel.gcu_result_normal_id'); });
+                                   function onChange_gcu_result_normal_id() {if ($("#gcu_result_normal_id").data("kendoComboBox").value() != '' && $("#gcu_result_normal_id").data("kendoComboBox")._oldIndex == -1) {$("#gcu_result_normal_id").data("kendoComboBox").value('');}
+                                   }
+                                </script>
+                            </div>
+                        </div>
+
+                        <div id="form_item_deskripsi" class="form-group">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_health_gcu", "deskripsi")<span id="label_req_deskripsi" class="required"> *</span></div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_deskripsi" class="form-item-field">
+                                <textarea type="text" id="deskripsi" name="deskripsi" class="k-textbox" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_health_gcu","deskripsi"))" maxlength="512" style="width:350px;" title="@ResxHelper.GetValue("ta_health_gcu", "deskripsi") @ResxHelper.GetValue("Message", "IsNotValidCharacter")." pattern="@ConfigHelper.GetValue("AllowInputCharacters")">@Html.Raw(fieldModel.deskripsi)</textarea>
+                                <span class="k-invalid-msg" data-for="deskripsi"></span>
+                            </div>
+                        </div>
+                        <div class="form-group"></div>
+
+                    </div>
+				</div>
+			</div>
+			<div class="panel-footer">
+				<a id="cancel" class="k-button k-button-icontext" href="#"><i class="far fa-times-circle"></i>&nbsp;<span id="btnCancelText">@ResxHelper.GetValue("Message", "Cancel")</span></a>
+				<a id="save" class="k-button k-button-icontext" href="#"><i class="fas fa-save"></i>&nbsp;<span id="btnSaveText">@ResxHelper.GetValue("Message", "Save")</span></a>
+			</div>
+		</div>
+    </div>
+</form>
+
+<script>
+    var form_type = '@ViewData["form_type"]';
+    function ShowHideColumn(form_type)
+    {
+        if(form_type=='Add')
+        {
+            var hiden_column = [];
+            for (i = 0; i < hiden_column.length; i++) {
+                $("#form_item_"+hiden_column[i]).hide();
+            }
+        }
+        else if(form_type=='Edit')
+        {
+            var hiden_column = [];
+            for (i = 0; i < hiden_column.length; i++) {
+                $("#form_item_"+hiden_column[i]).hide();
+            }
+        }
+    }
+    function setReadOnly(form_type,opt)
+    {
+        if(opt==true)
+        {
+            if(form_type=='Add')
+            {
+
+            }
+            else if(form_type=='Edit')
+            {
+
+            }
+        }
+        else
+        {
+            if(form_type=='Add')
+            {
+
+            }
+            else if(form_type=='Edit')
+            {
+
+            }
+        }
+    }
+    $(document).ready(function () {
+        ShowHideColumn(form_type);
+        setReadOnly(form_type, true);
+    });
+    var validatable = $("#form_edit").kendoValidator().data("kendoValidator");
+    $("#save").click(function (e) {
+        if (validatable.validate() === true) {
+            kendo.ui.progress($("#form_edit"), true);
+            $.ajax({
+                url: '@ViewData["UrlAction"]', data: $('#form_edit').serialize(), type: 'POST',
+                success: function (data) {
+                    kendo.ui.progress($("#form_edit"), false);
+                    if (data.status == 1) {
+                        window.parent.notification.show({title: data.title, message: kendo.toString(data.message) }, "success");
+                        if (window.parent.Reload_list_ta_health_gcu) {
+                            window.parent.Reload_list_ta_health_gcu();
+                        }else if (window.parent.reload_ta_health_gcu) {
+                            window.parent.reload_ta_health_gcu(data.pk);
+                        }
+                        close_self();
+                    } else if (data.status == 3) {
+                        windows.parent.notification.show({ title: data.title, message: data.message }, "error");
+                        close_self();
+                    } else {
+                        notification.show({ title: data.title, message: data.message }, "error");
+                    }
+                }
+            });
+        } else {
+            kendo.ui.progress($("#form_edit"), false);
+        }
+		setReadOnly(form_type, true);
+    });
+    $("#cancel").kendoButton();
+    $("#cancel").click(function (e) {
+        close_self();
+    });
+    function close_self() { if (window.parent.$("#dialog_ta_health_gcu").data("kendoWindow")) { window.parent.$("#dialog_ta_health_gcu").data("kendoWindow").close(); } else { window.parent.$("#dialog").data("kendoWindow").close(); } }
+</script>

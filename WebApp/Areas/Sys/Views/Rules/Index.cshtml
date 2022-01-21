@@ -1,0 +1,150 @@
+﻿@using WebApp;
+@using Newtonsoft.Json
+@using WebApp.Models
+@model IEnumerable<WebApp.Models.GridColumn>
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@{
+    var param = ViewData["param"] as WebApp.Models.ParamGrid;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = ResxHelper.GetValue("sys_rules", "ListTitle");
+    ViewData["PageName"] = "rules";
+    ViewData["Heading"] = ResxHelper.GetValue("sys_rules", "ListTitle");
+    ViewData["Category1"] = "System";
+    ViewData["Category2"] = "";
+}
+<style>
+    .k-grid tbody button.k-button {
+        min-width: 20px;
+    }
+</style>
+<div class="panel">
+    <div class="panel-container">
+        <div class="panel-content">
+            <div>
+                <table id="toolbar_panel" style="width:100%;">
+                    <tr>
+                        <td></td>
+                        <td style="float:right">
+                            <img id="btnExportExcel_sys_rules" title="@ResxHelper.GetValue("Message","ExportToExcel","Export Ke Excel")" style="cursor:pointer" src="~/img/excel.png" width="20" />&nbsp;
+                            <a id="btnAdd_sys_rules" onclick="AddData_sys_rules()" class="k-button" title="@ResxHelper.GetValue("Message","Add","Tambah")">@ResxHelper.GetValue("Message", "Add", "Tambah")</a>
+                        </td>
+                    <tr>
+                </table>
+            </div>
+            <div id="grid_sys_rules"></div>
+        </div>
+    </div>
+    
+</div>
+
+@section ScriptsBlock{
+    <script>
+    var record_sys_rules = 0;
+    var grid_sys_rules_heigth = 0;
+    var ds_sys_rules_filter = {};
+    //var ds_sys_rules = new kendo.data.DataSource({ transport: { read: { url: "@ViewData["UrlGetList"]", dataType: "json", type: "POST", data: ds_sys_rules_filter }, parameterMap: function (options) { if (options.filter) { for (var i = 0; i < options.filter.filters.length; i++) { if (options.filter.filters[i].field == 'tanggal') { options.filter.filters[i].value = kendo.toString(options.filter.filters[i].value, "yyyy-MM-dd"); } } } return options; } }, schema: { data: "data", total: "total", aggregates: "aggregates", model: { fields: field_data } }, aggregate: [], pageSize: 10, serverAggregates: true, serverPaging: true, serverFiltering: true, serverSorting: true });
+    var ds_sys_rules = new kendo.data.TreeListDataSource(
+        {
+            type: "json",
+            transport: {read: {
+                    url: "@ViewData["UrlGetList"]",
+                    dataType: "json",type: "POST",data: ds_sys_rules_filter}},
+            schema: {
+                model: {
+                    id: "id",
+                    parentId: "parent_id",
+                    fields: {
+                        id: { type: "number", nullable: false },
+                        parent_id: { nullable: true, type: "number" },
+                        kode: { type: "string", validation: { required: true }},
+                        nama: { type: "string", validation: { required: true } },
+                        keterangan: { type: "string" },
+                        aktif_id: { type: "number", validation: { required: true } },
+                        ordinal: { type: "number", validation: { required: true } ,format:"{0:#}"}
+                    },
+                    expanded: true
+                }
+            }
+        }
+    );
+    var filename_excel = "@ViewData["TitleHeader"]"+".xlsx";
+    var list_sys_rules = $("#grid_sys_rules").kendoTreeList({
+        excel: {
+            fileName: filename_excel,
+            filterable: true
+        },dataSource: ds_sys_rules,
+        columns: [
+            { field: "kode", expandable: true, title: "Kode", width: 250 },
+            { field: "nama", title: "Nama" },
+            { field: "keterangan", title: "Keterangan"  },
+            { field: "aktif_id_text", title: "Aktif", width: 70 },
+            { field: "ordinal", title: "Urutan", width: 70 },
+            {
+                command: [
+                    { name: "custom", text: " ",
+                      click: function(e) {
+                            var tr = $(e.target).closest("tr");
+                            var data = this.dataItem(tr);
+                             AddChidlData(data);
+                      },
+                        className: "v-plus"
+                    },{ name: "customEdit", text: " ",
+                      click: function(e) {
+                            var tr = $(e.target).closest("tr");
+                            var data = this.dataItem(tr);
+                            EditData_sys_rules(data);
+                      },className: "v-pencil"
+                    },{ name: "customDelete", text: " ",
+                      click: function(e) {
+                            var tr = $(e.target).closest("tr");
+                            var data = this.dataItem(tr);
+                            DeleteData_sys_rules(data);
+                      },
+                        className: "v-close"
+                    }
+                ], width: 90
+            }
+        ]
+    });
+
+    function Reload_list_sys_rules() { list_sys_rules.data('kendoTreeList').dataSource.read(); list_sys_rules.data('kendoTreeList').refresh(); }
+    function onDataBound_sys_rules(e) {
+
+        }
+        function AddData_sys_rules() { var contentUrl = '@ViewData["UrlAdd"]'; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: @param.btn_add_modal_width, height: @param.btn_add_modal_height, minHeight: 300 }); if (@param.btn_add_modal_width == 0) { form_edit.data("kendoWindow").center().open().maximize() } else { form_edit.data("kendoWindow").center().open().maximize(); } }
+    function AddChidlData(data) { var qs = 'parent_id=' + data.id; var contentUrl = '@ViewData["UrlAdd"]?' + qs; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: @param.btn_edit_modal_width, height: @param.btn_edit_modal_height, minHeight: 300, }); if(@param.btn_edit_modal_width == 0) {form_edit.data("kendoWindow").center().open().maximize()} else {form_edit.data("kendoWindow").center().open().maximize();} }
+    function ViewItem_sys_rules(data) { var qs = 'id=' + data.id; var contentUrl = '@ViewData["UrlView"]?' + qs; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: @param.btn_view_modal_width, height: @param.btn_view_modal_height, minHeight: 300, }); if(@param.btn_view_modal_width == 0) {form_edit.data("kendoWindow").center().open().maximize()} else {form_edit.data("kendoWindow").center().open().maximize();} }
+    function EditData_sys_rules(data) { var qs = 'id=' + data.id; var contentUrl = '@ViewData["UrlEdit"]?' + qs; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: @param.btn_edit_modal_width, height: @param.btn_edit_modal_height, minHeight: 300, }); if(@param.btn_edit_modal_width == 0) {form_edit.data("kendoWindow").center().open().maximize()} else {form_edit.data("kendoWindow").center().open().maximize();} }
+    function CopyData_sys_rules(data) { var qs = 'id=' + data.id; var contentUrl = '@ViewData["UrlCopy"]?' + qs; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: @param.btn_edit_modal_width, height: @param.btn_edit_modal_height, minHeight: 300, }); if(@param.btn_edit_modal_width == 0) {form_edit.data("kendoWindow").center().open().maximize()} else {form_edit.data("kendoWindow").center().open().maximize();} }
+    function DeleteData_sys_rules(data) {
+        var keyValue = '@ResxHelper.GetValue("sys_rules","kode"): ' + data.kode;
+        var data2 = { title: 'Apakah anda yakin akan menghapus data ini?', msg: keyValue };
+        var winconfirm = $("#dialogconfirm").kendoWindow({ title: "@ResxHelper.GetValue("sys_rules","DeleteTitle")", modal: true, visible: false, resizable: true, draggable: true, width: "500px", height: "150px" }).data("kendoWindow");
+        winconfirm.content(confirmTemplate(data2));
+        winconfirm.center(); winconfirm.open();
+        $("#yesButton").click(function () {
+            $.ajax({
+                data: { id: data.id}, url: '@ViewData["UrlDelete"]', type: 'POST'
+                , success: function (data) {
+                    if (data.status != 1) {
+                        notification.show({ title: data.title, message: kendo.toString(data.message) }, "error");
+                        winconfirm.close();
+                    } else {
+                        notification.show({ message: kendo.toString(data.message) }, "success");
+                        Reload_list_sys_rules();
+                        winconfirm.close();
+                    }
+                }
+            });
+        });
+        $("#noButton").click(function () { winconfirm.close(); });
+    }
+    $("#btnExportExcel_sys_rules").click(function(e) {var grid = $("#grid_sys_rules").data("kendoTreeList");grid.saveAsExcel();});
+    function onCloseDialog(e) { $('#dialog').html(''); }
+    function closeDialog() { $("#dialog").data("kendoWindow").close(); }
+    $(document).ready(function () {
+        if ("@param.btnAdd" != "1") { $("#btnAdd_sys_rules").hide(); }
+    });
+
+    </script>
+}

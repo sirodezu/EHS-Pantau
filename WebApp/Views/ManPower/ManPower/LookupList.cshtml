@@ -1,0 +1,339 @@
+@using WebApp
+@using Newtonsoft.Json
+@{
+    Layout = "~/Views/Shared/_LayoutNoHeader.cshtml";
+	var filterColumn = ViewData["filterColumn"] as WebApp.Models.ManPowerModel.ViewModel;
+    ViewData["Title"] = ViewData["TitleHeader"];
+    ViewData["PageName"] = "manpower";
+    ViewData["Heading"] = ViewData["TitleHeader"];
+    ViewData["Category1"] = "";
+    ViewData["Category2"] = "";
+}
+<div class="panel">
+    <div class="panel-container">
+		<div class="panel-content">
+			<div id="collapse_filter_ta_mp" class="panel panel-collapse collapse">
+                <div class="panel-heading-filter">
+                    @ResxHelper.GetValue("Message", "FilterDataHeader", "Filter Data")
+                </div>
+				<div class="panel-body-filter">
+                    <section class="filter_cols">
+                        <div id="fiter_ehs_area_id" class="filter_col">
+                            <label for="ehs_area_id" class="label-filter">@ResxHelper.GetValue("ta_mp", "ehs_area_id"): </label>
+                            <input id="ehs_area_id" name="ehs_area_id" style="width: 250px;" />
+                        </div>
+
+                        <div id="fiter_business_area_id" class="filter_col">
+                            <label for="business_area_id" class="label-filter">@ResxHelper.GetValue("ta_mp", "business_area_id"): </label>
+                            <input id="business_area_id" name="business_area_id" style="width: 250px;" />
+                        </div>
+
+                        <div id="fiter_personal_area_id" class="filter_col">
+                            <label for="personal_area_id" class="label-filter">@ResxHelper.GetValue("ta_mp", "personal_area_id"): </label>
+                            <input id="personal_area_id" name="personal_area_id" style="width: 250px;" />
+                        </div>
+
+                        <div id="fiter_personal_sub_area_id" class="filter_col">
+                            <label for="personal_sub_area_id" class="label-filter">@ResxHelper.GetValue("ta_mp", "personal_sub_area_id"): </label>
+                            <input id="personal_sub_area_id" name="personal_sub_area_id" style="width: 250px;" />
+                        </div>
+
+                        <div id="fiter_karyawan_nonkaryawan_id" class="filter_col">
+                            <label for="karyawan_nonkaryawan_id" class="label-filter">@ResxHelper.GetValue("ta_mp", "karyawan_nonkaryawan_id"): </label>
+                            <input id="karyawan_nonkaryawan_id" name="karyawan_nonkaryawan_id" style="width: 250px;" />
+                        </div>
+                        <div id="fiter_company_id" class="filter_col">
+                            <label for="company_id" class="label-filter">@ResxHelper.GetValue("ta_mp", "company_id"): </label>
+                            <input id="company_id" name="company_id" style="width: 250px;" />
+                        </div>
+                        <div id="fiter_user_nonuser_id" class="filter_col">
+                            <label for="user_nonuser_id" class="label-filter">@ResxHelper.GetValue("ta_mp", "user_nonuser_id"): </label>
+                            <input id="user_nonuser_id" name="user_nonuser_id" style="width: 250px;" />
+                        </div>
+
+                        <div id="fiter_company_id" class="filter_col">
+                            &nbsp;
+                        </div>
+                    </section>
+				</div>
+				<div class="panel-footer-filter">
+					<a id="btnResetFilter_ta_mp" onclick="reset_filter_ta_mp()" class="k-button" title="Reset Filter">@ResxHelper.GetValue("Message", "ResetFilter", "Reset Filter")</a>
+				</div>
+			</div>
+			<div>
+				<table id="toolbar_panel" style="width:100%;">
+					<tr>
+						<td>
+							<span id="quick_search_template_ta_mp" class="k-textbox k-space-right"><input id="txtSearch_ta_mp" placeholder="@ResxHelper.GetValue("Message","QuickSearch")" value="" /><a id="btnSearch_ta_mp" href="#" class="k-icon k-i-search">&nbsp;</a></span>
+							<img id="btnSearchByColumn_ta_mp" title="@ResxHelper.GetValue("Message","ShowSearchByColumn")" style="cursor:pointer" src="~/img/search_by_column.png" width="20">
+							<img id="btnShowHideColumn_ta_mp" title="@ResxHelper.GetValue("Message","ShowHideColumn")" style="cursor:pointer" src="~/img/show_hide_column.png" width="20">
+							<a id="btnShowHideFilter_ta_mp" data-toggle="collapse" href="#collapse_filter_ta_mp" style="display:none">@ResxHelper.GetValue("Message", "ShowFilter", "Tampilkan Filter")</a>
+						</td>
+						<td style="float:right">
+							<img id="btnExportExcel_ta_mp" title="@ResxHelper.GetValue("Message","ExportToExcel")" style="cursor:pointer" src="~/img/excel.png" width="20" />&nbsp;
+						</td>
+					<tr>
+				</table>
+			</div>
+			<div id="grid_ta_mp"></div>
+		</div>
+    </div>
+
+</div>
+<div id="WinShowHideColumn_ta_mp" style="display: none">
+    <div id="attr_column_show_hide" style="width:auto;height:auto;overflow-y:scroll;"></div>
+</div>
+@section ScriptsBlock {
+    <script>
+		var param_ta_mp = @Html.Raw(JsonConvert.SerializeObject(WebApp.Models.ManPowerModel.GetListParam()));
+		var displayName_ta_mp = @Html.Raw(JsonConvert.SerializeObject(WebApp.Models.ManPowerModel.GetDisplayItem()));
+		var pkKey_ta_mp = @Html.Raw(JsonConvert.SerializeObject(WebApp.Models.ManPowerModel._pkKey));
+		var j_data_ta_mp = @Html.Raw(JsonConvert.SerializeObject(WebApp.Models.ManPowerModel.GetGridColumn()));
+		var colNameTooltip_ta_mp = [];
+		var colbuttonCount_ta_mp = 0;
+		var columnWidth = 40;
+		colbuttonCount_ta_mp += param_ta_mp.btnView == 1 ? 2 : 0;
+		if (colbuttonCount_ta_mp == 1) { columnWidth = 40; } else if (colbuttonCount_ta_mp == 2) { columnWidth = 60; } else if (colbuttonCount_ta_mp == 3) { columnWidth = 95; } else if (colbuttonCount_ta_mp == 4) { columnWidth = 120; }
+		var columnActionWidth_ta_mp = columnWidth + "px";
+		var item_data = "";
+		var col_att = [];
+		var showhide_column = "";
+		var j = 0;
+		var checked = '';
+		var aggregate_data_ta_mp = [];
+		var agg_i = 0
+		jQuery.each(j_data_ta_mp, function (i, val) {
+			var footerTemplate = "";
+			if (val.aggregate != "") {
+				footerTemplate = val.footerTemplate!="" ? val.footerTemplate : '#='+val.aggregate+'#';
+				aggregate_data_ta_mp[agg_i] = { field: val.name, aggregate: val.aggregate };
+				agg_i++;
+			}
+			item_data += item_data != "" ? "," : "";
+			item_data += '"' + val.name + '" : { "type": "' + val.type + '" } ';
+			if (val.display) {
+				col_att[j] = { field: val.name, title: val.title, hidden: JSON.parse(val.hidden), width: val.width, format: val.format, attributes: JSON.parse(val.attributes), encoded: JSON.parse(val.encoded), filterable: JSON.parse(val.filterable), sortable: JSON.parse(val.sortable), headerAttributes: { style: "white-space: normal;vertical-align:middle;text-align:center" },aggregates: [val.aggregate], footerTemplate: footerTemplate };
+				j++;
+				checked = '';if (val.hidden.toString() == 'false') {checked = 'checked';}
+				showhide_column += '<div><input type="checkbox" onclick="ShowHideColumn_ta_mp(this)" '+ checked +' value="' + val.name + '" /> ' + val.title + '</div>';
+			}
+		});
+		showhide_column += '<div><input type="checkbox" onclick="ShowHideColumn_ta_mp(this)" checked value="' + j + '" /> Action</div>';
+		item_data = '{' + item_data + '}';
+		var field_data = JSON.parse(item_data);
+		var columns_data = col_att;
+		var col_command = [];
+		var k = 0;
+		if (param_ta_mp.btnView== 1) {col_command[k] = { name: "View", text: "", className: "v-view", click: function (e) { var tr = $(e.target).closest("tr"); var data = this.dataItem(tr); ViewItem_ta_mp(data); } };k++;}
+		if (param_ta_mp.btnView== 1) {col_command[k] = { name: "Select", text: "", className: "v-select", click: function (e) { var tr = $(e.target).closest("tr"); var data = this.dataItem(tr); SelectData_ta_mp(data); } };k++;}
+		if (colbuttonCount_ta_mp > 0) {
+			columns_data[j] = {command: col_command, width: columnActionWidth_ta_mp, attributes: " style=\"vertical-align:top;\""};
+		}
+		//==============================
+        //=== filter ehs_area_id
+		var ehs_area_id_param = { item: { value: "id", text: "kode,nama" }, parent: [{field:"obj_data",value:"ManPower"}], order:[]};
+        var ehs_area_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/EHSArea/LookupDataEA", dataType: "json", data: ehs_area_id_param, type: "POST" } } });
+        var ehs_area_id = $("#ehs_area_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", change: onChange_ehs_area_id, dataSource: ehs_area_id_ds }).data("kendoComboBox");
+        $(document).ready(function () { $("#ehs_area_id").data("kendoComboBox").value('@filterColumn.ehs_area_id'); });
+        function onChange_ehs_area_id() {
+            if ($("#ehs_area_id").data("kendoComboBox").value() != '' && $("#ehs_area_id").data("kendoComboBox")._oldIndex == -1) { $("#ehs_area_id").data("kendoComboBox").value(''); }
+            reload_business_area_id();
+            onFilterHeader_ta_mp();
+        }
+
+        //=== filter business_area_id
+        var business_area_id_param = { item: { value: 'id', text: 'kode,nama', distinct: '0' }, parent: [{ field: 'ehs_area_id', opr: '=', value: '@filterColumn.ehs_area_id' }, {field:"obj_data",value:"ManPower"}], order: [] };
+        var business_area_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/BusinessArea/LookupDataBA", dataType: "json", data: business_area_id_param, type: "POST" } } });
+        var business_area_id = $("#business_area_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", change: onChange_business_area_id, dataSource: business_area_id_ds }).data("kendoComboBox");
+        $(document).ready(function () { $("#business_area_id").data("kendoComboBox").value('@filterColumn.business_area_id'); });
+        function onChange_business_area_id() {
+            if ($("#business_area_id").data("kendoComboBox").value() != '' && $("#business_area_id").data("kendoComboBox")._oldIndex == -1) { $("#business_area_id").data("kendoComboBox").value(''); }
+            //reload_person_id();
+            reload_personal_area_id();
+            reload_personal_sub_area_id();
+            //reload_departemen_id();
+            onFilterHeader_ta_mp();
+        }
+
+        function reload_business_area_id(){
+            $("#business_area_id").data("kendoComboBox").value('');
+            var ehs_area_id = $("#ehs_area_id").data("kendoComboBox").value();
+            var business_area_id_param = { item: { value: 'id', text: 'kode,nama' }, parent: [{ field: 'ehs_area_id',opr:'=', value: ehs_area_id }], order: [] };
+            $("#business_area_id").data("kendoComboBox").dataSource.read(business_area_id_param);
+        }
+
+
+        //=== filter personal_area_id
+        var personal_area_id_param = { item: { value: 'id', text: 'kode,nama', distinct: '0' } ,parent:[{ field: 'ba_id',opr:'=', value: '@filterColumn.business_area_id' }, {field:"obj_data",value:"ManPower"}], order:[]};
+        var personal_area_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/PersonalArea/LookupDataPA", dataType: "json", data: personal_area_id_param, type: "POST" } } });
+        var personal_area_id = $("#personal_area_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", change: onChange_personal_area_id, dataSource: personal_area_id_ds }).data("kendoComboBox");
+        $(document).ready(function () { $("#personal_area_id").data("kendoComboBox").value('@filterColumn.personal_area_id'); });
+        function onChange_personal_area_id() {
+            if ($("#personal_area_id").data("kendoComboBox").value() != '' && $("#personal_area_id").data("kendoComboBox")._oldIndex == -1) { $("#personal_area_id").data("kendoComboBox").value(''); }
+            reload_personal_sub_area_id();
+            onFilterHeader_ta_mp();
+        }
+
+        function reload_personal_area_id(){
+            $("#personal_area_id").data("kendoComboBox").value('');
+            var business_area_id = $("#business_area_id").data("kendoComboBox").value();
+            var personal_area_id_param = { item: { value: 'id', text: 'kode,nama' }, parent: [{ field: 'ba_id',opr:'=', value: business_area_id }], order: [] };
+            $("#personal_area_id").data("kendoComboBox").dataSource.read(personal_area_id_param);
+        }
+
+        //=== filter personal_sub_area_id
+        var personal_sub_area_id_param = { item: { value: 'id', text: 'kode,nama', distinct: '0' } ,parent:[{ field: 'ba_id',opr:'=', value: '@filterColumn.business_area_id' }, { field: 'pa_id',opr:'=', value: '@filterColumn.personal_area_id' }, {field:"obj_data",value:"ManPower"}], order:[]};
+        var personal_sub_area_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/PersonalSubArea/LookupDataPSA", dataType: "json", data: personal_sub_area_id_param, type: "POST" } } });
+        var personal_sub_area_id = $("#personal_sub_area_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", change: onChange_personal_sub_area_id, dataSource: personal_sub_area_id_ds }).data("kendoComboBox");
+        $(document).ready(function () { $("#personal_sub_area_id").data("kendoComboBox").value('@filterColumn.personal_sub_area_id'); });
+        function onChange_personal_sub_area_id() {
+            if ($("#personal_sub_area_id").data("kendoComboBox").value() != '' && $("#personal_sub_area_id").data("kendoComboBox")._oldIndex == -1) { $("#personal_sub_area_id").data("kendoComboBox").value(''); }
+                                                    //reload_person_id();
+            onFilterHeader_ta_mp();
+        }
+
+        function reload_personal_sub_area_id(){
+            $("#personal_sub_area_id").data("kendoComboBox").value('');
+            var business_area_id = $("#business_area_id").data("kendoComboBox").value();
+            var personal_area_id = $("#personal_area_id").data("kendoComboBox").value();
+            var personal_sub_area_id_param = { item: { value: 'id', text: 'kode,nama' }, parent: [{ field: 'ba_id',opr:'=', value: business_area_id }, { field: 'pa_id',opr:'=', value: personal_area_id }], order: [] };
+            $("#personal_sub_area_id").data("kendoComboBox").dataSource.read(personal_sub_area_id_param);
+        }
+
+        //==============================
+        //=== filter karyawan_nonkaryawan_id
+		var user_nonuser_id_param = {item : {value:"id",text:"nama"},parent:[{ field: 'cat_id',opr:'=', value: '148' }], order:[]};
+        var user_nonuser_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: user_nonuser_id_param, type: "POST" } } });
+        var user_nonuser_id = $("#user_nonuser_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: user_nonuser_id_ds, change:onChange_user_nonuser_id }).data("kendoComboBox");
+        $(document).ready(function () { $("#user_nonuser_id").data("kendoComboBox").value('@filterColumn.user_nonuser_id'); });
+        function onChange_user_nonuser_id() {
+            if ($("#user_nonuser_id").data("kendoComboBox").value() != '' && $("#user_nonuser_id").data("kendoComboBox")._oldIndex == -1) { $("#user_nonuser_id").data("kendoComboBox").value(''); }
+            onFilterHeader_ta_mp();
+        }
+        //==============================
+        //=== filter karyawan_nonkaryawan_id
+		var karyawan_nonkaryawan_id_param = {item : {value:"id",text:"nama"},parent:[{ field: 'cat_id',opr:'=', value: '147' }], order:[]};
+        var karyawan_nonkaryawan_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: karyawan_nonkaryawan_id_param, type: "POST" } } });
+        var karyawan_nonkaryawan_id = $("#karyawan_nonkaryawan_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: karyawan_nonkaryawan_id_ds, change:onChange_karyawan_nonkaryawan_id }).data("kendoComboBox");
+        $(document).ready(function () { $("#karyawan_nonkaryawan_id").data("kendoComboBox").value('@filterColumn.karyawan_nonkaryawan_id'); });
+        function onChange_karyawan_nonkaryawan_id() {
+            if ($("#karyawan_nonkaryawan_id").data("kendoComboBox").value() != '' && $("#karyawan_nonkaryawan_id").data("kendoComboBox")._oldIndex == -1) { $("#karyawan_nonkaryawan_id").data("kendoComboBox").value(''); }
+            reload_company_id();
+            onFilterHeader_ta_mp();
+        }
+        //==============================
+        //=== filter company_id
+		var company_id_param = {item : {value:"id",text:"nama"},parent:[{ field: 'comtype_id',opr:'=', value: '@filterColumn.karyawan_nonkaryawan_id' }], order:[]};
+        var company_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/Company/LookupData", dataType: "json", data: company_id_param, type: "POST" } } });
+        var company_id = $("#company_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: company_id_ds, change:onChange_company_id }).data("kendoComboBox");
+        $(document).ready(function () { $("#company_id").data("kendoComboBox").value('@filterColumn.company_id'); });
+        function onChange_company_id() {
+            if ($("#company_id").data("kendoComboBox").value() != '' && $("#company_id").data("kendoComboBox")._oldIndex == -1) { $("#company_id").data("kendoComboBox").value(''); }
+            onFilterHeader_ta_mp();
+        }
+        function reload_company_id(){
+            $("#company_id").data("kendoComboBox").value('');
+            var karyawan_nonkaryawan_id = $("#karyawan_nonkaryawan_id").data("kendoComboBox").value();
+            var company_id_param = { item: { value: 'id', text: 'nama' }, parent: [{ field: 'comtype_id',opr:'=', value: karyawan_nonkaryawan_id }], order: [] };
+            $("#company_id").data("kendoComboBox").dataSource.read(company_id_param);
+        }
+
+		//==============================
+		$("#collapse_filter_ta_mp").on('shown.bs.collapse', function () {
+			$("#btnShowHideFilter_ta_mp").html('@ResxHelper.GetValue("Message", "HideFilter")');
+		});
+		$("#collapse_filter_ta_mp").on('hidden.bs.collapse', function () {
+			$("#btnShowHideFilter_ta_mp").html('@ResxHelper.GetValue("Message", "ShowFilter")');
+		});
+		//==============================
+		var record_ta_mp = 0;
+		var grid_ta_mp_heigth = 0;
+		var ds_ta_mp_filter = { filter_by_column: [{ name: 'ehs_area_id',value: '@filterColumn.ehs_area_id' }, { name: 'business_area_id',value: '@filterColumn.business_area_id' }, { name: 'personal_area_id',value: '@filterColumn.personal_area_id' }, { name: 'personal_sub_area_id',value: '@filterColumn.personal_sub_area_id' }] };
+		var ds_ta_mp = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/ManPower/GetListData", dataType: "json", type: "POST", data: ds_ta_mp_filter }, parameterMap: function (options) { if (options.filter) { for (var i = 0; i < options.filter.filters.length; i++) { if (options.filter.filters[i].field == 'tanggal') { options.filter.filters[i].value = kendo.toString(options.filter.filters[i].value, "yyyy-MM-dd"); } } } return options; } }, schema: { data: "data", total: "total", aggregates: "aggregates", model: { fields: field_data } }, aggregate: aggregate_data_ta_mp, pageSize: 10, serverAggregates: true, serverPaging: true, serverFiltering: true, serverSorting: true });
+		var list_ta_mp = $("#grid_ta_mp").kendoGrid({
+			excel: { allPages: true, fileName: '@ViewData["TitleHeader"]'+'.xlsx' },
+			dataSource: ds_ta_mp, dataBound: onDataBound_ta_mp, height: grid_ta_mp_heigth, scrollable: true, groupable: false, columnMenu: false, menu: true, resizable: true, filterable: false, sortable: { mode: "multiple", allowUnsort: true }, pageable: { refresh: true, pageSizes: [5, 10, 20, 50, 100, 200], buttonCount: 5 },
+			columns: columns_data, editable: false, dataBinding: function () { record_ta_mp = (this.dataSource.page() - 1) * this.dataSource.pageSize(); }
+		});
+		function getParamgrid_ta_mp() {
+			var filter_by_column= [];var k = 0;
+	        if ($("#ehs_area_id").data("kendoComboBox").value() != "") {filter_by_column[k] = { name: "ehs_area_id", field: "ta_mp.ehs_area_id", opr: "=", value: $("#ehs_area_id").data("kendoComboBox").value() };k++;}
+            if ($("#business_area_id").data("kendoComboBox").value() != "") {filter_by_column[k] = { name: "business_area_id", field: "ta_mp.business_area_id", opr: "=", value: $("#business_area_id").data("kendoComboBox").value() };k++;}
+            if ($("#personal_area_id").data("kendoComboBox").value() != "") {filter_by_column[k] = { name: "personal_area_id", field: "ta_mp.personal_area_id", opr: "=", value: $("#personal_area_id").data("kendoComboBox").value() };k++;}
+            if ($("#personal_sub_area_id").data("kendoComboBox").value() != "") {filter_by_column[k] = { name: "personal_sub_area_id", field: "ta_mp.personal_sub_area_id", opr: "=", value: $("#personal_sub_area_id").data("kendoComboBox").value() };k++;}
+            if ($("#user_nonuser_id").data("kendoComboBox").value() != "") {filter_by_column[k] = { name: "user_nonuser_id", field: "ta_mp.user_nonuser_id", opr: "=", value: $("#user_nonuser_id").data("kendoComboBox").value() };k++;}
+			if ($("#karyawan_nonkaryawan_id").data("kendoComboBox").value() != "") {filter_by_column[k] = { name: "karyawan_nonkaryawan_id", field: "ta_mp.karyawan_nonkaryawan_id", opr: "=", value: $("#karyawan_nonkaryawan_id").data("kendoComboBox").value() };k++;}
+			if ($("#company_id").data("kendoComboBox").value() != "") {filter_by_column[k] = { name: "company_id", field: "ta_mp.company_id", opr: "=", value: $("#company_id").data("kendoComboBox").value() };k++;}
+			return { filter_by_column: filter_by_column };
+		}
+		function reset_filter_ta_mp() {
+	        $("#ehs_area_id").data("kendoComboBox").value('');
+            $("#business_area_id").data("kendoComboBox").value('');
+            $("#personal_area_id").data("kendoComboBox").value('');
+            $("#personal_sub_area_id").data("kendoComboBox").value('');
+			$("#user_nonuser_id").data("kendoComboBox").value('');
+			$("#karyawan_nonkaryawan_id").data("kendoComboBox").value('');
+			$("#company_id").data("kendoComboBox").value('');
+			onFilterHeader_ta_mp();
+		}
+		function onFilterHeader_ta_mp() {
+			$("#txtSearch_ta_mp").val('');
+			paramValue = getParamgrid_ta_mp();
+			if (list_ta_mp.data('kendoGrid').dataSource.page() > 1) {
+				list_ta_mp.data('kendoGrid').dataSource.page(0);
+			}
+			list_ta_mp.data('kendoGrid').dataSource.transport.options.read.data = paramValue;
+			list_ta_mp.data("kendoGrid").dataSource.filter([]);
+		};
+		$("#btnSearchByColumn_ta_mp").click(function () { var grid_ta_mp_heigth_filter = grid_ta_mp_heigth + 38; if (list_ta_mp.data("kendoGrid").options.filterable == false) { $('#btnSearchByColumn_ta_mp').prop('title', '@ResxHelper.GetValue("Message", "HideSearchByColumn")'); $("#txtSearch_ta_mp").val(''); if ('1' == '1') { $("#quick_search_template_ta_mp").hide(); }; QuickSearch_ta_mp(); list_ta_mp.data("kendoGrid").setOptions({ height: grid_ta_mp_heigth_filter, filterable: { mode: "row" }, }); } else { $('#btnSearchByColumn_ta_mp').prop('title', '@ResxHelper.GetValue("Message", "ShowSearchByColumn")'); $("#txtSearch_ta_mp").val(''); if ('1' == '1') { $("#quick_search_template_ta_mp").show(); }; QuickSearch_ta_mp(); list_ta_mp.data("kendoGrid").setOptions({ height: grid_ta_mp_heigth, filterable: false, }); } });
+		$("#btnSearch_ta_mp").click(function () { QuickSearch_ta_mp(); });
+		$('#txtSearch_ta_mp').keypress(function (e) { if (e.keyCode == 13) { QuickSearch_ta_mp(); } });
+		function QuickSearch_ta_mp() {
+			$filter = new Array();
+			$x = $("#txtSearch_ta_mp").val();
+			if ($x) {jQuery.each(j_data_ta_mp, function (i, val) {if (val.display && val.qsearch && val.type =='string') {$filter.push({ name: val.name, opr: "contains", value: $x });}});}
+			if ($filter.length > 0) {list_ta_mp.data("kendoGrid").dataSource.filter({ logic: "or", filters: $filter });}else {list_ta_mp.data("kendoGrid").dataSource.filter([]);}
+		}
+		function Reload_list_ta_mp() { list_ta_mp.data('kendoGrid').dataSource.read(); list_ta_mp.data('kendoGrid').refresh(); }
+		function onDataBound_ta_mp(e) {
+			if (colbuttonCount_ta_mp > 0) {
+				var grid = $("#grid_ta_mp").data("kendoGrid"); var list_ta_mp = grid.dataSource.view();
+				for (var i = 0; i < list_ta_mp.length; i++) {
+					var currentUid = list_ta_mp[i].uid; var currenRow = grid.table.find("tr[data-uid='" + currentUid + "']");
+					if (param_ta_mp.btnView == 1) {
+						var viewButton = $(currenRow).find(".k-grid-View"); viewButton.attr("title", "@ResxHelper.GetValue("Message", "View")");
+                        if ("@ViewData["AllowView"]" == "1") { } else { viewButton.hide(); }
+                        var SelectButton = $(currenRow).find(".k-grid-Select"); SelectButton.attr("title", "@ResxHelper.GetValue("Message", "Select", "Pilih")");
+						if ("@ViewData["AllowView"]" == "1") {} else {SelectButton.hide();}
+					}
+
+				}
+			}
+		}
+		function ViewItem_ta_mp(data) { var qs = '';jQuery.each(pkKey_ta_mp, function (i, val) {qs += qs != "" ? "&" : "";qs += val+'=' + data[val];});var contentUrl = '@ViewBag.BaseUrl/ManPower/ViewItem?' + qs; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: param_ta_mp.btn_view_modal_width, height: param_ta_mp.btn_view_modal_height, minHeight: 300, }); if (param_ta_mp.btn_view_modal_width == 0) { form_edit.data("kendoWindow").center().open().maximize() } else { form_edit.data("kendoWindow").center().open(); }}
+        function SelectData_ta_mp(data) {
+            var id = data.id;
+            if ("@filterColumn.fn"== "get_mp") {
+                if (window.parent.get_mp) {
+                    window.parent.get_mp(id);
+                    window.parent.$("#dialog").data("kendoWindow").close();
+                }
+            }
+            
+        }
+
+		function onCloseDialog(e) { $('#dialog').html(''); }
+		function closeDialog() { $("#dialog").data("kendoWindow").close(); }
+		$("#btnExportExcel_ta_mp").click(function (e) { var grid = $("#grid_ta_mp").data("kendoGrid"); grid.saveAsExcel(); });
+		function ShowHideColumn_ta_mp(e) { colname = $.isNumeric(e.value) ? parseInt(e.value) : e.value; if (e.checked) { $("#grid_ta_mp").data("kendoGrid").showColumn(colname); } else { $("#grid_ta_mp").data("kendoGrid").hideColumn(colname); } }
+		$(document).ready(function () {
+			$("#attr_column_show_hide").html(showhide_column);
+			if (param_ta_mp.ShowFilter == 1) { $("#btnShowHideFilter_ta_mp").show(); }
+			if (param_ta_mp.quick_search != 1) { $("#quick_search_template_ta_mp").hide(); }
+			if (param_ta_mp.search_by_column  != 1) { $("#btnSearchByColumn_ta_mp").hide(); }
+			if (param_ta_mp.show_hide_column != 1) { $("#btnShowHideColumn_ta_mp").hide(); }
+			if (param_ta_mp.export_exl != 1) { $("#btnExportExcel_ta_mp").hide(); }
+			$("#btnShowHideColumn_ta_mp").click(function () { var x = $("#btnShowHideColumn_ta_mp").offset().left; var y = $("#btnShowHideColumn_ta_mp").offset().top; if (!WinShowHideColumn_ta_mp) { var WinShowHideColumn_ta_mp = $("#WinShowHideColumn_ta_mp").kendoWindow({ width: "300px", position: { left: x, top: y }, title: "@ResxHelper.GetValue("Message","ShowHideColumn")", actions: ["Close"] }); } WinShowHideColumn_ta_mp.data("kendoWindow").open(); });
+		});
+    </script>
+}

@@ -1,0 +1,133 @@
+@using WebApp
+@using Microsoft.AspNetCore.Http;
+@{
+    Layout = "~/Views/Shared/_LayoutNoHeader.cshtml";
+    var fieldModel = ViewData["fieldModel"] as WebApp.Models.AuditModel.ViewModel;
+	ViewData["Title"] = ViewData["TitleHeader"];
+    ViewData["PageName"] = "audit";
+    ViewData["Heading"] = ViewData["TitleHeader"];
+    ViewData["Category1"] = "";
+    ViewData["Category2"] = "";
+}
+<div class="panel panel-form">
+	<div class="panel-container">
+		<div class="panel-heading">
+			<div class="title-header">@ViewData["TitleHeader"]</div>
+		</div>
+        <div class="panel-content">
+            <div class="row">
+                <div class="col-lg-12">
+
+                    <div id="form_item_id" class="form-group-none">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_audit", "id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_id" class="form-item-view">@Html.Raw(fieldModel.id)</div>
+                    </div>
+
+                    <div id="form_item_ehs_area_id" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_audit", "ehs_area_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_ehs_area_id" class="form-item-view">@Html.Raw(fieldModel.ehs_area_id_text)</div>
+                    </div>
+
+                    <div id="form_item_ba_id" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_audit", "ba_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_ba_id" class="form-item-view">@Html.Raw(fieldModel.ba_id_text)</div>
+                    </div>
+
+                    <div id="form_item_pa_id" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_audit", "pa_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_pa_id" class="form-item-view">@Html.Raw(fieldModel.pa_id_text)</div>
+                    </div>
+
+                    <div id="form_item_psa_id" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_audit", "psa_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_psa_id" class="form-item-view">@Html.Raw(fieldModel.psa_id_text)</div>
+                    </div>
+
+                    <div id="form_item_tgl_audit" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_audit", "tgl_audit")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_tgl_audit" class="form-item-view">@Html.Raw(fieldModel.tgl_audit)</div>
+                    </div>
+
+                    <div id="form_item_pelaksana_audit_id" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_audit", "pelaksana_audit_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_pelaksana_audit_id" class="form-item-view">@Html.Raw(fieldModel.pelaksana_audit_id_text)</div>
+                    </div>
+
+                    <div id="form_item_nama_auditor" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_audit", "nama_auditor")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_nama_auditor" class="form-item-view">@Html.Raw(fieldModel.nama_auditor)</div>
+                    </div>
+
+                    <div id="form_item_jenis_audit_id" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_audit", "jenis_audit_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_jenis_audit_id" class="form-item-view">@Html.Raw(fieldModel.jenis_audit_id_text)</div>
+                    </div>
+
+                    <div id="form_item_masa_berlaku" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_audit", "masa_berlaku")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_masa_berlaku" class="form-item-view">@Html.Raw(fieldModel.masa_berlaku)</div>
+                    </div>
+
+                    <div id="form_item_badan_pemberi_sertifikat" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_audit", "badan_pemberi_sertifikat")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_badan_pemberi_sertifikat" class="form-item-view">@Html.Raw(fieldModel.badan_pemberi_sertifikat)</div>
+                    </div>
+
+                    <div id="form_item_audit_file_path" class="form-group">
+                        <div class="form-item-label220">@ResxHelper.GetValue("ta_audit", "audit_file_path")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_audit_file_path" class="form-item-view">@Html.Raw(fieldModel.audit_file_path)</div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    @{
+                        <br /><hr /><h4>Kriteria Audit</h4>
+                        <partial name="_list_audit_kriteria" />
+                    }
+                </div>
+            </div>
+        </div>
+		<div class="panel-footer">
+			<a id="close" class="k-button k-button-icontext" href="#"><i class="far fa-times-circle"></i>&nbsp;<span id="btnCloseText">@ResxHelper.GetValue("Message", "Close", "Tutup")</span></a>
+		</div>
+	</div>
+</div>
+<script>
+    $("#close").kendoButton();
+    $("#close").click(function (e) {
+        close_self();
+    });
+    function onCloseDialog(e) { $('#dialog').html(''); }
+    function closeDialog() { $("#dialog").data("kendoWindow").close(); }
+    function close_self() { if (window.parent.$("#dialog_ta_audit").data("kendoWindow")) { window.parent.$("#dialog_ta_audit").data("kendoWindow").close(); } else { window.parent.$("#dialog").data("kendoWindow").close(); } }
+
+
+    function display_by_type() {
+        var a = '@Html.Raw(fieldModel.jenis_audit_id)';
+        if (a == '2' || a == '3') {
+            $('#form_item_masa_berlaku').show();
+            $('#form_item_badan_pemberi_sertifikat').show();
+        } else {
+            $('#form_item_masa_berlaku').hide();
+            $('#form_item_badan_pemberi_sertifikat').hide();
+        }
+    }
+    $(document).ready(function () {
+        display_by_type();
+    });
+
+</script>

@@ -1,0 +1,364 @@
+@using WebApp
+@using Newtonsoft.Json
+@using Microsoft.AspNetCore.Http;
+@{
+	Layout = "~/Views/Shared/_LayoutEHSPerformance.cshtml";
+	var fieldModel = ViewData["filterColumn"] as WebApp.Models.ConditionModel.ViewModel;
+	ViewData["Title"] = ViewData["TitleHeader"];
+	ViewData["PageName"] = "condition";
+	ViewData["Heading"] = ViewData["TitleHeader"];
+	ViewData["Category1"] = "";
+	ViewData["Category2"] = "";
+}
+<partial name="_ScriptsBasePlugins" />
+<style>
+	.curent-data th {
+		padding: 6px;
+		text-align: center;
+		background-color: #7D7D7D;
+		color: #ffffff;
+	}
+
+	.table th {
+		padding: 6px;
+		text-align: center;
+	}
+
+	.table td {
+		padding: 6px;
+	}
+</style>
+<div class="panel">
+	<div class="panel-heading">
+		<div class="title-header">@ResxHelper.GetValue("Message", "FilterDataHeader", "Filter Data")</div>
+	</div>
+    <div class="panel-container">
+        <form id="form_edit" method="post" class="panel-form">
+            <div class="panel-content">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div id="form_item_ehs_area_id" class="form-group">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_profile", "ehs_area_id")<span id="req_ehs_area_id" class="required"> *</span></div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_ehs_area_id" class="form-item-field">
+                                <input id="ehs_area_id" name="ehs_area_id" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_profile","ehs_area_id"))" style="width:200px;" />
+                                <span class="k-invalid-msg" data-for="ehs_area_id"></span>
+                            </div>
+                        </div>
+
+                        <div id="form_item_ba_id" class="form-group">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_profile", "ba_id")<span id="req_ba_id" class="required"> *</span></div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_ba_id" class="form-item-field">
+                                <input id="ba_id" name="ba_id" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_profile","ba_id"))" style="width:200px;" />
+                                <span class="k-invalid-msg" data-for="ba_id"></span>
+                            </div>
+                        </div>
+
+                        <div id="form_item_pa_id" class="form-group">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_profile", "pa_id")<span id="req_pa_id" class="required"> *</span></div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_pa_id" class="form-item-field">
+                                <input id="pa_id" name="pa_id" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_profile","pa_id"))" style="width:200px;" />
+                                <span class="k-invalid-msg" data-for="pa_id"></span>
+                            </div>
+                        </div>
+
+                        <div id="form_item_psa_id" class="form-group">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_profile", "psa_id")<span id="req_psa_id" class="required"> *</span></div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_psa_id" class="form-item-field">
+                                <input id="psa_id" name="psa_id" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_profile","psa_id"))" style="width:200px;" />
+                                <span class="k-invalid-msg" data-for="psa_id"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div id="form_item_date_start" class="form-group">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_profile", "date_start")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_date_start" class="form-item-field">
+                                <input id="dt_date_start" name="dt_date_start" data-role="datepicker" data-type="date" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_profile","date_start"))" style="width:150px;" title="@ResxHelper.GetValue("ta_profile", "date_start") @ResxHelper.GetValue("Message", "IsNotValidDate")." />
+                                <span class="k-invalid-msg" data-for="dt_date_start"></span>
+                                <input type="hidden" id="date_start" name="date_start" value="@fieldModel.date_start" />
+                            </div>
+                        </div>
+
+                        <div id="form_item_date_finish" class="form-group">
+                            <div class="form-item-label">@ResxHelper.GetValue("ta_profile", "date_finish")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_date_finish" class="form-item-field">
+                                <input id="dt_date_finish" name="dt_date_finish" data-role="datepicker" data-type="date" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_profile","date_finish"))" style="width:150px;" title="@ResxHelper.GetValue("ta_profile", "date_finish") @ResxHelper.GetValue("Message", "IsNotValidDate")." />
+                                <span class="k-invalid-msg" data-for="dt_date_finish"></span>
+                                <input type="hidden" id="date_finish" name="date_finish" value="@fieldModel.date_finish" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-footer">
+                <a id="ok" class="k-button k-button-icontext" href="#"><span id="btnSaveText">@ResxHelper.GetValue("Message", "Ok")</span></a>
+            </div>
+        </form>
+        
+        <div class="panel-content">
+            <div id="row_emergency" class="row" style="display:none">
+                <div class="col-sm-6">
+                    <div id="emergency"></div>
+                </div>
+                <div class="col-sm-6">
+                    <div id="chart_emergency"></div>
+                    <div id="overlay_chart_emergency" class="overlay"><div style="margin-top: 50px;"></div></div>
+                </div>
+            </div>
+            <div id="row_campaign" class="row" style="display:none">
+                <div class="col-sm-6">
+                    <div id="campaign"></div>
+                </div>
+                <div class="col-sm-6">
+                    <div id="chart_campaign"></div>
+                    <div id="overlay_chart_campaign" class="overlay"><div style="margin-top: 50px;"></div></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+@section ScriptsBlock {
+	<script>
+        var validatable = $("#form_edit").kendoValidator().data("kendoValidator");
+        //============== Filter ehs_area_id
+        var ehs_area_id_param = {item : {value:"id",text:"kode"},parent:[{field:"obj_data",value:"Profile"}], order:[]};
+        var ehs_area_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/EHSArea/LookupDataEA", dataType: "json", data: ehs_area_id_param, type: "POST" } } });
+        var ehs_area_id = $("#ehs_area_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: ehs_area_id_ds, change:onChange_ehs_area_id }).data("kendoComboBox");
+        $(document).ready(function () { $("#ehs_area_id").data("kendoComboBox").value('@fieldModel.ehs_area_id'); });
+        function onChange_ehs_area_id() {if ($("#ehs_area_id").data("kendoComboBox").value() != '' && $("#ehs_area_id").data("kendoComboBox")._oldIndex == -1) {$("#ehs_area_id").data("kendoComboBox").value('');}
+            reload_ba_id();
+            reload_pa_id();
+            reload_psa_id();
+        }
+        //============== Filter ba_id
+        var ba_id_param = {item : {value:"id",text:"kode"},parent:[{ field: 'ehs_area_id',opr:'=', value: '@fieldModel.ehs_area_id' },{field:"obj_data",value:"Profile"}], order:[]};
+        var ba_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/BusinessArea/LookupDataBA", dataType: "json", data: ba_id_param, type: "POST" } } });
+        var ba_id = $("#ba_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: ba_id_ds, change:onChange_ba_id }).data("kendoComboBox");
+        $(document).ready(function () { $("#ba_id").data("kendoComboBox").value('@fieldModel.ba_id'); });
+        function onChange_ba_id() {if ($("#ba_id").data("kendoComboBox").value() != '' && $("#ba_id").data("kendoComboBox")._oldIndex == -1) {$("#ba_id").data("kendoComboBox").value('');}
+            reload_pa_id();
+            reload_psa_id();
+        }
+        function reload_ba_id(){
+            $("#ba_id").data("kendoComboBox").value('');
+            var ehs_area_id = $("#ehs_area_id").data("kendoComboBox").value();
+            var ba_id_param = { item: { value: 'id', text: 'kode' }, parent: [{ field: 'ehs_area_id',opr:'=', value: ehs_area_id }], order: [] };
+            $("#ba_id").data("kendoComboBox").dataSource.read(ba_id_param);
+        }
+        //============== Filter pa_id
+        var pa_id_param = {item : {value:"id",text:"kode"},parent:[{ field: 'ehs_area_id',opr:'=', value: '@fieldModel.ehs_area_id' }, { field: 'ba_id',opr:'=', value: '@fieldModel.ba_id' },{field:"obj_data",value:"Profile"}], order:[]};
+        var pa_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/PersonalArea/LookupDataPA", dataType: "json", data: pa_id_param, type: "POST" } } });
+        var pa_id = $("#pa_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: pa_id_ds, change:onChange_pa_id }).data("kendoComboBox");
+        $(document).ready(function () { $("#pa_id").data("kendoComboBox").value('@fieldModel.pa_id'); });
+        function onChange_pa_id() {if ($("#pa_id").data("kendoComboBox").value() != '' && $("#pa_id").data("kendoComboBox")._oldIndex == -1) {$("#pa_id").data("kendoComboBox").value('');}
+            reload_psa_id();
+        }
+        function reload_pa_id(){
+            $("#pa_id").data("kendoComboBox").value('');
+            var ehs_area_id = $("#ehs_area_id").data("kendoComboBox").value();
+            var ba_id = $("#ba_id").data("kendoComboBox").value();
+            var pa_id_param = { item: { value: 'id', text: 'kode' }, parent: [{ field: 'ehs_area_id',opr:'=', value: ehs_area_id }, { field: 'ba_id',opr:'=', value: ba_id }], order: [] };
+            $("#pa_id").data("kendoComboBox").dataSource.read(pa_id_param);
+        }
+        //============== Filter psa_id
+        var psa_id_param = {item : {value:"id",text:"kode"},parent:[{ field: 'ehs_area_id',opr:'=', value: '@fieldModel.ehs_area_id' }, { field: 'ba_id',opr:'=', value: '@fieldModel.ba_id' }, { field: 'pa_id',opr:'=', value: '@fieldModel.pa_id' },{field:"obj_data",value:"Profile"}], order:[]};
+        var psa_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/PersonalSubArea/LookupDataPSA", dataType: "json", data: psa_id_param, type: "POST" } } });
+        var psa_id = $("#psa_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: psa_id_ds, change:onChange_psa_id }).data("kendoComboBox");
+        $(document).ready(function () { $("#psa_id").data("kendoComboBox").value('@fieldModel.psa_id'); });
+        function onChange_psa_id() {if ($("#psa_id").data("kendoComboBox").value() != '' && $("#psa_id").data("kendoComboBox")._oldIndex == -1) {$("#psa_id").data("kendoComboBox").value('');}
+        }
+        function reload_psa_id(){
+            $("#psa_id").data("kendoComboBox").value('');
+            var ehs_area_id = $("#ehs_area_id").data("kendoComboBox").value();
+            var ba_id = $("#ba_id").data("kendoComboBox").value();
+            var pa_id = $("#pa_id").data("kendoComboBox").value();
+            var psa_id_param = { item: { value: 'id', text: 'kode' }, parent: [{ field: 'ehs_area_id',opr:'=', value: ehs_area_id }, { field: 'ba_id',opr:'=', value: ba_id }, { field: 'pa_id',opr:'=', value: pa_id }], order: [] };
+            $("#psa_id").data("kendoComboBox").dataSource.read(psa_id_param);
+        }
+        //============== Filter date_start
+        $("#dt_date_start").kendoDatePicker({value: "@fieldModel.dt_date_start", format: "{0:dd/MM/yyyy}" });
+        //============== Filter date_finish
+        $("#dt_date_finish").kendoDatePicker({value: "@fieldModel.dt_date_finish", format: "{0:dd/MM/yyyy}" });
+        $(document).ready(function () {
+            if ("@ViewData["AllowViewEmergency"]" == "1") { $("#row_emergency").show(); }
+            //if ("@ViewData["AllowViewAudit"]" == "1") { $("#row_accident").show(); }
+            if ("@ViewData["AllowViewCampaign"]" == "1") { $("#row_campaign").show(); }
+        });
+        $("#ok").click(function (e) {
+            if (validatable.validate() === true) {
+                var date_begin = kendo.toString($("#dt_date_start").data("kendoDatePicker").value(), "yyyy-MM-dd")
+                var date_end = kendo.toString($("#dt_date_finish").data("kendoDatePicker").value(), "yyyy-MM-dd")
+                if ((date_begin!=null && date_begin!='') && (date_end!=null && date_end != '')) {
+                    if (new Date(date_begin) > new Date(date_end)) {
+                        notification.show({ title: "Error", message: "Tanggal Awal harus lebih kecil atau sama dengan Tanggal Akhir" }, "error");
+                        return;
+                    }
+                }
+                show_data();
+            }
+            
+        });
+        function createPieChart(chartname,charttitle,ds,field,categoryField,colorField){
+            var total =0;
+            for (i = 0; i < ds.length; i++){
+                if(field=='jumlah'){
+                    total +=parseInt(ds[i].jumlah);
+                }else{
+                    total += parseFloat(ds[i].harga);
+                }
+            }
+            var judul = 'Total = '+number_format(total,0,',','.');
+            $("#" + chartname).kendoChart({
+                pdf: {
+                    fileName: chartname + ".pdf"
+                },
+                dataSource: ds,
+                theme: "bootstrap",
+                chartArea: { height: 400 }, title: { text: judul, font: "9px sans-serif", position: 'bottom', color: '#000000' },
+                legend: { position: "bottom", labels: { font: "12px sans-serif", template: "#= text # = #= number_format(value, 0, ',', '.') # (#= kendo.format('{0:P}', percentage)#)" }, width: 100 },
+                seriesDefaults: { type: "pie", overlay: { gradient: "roundedBevel" } },
+                series: [{ field: field, categoryField: categoryField, padding: 0 }],
+                tooltip: { visible: true, format: "N0", template: "#= category # = #= number_format(value, 0, ',', '.') # (#= kendo.format('{0:P}', percentage)#)" },
+                name: chartname,
+                title: charttitle,
+                transitions: true
+            });
+        }
+        function show_data() {
+            var ehs_area_id = $("#ehs_area_id").data("kendoComboBox").value();
+            var ba_id = $("#ba_id").data("kendoComboBox").value();
+            var pa_id = $("#pa_id").data("kendoComboBox").value();
+            var psa_id = $("#psa_id").data("kendoComboBox").value();
+            var date_begin = kendo.toString($("#dt_date_start").data("kendoDatePicker").value(), "yyyy-MM-dd")
+            var date_end = kendo.toString($("#dt_date_finish").data("kendoDatePicker").value(), "yyyy-MM-dd")
+
+            var param = {date_begin:date_begin,date_end:date_end,ehs_area_id:ehs_area_id,ba_id:ba_id,pa_id:pa_id,psa_id:psa_id};
+            $.ajax({
+                url: '@ViewBag.BaseUrl/Condition/GetValidData', data:param, type: 'POST',
+                success: function (data) {
+                    if (data != null && data != undefined) {
+                        if (data.table5 != null && data.table5 != undefined && data.table5.length > 0) {
+                            draw_emergency(data.table5);
+                            $("#chart_emergency").show();
+                            createPieChart('chart_emergency', 'Kategori Kondisi Sarana', data.table5, 'emergencyCount', 'emergencyName', 'bg_color');
+                        } else {
+                            draw_emergency(null);
+                        }
+                        if (data.table6 != null && data.table6 != undefined && data.table6.length > 0) {
+                            draw_campaign(data.table6);
+                            $("#chart_campaign").show();
+                            createPieChart('chart_campaign', 'Kategori Campaign', data.table6, 'campaignCount', 'campaignName', 'bg_color');
+                        } else {
+                            draw_campaign(null);
+                        }
+
+                    } else {
+                        draw_emergency(null);
+                        draw_campaign(null);
+                    }
+                }
+            });
+        }
+        function draw_emergency(data) {
+            var htm = "";
+            if (data != null && data != undefined && data.length > 0) {
+                var htm = '<table class="table table-bordered table-striped table-responsive">';
+                htm += '<tr>';
+                htm += '    <th colspan="4"><div style="padding:2px;white-space:normal;">Kategori Kondisi Sarana</div></th>';
+                htm += '</tr>';
+                htm += '<tr>';
+                htm += '    <th style="width:20px;">No</th>';
+                htm += '    <th style="width:500px;">Kondisi Sarana</th>';
+                htm += '    <th style="width:125px;">Total</th>';
+                htm += '    <th style="width:125px;">Persentase (%)</th>';
+                htm += '</tr>';
+
+                var no = 0;
+                var event_code = "";
+                var bg_color = "";
+                var font_color = "";
+                var status_text = "";
+                jQuery.each(data, function (i, val) {
+                    no++;
+                    htm += '<tr>';
+                    htm += '    <td style="width:20px;text-align: center;">'+no+'</td>';
+                    htm += '    <td style="width:20px;text-align: left;">' + val.emergencyName + '</td>';
+                    htm += '    <td style="width:20px;text-align: right;">' + val.emergencyCount + '</td>';
+                    htm += '    <td style="width:20px;text-align: right;">' + val.emergencyPercentage + '</td>';
+                    htm += '</tr>';
+                });
+                htm += '</table>';
+            }
+            $("#emergency").html(htm);
+        }
+        function draw_campaign(data) {
+            var htm = "";
+            if (data != null && data != undefined && data.length > 0) {
+                var htm = '<table class="table table-bordered table-striped table-responsive">';
+                htm += '<tr>';
+                htm += '    <th colspan="4"><div style="padding:2px;white-space:normal;">Kategori Campaign</div></th>';
+                htm += '</tr>';
+                htm += '<tr>';
+                htm += '    <th style="width:20px;">No</th>';
+                htm += '    <th style="width:500px;">Campaign</th>';
+                htm += '    <th style="width:125px;">Total</th>';
+                htm += '    <th style="width:125px;">Persentase (%)</th>';
+                htm += '</tr>';
+
+                var no = 0;
+                var event_code = "";
+                var bg_color = "";
+                var font_color = "";
+                var status_text = "";
+                jQuery.each(data, function (i, val) {
+                    no++;
+                    htm += '<tr>';
+                    htm += '    <td style="width:20px;text-align: center;">'+no+'</td>';
+                    htm += '    <td style="width:20px;text-align: left;">' + val.campaignName + '</td>';
+                    htm += '    <td style="width:20px;text-align: right;">' + val.campaignCount + '</td>';
+                    htm += '    <td style="width:20px;text-align: right;">' + val.campaignPercentage + '</td>';
+                    htm += '</tr>';
+                });
+                htm += '</table>';
+            }
+            $("#campaign").html(htm);
+        }
+        $(document).ready(function () {
+            if ('@ViewData["AllowViewAll"]' == '1') {
+                $("#req_ehs_area_id").hide();
+                $("#req_ba_id").hide();
+                $("#req_pa_id").hide();
+                $("#req_psa_id").hide();
+                $("#ehs_area_id").removeAttr('required');
+                $("#ba_id").removeAttr('required');
+                $("#pa_id").removeAttr('required');
+                $("#psa_id").removeAttr('required');
+            } else {
+                $("#req_ehs_area_id").show();
+                $("#ehs_area_id").attr('required','required');
+                if ('@ViewData["IsHeadArea"]' == '1') {
+                    $("#req_ba_id").hide();
+                    $("#req_pa_id").hide();
+                    $("#req_psa_id").hide();
+                    $("#ba_id").removeAttr('required');
+                    $("#pa_id").removeAttr('required');
+                    $("#psa_id").removeAttr('required');
+                } else {
+                    $("#req_ba_id").show();
+                    $("#req_pa_id").show();
+                    $("#req_psa_id").show();
+                    $("#ba_id").attr('required', 'required');
+                    $("#pa_id").attr('required', 'required');
+                    $("#psa_id").attr('required','required');
+                }
+            }
+        });
+	</script>
+}

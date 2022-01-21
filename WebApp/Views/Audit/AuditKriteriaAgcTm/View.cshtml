@@ -1,0 +1,231 @@
+@using WebApp
+@using Microsoft.AspNetCore.Http;
+@{
+    Layout = "~/Views/Shared/_LayoutNoHeader.cshtml";
+    var fieldModel = ViewData["fieldModel"] as WebApp.Models.AuditKriteriaAgcTmModel.ViewModel;
+	ViewData["Title"] = ViewData["TitleHeader"];
+    ViewData["PageName"] = "auditkriteriaagctm";
+    ViewData["Heading"] = ViewData["TitleHeader"];
+    ViewData["Category1"] = "";
+    ViewData["Category2"] = "";
+}
+<div class="panel panel-form">
+	<div class="panel-container">
+		<div class="panel-heading">
+			<div class="title-header">@ViewData["TitleHeader"]</div>
+		</div>
+		<div class="panel-content">
+			<div class="row">
+				<div class="col-lg-6">
+
+                    <div id="form_item_id" class="form-group-none">
+                      <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_id" class="form-item-view">@Html.Raw(fieldModel.id)</div>
+                  </div>
+
+                    <div id="form_item_audit_id" class="form-group-none">
+                      <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "audit_id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_audit_id" class="form-item-view">@Html.Raw(fieldModel.audit_id)</div>
+                  </div>
+
+                    <div id="form_item_kriteria_audit_id" class="form-group-none">
+                      <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "kriteria_audit_id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_kriteria_audit_id" class="form-item-view">@Html.Raw(fieldModel.kriteria_audit_id)</div>
+                  </div>
+
+                    <div id="form_item_strategy" class="form-group">
+                      <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "strategy")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_strategy" class="form-item-view">@Html.Raw(fieldModel.strategy)</div>
+                  </div>
+
+                    <div id="form_item_process" class="form-group">
+                      <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "process")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_process" class="form-item-view">@Html.Raw(fieldModel.process)</div>
+                  </div>
+
+                    <div id="form_item_product" class="form-group">
+                      <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "product")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_product" class="form-item-view">@Html.Raw(fieldModel.product)</div>
+                  </div>
+
+                    <div id="form_item_employee" class="form-group">
+                      <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "employee")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_employee" class="form-item-view">@Html.Raw(fieldModel.employee)</div>
+                  </div>
+
+                    <div id="form_item_status_akhir_acp_id" class="form-group">
+                      <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "status_akhir_acp_id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_status_akhir_acp_id" class="form-item-view">@Html.Raw(fieldModel.status_akhir_acp_id_text)</div>
+                  </div>
+
+                    <div><p>&nbsp;</p></div>
+
+                    <div id="form_item_amdal_id" class="form-group">
+                      <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "amdal_id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_amdal_id" class="form-item-view">@Html.Raw(fieldModel.amdal_id_text)</div>
+                  </div>
+
+                    <div id="form_item_pencemaran_air_id" class="form-group">
+                      <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "pencemaran_air_id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_pencemaran_air_id" class="form-item-view">@Html.Raw(fieldModel.pencemaran_air_id_text)</div>
+                  </div>
+
+                    <div id="form_item_pencemaran_udara_id" class="form-group">
+                      <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "pencemaran_udara_id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_pencemaran_udara_id" class="form-item-view">@Html.Raw(fieldModel.pencemaran_udara_id_text)</div>
+                  </div>
+
+                    <div id="form_item_limbah_lb3_id" class="form-group">
+                      <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "limbah_lb3_id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_limbah_lb3_id" class="form-item-view">@Html.Raw(fieldModel.limbah_lb3_id_text)</div>
+                  </div>
+
+                    <div id="form_item_land_clearing_id" class="form-group">
+                      <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "land_clearing_id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_land_clearing_id" class="form-item-view">@Html.Raw(fieldModel.land_clearing_id_text)</div>
+                  </div>
+
+                    <div id="form_item_rusak_lahan_id" class="form-group">
+                      <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "rusak_lahan_id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_rusak_lahan_id" class="form-item-view">@Html.Raw(fieldModel.rusak_lahan_id_text)</div>
+                  </div>
+
+                    <div id="form_item_efisiensi_energi_id" class="form-group">
+                      <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "efisiensi_energi_id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_efisiensi_energi_id" class="form-item-view">@Html.Raw(fieldModel.efisiensi_energi_id_text)</div>
+                  </div>
+
+                    <div id="form_item_manfaat_lb3_id" class="form-group">
+                      <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "manfaat_lb3_id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_manfaat_lb3_id" class="form-item-view">@Html.Raw(fieldModel.manfaat_lb3_id_text)</div>
+                  </div>
+
+                    <div id="form_item_kelola_non_lb3_id" class="form-group">
+                      <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "kelola_non_lb3_id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_kelola_non_lb3_id" class="form-item-view">@Html.Raw(fieldModel.kelola_non_lb3_id_text)</div>
+                  </div>
+
+                    <div id="form_item_kurang_cemar_udara_id" class="form-group">
+                      <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "kurang_cemar_udara_id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_kurang_cemar_udara_id" class="form-item-view">@Html.Raw(fieldModel.kurang_cemar_udara_id_text)</div>
+                  </div>
+
+                    <div id="form_item_konservasi_air_id" class="form-group">
+                      <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "konservasi_air_id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_konservasi_air_id" class="form-item-view">@Html.Raw(fieldModel.konservasi_air_id_text)</div>
+                  </div>
+
+                    <div id="form_item_comdev_id" class="form-group">
+                      <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "comdev_id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_comdev_id" class="form-item-view">@Html.Raw(fieldModel.comdev_id_text)</div>
+                  </div>
+
+                    <div id="form_item_status_akhir_cpproper_id" class="form-group">
+                      <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "status_akhir_cpproper_id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_status_akhir_cpproper_id" class="form-item-view">@Html.Raw(fieldModel.status_akhir_cpproper_id_text)</div>
+                  </div>
+
+
+                </div>
+                <div class="col-lg-6">
+
+                    <div id="form_item_sarana_k3_id" class="form-group">
+                      <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "sarana_k3_id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_sarana_k3_id" class="form-item-view">@Html.Raw(fieldModel.sarana_k3_id_text)</div>
+                  </div>
+
+                    <div id="form_item_sarana_ktd_id" class="form-group">
+                      <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "sarana_ktd_id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_sarana_ktd_id" class="form-item-view">@Html.Raw(fieldModel.sarana_ktd_id_text)</div>
+                  </div>
+
+                    <div id="form_item_simulasi_ktd_id" class="form-group">
+                      <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "simulasi_ktd_id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_simulasi_ktd_id" class="form-item-view">@Html.Raw(fieldModel.simulasi_ktd_id_text)</div>
+                  </div>
+
+                    <div id="form_item_fr_tk" class="form-group">
+                      <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "fr_tk")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_fr_tk" class="form-item-view">@Html.Raw(fieldModel.fr_tk)</div>
+                  </div>
+
+                    <div id="form_item_sr_tf" class="form-group">
+                      <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "sr_tf")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_sr_tf" class="form-item-view">@Html.Raw(fieldModel.sr_tf)</div>
+                  </div>
+
+                    <div><p>&nbsp;</p></div>
+
+                    <div id="form_item_status_akhir_incident_rate_id" class="form-group">
+                      <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "status_akhir_incident_rate_id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_status_akhir_incident_rate_id" class="form-item-view">@Html.Raw(fieldModel.status_akhir_incident_rate_id_text)</div>
+                  </div>
+
+                    <div id="form_item_status_akhir_cpsafety_id" class="form-group">
+                      <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "status_akhir_cpsafety_id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_status_akhir_cpsafety_id" class="form-item-view">@Html.Raw(fieldModel.status_akhir_cpsafety_id_text)</div>
+                  </div>
+
+                    <div id="form_item_status_akhir_legal_comp_id" class="form-group">
+                      <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "status_akhir_legal_comp_id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_status_akhir_legal_comp_id" class="form-item-view">@Html.Raw(fieldModel.status_akhir_legal_comp_id_text)</div>
+                  </div>
+
+                    <div id="form_item_status_akhir_agc_id" class="form-group">
+                      <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "status_akhir_agc_id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_status_akhir_agc_id" class="form-item-view">@Html.Raw(fieldModel.status_akhir_agc_id_text)</div>
+                  </div>
+
+                    <div id="form_item_lampiran_file_path" class="form-group">
+                      <div class="form-item-label220">@ResxHelper.GetValue("ta_audit_kriteria_agc_tm", "lampiran_file_path")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_lampiran_file_path" class="form-item-view">@Html.Raw(fieldModel.lampiran_file_path)</div>
+                  </div>
+
+				</div>
+			</div>
+		</div>
+		<div class="panel-footer">
+			<a id="close" class="k-button k-button-icontext" href="#"><i class="far fa-times-circle"></i>&nbsp;<span id="btnCloseText">@ResxHelper.GetValue("Message", "Close", "Tutup")</span></a>
+		</div>
+	</div>
+</div>
+<script>
+    $("#close").kendoButton();
+    $("#close").click(function (e) {
+        close_self();
+    });
+    function onCloseDialog(e) { $('#dialog').html(''); }
+    function closeDialog() { $("#dialog").data("kendoWindow").close(); }
+    function close_self() { if (window.parent.$("#dialog_ta_audit_kriteria_agc_tm").data("kendoWindow")) { window.parent.$("#dialog_ta_audit_kriteria_agc_tm").data("kendoWindow").close(); } else { window.parent.$("#dialog").data("kendoWindow").close(); } }
+</script>

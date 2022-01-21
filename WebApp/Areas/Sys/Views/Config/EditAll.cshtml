@@ -1,0 +1,224 @@
+@using WebApp
+@using Newtonsoft.Json
+@using System.Collections.Specialized;
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var ConfigData = ViewData["ConfigData"] as OrderedDictionary;
+    ViewData["PageName"] = "config";
+    ViewData["Heading"] = ViewData["TitleHeader"];
+    ViewData["Category1"] = "System";
+    ViewData["Category2"] = "";
+}
+
+<form id="form_edit" method="post">
+    <div class="panel">
+        <div class="panel-container">
+            <div class="panel-content">
+                <div class="row">
+                    <div class="col-12">
+                        <div id="form_item_ApplicationCode" class="form-item">
+                            <div class="form-item-label140">@ResxHelper.GetValue("sys_config", "ApplicationCode")<span class="required"> *</span></div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_ApplicationCode" class="form-item-field">
+                                <input type="text" id="ApplicationCode" name="ApplicationCode" class="k-textbox" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("sys_config", "ApplicationCode"))" maxlength="50" style="width:350px;" value="@Html.Raw(ConfigData["ApplicationCode"])" />
+                                <span class="k-invalid-msg" data-for="ApplicationCode"></span>
+                            </div>
+                        </div>
+                        <div id="form_item_ApplicationName" class="form-item">
+                            <div class="form-item-label140">@ResxHelper.GetValue("sys_config", "ApplicationName")<span class="required"> *</span></div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_ApplicationName" class="form-item-field">
+                                <textarea type="text" id="ApplicationName" name="ApplicationName" class="k-textbox" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("sys_config", "ApplicationName"))" maxlength="250" style="width:350px;">@Html.Raw(ConfigData["ApplicationName"])</textarea>
+                                <span class="k-invalid-msg" data-for="ApplicationName"></span>
+                            </div>
+                        </div>
+                        <div id="form_item_SessionTimeOut" class="form-item">
+                            <div class="form-item-label140">@ResxHelper.GetValue("sys_config", "SessionTimeOut")<span class="required"> *</span></div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_id" class="form-item-field">
+                                <input type="number" id="SessionTimeOut" name="SessionTimeOut" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("sys_config", "SessionTimeOut"))" style="width:80px;" /> Menit
+                                <span class="k-invalid-msg" data-for="SessionTimeOut"></span>
+                            </div>
+                        </div>
+                        <div id="form_item_TrackFailedAttempts" class="form-item">
+                            <div class="form-item-label140">@ResxHelper.GetValue("sys_config", "TrackFailedAttempts", "Track Failed Attempts")<span class="required"> *</span></div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_id" class="form-item-field">
+                                <input id="TrackFailedAttempts" name="TrackFailedAttempts" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("sys_config","TrackFailedAttempts","Track Failed Attempts"))" style="width:100px;" />
+                                <span class="k-invalid-msg" data-for="TrackFailedAttempts"></span>
+                            </div>
+                        </div>
+                        <div id="form_item_MaximumFailedAttempts" class="form-item">
+                            <div class="form-item-label140">@ResxHelper.GetValue("sys_config", "MaximumFailedAttempts", "Maximum Failed Attempts")<span class="required"> *</span></div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_id" class="form-item-field">
+                                <input id="MaximumFailedAttempts" name="MaximumFailedAttempts" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("sys_config","MaximumFailedAttempts","Maximum Failed Attempts"))" style="width:100px;" />
+                                <span class="k-invalid-msg" data-for="MaximumFailedAttempts"></span>
+                            </div>
+                        </div>
+                        <div id="form_item_FailedAttempsTime" class="form-item">
+                            <div class="form-item-label140">@ResxHelper.GetValue("sys_config", "FailedAttempsTime", "Failed Attempts Time")<span class="required"> *</span></div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_id" class="form-item-field">
+                                <input id="FailedAttempsTime" name="FailedAttempsTime" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("sys_config","FailedAttempsTime","Failed Attempts Time"))" style="width:200px;" />
+                                <span class="k-invalid-msg" data-for="FailedAttempsTime"></span>
+                            </div>
+                        </div>
+                        <div id="form_item_AllowInputCharacters" class="form-item">
+                            <div class="form-item-label140">@ResxHelper.GetValue("sys_config", "AllowInputCharacters")<span class="required"> *</span></div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_AllowInputCharacters" class="form-item-field">
+                                <input type="text" id="AllowInputCharacters" name="AllowInputCharacters" class="k-textbox" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("sys_config", "AllowInputCharacters"))" maxlength="100" style="width:350px;" value="@Html.Raw(ConfigData["AllowInputCharacters"])" />
+                                <span class="k-invalid-msg" data-for="AllowInputCharacters"></span>
+                            </div>
+                        </div>
+                        <div id="form_item_UsePeriode" class="form-item">
+                            <div class="form-item-label140">@ResxHelper.GetValue("sys_config", "UsePeriode")<span class="required"> *</span></div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_id" class="form-item-field">
+                                <input id="UsePeriode" name="UsePeriode" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("sys_config","UsePeriode"))" style="width:100px;" />
+                                <span class="k-invalid-msg" data-for="UsePeriode"></span>
+                            </div>
+                        </div>
+                        <div class="form-item">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-footer" style="text-align:center">
+                <a id="cancel" class="k-button k-button-icontext" href="#"><i class="fal fa-times-circle"></i>&nbsp;<span id="btnCancelText">@ResxHelper.GetValue("Message", "Cancel")</span></a>
+                <a id="save" class="k-button k-button-icontext" href="#"><i class="fal fa-save"></i>&nbsp;<span id="btnSaveText">@ResxHelper.GetValue("Message", "Save")</span></a>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section ScriptsBlock {
+    <script>
+        $("#SessionTimeOut").kendoNumericTextBox({ format: "{0:N0}", decimals: 0 });
+        $(document).ready(function () {$("#SessionTimeOut").data('kendoNumericTextBox').value('@ConfigData["SessionTimeOut"]');})
+
+        var TrackFailedAttempts_ds = [{ value: "0", text: "Tidak" }, { value: "1", text: "Ya" }];
+        var TrackFailedAttempts = $("#TrackFailedAttempts").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: TrackFailedAttempts_ds, change:onChange_TrackFailedAttempts }).data("kendoComboBox");
+        $(document).ready(function () { $("#TrackFailedAttempts").data("kendoComboBox").value('@ConfigData["TrackFailedAttempts"]'); });
+        function onChange_TrackFailedAttempts() {if ($("#TrackFailedAttempts").data("kendoComboBox").value() != '' && $("#TrackFailedAttempts").data("kendoComboBox")._oldIndex == -1) {$("#TrackFailedAttempts").data("kendoComboBox").value('');}
+            display_TrackFailedAttempts();
+        }
+
+        var MaximumFailedAttempts_ds = [{ value: "1", text: "1" }, { value: "3", text: "3" }, { value: "5", text: "5" }];
+        var MaximumFailedAttempts = $("#MaximumFailedAttempts").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: MaximumFailedAttempts_ds, change:onChange_MaximumFailedAttempts }).data("kendoComboBox");
+        $(document).ready(function () { $("#MaximumFailedAttempts").data("kendoComboBox").value('@ConfigData["MaximumFailedAttempts"]'); });
+        function onChange_MaximumFailedAttempts() {if ($("#MaximumFailedAttempts").data("kendoComboBox").value() != '' && $("#MaximumFailedAttempts").data("kendoComboBox")._oldIndex == -1) {$("#MaximumFailedAttempts").data("kendoComboBox").value('');}
+        }
+
+        var FailedAttempsTime_ds = [{ value: "1", text: "1 minute" }, { value: "3", text: "3 minute" }, { value: "5", text: "5 minute" }, { value: "10", text: "10 minute" }, { value: "15", text: "15 minute" }];
+        var FailedAttempsTime = $("#FailedAttempsTime").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: FailedAttempsTime_ds, change:onChange_FailedAttempsTime }).data("kendoComboBox");
+        $(document).ready(function () { $("#FailedAttempsTime").data("kendoComboBox").value('@ConfigData["FailedAttempsTime"]'); });
+        function onChange_FailedAttempsTime() {if ($("#FailedAttempsTime").data("kendoComboBox").value() != '' && $("#FailedAttempsTime").data("kendoComboBox")._oldIndex == -1) {$("#FailedAttempsTime").data("kendoComboBox").value('');}
+        }
+
+        var UsePeriode_ds = [{ value: "0", text: "Tidak" }, { value: "1", text: "Ya" }];
+        var UsePeriode = $("#UsePeriode").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: UsePeriode_ds, change:onChange_UsePeriode }).data("kendoComboBox");
+        $(document).ready(function () { $("#UsePeriode").data("kendoComboBox").value('@ConfigData["UsePeriode"]'); });
+        function onChange_UsePeriode() {if ($("#UsePeriode").data("kendoComboBox").value() != '' && $("#UsePeriode").data("kendoComboBox")._oldIndex == -1) {$("#UsePeriode").data("kendoComboBox").value('');}
+        }
+
+        function display_TrackFailedAttempts() {
+            var TrackFailedAttempts = $("#TrackFailedAttempts").data("kendoComboBox").value();
+            if (TrackFailedAttempts == "1") {
+                $("#form_item_MaximumFailedAttempts").show();
+                $("#form_item_FailedAttempsTime").show();
+                $("#MaximumFailedAttempts").attr('required','required');
+                $("#FailedAttempsTime").attr('required','required');
+            } else {
+                $("#form_item_MaximumFailedAttempts").hide();
+                $("#form_item_FailedAttempsTime").hide();
+                $("#MaximumFailedAttempts").removeAttr('required');
+                $("#FailedAttempsTime").removeAttr('required');
+            }
+        }
+        var form_type = '@ViewData["form_type"]';
+        function ShowHideColumn(form_type)
+        {
+            if(form_type=='Add')
+            {
+                var hiden_column = [];
+                for (i = 0; i < hiden_column.length; i++) {
+                    $("#form_item_"+hiden_column[i]).hide();
+                }
+            }
+            else if(form_type=='Edit')
+            {
+                var hiden_column = [];
+                for (i = 0; i < hiden_column.length; i++) {
+                    $("#form_item_"+hiden_column[i]).hide();
+                }
+            }
+        }
+        function setReadOnly(form_type,opt)
+        {
+            if(opt==true)
+            {
+                if(form_type=='Add')
+                {
+
+                }
+                else if(form_type=='Edit')
+                {
+
+                }
+            }
+            else
+            {
+                if(form_type=='Add')
+                {
+
+                }
+                else if(form_type=='Edit')
+                {
+
+                }
+            }
+        }
+        $(document).ready(function () {
+            ShowHideColumn(form_type);
+            setReadOnly(form_type, true);
+            display_TrackFailedAttempts();
+        });
+        var validatable = $("#form_edit").kendoValidator().data("kendoValidator");
+        $("#save").click(function (e) {
+            if (validatable.validate() === true) {
+                kendo.ui.progress($("#form_edit"), true);
+                $.ajax({
+                    url: '@ViewData["UrlAction"]', data: $('#form_edit').serialize(), type: 'POST',
+                    success: function (data) {
+                        kendo.ui.progress($("#form_edit"), false);
+                        if (data.status == 1) {
+                            window.parent.notification.show({title: data.title, message: kendo.toString(data.message) }, "success");
+                            //if (window.parent.Reload_list_sys_config) {
+                            //    window.parent.Reload_list_sys_config();
+                            //}else if (window.parent.reload_sys_config) {
+                            //    window.parent.reload_sys_config(data.pk);
+                            //}
+                            //close_self();
+                            window.location.href = '@ViewBag.BaseUrl/sys/config';
+                        } else if (data.status == 3) {
+                            windows.parent.notification.show({ title: data.title, message: data.message }, "error");
+                            //close_self();
+                        } else {
+                            notification.show({ title: data.title, message: data.message }, "error");
+                        }
+                    }
+                });
+            } else {
+                kendo.ui.progress($("#form_edit"), false);
+            }
+
+        });
+        $("#cancel").kendoButton();
+        $("#cancel").click(function (e) {
+            window.location.href = '@ViewBag.BaseUrl/sys/config';
+        });
+        function close_self() { if (window.parent.$("#dialog_sys_config").data("kendoWindow")) { window.parent.$("#dialog_sys_config").data("kendoWindow").close(); } else { window.parent.$("#dialog").data("kendoWindow").close(); } }
+    </script>
+}

@@ -1,0 +1,340 @@
+@using WebApp
+@using Microsoft.AspNetCore.Http;
+@{
+    Layout = "~/Views/Shared/_LayoutNoHeader.cshtml";
+    var fieldModel = ViewData["fieldModel"] as WebApp.Areas.Ref.Models.LiteralDataModel.ViewModel;
+    var KategoriModel = ViewData["KategoriModel"] as WebApp.Areas.Ref.Models.LiteralKategoriModel.ViewModel;
+    var baseUrl = ViewData["baseUrl"];
+    var display_dev ="form-item";
+    if (ViewData["curUserId"].ToString() != "-1") {
+        display_dev = "form-item-none";
+    }
+}
+
+<form id="form_edit" method="post">
+    <div class="card">
+        <div class="card-header">
+            <div class="title-header">@ViewData["TitleHeader"]</div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-6">
+                    <div id="form_item_cat_id" class="form-item">
+                        <div class="form-item-label">@ResxHelper.GetValue("ref_literal_data", "cat_id")<span id="label_req_cat_id" class="required"> *</span></div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_cat_id" class="form-item-field">
+                            <div id="cat_id_text" style="display:none">
+                                @Html.Raw(fieldModel.cat_id_text)
+                            </div>
+                            <div id="cat_id_val">
+                                <input id="cat_id" name="cat_id" required data-required-msg="@ResxHelper.GetValue("Message", "RequiredTextFormat").Replace("{0}", @ResxHelper.GetValue("ref_literal_data", "cat_id"))" style="width:450px;" />
+                                <span class="k-invalid-msg" data-for="cat_id"></span>
+                            </div>
+                            <input type="hidden" id="cat_id_old" name="cat_id_old" value="@fieldModel.cat_id" />
+                            <script>
+                                var cat_id_param = {item : {value:"id",text:"nama", attribute: ['use_min_max', 'user_color_id']},parent:[{ field: 'allow_add', value: '1' }], order:[{ field: 'ordinal', dir: 'asc' }]};
+                                var cat_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@baseUrl/Ref/LiteralKategori/LookupData", dataType: "json", data: cat_id_param, type: "POST" } } });
+                                var cat_id = $("#cat_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: cat_id_ds, change:onChange_cat_id }).data("kendoComboBox");
+                                $(document).ready(function () { $("#cat_id").data("kendoComboBox").value('@fieldModel.cat_id'); });
+                                function onChange_cat_id() {if ($("#cat_id").data("kendoComboBox").value() != '' && $("#cat_id").data("kendoComboBox")._oldIndex == -1) {$("#cat_id").data("kendoComboBox").value('');}
+                                    var cat_id = $("#cat_id").data("kendoComboBox").value();
+                                    var use_min_max = 0;
+                                    var user_color_id = 0;
+                                    if (cat_id != "") {
+                                        var dataItem = $("#cat_id").data("kendoComboBox").dataItem();
+                                        if (dataItem != null && dataItem != 'undefined') {
+                                            use_min_max = dataItem.use_min_max;
+                                            user_color_id = dataItem.user_color_id;
+                                        }
+                                    }
+                                    display_by_cat_id(use_min_max,user_color_id);
+                                }
+                            </script>
+                        </div>
+                    </div>
+
+                    <div id="form_item_id" class="@Html.Raw(display_dev)">
+                        <div class="form-item-label">@ResxHelper.GetValue("ref_literal_data", "id")<span id="label_req_id" class="required"> *</span></div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_id" class="form-item-field">
+                            <input type="number" id="id" name="id"  min="0" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ref_literal_data","id"))" style ="width:200px;" />
+                            <span class="k-invalid-msg" data-for="id"></span>
+                            <input type="hidden" id="id_old" name="id_old" value="@fieldModel.id" />
+                            <script>
+                                $("#id").kendoNumericTextBox({ format: "{0:N0}", decimals: 0 });
+                                $(document).ready(function () {$("#id").data('kendoNumericTextBox').value('@fieldModel.id');})
+                            </script>
+                        </div>
+                    </div>
+
+                   <div id="form_item_kode" class="form-item">
+                       <div class="form-item-label">@ResxHelper.GetValue("ref_literal_data", "kode")<span id="label_req_kode" class="required"> *</span></div>
+                       <div class="form-item-separator">:</div>
+                       <div id="field_item_kode" class="form-item-field">
+                           <input type="text" id="kode" name="kode" class="k-textbox" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ref_literal_data","kode"))"  maxlength="50" style="width:350px;" value="@Html.Raw(fieldModel.kode)" title="@ResxHelper.GetValue("ref_literal_data", "kode") @ResxHelper.GetValue("Message", "IsNotValidCharacter")." pattern="@ConfigHelper.GetValue("AllowInputCharacters")" />
+                           <span class="k-invalid-msg" data-for="kode"></span>
+                       </div>
+                   </div>
+
+                   <div id="form_item_nama" class="form-item">
+                       <div class="form-item-label">@ResxHelper.GetValue("ref_literal_data", "nama")<span id="label_req_nama" class="required"> *</span></div>
+                       <div class="form-item-separator">:</div>
+                       <div id="field_item_nama" class="form-item-field">
+                           <input type="text" id="nama" name="nama" class="k-textbox" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ref_literal_data","nama"))"  maxlength="255" style="width:350px;" value="@Html.Raw(fieldModel.nama)" title="@ResxHelper.GetValue("ref_literal_data", "nama") @ResxHelper.GetValue("Message", "IsNotValidCharacter")." pattern="@ConfigHelper.GetValue("AllowInputCharacters")" />
+                           <span class="k-invalid-msg" data-for="nama"></span>
+                       </div>
+                   </div>
+
+                   <div id="form_item_keterangan" class="form-item">
+                       <div class="form-item-label">@ResxHelper.GetValue("ref_literal_data", "keterangan")</div>
+                       <div class="form-item-separator">:</div>
+                       <div id="field_item_keterangan" class="form-item-field">
+                            <textarea type="text" id="keterangan" name="keterangan" class="k-textbox"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ref_literal_data","keterangan"))" maxlength="1024" style="width:350px;" title="@ResxHelper.GetValue("ref_literal_data", "keterangan") @ResxHelper.GetValue("Message", "IsNotValidCharacter")." pattern="@ConfigHelper.GetValue("AllowInputCharacters")">@Html.Raw(fieldModel.keterangan)</textarea>
+                            <span class="k-invalid-msg" data-for="keterangan"></span>
+                       </div>
+                   </div>
+
+                    <div id="form_item_ordinal" class="form-item">
+                        <div class="form-item-label">@ResxHelper.GetValue("ref_literal_data", "ordinal")<span id="label_req_ordinal" class="required"> *</span></div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_ordinal" class="form-item-field">
+                            <input type="number" id="ordinal" name="ordinal"  min="0" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ref_literal_data","ordinal"))" style ="width:200px;" />
+                            <span class="k-invalid-msg" data-for="ordinal"></span>
+                            <script>
+                                $("#ordinal").kendoNumericTextBox({ format: "{0:N0}", decimals: 0 });
+                                $(document).ready(function () {$("#ordinal").data('kendoNumericTextBox').value('@fieldModel.ordinal');})
+                            </script>
+                        </div>
+                    </div>
+
+                    
+
+                    <div id="form_item_status_id" class="form-item">
+                        <div class="form-item-label">@ResxHelper.GetValue("ref_literal_data", "status_id")<span id="label_req_status_id" class="required"> *</span></div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_status_id" class="form-item-field">
+                            <input type="number" id="status_id" name="status_id" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ref_literal_data","status_id"))" style ="width:200px;" />
+                            <span class="k-invalid-msg" data-for="status_id"></span>
+                            <script>
+                                var status_id_ds = [{value:"1",text:"Aktif"},{value:"0",text:"Tidak aktif"}];
+                                var status_id = $("#status_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: status_id_ds, change:onChange_status_id }).data("kendoComboBox");
+                                $(document).ready(function () { $("#status_id").data("kendoComboBox").value('@fieldModel.status_id'); });
+                                function onChange_status_id() {
+                                    if ($("#status_id").data("kendoComboBox").value() != '' && $("#status_id").data("kendoComboBox")._oldIndex == -1) { $("#status_id").data("kendoComboBox").value(''); }
+                                }                                
+                            </script>
+                        </div>
+                    </div>
+
+                   <div id="form_item_cat_kode" class="form-item-none">
+                       <div class="form-item-label">@ResxHelper.GetValue("ref_literal_data", "cat_kode")</div>
+                       <div class="form-item-separator">:</div>
+                       <div id="field_item_cat_kode" class="form-item-field">
+                           <input type="text" id="cat_kode" name="cat_kode" class="k-textbox"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ref_literal_data","cat_kode"))"  maxlength="50" style="width:350px;" value="@Html.Raw(fieldModel.cat_kode)" title="@ResxHelper.GetValue("ref_literal_data", "cat_kode") @ResxHelper.GetValue("Message", "IsNotValidCharacter")." pattern="@ConfigHelper.GetValue("AllowInputCharacters")" />
+                           <span class="k-invalid-msg" data-for="cat_kode"></span>
+                       </div>
+                   </div>
+                    
+                </div>
+                <div class="col-6">
+                    <div id="form_item_nilai_min" class="form-item">
+                        <div class="form-item-label">@ResxHelper.GetValue("ref_literal_data", "nilai_min")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_nilai_min" class="form-item-field">
+                            <input type="number" id="nilai_min" name="nilai_min"  min="0" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ref_literal_data","nilai_min"))" style="width:200px;" />
+                            <span class="k-invalid-msg" data-for="nilai_min"></span>
+                            <script>
+                                $("#nilai_min").kendoNumericTextBox({ format: "{0:N2}", decimals: 2 });
+                                $(document).ready(function () {$("#nilai_min").data('kendoNumericTextBox').value('@fieldModel.nilai_min');})
+                            </script>
+                        </div>
+                    </div>
+
+                    <div id="form_item_nilai_mak" class="form-item">
+                        <div class="form-item-label">@ResxHelper.GetValue("ref_literal_data", "nilai_mak")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_nilai_mak" class="form-item-field">
+                            <input type="number" id="nilai_mak" name="nilai_mak"  min="0" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ref_literal_data","nilai_mak"))" style="width:200px;" />
+                            <span class="k-invalid-msg" data-for="nilai_mak"></span>
+                            <script>
+                                $("#nilai_mak").kendoNumericTextBox({ format: "{0:N2}", decimals: 2 });
+                                $(document).ready(function () {$("#nilai_mak").data('kendoNumericTextBox').value('@fieldModel.nilai_mak');})
+                            </script>
+                        </div>
+                    </div>
+
+                    <div id="form_item_bg_color" class="form-item">
+                        <div class="form-item-label">@ResxHelper.GetValue("ref_literal_data", "bg_color")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_bg_color" class="form-item-field">
+                            <div id="cp_bg_color" data-role="flatcolorpicker"></div>
+                            <span class="k-invalid-msg" data-for="cp_bg_color"></span>
+                            <input type="hidden" id="bg_color" name="bg_color" value="@fieldModel.bg_color" />
+                            @{var bg_color_val = fieldModel.bg_color != null && fieldModel.bg_color != "" ? fieldModel.bg_color : "#ffffff";}
+                            <script>
+                               $("#cp_bg_color").kendoFlatColorPicker({change:on_change_bg_color, preview: true, value: "@bg_color_val" });
+                               function on_change_bg_color() {$("#bg_color").val($("#cp_bg_color").data("kendoFlatColorPicker").value());}
+                            </script>
+                        </div>
+                    </div>
+
+                    <div id="form_item_font_color" class="form-item">
+                        <div class="form-item-label">@ResxHelper.GetValue("ref_literal_data", "font_color")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_font_color" class="form-item-field">
+                            <div id="cp_font_color" data-role="flatcolorpicker"></div>
+                            <span class="k-invalid-msg" data-for="cp_font_color"></span>
+                            <input type="hidden" id="font_color" name="font_color" value="@fieldModel.font_color" />
+                            @{var font_color_val = fieldModel.font_color != null && fieldModel.font_color !="" ? fieldModel.font_color:"#000000";}
+                            <script>
+                               $("#cp_font_color").kendoFlatColorPicker({change:on_change_font_color, preview: true, value: "@font_color_val" });
+                               function on_change_font_color() {$("#font_color").val($("#cp_font_color").data("kendoFlatColorPicker").value());}
+                            </script>
+                        </div>
+                    </div>
+                    
+                   <div id="form_item_satuan" class="form-group">
+                       <div class="form-item-label">@ResxHelper.GetValue("ref_literal_data", "satuan")</div>
+                       <div class="form-item-separator">:</div>
+                       <div id="field_item_satuan" class="form-item-field">
+                           <input type="text" id="satuan" name="satuan" class="k-textbox"  data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ref_literal_data","satuan"))"  maxlength="10" style="width:200px;" value="@Html.Raw(fieldModel.satuan)" title="@ResxHelper.GetValue("ref_literal_data", "satuan") @ResxHelper.GetValue("Message", "IsNotValidCharacter")." pattern="@ConfigHelper.GetValue("AllowInputCharacters")" />
+                           <span class="k-invalid-msg" data-for="satuan"></span>
+                       </div>
+                   </div>
+                                           
+                </div>
+            </div>
+        </div>
+        <div class="card-footer" style="text-align:center">
+            <a id="cancel" class="k-button k-button-icontext" href="#"><i class="far fa-times-circle"></i>&nbsp;<span id="btnCancelText">@ResxHelper.GetValue("Message", "Cancel")</span></a>
+            <a id="save" class="k-button k-button-icontext" href="#"><i class="fas fa-save"></i>&nbsp;<span id="btnSaveText">@ResxHelper.GetValue("Message", "Save")</span></a>
+        </div>
+    </div>
+</form>
+
+<script>
+    function GetNewIdOrdinal() {
+        var cat_id = $("#cat_id").data("kendoComboBox").value();
+        $.ajax({
+            url: '@baseUrl/ref/literaldata/GetNewIdOrdinal', data: {cat_id:cat_id}, type: 'POST',
+            success: function (data) {
+                if (data != null && data != 'undefined') {
+                    if (data.id != null && data.id != "") {
+                        $("#id").data('kendoNumericTextBox').value(data.id);
+                    }
+                    if (data.ordinal != null && data.ordinal != "") {
+                        $("#ordinal").data('kendoNumericTextBox').value(data.ordinal);
+                    }
+                }
+            }
+        });
+    }
+    function display_by_cat_id(use_min_max,user_color_id,use_satuan) {
+        if (use_min_max == '1') {
+            $("#form_item_nilai_min").show();
+            $("#form_item_nilai_mak").show();
+        } else {
+            $("#form_item_nilai_min").hide();
+            $("#form_item_nilai_mak").hide();
+        }
+        if (user_color_id == '1') {
+            $("#form_item_bg_color").show();
+            $("#form_item_font_color").show();
+        } else {
+            $("#form_item_bg_color").hide();
+            $("#form_item_font_color").hide();
+        }
+        if (use_satuan == '1') {
+            $("#form_item_satuan").show();
+        } else {
+            $("#form_item_satuan").hide();
+        }
+    }
+    var form_type = '@ViewData["form_type"]';
+    function ShowHideColumn(form_type)
+    {
+        if(form_type=='Add')
+        {
+            var hiden_column = [];
+            for (i = 0; i < hiden_column.length; i++) {
+                $("#form_item_"+hiden_column[i]).hide();
+            }
+            $("#cat_id_text").hide();
+            $("#cat_id_val").show();
+        }
+        else if(form_type=='Edit')
+        {
+            var hiden_column = [];
+            for (i = 0; i < hiden_column.length; i++) {
+                $("#form_item_"+hiden_column[i]).hide();
+            }
+            $("#cat_id_text").show();
+            $("#cat_id_val").hide();
+        }
+    }
+    function setReadOnly(form_type,opt)
+    {
+        if(opt==true)
+        {
+            if(form_type=='Add')
+            {
+
+            }
+            else if(form_type=='Edit')
+            {
+
+            }
+        }
+        else
+        {
+            if(form_type=='Add')
+            {
+
+            }
+            else if(form_type=='Edit')
+            {
+
+            }
+        }
+    }
+    $(document).ready(function () {
+        ShowHideColumn(form_type);
+        setReadOnly(form_type, true);
+        display_by_cat_id('@KategoriModel.use_min_max', '@KategoriModel.user_color_id', '@KategoriModel.use_satuan');
+        
+    });
+    var validatable = $("#form_edit").kendoValidator().data("kendoValidator");
+    $("#save").click(function (e) {
+        if (validatable.validate() === true) {
+            kendo.ui.progress($("#form_edit"), true);
+            $.ajax({
+                url: '@ViewData["UrlAction"]', data: $('#form_edit').serialize(), type: 'POST',
+                success: function (data) {
+                    kendo.ui.progress($("#form_edit"), false);
+                    if (data.status == 1) {
+                        window.parent.notification.show({title: data.title, message: kendo.toString(data.message) }, "success");
+                        if (window.parent.Reload_list_ref_literal_data) {
+                            window.parent.Reload_list_ref_literal_data();
+                        }else if (window.parent.reload_ref_literal_data) {
+                            window.parent.reload_ref_literal_data(data.pk);
+                        }
+                        close_self();
+                    } else if (data.status == 3) {
+                        windows.parent.notification.show({ title: data.title, message: data.message }, "error");
+                        close_self();
+                    } else {
+                        notification.show({ title: data.title, message: data.message }, "error");
+                    }
+                }
+            });
+        } else {
+            kendo.ui.progress($("#form_edit"), false);
+        }
+
+    });
+    $("#cancel").kendoButton();
+    $("#cancel").click(function (e) {
+        close_self();
+    });
+    function close_self() { if (window.parent.$("#dialog_ref_literal_data").data("kendoWindow")) { window.parent.$("#dialog_ref_literal_data").data("kendoWindow").close(); } else { window.parent.$("#dialog").data("kendoWindow").close(); } }
+</script>

@@ -1,0 +1,107 @@
+@using WebApp
+@using Microsoft.AspNetCore.Http;
+@{
+    Layout = "~/Views/Shared/_LayoutNoHeader.cshtml";
+    var fieldModel = ViewData["fieldModel"] as WebApp.Models.PerusahaanModel.ViewModel;
+    ViewData["Title"] = ViewData["TitleHeader"];
+    ViewData["PageName"] = "perusahaan";
+    ViewData["Heading"] = ViewData["TitleHeader"];
+    ViewData["Category1"] = "";
+    ViewData["Category2"] = "";
+}
+<div class="panel panel-form">
+	<div class="panel-container">
+		<div class="panel-heading">
+			<div class="title-header">@ViewData["TitleHeader"]</div>
+		</div>
+        <div class="panel-content">
+            <div class="row">
+                <div class="col-lg-12">
+
+                    <div id="form_item_id" class="form-group-none">
+                        <div class="form-item-label">@ResxHelper.GetValue("ref_perusahaan", "id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_id" class="form-item-view">@Html.Raw(fieldModel.id)</div>
+                    </div>
+
+                    <div id="form_item_nama_perusahaan" class="form-group">
+                        <div class="form-item-label">@ResxHelper.GetValue("ref_perusahaan", "nama_perusahaan")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_nama_perusahaan" class="form-item-view">@Html.Raw(fieldModel.nama_perusahaan)</div>
+                    </div>
+
+                    <div id="form_item_alamat" class="form-group">
+                        <div class="form-item-label">@ResxHelper.GetValue("ref_perusahaan", "alamat")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_alamat" class="form-item-view">@Html.Raw(fieldModel.alamat)</div>
+                    </div>
+
+                    <div id="form_item_lb3_usaha_id" class="form-group-none">
+                        <div class="form-item-label">@ResxHelper.GetValue("ref_perusahaan", "lb3_usaha_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_lb3_usaha_id" class="form-item-view">@Html.Raw(fieldModel.lb3_usaha_id_text)</div>
+                    </div>
+
+                    <div id="form_item_lb3_usaha_nama" class="form-group">
+                        <div class="form-item-label">@ResxHelper.GetValue("ref_perusahaan", "lb3_usaha_nama")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_lb3_usaha_nama" class="form-item-view">@Html.Raw(fieldModel.lb3_usaha_nama)</div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    @{
+                        string pengangkut = "1";
+                        string pengumpul = "2";
+                        string pengolah = "3";
+                        string pemanfaat = "4";
+                        string penimbun = "5";
+                        string dataItem = @ViewBag.lb3_usaha_id;
+                        foreach (string _usaha_id in dataItem.Split(','))
+                        {
+                            if (_usaha_id == pengangkut)
+                            {
+                                <br /><hr /><h4>Profil Pengangkut</h4>
+                                <partial name="_list_lb3_angkut" />
+                            }
+                            if (_usaha_id == pengumpul)
+                            {
+                                <br /><hr /><h4>Profil Pengumpul</h4>
+                                <partial name="_list_lb3_kumpul" />
+                            }
+                            if (_usaha_id == pengolah)
+                            {
+                                <br /><hr /><h4>Profil Pengolah</h4>
+                                <partial name="_list_lb3_olah" />
+                            }
+                            if (_usaha_id == pemanfaat)
+                            {
+                                <br /><hr /><h4>Profil Pemanfaat</h4>
+                                <partial name="_list_lb3_manfaat" />
+                            }
+                            if (_usaha_id == penimbun)
+                            {
+                                <br /><hr /><h4>Profil Penimbun</h4>
+                                <partial name="_list_lb3_timbun" />
+                            }
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+		<div class="panel-footer">
+			<a id="close" class="k-button k-button-icontext" href="#"><i class="far fa-times-circle"></i>&nbsp;<span id="btnCloseText">@ResxHelper.GetValue("Message", "Close", "Tutup")</span></a>
+		</div>
+	</div>
+</div>
+<script>
+    $("#close").kendoButton();
+    $("#close").click(function (e) {
+        close_self();
+    });
+    function onCloseDialog(e) { $('#dialog').html(''); }
+    function closeDialog() { $("#dialog").data("kendoWindow").close(); }
+    function close_self() { if (window.parent.$("#dialog_ref_perusahaan").data("kendoWindow")) { window.parent.$("#dialog_ref_perusahaan").data("kendoWindow").close(); } else { window.parent.$("#dialog").data("kendoWindow").close(); } }
+</script>

@@ -1,0 +1,28 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+<p>SessionId= @ViewData["SessionId"]</p>
+<a href="#" onclick="onPoses()">proses</a>
+<script>
+    function onPoses() {
+        var data = {param:[{ name: "id", opr: "=", value: "2" }, { name: "nama", opr: "contain", value: "asdfd" }]};
+        $.ajax({
+                data: data, url: '/Test/GetListData', type: 'POST'
+                , success: function (data) {
+                    if (data.status != 1) {
+                        notification.show({ title: data.title, message: kendo.toString(data.message) }, "error");
+                        winconfirm.close();
+                    } else {
+                        notification.show({ message: kendo.toString(data.message) }, "success");
+                        Reload_list_ref_business_area();
+                        winconfirm.close();
+                    }
+                }
+        });
+    }
+
+</script>

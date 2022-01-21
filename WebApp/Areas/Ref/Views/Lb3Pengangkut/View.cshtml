@@ -1,0 +1,109 @@
+@using WebApp
+@using Microsoft.AspNetCore.Http;
+@{
+    Layout = "~/Views/Shared/_LayoutNoHeader.cshtml";
+    var fieldModel = ViewData["fieldModel"] as WebApp.Areas.Ref.Models.Lb3PengangkutModel.ViewModel;
+	ViewData["Title"] = ViewData["TitleHeader"];
+    ViewData["PageName"] = "lb3pengangkut";
+    ViewData["Heading"] = ViewData["TitleHeader"];
+    ViewData["Category1"] = "";
+    ViewData["Category2"] = "";
+}
+<div class="panel panel-form">
+	<div class="panel-container">
+		<div class="panel-heading">
+			<div class="title-header">@ViewData["TitleHeader"]</div>
+		</div>
+		<div class="panel-content">
+			<div class="row">
+				<div class="col-lg-12">
+
+                    <div id="form_item_id" class="form-group-none">
+                      <div class="form-item-label">@ResxHelper.GetValue("ref_lb3_pengangkut", "id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_id" class="form-item-view">@Html.Raw(fieldModel.id)</div>
+                  </div>
+
+                    <div id="form_item_perusahaan_id" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ref_lb3_pengangkut", "perusahaan_id")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_perusahaan_id" class="form-item-view">@Html.Raw(fieldModel.perusahaan_id_text)</div>
+                  </div>
+
+                    <div id="form_item_no_kontrak" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ref_lb3_pengangkut", "no_kontrak")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_no_kontrak" class="form-item-view">@Html.Raw(fieldModel.no_kontrak)</div>
+                  </div>
+
+                    <div id="form_item_tgl_kontrak" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ref_lb3_pengangkut", "tgl_kontrak")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_tgl_kontrak" class="form-item-view">@Html.Raw(fieldModel.tgl_kontrak)</div>
+                  </div>
+
+                    <div id="form_item_masa_berlaku_kontrak" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ref_lb3_pengangkut", "masa_berlaku_kontrak")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_masa_berlaku_kontrak" class="form-item-view">@Html.Raw(fieldModel.masa_berlaku_kontrak)</div>
+                  </div>
+
+                    <div id="form_item_no_izin_angkut_klh" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ref_lb3_pengangkut", "no_izin_angkut_klh")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_no_izin_angkut_klh" class="form-item-view">@Html.Raw(fieldModel.no_izin_angkut_klh)</div>
+                  </div>
+
+                    <div id="form_item_tgl_berlaku_izin_klh" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ref_lb3_pengangkut", "tgl_berlaku_izin_klh")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_tgl_berlaku_izin_klh" class="form-item-view">@Html.Raw(fieldModel.tgl_berlaku_izin_klh)</div>
+                  </div>
+
+                    <div id="form_item_masa_berlaku_izin_klh" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ref_lb3_pengangkut", "masa_berlaku_izin_klh")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_masa_berlaku_izin_klh" class="form-item-view">@Html.Raw(fieldModel.masa_berlaku_izin_klh)</div>
+                  </div>
+
+                    <div id="form_item_no_izin_angkut_dishub" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ref_lb3_pengangkut", "no_izin_angkut_dishub")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_no_izin_angkut_dishub" class="form-item-view">@Html.Raw(fieldModel.no_izin_angkut_dishub)</div>
+                  </div>
+
+                    <div id="form_item_tgl_berlaku_izin_dishub" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ref_lb3_pengangkut", "tgl_berlaku_izin_dishub")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_tgl_berlaku_izin_dishub" class="form-item-view">@Html.Raw(fieldModel.tgl_berlaku_izin_dishub)</div>
+                  </div>
+
+                    <div id="form_item_masa_berlaku_izin_dishub" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ref_lb3_pengangkut", "masa_berlaku_izin_dishub")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_masa_berlaku_izin_dishub" class="form-item-view">@Html.Raw(fieldModel.masa_berlaku_izin_dishub)</div>
+                  </div>
+
+                    <div id="form_item_surat_tdk_bermasalah" class="form-group">
+                      <div class="form-item-label">@ResxHelper.GetValue("ref_lb3_pengangkut", "surat_tdk_bermasalah")</div>
+                      <div class="form-item-separator">:</div>
+                      <div id="view_item_surat_tdk_bermasalah" class="form-item-view">@Html.Raw(fieldModel.surat_tdk_bermasalah_text)</div>
+                  </div>
+
+				</div>
+			</div>
+		</div>
+		<div class="panel-footer">
+			<a id="close" class="k-button k-button-icontext" href="#"><i class="far fa-times-circle"></i>&nbsp;<span id="btnCloseText">@ResxHelper.GetValue("Message", "Close", "Tutup")</span></a>
+		</div>
+	</div>
+</div>
+<script>
+    $("#close").kendoButton();
+    $("#close").click(function (e) {
+        close_self();
+    });
+    function onCloseDialog(e) { $('#dialog').html(''); }
+    function closeDialog() { $("#dialog").data("kendoWindow").close(); }
+    function close_self() { if (window.parent.$("#dialog_ref_lb3_pengangkut").data("kendoWindow")) { window.parent.$("#dialog_ref_lb3_pengangkut").data("kendoWindow").close(); } else { window.parent.$("#dialog").data("kendoWindow").close(); } }
+</script>

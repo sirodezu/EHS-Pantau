@@ -1,0 +1,391 @@
+@using WebApp
+@using Microsoft.AspNetCore.Http;
+@{
+    Layout = "~/Views/Shared/_LayoutNoHeader.cshtml";
+    var fieldModel = ViewData["fieldModel"] as WebApp.Models.ManPowerModel.ViewModel;
+    ViewData["Title"] = ViewData["TitleHeader"];
+    ViewData["PageName"] = "manpower";
+    ViewData["Heading"] = ViewData["TitleHeader"];
+    ViewData["Category1"] = "";
+    ViewData["Category2"] = "";
+}
+
+<form id="form_edit" method="post" class="panel-form">
+    <div class="panel">
+        <div class="panel-heading">
+            <div class="title-header">@ViewData["TitleHeader"]</div>
+        </div>
+        <div class="panel-container">
+            <div class="panel-content">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div id="form_item_id" class="form-group-none">
+                            <div class="form-item-label220">@ResxHelper.GetValue("ta_mp", "id")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_id" class="form-item-field">
+                                <input type="hidden" id="id" name="id" value="@fieldModel.id" />
+                                <input type="hidden" id="id_old" name="id_old" value="@fieldModel.id" />
+                            </div>
+                        </div>
+                        <div id="form_item_karyawan_nonkaryawan_id" class="form-group">
+                            <div class="form-item-label220">@ResxHelper.GetValue("ta_mp", "karyawan_nonkaryawan_id")<span id="label_req_karyawan_nonkaryawan_id" class="required"> *</span></div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_karyawan_nonkaryawan_id" class="form-item-field">
+                                @Html.Raw(fieldModel.karyawan_nonkaryawan_id_text)
+                                <input type="hidden" id="karyawan_nonkaryawan_id" name="karyawan_nonkaryawan_id" value="@fieldModel.karyawan_nonkaryawan_id" />
+                            </div>
+                        </div>
+
+                        <div id="form_item_user_nonuser_id" class="form-group">
+                            <div class="form-item-label220">@ResxHelper.GetValue("ta_mp", "user_nonuser_id")<span id="label_req_user_nonuser_id" class="required"> *</span></div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_user_nonuser_id" class="form-item-field">
+                                <input id="user_nonuser_id" name="user_nonuser_id" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_mp","user_nonuser_id"))" style="width:250px;" />
+                                <span class="k-invalid-msg" data-for="user_nonuser_id"></span>
+                                <script>
+                                   var user_nonuser_id_param = {item : {value:"id",text:"nama"},parent:[{ field: 'cat_id',opr:'=', value: '148' }], order:[]};
+                                   var user_nonuser_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: user_nonuser_id_param, type: "POST" } } });
+                                   var user_nonuser_id = $("#user_nonuser_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: user_nonuser_id_ds, change:onChange_user_nonuser_id }).data("kendoComboBox");
+                                   $(document).ready(function () { $("#user_nonuser_id").data("kendoComboBox").value('@fieldModel.user_nonuser_id'); });
+                                   function onChange_user_nonuser_id() {if ($("#user_nonuser_id").data("kendoComboBox").value() != '' && $("#user_nonuser_id").data("kendoComboBox")._oldIndex == -1) {$("#user_nonuser_id").data("kendoComboBox").value('');}
+                                        display_by_type();
+                                   }
+                                </script>
+                            </div>
+                        </div>
+
+                        <div id="form_item_person_id" class="form-group-none">
+                            <div class="form-item-label220">@ResxHelper.GetValue("ta_mp", "person_id")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_person_id" class="form-item-field">
+                                @Html.Raw(fieldModel.person_id_text)
+                                <input type="hidden" id="person_id" name="karyawan_nonkaryawan_id" value="@fieldModel.person_id" />
+                            </div>
+                        </div>
+
+                        <div id="form_item_file_path_photo" class="form-group">
+                            <div class="form-item-label220">@ResxHelper.GetValue("ta_mp", "file_path_photo")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_file_path_photo" class="form-item-field">
+                                @Html.Raw(fieldModel.file_path_photo)
+                                <input type="hidden" id="file_path_photo" name="file_path_photo" value="@fieldModel.file_path_photo" />
+                            </div>
+                        </div>
+
+                        <div id="form_item_nama_lengkap" class="form-group">
+                            <div class="form-item-label220">@ResxHelper.GetValue("ta_mp", "nama_lengkap")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_nama_lengkap" class="form-item-field">
+                                @Html.Raw(fieldModel.nama_lengkap)
+                                <input type="hidden" id="nama_lengkap" name="nama_lengkap" value="@fieldModel.nama_lengkap" />
+                            </div>
+                        </div>
+
+                        <div id="form_item_nrp" class="form-group">
+                            <div class="form-item-label220">@ResxHelper.GetValue("ta_mp", "nrp")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_nrp" class="form-item-field">
+                                @Html.Raw(fieldModel.nrp)
+                                <input type="hidden" id="nrp" name="nrp" value="@fieldModel.nrp" />
+                            </div>
+                        </div>
+
+                        <div id="form_item_tempat_lahir" class="form-group">
+                            <div class="form-item-label220">@ResxHelper.GetValue("ta_mp", "tempat_lahir")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_tempat_lahir" class="form-item-field">
+                                @Html.Raw(fieldModel.tempat_lahir)
+                                <input type="hidden" id="tempat_lahir" name="tempat_lahir" value="@fieldModel.tempat_lahir" />
+                            </div>
+                        </div>
+
+                        <div id="form_item_tgl_lahir" class="form-group">
+                            <div class="form-item-label220">@ResxHelper.GetValue("ta_mp", "tgl_lahir")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_tgl_lahir" class="form-item-field">
+                                @Html.Raw(fieldModel.dt_tgl_lahir)
+                                <input type="hidden" id="tgl_lahir" name="tgl_lahir" value="@fieldModel.tgl_lahir" />
+                            </div>
+                        </div>
+                        <div id="form_item_jenis_kelamin_id" class="form-group">
+                            <div class="form-item-label220">@ResxHelper.GetValue("ta_mp", "jenis_kelamin_id")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_jenis_kelamin_id" class="form-item-field">
+                                @Html.Raw(fieldModel.jenis_kelamin_id_text)
+                                <input type="hidden" id="jenis_kelamin_id" name="jenis_kelamin_id" value="@fieldModel.jenis_kelamin_id" />
+                            </div>
+                        </div>
+                        <div id="form_item_company_id" class="form-group">
+                            <div class="form-item-label220">@ResxHelper.GetValue("ta_mp", "company_id")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_company_id" class="form-item-field">
+                                @Html.Raw(fieldModel.company_id_text)
+                                <input type="hidden" id="company_id" name="company_id" value="@fieldModel.company_id" />
+                            </div>
+                        </div>
+
+                        <div id="form_item_ehs_area_id" class="form-group">
+                            <div class="form-item-label220">@ResxHelper.GetValue("ta_mp", "ehs_area_id")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_ehs_area_id" class="form-item-field">
+                                @Html.Raw(fieldModel.ehs_area_id_text)
+                                <input type="hidden" id="ehs_area_id" name="ehs_area_id" value="@fieldModel.ehs_area_id" />
+                            </div>
+                        </div>
+
+                        <div id="form_item_business_area_id" class="form-group">
+                            <div class="form-item-label220">@ResxHelper.GetValue("ta_mp", "business_area_id")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_business_area_id" class="form-item-field">
+                                @Html.Raw(fieldModel.business_area_id_text)
+                                <input type="hidden" id="business_area_id" name="business_area_id" value="@fieldModel.business_area_id" />
+                            </div>
+                        </div>
+
+                        <div id="form_item_personal_area_id" class="form-group">
+                            <div class="form-item-label220">@ResxHelper.GetValue("ta_mp", "personal_area_id")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_personal_area_id" class="form-item-field">
+                                @Html.Raw(fieldModel.personal_area_id_text)
+                                <input type="hidden" id="personal_area_id" name="personal_area_id" value="@fieldModel.personal_area_id" />
+                            </div>
+                        </div>
+
+                        <div id="form_item_personal_sub_area_id" class="form-group">
+                            <div class="form-item-label220">@ResxHelper.GetValue("ta_mp", "personal_sub_area_id")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_personal_sub_area_id" class="form-item-field">
+                                @Html.Raw(fieldModel.personal_sub_area_id_text)
+                                <input type="hidden" id="personal_sub_area_id" name="personal_sub_area_id" value="@fieldModel.personal_sub_area_id" />
+                            </div>
+                        </div>
+                        <div id="form_item_job" class="form-group">
+                            <div class="form-item-label220">@ResxHelper.GetValue("ta_mp", "job")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_job" class="form-item-field">
+                                @Html.Raw(fieldModel.job)
+                                <input type="hidden" id="job" name="job" value="@fieldModel.job" />
+                            </div>
+                        </div>
+                        <div id="form_item_position" class="form-group">
+                            <div class="form-item-label220">@ResxHelper.GetValue("ta_mp", "position")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_position" class="form-item-field">
+                                @Html.Raw(fieldModel.position)
+                                <input type="hidden" id="position" name="position" value="@fieldModel.position" />
+                            </div>
+                        </div>
+                        <div id="form_item_tgl_masuk_kerja" class="form-group">
+                            <div class="form-item-label220">@ResxHelper.GetValue("ta_mp", "tgl_masuk_kerja")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_tgl_masuk_kerja" class="form-item-field">
+                                @Html.Raw(fieldModel.dt_tgl_masuk_kerja)
+                                <input type="hidden" id="tgl_masuk_kerja" name="tgl_masuk_kerja" value="@fieldModel.tgl_masuk_kerja" />
+                            </div>
+                        </div>
+
+                        <div id="form_item_tgl_akhir_kerja" class="form-group">
+                            <div class="form-item-label220">@ResxHelper.GetValue("ta_mp", "tgl_akhir_kerja")</div>
+                            <div class="form-item-separator">:</div>
+                            <div id="field_item_tgl_akhir_kerja" class="form-item-field">
+                                @Html.Raw(fieldModel.dt_tgl_akhir_kerja)
+                                <input type="hidden" id="tgl_akhir_kerja" name="tgl_akhir_kerja" value="@fieldModel.tgl_akhir_kerja" />
+                            </div>
+                        </div>
+                        <div class="form-group"></div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div id="tbl_screening" class="card">
+                            <div class="card-header">Screening</div>
+                            <div class="card-body">
+                                <table class="table table-bordered table-striped table-responsive-lg">
+                                    <tr>
+                                        <th style="width:20px">No</th>
+                                        <th style="width:100px">Screening</th>
+                                        <th style="width:50px">Nilai</th>
+                                        <th>Catatan Objective</th>
+                                    </tr>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>Behaviour</td>
+                                        <td>
+                                            <input type="number" id="behaviour_screen_nilai" name="behaviour_screen_nilai"  min="0" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_mp","behaviour_screen_nilai"))" style="width:60px;" />
+                                            <span class="k-invalid-msg" data-for="behaviour_screen_nilai"></span>
+                                            <script>
+                                               $("#behaviour_screen_nilai").kendoNumericTextBox({ format: "{0:N0}", decimals: 0,min:1,max:10  });
+                                               $(document).ready(function () {$("#behaviour_screen_nilai").data('kendoNumericTextBox').value('@fieldModel.behaviour_screen_nilai');})
+                                            </script>
+                                        </td>
+                                        <td>
+                                            <textarea type="text" id="behaviour_screen_objective" name="behaviour_screen_objective" class="k-textbox" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_mp","behaviour_screen_objective"))" maxlength="1024" style="width:350px;" title="@ResxHelper.GetValue("ta_mp", "behaviour_screen_objective") @ResxHelper.GetValue("Message", "IsNotValidCharacter")." pattern="@ConfigHelper.GetValue("AllowInputCharacters")">@Html.Raw(fieldModel.behaviour_screen_objective)</textarea>
+                                            <span class="k-invalid-msg" data-for="behaviour_screen_objective"></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td>TOC</td>
+                                        <td>
+                                            <input type="number" id="toc_nilai" name="toc_nilai"  min="0" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_mp","toc_nilai"))" style="width:60px;" />
+                                            <span class="k-invalid-msg" data-for="toc_nilai"></span>
+                                            <script>
+                                               $("#toc_nilai").kendoNumericTextBox({ format: "{0:N0}", decimals: 0,min:1,max:10  });
+                                               $(document).ready(function () {$("#toc_nilai").data('kendoNumericTextBox').value('@fieldModel.toc_nilai');})
+                                            </script>
+                                        </td>
+                                        <td>
+                                            <textarea type="text" id="toc_objective" name="toc_objective" class="k-textbox" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_mp","toc_objective"))" maxlength="1024" style="width:350px;" title="@ResxHelper.GetValue("ta_mp", "toc_objective") @ResxHelper.GetValue("Message", "IsNotValidCharacter")." pattern="@ConfigHelper.GetValue("AllowInputCharacters")">@Html.Raw(fieldModel.toc_objective)</textarea>
+                                            <span class="k-invalid-msg" data-for="toc_objective"></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>3</td>
+                                        <td>BMC</td>
+                                        <td>
+                                            <input type="number" id="bmc_nilai" name="bmc_nilai"  min="0" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_mp","bmc_nilai"))" style="width:60px;" />
+                                            <span class="k-invalid-msg" data-for="bmc_nilai"></span>
+                                            <script>
+                                               $("#bmc_nilai").kendoNumericTextBox({ format: "{0:N0}", decimals: 0,min:1,max:10  });
+                                               $(document).ready(function () {$("#bmc_nilai").data('kendoNumericTextBox').value('@fieldModel.bmc_nilai');})
+                                            </script>
+                                        </td>
+                                        <td>
+                                            <textarea type="text" id="bmc_objective" name="bmc_objective" class="k-textbox" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_mp","bmc_objective"))" maxlength="1024" style="width:350px;" title="@ResxHelper.GetValue("ta_mp", "bmc_objective") @ResxHelper.GetValue("Message", "IsNotValidCharacter")." pattern="@ConfigHelper.GetValue("AllowInputCharacters")">@Html.Raw(fieldModel.bmc_objective)</textarea>
+                                            <span class="k-invalid-msg" data-for="bmc_objective"></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>4</td>
+                                        <td>English</td>
+                                        <td>
+                                            <input type="number" id="english_nilai" name="english_nilai"  min="0" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_mp","english_nilai"))" style="width:60px;" />
+                                            <span class="k-invalid-msg" data-for="english_nilai"></span>
+                                            <script>
+                                               $("#english_nilai").kendoNumericTextBox({ format: "{0:N0}", decimals: 0,min:1,max:10 });
+                                               $(document).ready(function () {$("#english_nilai").data('kendoNumericTextBox').value('@fieldModel.english_nilai');})
+                                            </script>
+                                        </td>
+                                        <td>
+                                            <textarea type="text" id="english_objective" name="english_objective" class="k-textbox" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("ta_mp","english_objective"))" maxlength="1024" style="width:350px;" title="@ResxHelper.GetValue("ta_mp", "english_objective") @ResxHelper.GetValue("Message", "IsNotValidCharacter")." pattern="@ConfigHelper.GetValue("AllowInputCharacters")">@Html.Raw(fieldModel.english_objective)</textarea>
+                                            <span class="k-invalid-msg" data-for="english_objective"></span>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-footer">
+                <a id="cancel" class="k-button k-button-icontext" href="#"><i class="far fa-times-circle"></i>&nbsp;<span id="btnCancelText">@ResxHelper.GetValue("Message", "Cancel")</span></a>
+                <a id="save" class="k-button k-button-icontext" href="#"><i class="fas fa-save"></i>&nbsp;<span id="btnSaveText">@ResxHelper.GetValue("Message", "Save")</span></a>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+    var form_type = '@ViewData["form_type"]';
+    function ShowHideColumn(form_type)
+    {
+        if(form_type=='Add')
+        {
+            var hiden_column = [];
+            for (i = 0; i < hiden_column.length; i++) {
+                $("#form_item_"+hiden_column[i]).hide();
+            }
+        }
+        else if(form_type=='Edit')
+        {
+            var hiden_column = [];
+            for (i = 0; i < hiden_column.length; i++) {
+                $("#form_item_"+hiden_column[i]).hide();
+            }
+        }
+    }
+    function setReadOnly(form_type,opt)
+    {
+        if(opt==true)
+        {
+            if(form_type=='Add')
+            {
+
+            }
+            else if(form_type=='Edit')
+            {
+
+            }
+        }
+        else
+        {
+            if(form_type=='Add')
+            {
+
+            }
+            else if(form_type=='Edit')
+            {
+
+            }
+        }
+    }
+
+    function display_by_type() {
+        if ($("#user_nonuser_id").data("kendoComboBox").value() == '1') {
+            $('#tbl_screening').show();
+        } else {
+            $('#tbl_screening').hide();
+            $("#behaviour_screen_nilai").data('kendoNumericTextBox').value('');
+            $('#behaviour_screen_objective').val('');
+            $("#toc_nilai").data('kendoNumericTextBox').value('');
+            $('#toc_objective').val('');
+            $("#bmc_nilai").data('kendoNumericTextBox').value('');
+            $('#bmc_objective').val('');
+            $("#english_nilai").data('kendoNumericTextBox').value('');
+            $('#english_objective').val('');
+        }
+
+    }
+
+    $(document).ready(function () {
+        ShowHideColumn(form_type);
+        setReadOnly(form_type, true);
+        display_by_type();
+    });
+    var validatable = $("#form_edit").kendoValidator().data("kendoValidator");
+    $("#save").click(function (e) {
+        //getListFileUpload("file_path_photo");
+		setReadOnly(form_type, false);
+        if (validatable.validate() === true) {
+            kendo.ui.progress($("#form_edit"), true);
+            $.ajax({
+                url: '@ViewData["UrlAction"]', data: $('#form_edit').serialize(), type: 'POST',
+                success: function (data) {
+                    kendo.ui.progress($("#form_edit"), false);
+                    if (data.status == 1) {
+                        window.parent.notification.show({title: data.title, message: kendo.toString(data.message) }, "success");
+                        if (window.parent.Reload_list_ta_mp) {
+                            window.parent.Reload_list_ta_mp();
+                        }else if (window.parent.reload_ta_mp) {
+                            window.parent.reload_ta_mp(data.pk);
+                        }
+                        close_self();
+                    } else if (data.status == 3) {
+                        windows.parent.notification.show({ title: data.title, message: data.message }, "error");
+                        setReadOnly(form_type, true);
+						close_self();
+                    } else {
+						setReadOnly(form_type, true);
+                        notification.show({ title: data.title, message: data.message }, "error");
+                    }
+                }
+            });
+        } else {
+            kendo.ui.progress($("#form_edit"), false);
+        }
+		setReadOnly(form_type, true);
+    });
+    $("#cancel").kendoButton();
+    $("#cancel").click(function (e) {
+        close_self();
+    });
+    function close_self() { if (window.parent.$("#dialog_ta_mp").data("kendoWindow")) { window.parent.$("#dialog_ta_mp").data("kendoWindow").close(); } else { window.parent.$("#dialog").data("kendoWindow").close(); } }
+</script>

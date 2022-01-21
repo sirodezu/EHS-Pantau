@@ -1,0 +1,51 @@
+﻿@using WebApp;
+@using Microsoft.AspNetCore.Http;
+@{
+    Layout = "~/Views/Shared/_LayoutNoHeader.cshtml";
+    var fieldModel = ViewData["fieldModel"] as WebApp.Areas.Sys.Models.ResourcesModel.ViewModel;
+    var baseUrl = ViewData["baseUrl"];
+}
+
+<div class="card">
+    <div class="card-header">
+        <div class="title-header">@ViewData["TitleHeader"]</div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12">
+                <div id="form_item_id" class="form-item">
+                    <div class="form-item-label">@ResxHelper.GetValue("sys_resources", "lang_code")</div>
+                    <div class="form-item-separator">:</div>
+                    <div id="view_item_id" class="form-item-view">@fieldModel.lang_code</div>
+                </div>
+                <div id="form_item_name" class="form-item">
+                    <div class="form-item-label">@ResxHelper.GetValue("sys_resources", "class_name")</div>
+                    <div class="form-item-separator">:</div>
+                    <div id="view_item_name" class="form-item-view">@fieldModel.class_name</div>
+                </div>
+                <div id="form_item_description" class="form-item">
+                    <div class="form-item-label">@ResxHelper.GetValue("sys_resources", "key_name")</div>
+                    <div class="form-item-separator">:</div>
+                    <div id="view_item_description" class="form-item-view">@fieldModel.key_name</div>
+                </div>
+                <div id="form_item_level_id" class="form-item">
+                    <div class="form-item-label">@ResxHelper.GetValue("sys_resources", "key_value")</div>
+                    <div class="form-item-separator">:</div>
+                    <div id="view_item_level_id" class="form-item-view">@fieldModel.key_value</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer" style="text-align:center">
+        <a id="close" class="k-button k-button-icontext" href="#"><i class="far fa-times-circle"></i>&nbsp;<span id="btnCloseText">@ResxHelper.GetValue("Message", "Close", "Tutup")</span></a>
+        <a id="edit" class="k-button k-button-icontext" href="#"><i class="fas fa-edit"></i>&nbsp;<span id="btnEditText">@ResxHelper.GetValue("Message", "Edit", "Edit")</span></a>
+    </div>
+</div>
+<script>
+    $("#close").kendoButton();
+    $("#close").click(function (e) {
+        close_self();
+    });
+    function close_self() { if (window.parent.$("#dialog_sys_resources").data("kendoWindow")) { window.parent.$("#dialog_sys_resources").data("kendoWindow").close(); } else { window.parent.$("#dialog").data("kendoWindow").close(); } }
+</script>
+

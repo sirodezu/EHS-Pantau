@@ -1,0 +1,382 @@
+@using WebApp
+@using Newtonsoft.Json
+@using Microsoft.AspNetCore.Http;
+@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	var filterColumn = ViewData["filterColumn"] as WebApp.Models.ServiceReportModel.ViewModel;
+	ViewData["Title"] = ViewData["TitleHeader"];
+	ViewData["PageName"] = "servicereport";
+	ViewData["Heading"] = ViewData["TitleHeader"];
+	ViewData["Category1"] = "";
+	ViewData["Category2"] = "";
+}
+<style>
+	.curent-data th {
+		padding: 6px;
+		text-align: center;
+		background-color: #7D7D7D;
+		color: #ffffff;
+	}
+
+	.table th {
+		padding: 6px;
+		text-align: center;
+	}
+
+	.table td {
+		padding: 6px;
+	}
+</style>
+<div class="panel">
+	<div class="panel-heading">
+		<div class="title-header">@ResxHelper.GetValue("Message", "FilterDataHeader", "Filter Data")</div>
+	</div>
+	<div class="panel-container">
+		<div class="panel-content">
+			<div class="row">
+				<div class="col-lg-12">
+
+					<div id="form_item_id_bulan" class="form-group">
+						<div class="form-item-label">@ResxHelper.GetValue("ta_service_report", "bulan"):</div>
+						<div class="form-item-separator">:</div>
+						<div id="field_item_id" class="form-item-field">
+							<input id="bulan" name="bulan" style="width: 350px;" />
+						</div>
+					</div>
+					<div id="form_item_id_tahun" class="form-group">
+						<div class="form-item-label">@ResxHelper.GetValue("ta_service_report", "tahun"):</div>
+						<div class="form-item-separator">:</div>
+						<div id="field_item_id" class="form-item-field">
+							<input id="tahun" name="tahun" style="width: 350px;" />
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+        <div class="panel-content">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div id="service_report_area"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div id="service_report_psa"></div>
+                </div>
+            </div>
+            <div><p>&nbsp;</p></div>
+            <div id="div_legend" style="display:none">
+                <div class="row">
+                    <div class="col-lg-12"><span style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;color:green;"><b>LEGEND:</b></span></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2"><div class="card text-center"><div id="legend_ag" class="card-body"></div></div></div>
+                    <div class="col-md-2"><div class="card text-center"><div id="legend_fr" class="card-body"></div></div></div>
+                    <div class="col-md-2"><div class="card text-center"><div id="legend_sr" class="card-body"></div></div></div>
+                    <div class="col-md-2"><div class="card text-center"><div id="legend_st" class="card-body"></div></div></div>
+                    <div class="col-md-2"><div class="card text-center"><div id="legend_gb" class="card-body"></div></div></div>
+                </div>
+            </div>
+        </div>
+	</div>
+</div>
+@section ScriptsBlock {
+	<script>
+        //=== filter bulan
+        var bulan_param = { item: { value: 'id', text: 'nama', distinct: '0' } ,parent:[{ field: 'cat_id',opr:'=', value: '150' }], order:[{ field: 'id', dir: 'asc' }]};
+        var bulan_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: bulan_param, type: "POST" } } });
+        var bulan = $("#bulan").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", change: onChange_bulan, dataSource: bulan_ds }).data("kendoComboBox");
+        $(document).ready(function () { $("#bulan").data("kendoComboBox").value('@filterColumn.bulan'); });
+        function onChange_bulan() {
+            if ($("#bulan").data("kendoComboBox").value() != '' && $("#bulan").data("kendoComboBox")._oldIndex == -1) { $("#bulan").data("kendoComboBox").value(''); }
+            show_data();
+        }
+
+
+        //=== filter tahun
+        var tahun_param = { item: { value: 'id', text: 'nama', distinct: '0' } ,parent:[{ field: 'cat_id',opr:'=', value: '151' }], order:[]};
+        var tahun_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: tahun_param, type: "POST" } } });
+        var tahun = $("#tahun").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", change: onChange_tahun, dataSource: tahun_ds }).data("kendoComboBox");
+        $(document).ready(function () { $("#tahun").data("kendoComboBox").value('@filterColumn.tahun'); });
+        function onChange_tahun() {
+            if ($("#tahun").data("kendoComboBox").value() != '' && $("#tahun").data("kendoComboBox")._oldIndex == -1) { $("#tahun").data("kendoComboBox").value(''); }
+            show_data();
+        }
+
+
+        function show_data() {
+            var cur_bulan = $("#bulan").data("kendoComboBox").value();
+            var cur_tahun = $("#tahun").data("kendoComboBox").text();
+
+            if ((cur_bulan != null && cur_bulan != '') && (cur_tahun != null && cur_tahun != ''))
+            {
+                //
+            }
+            else
+            {
+                draw_service_report_area(null);
+                draw_service_report_psa(null);
+                draw_legend_ag(null);
+                draw_legend_fr(null);
+                draw_legend_sr(null);
+                draw_legend_st(null);
+                draw_legend_gb(null);
+
+                $("#service_report_area").parent().parent().hide();
+                $("#service_report_psa").parent().parent().hide();
+                $("#div_legend").css('display', 'none');
+                return;
+
+            }
+
+            var param = {cur_bulan:cur_bulan,cur_tahun:cur_tahun};
+            $.ajax({
+                url: '@ViewBag.BaseUrl/ServiceReport/GetValidData', data:param, type: 'POST',
+                success: function (data) {
+                    if (data != null && data != undefined) {
+                        if (data.table != null && data.table != undefined && data.table.length > 0) {
+                            draw_service_report_area(data.table)
+                            $("#service_report_area").show();
+                            $("#service_report_area").parent().parent().show();
+                        } else {
+                            draw_service_report_area(null);
+                            $("#service_report_area").parent().parent().hide();
+                        }
+                        if (data.table1 != null && data.table1 != undefined && data.table1.length > 0) {
+                            draw_service_report_psa(data.table1)
+                            $("#service_report_psa").show();
+                            $("#service_report_psa").parent().parent().show();
+                        } else {
+                            draw_service_report_psa(null);
+                            $("#service_report_psa").parent().parent().hide();
+                        }
+                        //
+                        if (data.table2 != null && data.table2 != undefined && data.table2.length > 0) {
+                            draw_legend_ag(data.table2)
+                            $("#div_legend").css('display', 'block');
+                        } else {
+                            draw_legend_ag(null);
+                        }
+                        if (data.table3 != null && data.table3 != undefined && data.table3.length > 0) {
+                            draw_legend_fr(data.table3)
+                            $("#div_legend").css('display', 'block');
+                        } else {
+                            draw_legend_fr(null);
+                        }
+                        if (data.table4 != null && data.table4 != undefined && data.table4.length > 0) {
+                            draw_legend_sr(data.table4)
+                            $("#div_legend").css('display', 'block');
+                        } else {
+                            draw_legend_sr(null);
+                        }
+                        if (data.table5 != null && data.table5 != undefined && data.table5.length > 0) {
+                            draw_legend_st(data.table5)
+                            $("#div_legend").css('display', 'block');
+                        } else {
+                            draw_legend_st(null);
+                        }
+                        if (data.table6 != null && data.table6 != undefined && data.table6.length > 0) {
+                            draw_legend_gb(data.table6)
+                            $("#div_legend").css('display', 'block');
+                        } else {
+                            draw_legend_gb(null);
+                        }
+                    } else {
+                        draw_service_report_area(null);
+                        draw_service_report_psa(null);
+                        draw_legend_ag(null);
+                        draw_legend_fr(null);
+                        draw_legend_sr(null);
+                        draw_legend_st(null);
+                        draw_legend_gb(null);
+                        $("#service_report_area").parent().parent().hide();
+                        $("#service_report_psa").parent().parent().hide();
+                        $("#div_legend").css('display', 'none');
+                    }
+                }
+            });
+        }
+        function draw_service_report_area(data) {
+            var htm = "";
+            if (data != null && data != undefined && data.length > 0) {
+                var htm = '<table class="table table-bordered table-striped table-responsive">';
+                htm += '<tr>';
+                htm += '    <th colspan="10"><div style="padding:2px;white-space:normal;">Service Report - Area</div></th>';
+                htm += '</tr>';
+                htm += '<tr>';
+                htm += '    <th rowspan="2" style="width:50px;">No</th>';
+                htm += '    <th rowspan="2" style="width:300px;">Area</th>';
+                htm += '    <th rowspan="2" style="width:300px;">Area Head</th>';
+                htm += '    <th rowspan="2" style="width:50px;">AGC</th>';
+                htm += '    <th rowspan="2" style="width:50px;">FR</th>';
+                htm += '    <th rowspan="2" style="width:50px;">SR</th>';
+                htm += '    <th colspan="2" style="width:100px;">Safety Talk</th>';
+                htm += '    <th colspan="2" style="width:100px;">Genba</th>';
+                htm += '</tr>';
+                htm += '<tr>';
+                htm += '    <th style="width:50px;">This Month</th>';
+                htm += '    <th style="width:50px;">YTD</th>';
+                htm += '    <th style="width:50px;">This Month</th>';
+                htm += '    <th style="width:50px;">YTD</th>';
+                htm += '</tr>';
+
+                var no = 0;
+                var event_code = "";
+                var bg_color = "";
+                var font_color = "";
+                var status_text = "";
+                jQuery.each(data, function (i, val) {
+                    no++;
+                    htm += '<tr>';
+                    htm += '    <td style="text-align: center;">'+no+'</td>';
+                    htm += '    <td style="text-align: left;">' + val.ehs_nama + '</td>';
+                    htm += '    <td style="text-align: left;">' + val.ehs_head + '</td>';
+                    htm += '    <td style="text-align: left;" ' + (val.agc == '' ? '' : 'bgcolor="#'+ val.agc +'"') + '></td>';
+                    htm += '    <td style="text-align: left;" ' + (val.fr == '' ? '' : 'bgcolor="#'+ val.fr +'"') + '></td>';
+                    htm += '    <td style="text-align: left;" ' + (val.sr == '' ? '' : 'bgcolor="#'+ val.sr +'"') + '></td>';
+                    htm += '    <td style="text-align: left;" ' + (val.st_month == '' ? '' : 'bgcolor="#'+ val.st_month +'"') + '></td>';
+                    htm += '    <td style="text-align: left;" ' + (val.st_year == '' ? '' : 'bgcolor="#' + val.st_year + '"') + '></td>';
+                    htm += '    <td style="text-align: left;" ' + (val.gb_month == '' ? '' : 'bgcolor="#'+ val.gb_month +'"') + '></td>';
+                    htm += '    <td style="text-align: left;" ' + (val.gb_year == '' ? '' : 'bgcolor="#'+ val.gb_year +'"') + '></td>';
+                    htm += '</tr>';
+                });
+                htm += '</table>';
+            }
+            $("#service_report_area").html(htm);
+        }
+        function draw_service_report_psa(data) {
+            var htm = "";
+            if (data != null && data != undefined && data.length > 0) {
+                var htm = '<table class="table table-bordered table-striped table-responsive">';
+                htm += '<tr>';
+                htm += '    <th colspan="10"><div style="padding:2px;white-space:normal;">Service Report - Personal Sub Area</div></th>';
+                htm += '</tr>';
+                htm += '<tr>';
+                htm += '    <th rowspan="2" style="width:50px;">No</th>';
+                htm += '    <th rowspan="2" style="width:300px;">Personal Sub Area</th>';
+                htm += '    <th rowspan="2" style="width:300px;">Personal Sub Area Head</th>';
+                htm += '    <th rowspan="2" style="width:50px;">AGC</th>';
+                htm += '    <th rowspan="2" style="width:50px;">FR</th>';
+                htm += '    <th rowspan="2" style="width:50px;">SR</th>';
+                htm += '    <th colspan="2" style="width:100px;">Safety Talk</th>';
+                htm += '    <th colspan="2" style="width:100px;">Genba</th>';
+                htm += '</tr>';
+                htm += '<tr>';
+                htm += '    <th style="width:50px;">This Month</th>';
+                htm += '    <th style="width:50px;">YTD</th>';
+                htm += '    <th style="width:50px;">This Month</th>';
+                htm += '    <th style="width:50px;">YTD</th>';
+                htm += '</tr>';
+
+                var no = 0;
+                var event_code = "";
+                var bg_color = "";
+                var font_color = "";
+                var status_text = "";
+                jQuery.each(data, function (i, val) {
+                    no++;
+                    htm += '<tr>';
+                    htm += '    <td style="text-align: center;">'+no+'</td>';
+                    htm += '    <td style="text-align: left;">' + val.psa_nama + '</td>';
+                    htm += '    <td style="text-align: left;">' + val.psa_head + '</td>';
+                    htm += '    <td style="text-align: left;" ' + (val.agc == '' ? '' : 'bgcolor="#'+ val.agc +'"') + '></td>';
+                    htm += '    <td style="text-align: left;" ' + (val.fr == '' ? '' : 'bgcolor="#'+ val.fr +'"') + '></td>';
+                    htm += '    <td style="text-align: left;" ' + (val.sr == '' ? '' : 'bgcolor="#'+ val.sr +'"') + '></td>';
+                    htm += '    <td style="text-align: left;" ' + (val.st_month == '' ? '' : 'bgcolor="#'+ val.st_month +'"') + '></td>';
+                    htm += '    <td style="text-align: left;" ' + (val.st_year == '' ? '' : 'bgcolor="#' + val.st_year + '"') + '></td>';
+                    htm += '    <td style="text-align: left;" ' + (val.gb_month == '' ? '' : 'bgcolor="#'+ val.gb_month +'"') + '></td>';
+                    htm += '    <td style="text-align: left;" ' + (val.gb_year == '' ? '' : 'bgcolor="#'+ val.gb_year +'"') + '></td>';
+                    htm += '</tr>';
+                });
+                htm += '</table>';
+            }
+            $("#service_report_psa").html(htm);
+        }
+        function draw_legend_ag(data) {
+            var htm = "";
+            if (data != null && data != undefined && data.length > 0) {
+                htm = '<table class="table table-bordered table-striped table-responsive">';
+                htm += '<tr>';
+                htm += '    <th colspan="2"><div style="padding:2px;white-space:normal;">ASTRA GREEN COMPANY (AGC)</div></th>';
+                htm += '</tr>';
+                jQuery.each(data, function (i, val) {
+                    htm += '<tr>';
+                    htm += '    <td style="width:50px;text-align: left;" bgcolor="#'+ val.pallete +'">&nbsp;</td>';
+                    htm += '    <td style="width:200px;text-align: left;">' + val.description + '</td>';
+                    htm += '</tr>';
+                });
+                htm += '</table>';
+            }
+            $("#legend_ag").html(htm);
+        }
+        function draw_legend_fr(data) {
+            var htm = "";
+            if (data != null && data != undefined && data.length > 0) {
+                htm = '<table class="table table-bordered table-striped table-responsive">';
+                htm += '<tr>';
+                htm += '    <th colspan="2"><div style="padding:2px;white-space:normal;">FREQUENCY RATE (FR)</div></th>';
+                htm += '</tr>';
+                jQuery.each(data, function (i, val) {
+                    htm += '<tr>';
+                    htm += '    <td style="width:50px;text-align: left;" bgcolor="#'+ val.pallete +'">&nbsp;</td>';
+                    htm += '    <td style="width:200px;text-align: left;">' + val.description + '</td>';
+                    htm += '</tr>';
+                });
+                htm += '</table>';
+            }
+            $("#legend_fr").html(htm);
+        }
+        function draw_legend_sr(data) {
+            var htm = "";
+            if (data != null && data != undefined && data.length > 0) {
+                htm = '<table class="table table-bordered table-striped table-responsive">';
+                htm += '<tr>';
+                htm += '    <th colspan="2"><div style="padding:2px;white-space:normal;">SEVERITY RATE (SR)</div></th>';
+                htm += '</tr>';
+                jQuery.each(data, function (i, val) {
+                    htm += '<tr>';
+                    htm += '    <td style="width:50px;text-align: left;" bgcolor="#' + val.pallete + '">&nbsp;</td>';
+                    htm += '    <td style="width:200px;text-align: left;">' + val.description + '</td>';
+                    htm += '</tr>';
+                });
+                htm += '</table>';
+            }
+            $("#legend_sr").html(htm);
+        }
+        function draw_legend_st(data) {
+            var htm = "";
+            if (data != null && data != undefined && data.length > 0) {
+                htm = '<table class="table table-bordered table-striped table-responsive">';
+                htm += '<tr>';
+                htm += '    <th colspan="2"><div style="padding:2px;white-space:normal;">SAFETY TALK (ST)</div></th>';
+                htm += '</tr>';
+                jQuery.each(data, function (i, val) {
+                    htm += '<tr>';
+                    htm += '    <td style="width:50px;text-align: left;" bgcolor="#' + val.pallete + '">&nbsp;</td>';
+                    htm += '    <td style="width:200px;text-align: left;">' + val.description + '</td>';
+                    htm += '</tr>';
+                });
+                htm += '</table>';
+            }
+            $("#legend_st").html(htm);
+        }
+        function draw_legend_gb(data) {
+            var htm = "";
+            if (data != null && data != undefined && data.length > 0) {
+                htm = '<table class="table table-bordered table-striped table-responsive">';
+                htm += '<tr>';
+                htm += '    <th colspan="2"><div style="padding:2px;white-space:normal;">GENBA/INSPEKSI (GNB)</div></th>';
+                htm += '</tr>';
+                jQuery.each(data, function (i, val) {
+                    htm += '<tr>';
+                    htm += '    <td style="width:50px;text-align: left;" bgcolor="#' + val.pallete + '">&nbsp;</td>';
+                    htm += '    <td style="width:200px;text-align: left;">' + val.description + '</td>';
+                    htm += '</tr>';
+                });
+                htm += '</table>';
+            }
+            $("#legend_gb").html(htm);
+        }
+    </script>
+}

@@ -1,0 +1,215 @@
+@using System.Data;
+@using WebApp;
+@using Microsoft.AspNetCore.Http;
+@{
+    Layout = "~/Views/Shared/_LayoutNoHeader.cshtml";
+    var fieldModel = ViewData["fieldModel"] as WebApp.Areas.Ref.Models.PersonalSubAreaModel.ViewModel;
+    ViewData["Title"] = ViewData["TitleHeader"];
+    ViewData["PageName"] = "personalsubarea";
+    ViewData["Heading"] = ViewData["TitleHeader"];
+    ViewData["Category1"] = "";
+    ViewData["Category2"] = "";
+    var HeadData = ViewData["HeadData"] as DataTable;
+}
+<div class="panel panel-form">
+    <div class="panel-container">
+        <div class="panel-heading">
+            <div class="title-header">@ViewData["TitleHeader"]</div>
+        </div>
+        <div class="panel-content">
+            <div class="row">
+                <div class="col-lg-12">
+
+                    <div id="form_item_id" class="form-group-none">
+                        <div class="form-item-label">@ResxHelper.GetValue("ref_personal_sub_area", "id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_id" class="form-item-view">@Html.Raw(fieldModel.id)</div>
+                    </div>
+
+                    <div id="form_item_ehs_area_id" class="form-group">
+                        <div class="form-item-label">@ResxHelper.GetValue("ref_personal_sub_area", "ehs_area_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_ehs_area_id" class="form-item-view">@Html.Raw(fieldModel.ehs_area_id_text)</div>
+                    </div>
+
+                    <div id="form_item_ba_id" class="form-group">
+                        <div class="form-item-label">@ResxHelper.GetValue("ref_personal_sub_area", "ba_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_ba_id" class="form-item-view">@Html.Raw(fieldModel.ba_id_text)</div>
+                    </div>
+
+                    <div id="form_item_pa_id" class="form-group">
+                        <div class="form-item-label">@ResxHelper.GetValue("ref_personal_sub_area", "pa_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_pa_id" class="form-item-view">@Html.Raw(fieldModel.pa_id_text)</div>
+                    </div>
+
+                    <div id="form_item_kode" class="form-group">
+                        <div class="form-item-label">@ResxHelper.GetValue("ref_personal_sub_area", "kode")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_kode" class="form-item-view">@Html.Raw(fieldModel.kode)</div>
+                    </div>
+
+                    <div id="form_item_nama" class="form-group">
+                        <div class="form-item-label">@ResxHelper.GetValue("ref_personal_sub_area", "nama")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_nama" class="form-item-view">@Html.Raw(fieldModel.nama)</div>
+                    </div>
+
+                    <div id="form_item_keterangan" class="form-group">
+                        <div class="form-item-label">@ResxHelper.GetValue("ref_personal_sub_area", "keterangan")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_keterangan" class="form-item-view">@Html.Raw(fieldModel.keterangan)</div>
+                    </div>
+
+                    <div id="form_item_head_type_id" class="form-group-none">
+                        <div class="form-item-label">@ResxHelper.GetValue("ref_personal_sub_area", "head_type_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_head_type_id" class="form-item-view">@Html.Raw(fieldModel.head_type_id_text)</div>
+                    </div>
+
+                    <div id="form_item_head_id" class="form-group-none">
+                        <div class="form-item-label">@ResxHelper.GetValue("ref_personal_sub_area", "head_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_head_id" class="form-item-view">@Html.Raw(fieldModel.head_id_text)</div>
+                    </div>
+
+                    <div id="form_item_head_nrp" class="form-group-none">
+                        <div class="form-item-label">@ResxHelper.GetValue("ref_personal_sub_area", "head_nrp")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_head_nrp" class="form-item-view">@Html.Raw(fieldModel.head_nrp)</div>
+                    </div>
+
+                    <div id="form_item_head_nama" class="form-group-none">
+                        <div class="form-item-label">@ResxHelper.GetValue("ref_personal_sub_area", "head_nama")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_head_nama" class="form-item-view">@Html.Raw(fieldModel.head_nama)</div>
+                    </div>
+
+                    <div id="form_item_status_id" class="form-group">
+                        <div class="form-item-label">@ResxHelper.GetValue("ref_personal_sub_area", "status_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_status_id" class="form-item-view">@Html.Raw(fieldModel.status_id_text)</div>
+                    </div>
+
+                    <div id="form_item_start_date" class="form-group">
+                        <div class="form-item-label">@ResxHelper.GetValue("ref_personal_sub_area", "start_date")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_start_date" class="form-item-view">@Html.Raw(fieldModel.start_date)</div>
+                    </div>
+
+                    <div id="form_item_end_date" class="form-group">
+                        <div class="form-item-label">@ResxHelper.GetValue("ref_personal_sub_area", "end_date")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_end_date" class="form-item-view">@Html.Raw(fieldModel.end_date)</div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header bg-info">@ResxHelper.GetValue("ref_personal_sub_area", "head_id")</div>
+                        <div class="card-body">
+                            <table class="table table-bordered">
+                                <tr class="bg-light">
+                                    <th style="width:20px;">No</th>
+                                    <th style="text-align:center">@ResxHelper.GetValue("ref_personal_sub_area_head", "head_type_id")</th>
+                                    <th style="text-align:center">@ResxHelper.GetValue("ref_personal_sub_area_head", "head_id")</th>
+                                    <th style="width:90px;text-align:center">@ResxHelper.GetValue("ref_personal_sub_area_head", "status_id")</th>
+                                    <th style="width:90px;text-align:center">@ResxHelper.GetValue("ref_personal_sub_area_head", "start_date")</th>
+                                    <th style="width:90px;text-align:center">@ResxHelper.GetValue("ref_personal_sub_area_head", "end_date")</th>
+                                    <th style="width:80px;text-align:center"></th>
+                                </tr>
+                                @{int no = 0;
+                                    if (HeadData.Rows.Count > 0)
+                                    {
+                                        no = 0;
+                                        @foreach (DataRow dr in HeadData.Rows)
+                                        {
+                                            no++;
+                            <tr>
+                                <td style="width:20px;text-align:center">@no</td>
+                                <td style="text-align:left">@dr["head_type_id_text"].ToString()</td>
+                                <td style="text-align:left">@dr["head_nrp"].ToString() - @dr["head_nama"].ToString()</td>
+                                <td style="text-align:center">@dr["status_id_text"].ToString()</td>
+                                <td style="text-align:center">@String.Format("{0:dd/MM/yyyy}", dr["start_date"])</td>
+                                <td style="text-align:center">@String.Format("{0:dd/MM/yyyy}", dr["end_date"])</td>
+                                <td style="text-align:center">
+                                    <a class="k-button k-button-icontext v-pencil k-grid-Edit" href="#" onclick="edit_head('@dr["id"].ToString()')" title="@ResxHelper.GetValue("Message","Edit")"><span class=" "></span></a>
+                                    <a class="k-button k-button-icontext v-close k-grid-Delete" href="#" onclick="delete_head('@dr["id"].ToString()','@String.Format("{0:dd/MM/yyyy}", dr["start_date"])')" title="@ResxHelper.GetValue("Message","Delete")"><span class=" "></span></a>
+                                    @if (@dr["status_id"].ToString() != "1")
+                                    {
+                                    }
+
+                                </td>
+                            </tr>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td colspan="8">@ResxHelper.GetValue("Message", "NoRecordFound")</td>
+                                        </tr>
+                                    }
+
+                                }
+                                <tr>
+                                    <td colspan="8">
+                                        <a id="btnAdd_ta_person_area_head" onclick="add_head()" class="k-button" title="@ResxHelper.GetValue("Message","Add")">@ResxHelper.GetValue("Message", "Add", "Tambah")</a>
+                                    </td>
+                                </tr>
+
+                            </table>
+                            <script>
+                            function add_head() {var contentUrl = '@ViewData["baseUrl"]/Ref/PersonalSubAreaHead/Add?psa_id=@fieldModel.id'; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog, }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: 700, height: 400, minHeight: 300, });form_edit.data("kendoWindow").center().open().maximize();}
+                            function edit_head(id) { var qs = 'id=' + id; var contentUrl = '@ViewData["baseUrl"]/Ref/PersonalSubAreaHead/Edit?' + qs; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: 700, height: 400, minHeight: 300, }); form_edit.data("kendoWindow").center().open().maximize();}
+                            function delete_head(id, start_date) {
+                                var keyValue = '@ResxHelper.GetValue("ta_person_area","start_date") :' + start_date;
+                                var pkVal = { id:id };
+                                var data2 = { title: '@ResxHelper.GetValue("Message","ConfirmDelete")', msg: keyValue };
+                                var winconfirm = $("#dialogconfirm").kendoWindow({ title: "@ResxHelper.GetValue("Message","DeleteData")", modal: true, visible: false, resizable: true, draggable: true, width: "500px", height: "200px" }).data("kendoWindow");
+                                winconfirm.content(confirmTemplate(data2));
+                                winconfirm.center(); winconfirm.open();
+                                $("#yesButton").click(function () {
+                                    $.ajax({
+                                        data: pkVal, url: '@ViewData["baseUrl"]/Ref/PersonalSubAreaHead/Delete', type: 'POST'
+                                        , success: function (data) {
+                                            if (data.status != 1) {
+                                                notification.show({ title: data.title, message: kendo.toString(data.message) }, "error");
+                                                winconfirm.close();
+                                            } else {
+                                                notification.show({ message: kendo.toString(data.message) }, "success");
+                                                window.location.href = window.location.href;
+                                                window.location.reload();
+                                                if (window.parent.Reload_list_ref_personal_sub_area) {
+                                                    window.parent.Reload_list_ref_personal_sub_area();
+                                                }
+                                                winconfirm.close();
+                                            }
+                                        }
+                                    });
+                                });
+                                $("#noButton").click(function () { winconfirm.close(); });
+                            }
+                            </script>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        <div class="panel-footer">
+            <a id="close" class="k-button k-button-icontext" href="#"><i class="far fa-times-circle"></i>&nbsp;<span id="btnCloseText">@ResxHelper.GetValue("Message", "Close", "Tutup")</span></a>
+        </div>
+    </div>
+</div>
+<script>
+    $("#close").kendoButton();
+    $("#close").click(function (e) {
+        close_self();
+    });
+    function onCloseDialog(e) { $('#dialog').html(''); }
+    function closeDialog() { $("#dialog").data("kendoWindow").close(); }
+    function close_self() { if (window.parent.$("#dialog_ref_personal_sub_area").data("kendoWindow")) { window.parent.$("#dialog_ref_personal_sub_area").data("kendoWindow").close(); } else { window.parent.$("#dialog").data("kendoWindow").close(); } }
+</script>

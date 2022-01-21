@@ -1,0 +1,274 @@
+﻿@using WebApp;
+@using Newtonsoft.Json;
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
+@{
+    ViewData["Title"] = ViewData["TitleHeader"];
+    Layout = "~/Views/Shared/Pwa/_Layout.cshtml";
+}
+<style>
+    .page_area {
+        background-color:#FFFFFF;
+        margin-right:5px;
+        margin-left:5px;
+    }
+    .div_page {
+        margin-top: 10px;
+        margin-left: auto;
+        margin-right: auto;
+        
+        text-align: center;
+        background-color:#FFFFFF;
+    }
+
+    .div_page_from_total {
+        padding-right:5px;
+        padding-left:5px;
+        text-align: right;
+        background-color:#FFFFFF;
+    }
+
+    .form-item-label {
+        display: contents;
+    }
+    .form-item-view {
+        display: contents;
+    }
+    .btn-link {
+        color: #ffffff;
+    }
+
+    .btn-link:hover {
+        color: #ffffff;
+    }
+
+    .tanggal {
+        display: block;
+        font-size: small;
+    }
+
+    .item_header {
+        display: block;
+        font-size: medium;
+        cursor: pointer;
+    }
+    .item_hader1 {
+        display: block;
+        font-size: medium;
+        cursor: pointer;
+    }
+    .item_hader2 {
+        display: block;
+        font-size: medium;
+        cursor: pointer;
+        color:#ffff00;
+    }
+    .toolbar_panel {
+        text-align:right;
+        padding-right:10px;
+    }
+</style>
+<div class="header-container">
+    <div>
+        <a href="@ViewData["baseUrl"]/Pwa">
+            <i class="fas fa-arrow-left" style="font-size:20px;color:black;line-height:30px;"></i>
+        </a>
+    </div>
+    <div class="header-title-right">
+        @ResxHelper.GetValue("ta_acc", "TableTitle")
+    </div>
+</div>
+<div class="">
+    <div class="toolbar_panel"><a href="#" onclick="add_data()">@ResxHelper.GetValue("Message","Add")</a></div>
+    <div class="accordion" id="accordionList"></div>
+    <div id="page_area" class="page_area"></div>
+</div>
+
+<script>
+    function get_link_page(page, count_data, pageSize, pageNum) {
+        var total_page = count_data / pageSize;
+        total_page = Math.ceil(total_page);
+        var page_start = page / pageNum;
+        page_start = (Math.ceil(page_start) * pageNum) - (pageNum - 1);
+        var page_end = page_start + (pageNum - 1);
+        if (page_end > total_page) {
+            page_end = total_page;
+        }
+        var htm_page = '';
+        if (total_page > 1) {
+            htm_page += '<div class="div_page">';
+            htm_page += '<nav aria-label="...">';
+            htm_page += '<ul class="pagination">';
+            if (page <= pageNum) {
+                htm_page += '<li class="page-item disabled">';
+                htm_page += '<a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>';
+                htm_page += '</li>';
+            } else {
+                htm_page += '<li class="page-item">';
+                htm_page += '<a class="page-link" href="#" tabindex="-1" onclick="GetListData('+(page_start - 1)+')">Previous</a>';
+                htm_page += '</li>';
+            }
+            for (i = page_start; i <= page_end; i++) {
+                if (i == page) {
+                    htm_page += '<li class="page-item active" aria-current="page">';
+                    htm_page += '<a class="page-link" href="#" onclick="GetListData(' + i + ')">' + i + ' <span class="sr-only">(current)</span></a>';
+                    htm_page += '</li>';
+                } else {
+                    htm_page += '<li class="page-item"><a class="page-link" href="#" onclick="GetListData(' + i + ')">' + i + '</a></li>';
+                }
+            }
+            if (page_end < total_page) {
+                htm_page += '<li class="page-item">';
+                htm_page += '<a class="page-link" href="#" onclick="GetListData(' + (page_end + 1) + ')">Next</a>';
+                htm_page += '</li>';
+            } else {
+                htm_page += '<li class="page-item disabled">';
+                htm_page += '<a class="page-link" href="#" aria-disabled="true">Next</a>';
+                htm_page += '</li>';
+            }
+            htm_page += '</ul>';
+            htm_page += '</nav>';
+            htm_page += '</div>';
+            htm_page += '<div class="div_page_from_total">Hal ' + page + ' dari ' + total_page + '</div>';
+        }
+        return htm_page;
+    }
+    function GetListData(page) {
+        var pageNum = 3;
+        var pageSize = 10;
+        var take = 10;
+        var skip = (page - 1) * take;
+        var ds_filter = { sort: [{ field: "tgl_kejadian", dir: "desc" }],take: take, skip: skip, page:page, pageSize:pageSize};
+        $.post( "@ViewData["baseUrl"]/PwaAccident/GetListData", ds_filter)
+            .done(function (data) {
+                var htm = '';
+                var htm_page = '';
+                if (data.total == 0) {
+                    htm += '<ul class="list-group">';
+                    htm += '<li class="list-group-item">@ResxHelper.GetValue("Message", "NoDataAvaliable", "Tidak ada data")</li>';
+                    htm += '</ul>';
+                } else {
+                    jQuery.each(data.data, function (i, val) {
+                        htm += '<div class="card">';
+                        htm += '<div class="card-header" id="heading'+val.id+'">';
+                        //htm += '<h2 class="mb-0">';
+                        htm += '<a class="item_header" data-toggle="collapse" data-target="#collapse'+val.id+'" aria-expanded="true" aria-controls="collapse'+val.id+'">';
+                        htm += '<span class="item_hader1">'+val.judul_kejadian+'</span>';
+                        htm += '<span class="item_hader2">'+val.jenis_kejadian_id_text+'</span>';
+                        htm += '<span class="tanggal">'+ kendo.toString(kendo.parseDate(val.tgl_kejadian), "dd MMMM yyyy")+'</span>';
+                        htm += '</a>';
+                        //htm += '</h2>';
+                        htm += '</div>';
+                        htm += '<div id="collapse'+val.id+'" class="collapse" aria-labelledby="heading'+val.id+'" data-parent="#accordionList">';
+                        htm += '<div class="card-body">';
+                        htm += '<div class="form-group">';
+                        htm += '<div class="form-item-label">@ResxHelper.GetValue("ta_acc", "ehs_area_id"):</div>';
+                        htm += '<div class="form-item-view">'+val.ehs_area_id_text+'</div>';
+                        htm += '</div>';
+                        htm += '<div class="form-group">';
+                        htm += '<div class="form-item-label">@ResxHelper.GetValue("ta_acc", "ba_id"):</div>';
+                        htm += '<div class="form-item-view">'+val.ba_id_text+'</div>';
+                        htm += '</div>';
+                        htm += '<div class="form-group">';
+                        htm += '<div class="form-item-label">@ResxHelper.GetValue("ta_acc", "pa_id"):</div>';
+                        htm += '<div class="form-item-view">'+val.pa_id_text+'</div>';
+                        htm += '</div>';
+                        htm += '<div class="form-group">';
+                        htm += '<div class="form-item-label">@ResxHelper.GetValue("ta_acc", "psa_id"):</div>';
+                        htm += '<div class="form-item-view">'+val.psa_id_text+'</div>';
+                        htm += '</div>';
+                        htm += '<div class="form-group">';
+                        htm += '<div class="form-item-label">@ResxHelper.GetValue("ta_acc", "company_id"):</div>';
+                        htm += '<div class="form-item-view">'+val.company_id_text+'</div>';
+                        htm += '</div>';
+                        @*htm += '<div class="form-group">';
+                        htm += '<div class="form-item-label">@ResxHelper.GetValue("ta_acc", "jenis_kejadian_id"):</div>';
+                        htm += '<div class="form-item-view">'+val.jenis_kejadian_id_text+'</div>';
+                        htm += '</div>';
+                        htm += '<div class="form-group">';
+                        htm += '<div class="form-item-label">@ResxHelper.GetValue("ta_acc", "judul_kejadian"):</div>';
+                        htm += '<div class="form-item-view">'+val.judul_kejadian+'</div>';
+                        htm += '</div>';*@
+                        htm += '<div class="form-group">';
+                        htm += '<div class="form-item-label">@ResxHelper.GetValue("ta_acc", "nomor_kejadian"):</div>';
+                        htm += '<div class="form-item-view">'+val.nomor_kejadian+'</div>';
+                        htm += '</div>';
+                        htm += '<div class="form-group">';
+                        htm += '<div class="form-item-label">@ResxHelper.GetValue("ta_acc", "lokasi_kejadian_id"):</div>';
+                        htm += '<div class="form-item-view">'+val.lokasi_kejadian_id_text+'</div>';
+                        htm += '</div>';
+                        htm += '<div class="form-group">';
+                        htm += '<div class="form-item-label">@ResxHelper.GetValue("ta_acc", "tgl_kejadian"):</div>';
+                        htm += '<div class="form-item-view">'+ kendo.toString(kendo.parseDate(val.tgl_kejadian), "dd MMMM yyyy")+'</div>';
+                        htm += '</div>';
+
+                        htm += '<div class="form-group">';
+                        htm += '<a class="k-button k-button-icontext v-view k-grid-View" href="#" onclick="view_data('+val.id+')" title="@ResxHelper.GetValue("Message","View")"><span class=" "></span></a>';
+                        htm += '<a class="k-button k-button-icontext v-pencil k-grid-Edit" href="#" onclick="edit_data('+val.id+')" title="@ResxHelper.GetValue("Message","Edit")"><span class=" "></span></a>';
+                        htm += '<a class="k-button k-button-icontext v-close k-grid-Delete" href="#" onclick="delete_data('+val.id+',\''+val.judul_kejadian+'\')" title="@ResxHelper.GetValue("Message","Delete")"><span class=" "></span></a>';
+                        htm += '</div>';
+                        htm += '</div>';
+                        htm += '</div>';
+                        htm += '</div>';
+                    });
+                    htm_page = get_link_page(page, data.total, pageSize, pageNum);
+                }
+                htm += '';
+                $("#accordionList").html(htm);
+                $("#page_area").html(htm_page);
+                localStorage.setItem("EHS_PwaAccident_last_page", page);
+        });
+    }
+    function view_data(id) {
+        localStorage.setItem("EHS_PwaAccidentPelaku_last_page", 1);
+        localStorage.setItem("EHS_PwaAccidentSakski_last_page", 1);
+        localStorage.setItem("EHS_PwaAccidentKorban_last_page", 1);
+        localStorage.setItem("EHS_PwaAccidentFollowup_last_page", 1);
+        var contentUrl = '@ViewBag.BaseUrl/PwaAccident/ViewItem?id='+id;
+        window.location.href = contentUrl;
+    }
+    function add_data() {
+        var contentUrl = '@ViewBag.BaseUrl/PwaAccident/Add';
+        var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Close"], close: onCloseDialog, });
+        form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: false, width: 400, height: 500, minHeight: 300, });
+        form_edit.data("kendoWindow").center().open().maximize();
+    }
+    function edit_data(id) {
+        var contentUrl = '@ViewBag.BaseUrl/PwaAccident/Edit?id='+id;
+        var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Close"], close: onCloseDialog, });
+        form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: false, width: 400, height: 500, minHeight: 300, });
+        form_edit.data("kendoWindow").center().open().maximize();
+    }
+    function delete_data(id,text) {
+		var keyValue = "@ResxHelper.GetValue("ta_acc", "judul_kejadian"): " + text;
+		var data2 = { title: '@ResxHelper.GetValue("Message","ConfirmDelete")', msg: keyValue };
+		var winconfirm = $("#dialogconfirm").kendoWindow({ title: "@ResxHelper.GetValue("Message","DeleteData")", modal: true, visible: false, resizable: true, draggable: true, width: "100%", height: "200px" }).data("kendoWindow");
+		winconfirm.content(confirmTemplate(data2));
+		winconfirm.center(); winconfirm.open();
+		$("#yesButton").click(function () {
+            $.ajax({
+                data: {id:id}, url: '@ViewBag.BaseUrl/Accident/Delete', type: 'POST'
+				, success: function (data) {
+					if (data.status != 1) {
+						notification.show({ title: data.title, message: kendo.toString(data.message) }, "error");
+					} else {
+						notification.show({ message: kendo.toString(data.message) }, "success");
+						window.location.href = window.location.href;
+						window.location.reload();
+					}
+				}
+			});
+		});
+		$("#noButton").click(function () { winconfirm.close(); });
+	}
+    function onCloseDialog(e) { $('#dialog').html(''); }
+    function closeDialog() { $("#dialog").data("kendoWindow").close(); }
+    $(document).ready(function () {
+        var page = localStorage.getItem("EHS_PwaAccident_last_page");
+        if (page != null && page != undefined) {
+            GetListData(page);
+        } else {
+            GetListData(1);
+        }
+    });
+</script>
+

@@ -1,0 +1,234 @@
+@using WebApp
+@using Newtonsoft.Json
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+	var filterColumn = ViewData["filterColumn"] as WebApp.Models.FasSpekTangkiTimbunModel.ViewModel;
+    ViewData["Title"] = ViewData["TitleHeader"];
+    ViewData["PageName"] = "fasspektangkitimbun";
+    ViewData["Heading"] = ViewData["TitleHeader"];
+    ViewData["Category1"] = "";
+    ViewData["Category2"] = "";
+}
+<div class="panel">
+    <div class="panel-container">
+		<div class="panel-content">
+			<div id="collapse_filter_ta_fas_spek_tangki_timbun" class="panel panel-collapse collapse">
+                <div class="panel-heading-filter">
+                    @ResxHelper.GetValue("Message", "FilterDataHeader", "Filter Data")
+                </div>
+				<div class="panel-body-filter">
+                    <section class="filter_cols">
+
+                    </section>
+				</div>
+				<div class="panel-footer-filter">
+					<a id="btnResetFilter_ta_fas_spek_tangki_timbun" onclick="reset_filter_ta_fas_spek_tangki_timbun()" class="k-button" title="Reset Filter">@ResxHelper.GetValue("Message", "ResetFilter", "Reset Filter")</a>
+				</div>
+			</div>
+			<div>
+				<table id="toolbar_panel" style="width:100%;">
+					<tr>
+						<td>
+							<span id="quick_search_template_ta_fas_spek_tangki_timbun" class="k-textbox k-space-right"><input id="txtSearch_ta_fas_spek_tangki_timbun" placeholder="@ResxHelper.GetValue("Message","QuickSearch")" value="" /><a id="btnSearch_ta_fas_spek_tangki_timbun" href="#" class="k-icon k-i-search">&nbsp;</a></span>
+							<img id="btnSearchByColumn_ta_fas_spek_tangki_timbun" title="@ResxHelper.GetValue("Message","ShowSearchByColumn")" style="cursor:pointer" src="~/img/search_by_column.png" width="20">
+							<img id="btnShowHideColumn_ta_fas_spek_tangki_timbun" title="@ResxHelper.GetValue("Message","ShowHideColumn")" style="cursor:pointer" src="~/img/show_hide_column.png" width="20">
+							<a id="btnShowHideFilter_ta_fas_spek_tangki_timbun" data-toggle="collapse" href="#collapse_filter_ta_fas_spek_tangki_timbun" style="display:none">@ResxHelper.GetValue("Message", "ShowFilter", "Tampilkan Filter")</a>
+						</td>
+						<td style="float:right">
+							<img id="btnExportExcel_ta_fas_spek_tangki_timbun" title="@ResxHelper.GetValue("Message","ExportToExcel")" style="cursor:pointer" src="~/img/excel.png" width="20" />&nbsp;
+							<a id="btnAdd_ta_fas_spek_tangki_timbun" onclick="AddData_ta_fas_spek_tangki_timbun()" class="k-button" title="@ResxHelper.GetValue("Message","Add")">@ResxHelper.GetValue("Message", "Add", "Tambah")</a>
+						</td>
+					<tr>
+				</table>
+			</div>
+			<div id="grid_ta_fas_spek_tangki_timbun"></div>
+		</div>
+    </div>
+
+</div>
+<div id="WinShowHideColumn_ta_fas_spek_tangki_timbun" style="display: none">
+    <div id="attr_column_show_hide" style="width:auto;height:auto;overflow-y:scroll;"></div>
+</div>
+@section ScriptsBlock {
+    <script>
+		var param_ta_fas_spek_tangki_timbun = @Html.Raw(JsonConvert.SerializeObject(WebApp.Models.FasSpekTangkiTimbunModel.GetListParam()));
+		var displayName_ta_fas_spek_tangki_timbun = @Html.Raw(JsonConvert.SerializeObject(WebApp.Models.FasSpekTangkiTimbunModel.GetDisplayItem()));
+		var pkKey_ta_fas_spek_tangki_timbun = @Html.Raw(JsonConvert.SerializeObject(WebApp.Models.FasSpekTangkiTimbunModel._pkKey));
+		var j_data_ta_fas_spek_tangki_timbun = @Html.Raw(JsonConvert.SerializeObject(WebApp.Models.FasSpekTangkiTimbunModel.GetGridColumn()));
+		var colNameTooltip_ta_fas_spek_tangki_timbun = [];
+		var colbuttonCount_ta_fas_spek_tangki_timbun = 0;
+		var columnWidth = 40;
+		colbuttonCount_ta_fas_spek_tangki_timbun += param_ta_fas_spek_tangki_timbun.btnView == 1 ? 1 : 0;
+		colbuttonCount_ta_fas_spek_tangki_timbun += param_ta_fas_spek_tangki_timbun.btnEdit== "1" ? 1 : 0;
+		colbuttonCount_ta_fas_spek_tangki_timbun += param_ta_fas_spek_tangki_timbun.btnDelete == "1" ? 1 : 0;
+		colbuttonCount_ta_fas_spek_tangki_timbun += param_ta_fas_spek_tangki_timbun.btnCopy  == "1" ? 1 : 0;
+		if (colbuttonCount_ta_fas_spek_tangki_timbun == 1) { columnWidth = 40; } else if (colbuttonCount_ta_fas_spek_tangki_timbun == 2) { columnWidth = 60; } else if (colbuttonCount_ta_fas_spek_tangki_timbun == 3) { columnWidth = 95; } else if (colbuttonCount_ta_fas_spek_tangki_timbun == 4) { columnWidth = 120; }
+		var columnActionWidth_ta_fas_spek_tangki_timbun = columnWidth + "px";
+		var item_data = "";
+		var col_att = [];
+		var showhide_column = "";
+		var j = 0;
+		var checked = '';
+		var aggregate_data_ta_fas_spek_tangki_timbun = [];
+		var agg_i = 0
+		jQuery.each(j_data_ta_fas_spek_tangki_timbun, function (i, val) {
+			var footerTemplate = "";
+			if (val.aggregate != "") {
+				footerTemplate = val.footerTemplate!="" ? val.footerTemplate : '#='+val.aggregate+'#';
+				aggregate_data_ta_fas_spek_tangki_timbun[agg_i] = { field: val.name, aggregate: val.aggregate };
+				agg_i++;
+			}
+			item_data += item_data != "" ? "," : "";
+			item_data += '"' + val.name + '" : { "type": "' + val.type + '" } ';
+			if (val.display) {
+				col_att[j] = { field: val.name, title: val.title, hidden: JSON.parse(val.hidden), width: val.width, format: val.format, attributes: JSON.parse(val.attributes), encoded: JSON.parse(val.encoded), filterable: JSON.parse(val.filterable), sortable: JSON.parse(val.sortable), headerAttributes: { style: "white-space: normal;vertical-align:middle;text-align:center" },aggregates: [val.aggregate], footerTemplate: footerTemplate };
+				j++;
+				checked = '';if (val.hidden.toString() == 'false') {checked = 'checked';}
+				showhide_column += '<div><input type="checkbox" onclick="ShowHideColumn_ta_fas_spek_tangki_timbun(this)" '+ checked +' value="' + val.name + '" /> ' + val.title + '</div>';
+			}
+		});
+		showhide_column += '<div><input type="checkbox" onclick="ShowHideColumn_ta_fas_spek_tangki_timbun(this)" checked value="' + j + '" /> Action</div>';
+		item_data = '{' + item_data + '}';
+		var field_data = JSON.parse(item_data);
+		var columns_data = col_att;
+		var col_command = [];
+		var k = 0;
+		if (param_ta_fas_spek_tangki_timbun.btnView== 1) {col_command[k] = { name: "View", text: "", className: "v-view", click: function (e) { var tr = $(e.target).closest("tr"); var data = this.dataItem(tr); ViewItem_ta_fas_spek_tangki_timbun(data); } };k++;}
+		if (param_ta_fas_spek_tangki_timbun.btnEdit== 1) {col_command[k] = { name: "Edit", text: "", className: "v-pencil", click: function (e) { var tr = $(e.target).closest("tr"); var data = this.dataItem(tr); EditData_ta_fas_spek_tangki_timbun(data); } };k++;}
+		if (param_ta_fas_spek_tangki_timbun.btnDelete== 1) {col_command[k] = { name: "Delete", text: "", className: "v-close", click: function (e) { var tr = $(e.target).closest("tr"); var data = this.dataItem(tr); DeleteData_ta_fas_spek_tangki_timbun(data); } };k++;}
+		if (param_ta_fas_spek_tangki_timbun.btnCopy == 1) { col_command[k] = { name: "Copy", text: "", className: "v-copy", click: function (e) { var tr = $(e.target).closest("tr"); var data = this.dataItem(tr); CopyData_ta_fas_spek_tangki_timbun(data); } }; k++; }
+		if (colbuttonCount_ta_fas_spek_tangki_timbun > 0) {
+			columns_data[j] = {command: col_command, width: columnActionWidth_ta_fas_spek_tangki_timbun, attributes: " style=\"vertical-align:top;\""};
+		}
+		//==============================
+
+		//==============================
+		$("#collapse_filter_ta_fas_spek_tangki_timbun").on('shown.bs.collapse', function () {
+			$("#btnShowHideFilter_ta_fas_spek_tangki_timbun").html('@ResxHelper.GetValue("Message","HideFilter")');
+		});
+		$("#collapse_filter_ta_fas_spek_tangki_timbun").on('hidden.bs.collapse', function () {
+			$("#btnShowHideFilter_ta_fas_spek_tangki_timbun").html('@ResxHelper.GetValue("Message","ShowFilter")');
+		});
+		//==============================
+		var record_ta_fas_spek_tangki_timbun = 0;
+		var grid_ta_fas_spek_tangki_timbun_heigth = 0;
+		var ds_ta_fas_spek_tangki_timbun_filter = { filter_by_column: [] };
+		var ds_ta_fas_spek_tangki_timbun = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/FasSpekTangkiTimbun/GetListData", dataType: "json", type: "POST", data: ds_ta_fas_spek_tangki_timbun_filter }, parameterMap: function (options) { if (options.filter) { for (var i = 0; i < options.filter.filters.length; i++) { if (options.filter.filters[i].field == 'tanggal') { options.filter.filters[i].value = kendo.toString(options.filter.filters[i].value, "yyyy-MM-dd"); } } } return options; } }, schema: { data: "data", total: "total", aggregates: "aggregates", model: { fields: field_data } }, aggregate: aggregate_data_ta_fas_spek_tangki_timbun, pageSize: 10, serverAggregates: true, serverPaging: true, serverFiltering: true, serverSorting: true });
+		var list_ta_fas_spek_tangki_timbun = $("#grid_ta_fas_spek_tangki_timbun").kendoGrid({
+			excel: { allPages: true, fileName: '@ViewData["TitleHeader"]'+'.xlsx' },
+			dataSource: ds_ta_fas_spek_tangki_timbun, dataBound: onDataBound_ta_fas_spek_tangki_timbun, height: grid_ta_fas_spek_tangki_timbun_heigth, scrollable: true, groupable: false, columnMenu: false, menu: true, resizable: true, filterable: false, sortable: { mode: "multiple", allowUnsort: true }, pageable: { refresh: true, pageSizes: [5, 10, 20, 50, 100, 200], buttonCount: 5 },
+			columns: columns_data, editable: false, dataBinding: function () { record_ta_fas_spek_tangki_timbun = (this.dataSource.page() - 1) * this.dataSource.pageSize(); }
+		});
+		function getParamgrid_ta_fas_spek_tangki_timbun() {
+			var filter_by_column= [];var k = 0;
+	
+			return { filter_by_column:filter_by_column };
+		}
+		function reset_filter_ta_fas_spek_tangki_timbun() {
+	
+			onFilterHeader_ta_fas_spek_tangki_timbun();
+		}
+		function onFilterHeader_ta_fas_spek_tangki_timbun() {
+			$("#txtSearch_ta_fas_spek_tangki_timbun").val('');
+			paramValue = getParamgrid_ta_fas_spek_tangki_timbun();
+			if (list_ta_fas_spek_tangki_timbun.data('kendoGrid').dataSource.page() > 1) {
+				list_ta_fas_spek_tangki_timbun.data('kendoGrid').dataSource.page(0);
+			}
+			list_ta_fas_spek_tangki_timbun.data('kendoGrid').dataSource.transport.options.read.data = paramValue;
+			list_ta_fas_spek_tangki_timbun.data("kendoGrid").dataSource.filter([]);
+		};
+		$("#btnSearchByColumn_ta_fas_spek_tangki_timbun").click(function () { var grid_ta_fas_spek_tangki_timbun_heigth_filter = grid_ta_fas_spek_tangki_timbun_heigth + 38; if (list_ta_fas_spek_tangki_timbun.data("kendoGrid").options.filterable == false) { $('#btnSearchByColumn_ta_fas_spek_tangki_timbun').prop('title', '@ResxHelper.GetValue("Message","HideSearchByColumn")'); $("#txtSearch_ta_fas_spek_tangki_timbun").val(''); if ('1' == '1') { $("#quick_search_template_ta_fas_spek_tangki_timbun").hide(); }; QuickSearch_ta_fas_spek_tangki_timbun(); list_ta_fas_spek_tangki_timbun.data("kendoGrid").setOptions({ height: grid_ta_fas_spek_tangki_timbun_heigth_filter, filterable: { mode: "row" }, }); } else { $('#btnSearchByColumn_ta_fas_spek_tangki_timbun').prop('title', '@ResxHelper.GetValue("Message","ShowSearchByColumn")'); $("#txtSearch_ta_fas_spek_tangki_timbun").val(''); if ('1' == '1') { $("#quick_search_template_ta_fas_spek_tangki_timbun").show(); }; QuickSearch_ta_fas_spek_tangki_timbun(); list_ta_fas_spek_tangki_timbun.data("kendoGrid").setOptions({ height: grid_ta_fas_spek_tangki_timbun_heigth, filterable: false, }); } });
+		$("#btnSearch_ta_fas_spek_tangki_timbun").click(function () { QuickSearch_ta_fas_spek_tangki_timbun(); });
+		$('#txtSearch_ta_fas_spek_tangki_timbun').keypress(function (e) { if (e.keyCode == 13) { QuickSearch_ta_fas_spek_tangki_timbun(); } });
+		function QuickSearch_ta_fas_spek_tangki_timbun() {
+			$filter = new Array();
+			$x = $("#txtSearch_ta_fas_spek_tangki_timbun").val();
+			if ($x) {jQuery.each(j_data_ta_fas_spek_tangki_timbun, function (i, val) {if (val.display && val.qsearch && val.type =='string') {$filter.push({ name: val.name, opr: "contains", value: $x });}});} 
+			if ($filter.length > 0) {list_ta_fas_spek_tangki_timbun.data("kendoGrid").dataSource.filter({ logic: "or", filters: $filter });}else {list_ta_fas_spek_tangki_timbun.data("kendoGrid").dataSource.filter([]);}
+		}
+		function Reload_list_ta_fas_spek_tangki_timbun() { list_ta_fas_spek_tangki_timbun.data('kendoGrid').dataSource.read(); list_ta_fas_spek_tangki_timbun.data('kendoGrid').refresh(); }
+		function onDataBound_ta_fas_spek_tangki_timbun(e) {
+			if (colbuttonCount_ta_fas_spek_tangki_timbun > 0) {
+				var grid = $("#grid_ta_fas_spek_tangki_timbun").data("kendoGrid"); var list_ta_fas_spek_tangki_timbun = grid.dataSource.view();
+				for (var i = 0; i < list_ta_fas_spek_tangki_timbun.length; i++) {
+					var currentUid = list_ta_fas_spek_tangki_timbun[i].uid; var currenRow = grid.table.find("tr[data-uid='" + currentUid + "']");
+					if (param_ta_fas_spek_tangki_timbun.btnView == 1) {
+						var viewButton = $(currenRow).find(".k-grid-View"); viewButton.attr("title", "@ResxHelper.GetValue("Message","View")");
+						if ("@ViewData["AllowView"]" == "1") {} else {viewButton.hide();}
+					}
+					if (param_ta_fas_spek_tangki_timbun.btnEdit == 1) {
+						var editButton = $(currenRow).find(".k-grid-Edit"); editButton.attr("title", "@ResxHelper.GetValue("Message","Edit")");
+                        if (
+                            ("@ViewData["AllowEdit"]" == "1" && list_ta_fas_spek_tangki_timbun[i].officer_id == "@ViewBag.person_id")
+							|| ("@ViewData["AllowEdit"]" == "1" && list_ta_fas_spek_tangki_timbun[i].ehs_head_id == "@ViewBag.person_id")
+							|| ("@ViewData["AllowEditAll"]" == "1" )
+                        ) { } else { editButton.hide(); }
+					}
+					if (param_ta_fas_spek_tangki_timbun.btnDelete == 1) {
+						var deleteButton = $(currenRow).find(".k-grid-Delete"); deleteButton.attr("title", "@ResxHelper.GetValue("Message","Delete")");
+                        if (
+                            ("@ViewData["AllowDelete"]" == "1" && list_ta_fas_spek_tangki_timbun[i].officer_id == "@ViewBag.person_id")
+							|| ("@ViewData["AllowDelete"]" == "1" && list_ta_fas_spek_tangki_timbun[i].ehs_head_id == "@ViewBag.person_id")
+							|| ("@ViewData["AllowDeleteAll"]" == "1" )
+                        ) { } else { deleteButton.hide(); }
+					}
+					if (param_ta_fas_spek_tangki_timbun.btnCopy == 1) {
+						var copyButton = $(currenRow).find(".k-grid-Copy"); copyButton.attr("title", "@ResxHelper.GetValue("Message","Copy")");
+						if ("@ViewData["AllowAdd"]" == "1") {} else {copyButton.hide();}
+					}
+				}
+			}
+		}
+		function AddData_ta_fas_spek_tangki_timbun() {var contentUrl = '@ViewBag.BaseUrl/FasSpekTangkiTimbun/Add'; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog, }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: param_ta_fas_spek_tangki_timbun.btn_add_modal_width, height: param_ta_fas_spek_tangki_timbun.btn_add_modal_height, minHeight: 300, });if(param_ta_fas_spek_tangki_timbun.btn_add_modal_width == 0) {form_edit.data("kendoWindow").center().open().maximize()} else {form_edit.data("kendoWindow").center().open();}}
+		function ViewItem_ta_fas_spek_tangki_timbun(data) { var qs = '';jQuery.each(pkKey_ta_fas_spek_tangki_timbun, function (i, val) {qs += qs != "" ? "&" : "";qs += val+'=' + data[val];});var contentUrl = '@ViewBag.BaseUrl/FasSpekTangkiTimbun/ViewItem?' + qs; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: param_ta_fas_spek_tangki_timbun.btn_view_modal_width, height: param_ta_fas_spek_tangki_timbun.btn_view_modal_height, minHeight: 300, }); if (param_ta_fas_spek_tangki_timbun.btn_view_modal_width == 0) { form_edit.data("kendoWindow").center().open().maximize() } else { form_edit.data("kendoWindow").center().open(); }}
+		function EditData_ta_fas_spek_tangki_timbun(data) { var qs = '';jQuery.each(pkKey_ta_fas_spek_tangki_timbun, function (i, val) {qs += qs != "" ? "&" : "";qs += val+'=' + data[val];}); var contentUrl = '@ViewBag.BaseUrl/FasSpekTangkiTimbun/Edit?' + qs; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: param_ta_fas_spek_tangki_timbun.btn_edit_modal_width, height: param_ta_fas_spek_tangki_timbun.btn_edit_modal_height, minHeight: 300, }); if(param_ta_fas_spek_tangki_timbun.btn_edit_modal_width == 0) {form_edit.data("kendoWindow").center().open().maximize()} else {form_edit.data("kendoWindow").center().open();} }
+		function CopyData_ta_fas_spek_tangki_timbun(data) { var qs = '';jQuery.each(pkKey_ta_fas_spek_tangki_timbun, function (i, val) {qs += qs != "" ? "&" : "";qs += val+'=' + data[val];}); var contentUrl = '@ViewBag.BaseUrl/FasSpekTangkiTimbun/Copy?' + qs; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: param_ta_fas_spek_tangki_timbun.btn_edit_modal_width, height: param_ta_fas_spek_tangki_timbun.btn_edit_modal_height, minHeight: 300, }); if(param_ta_fas_spek_tangki_timbun.btn_edit_modal_width == 0) {form_edit.data("kendoWindow").center().open().maximize()} else {form_edit.data("kendoWindow").center().open();} }
+		function DeleteData_ta_fas_spek_tangki_timbun(data) {
+			var keyValue = '';
+			jQuery.each(displayName_ta_fas_spek_tangki_timbun, function (i, val) {
+				keyValue += keyValue != "" ? "<br />" : "";
+				keyValue += val.label+ ": " + data[val.name];
+			});
+			var pkItem = "";
+			jQuery.each(pkKey_ta_fas_spek_tangki_timbun, function (i, val) {
+				pkItem += pkItem != "" ? ", " : "";
+				pkItem += '"'+val+'":"'+data[val]+'" ';
+			});
+			var pkVal = jQuery.parseJSON("{" + pkItem + "}");
+			var data2 = { title: '@ResxHelper.GetValue("Message","ConfirmDelete")', msg: keyValue };
+			var winconfirm = $("#dialogconfirm").kendoWindow({ title: "@ResxHelper.GetValue("Message","DeleteData")", modal: true, visible: false, resizable: true, draggable: true, width: "500px", height: "200px" }).data("kendoWindow");
+			winconfirm.content(confirmTemplate(data2));
+			winconfirm.center(); winconfirm.open();
+			$("#yesButton").click(function () {
+				$.ajax({
+					data: pkVal, url: '@ViewBag.BaseUrl/FasSpekTangkiTimbun/Delete', type: 'POST'
+					, success: function (data) {
+						if (data.status != 1) {
+							notification.show({ title: data.title, message: kendo.toString(data.message) }, "error");
+							winconfirm.close();
+						} else {
+							notification.show({ message: kendo.toString(data.message) }, "success");
+							Reload_list_ta_fas_spek_tangki_timbun();
+							winconfirm.close();
+						}
+					}
+				});
+			});
+			$("#noButton").click(function () { winconfirm.close(); });
+		}
+		function onCloseDialog(e) { $('#dialog').html(''); }
+		function closeDialog() { $("#dialog").data("kendoWindow").close(); }
+		$("#btnExportExcel_ta_fas_spek_tangki_timbun").click(function (e) { var grid = $("#grid_ta_fas_spek_tangki_timbun").data("kendoGrid"); grid.saveAsExcel(); });
+		function ShowHideColumn_ta_fas_spek_tangki_timbun(e) { colname = $.isNumeric(e.value) ? parseInt(e.value) : e.value; if (e.checked) { $("#grid_ta_fas_spek_tangki_timbun").data("kendoGrid").showColumn(colname); } else { $("#grid_ta_fas_spek_tangki_timbun").data("kendoGrid").hideColumn(colname); } }
+		$(document).ready(function () {
+			$("#attr_column_show_hide").html(showhide_column);
+			if (param_ta_fas_spek_tangki_timbun.ShowFilter == 1) { $("#btnShowHideFilter_ta_fas_spek_tangki_timbun").show(); }
+			if (param_ta_fas_spek_tangki_timbun.btnAdd == 1 && @ViewData["AllowAdd"]== "1") { }else{ $("#btnAdd_ta_fas_spek_tangki_timbun").hide(); }
+			if (param_ta_fas_spek_tangki_timbun.quick_search != 1) { $("#quick_search_template_ta_fas_spek_tangki_timbun").hide(); }
+			if (param_ta_fas_spek_tangki_timbun.search_by_column  != 1) { $("#btnSearchByColumn_ta_fas_spek_tangki_timbun").hide(); }
+			if (param_ta_fas_spek_tangki_timbun.show_hide_column != 1) { $("#btnShowHideColumn_ta_fas_spek_tangki_timbun").hide(); }
+			if (param_ta_fas_spek_tangki_timbun.export_exl != 1) { $("#btnExportExcel_ta_fas_spek_tangki_timbun").hide(); }
+			$("#btnShowHideColumn_ta_fas_spek_tangki_timbun").click(function () { var x = $("#btnShowHideColumn_ta_fas_spek_tangki_timbun").offset().left; var y = $("#btnShowHideColumn_ta_fas_spek_tangki_timbun").offset().top; if (!WinShowHideColumn_ta_fas_spek_tangki_timbun) { var WinShowHideColumn_ta_fas_spek_tangki_timbun = $("#WinShowHideColumn_ta_fas_spek_tangki_timbun").kendoWindow({ width: "300px", position: { left: x, top: y }, title: "@ResxHelper.GetValue("Message","ShowHideColumn")", actions: ["Close"] }); } WinShowHideColumn_ta_fas_spek_tangki_timbun.data("kendoWindow").open(); });
+		});
+    </script>
+}

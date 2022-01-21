@@ -1,0 +1,81 @@
+@using WebApp
+@using Microsoft.AspNetCore.Http;
+@{
+    Layout = "~/Views/Shared/_LayoutNoHeader.cshtml";
+    var fieldModel = ViewData["fieldModel"] as WebApp.Areas.Ref.Models.LiteralKategoriModel.ViewModel;
+}
+<div class="panel panel-form">
+    <div class="panel-container">
+        <div class="panel-heading">
+            <div class="title-header">@ViewData["TitleHeader"]</div>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-12">
+                    <div id="form_item_id" class="form-item">
+                        <div class="form-item-label">@ResxHelper.GetValue("ref_literal_kategori", "id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_id" class="form-item-view">@Html.Raw(fieldModel.id)</div>
+                    </div>
+
+                    <div id="form_item_kode" class="form-item">
+                        <div class="form-item-label">@ResxHelper.GetValue("ref_literal_kategori", "kode")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_kode" class="form-item-view">@Html.Raw(fieldModel.kode)</div>
+                    </div>
+
+                    <div id="form_item_nama" class="form-item">
+                        <div class="form-item-label">@ResxHelper.GetValue("ref_literal_kategori", "nama")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_nama" class="form-item-view">@Html.Raw(fieldModel.nama)</div>
+                    </div>
+
+                    <div id="form_item_keterangan" class="form-item">
+                        <div class="form-item-label">@ResxHelper.GetValue("ref_literal_kategori", "keterangan")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_keterangan" class="form-item-view">@Html.Raw(fieldModel.keterangan)</div>
+                    </div>
+
+                    <div id="form_item_use_min_max" class="form-item">
+                        <div class="form-item-label">@ResxHelper.GetValue("ref_literal_kategori", "use_min_max")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_use_min_max" class="form-item-view">@Html.Raw(fieldModel.use_min_max_text)</div>
+                    </div>
+
+                    <div id="form_item_user_color_id" class="form-item">
+                        <div class="form-item-label">@ResxHelper.GetValue("ref_literal_kategori", "user_color_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_user_color_id" class="form-item-view">@Html.Raw(fieldModel.user_color_id_text)</div>
+                    </div>
+                    <div id="form_item_use_satuan" class="form-item">
+                        <div class="form-item-label">@ResxHelper.GetValue("ref_literal_kategori", "use_satuan")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_use_satuan" class="form-item-view">@Html.Raw(fieldModel.use_satuan_text)</div>
+                    </div>
+                    <div id="form_item_allow_add" class="form-item">
+                        <div class="form-item-label">@ResxHelper.GetValue("ref_literal_kategori", "allow_add")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_allow_add" class="form-item-view">@Html.Raw(fieldModel.allow_add_text)</div>
+                    </div>
+                    <div id="form_item_ordinal" class="form-item">
+                        <div class="form-item-label">@ResxHelper.GetValue("ref_literal_kategori", "ordinal")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="view_item_ordinal" class="form-item-view">@Html.Raw(fieldModel.ordinal)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-footer" style="text-align:center">
+            <a id="close" class="k-button k-button-icontext" href="#"><i class="far fa-times-circle"></i>&nbsp;<span id="btnCloseText">@ResxHelper.GetValue("Message", "Close", "Tutup")</span></a>
+        </div>
+    </div>
+</div>
+<script>
+    $("#close").kendoButton();
+    $("#close").click(function (e) {
+        close_self();
+    });
+    function onCloseDialog(e) { $('#dialog').html(''); }
+    function closeDialog() { $("#dialog").data("kendoWindow").close(); }
+    function close_self() { if (window.parent.$("#dialog_ref_literal_kategori").data("kendoWindow")) { window.parent.$("#dialog_ref_literal_kategori").data("kendoWindow").close(); } else { window.parent.$("#dialog").data("kendoWindow").close(); } }
+</script>

@@ -1,0 +1,371 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+    <!--<AspNetCoreHostingModel>OutOfProcess</AspNetCoreHostingModel>-->
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Areas\Compliance\**" />
+    <Compile Remove="Areas\Pwa\**" />
+    <Compile Remove="Areas\Referensi\**" />
+    <Compile Remove="Areas\Ref\Views\TnaAction\**" />
+    <Compile Remove="Areas\Ref\Views\TnaStatus\**" />
+    <Compile Remove="Controllers\System\**" />
+    <Compile Remove="Data\Hasil\**" />
+    <Compile Remove="Data\NewFolder\**" />
+    <Compile Remove="Models\AccountViewModels\**" />
+    <Compile Remove="Models\ManageViewModels\**" />
+    <Compile Remove="Models\SystemModel\**" />
+    <Compile Remove="Views\Fasilitas_\**" />
+    <Compile Remove="Views\Manage\**" />
+    <Compile Remove="Views\PersonArea_bak\**" />
+    <Compile Remove="Views\Person_bak\**" />
+    <Compile Remove="Views\RencanaModulTraining\**" />
+    <Compile Remove="Views\System\**" />
+    <Compile Remove="wwwroot\vendor\**" />
+    <Content Remove="Areas\Compliance\**" />
+    <Content Remove="Areas\Pwa\**" />
+    <Content Remove="Areas\Referensi\**" />
+    <Content Remove="Areas\Ref\Views\TnaAction\**" />
+    <Content Remove="Areas\Ref\Views\TnaStatus\**" />
+    <Content Remove="Controllers\System\**" />
+    <Content Remove="Data\Hasil\**" />
+    <Content Remove="Data\NewFolder\**" />
+    <Content Remove="Models\AccountViewModels\**" />
+    <Content Remove="Models\ManageViewModels\**" />
+    <Content Remove="Models\SystemModel\**" />
+    <Content Remove="Views\Fasilitas_\**" />
+    <Content Remove="Views\Manage\**" />
+    <Content Remove="Views\PersonArea_bak\**" />
+    <Content Remove="Views\Person_bak\**" />
+    <Content Remove="Views\RencanaModulTraining\**" />
+    <Content Remove="Views\System\**" />
+    <Content Remove="wwwroot\vendor\**" />
+    <EmbeddedResource Remove="Areas\Compliance\**" />
+    <EmbeddedResource Remove="Areas\Pwa\**" />
+    <EmbeddedResource Remove="Areas\Referensi\**" />
+    <EmbeddedResource Remove="Areas\Ref\Views\TnaAction\**" />
+    <EmbeddedResource Remove="Areas\Ref\Views\TnaStatus\**" />
+    <EmbeddedResource Remove="Controllers\System\**" />
+    <EmbeddedResource Remove="Data\Hasil\**" />
+    <EmbeddedResource Remove="Data\NewFolder\**" />
+    <EmbeddedResource Remove="Models\AccountViewModels\**" />
+    <EmbeddedResource Remove="Models\ManageViewModels\**" />
+    <EmbeddedResource Remove="Models\SystemModel\**" />
+    <EmbeddedResource Remove="Views\Fasilitas_\**" />
+    <EmbeddedResource Remove="Views\Manage\**" />
+    <EmbeddedResource Remove="Views\PersonArea_bak\**" />
+    <EmbeddedResource Remove="Views\Person_bak\**" />
+    <EmbeddedResource Remove="Views\RencanaModulTraining\**" />
+    <EmbeddedResource Remove="Views\System\**" />
+    <EmbeddedResource Remove="wwwroot\vendor\**" />
+    <None Remove="Areas\Compliance\**" />
+    <None Remove="Areas\Pwa\**" />
+    <None Remove="Areas\Referensi\**" />
+    <None Remove="Areas\Ref\Views\TnaAction\**" />
+    <None Remove="Areas\Ref\Views\TnaStatus\**" />
+    <None Remove="Controllers\System\**" />
+    <None Remove="Data\Hasil\**" />
+    <None Remove="Data\NewFolder\**" />
+    <None Remove="Models\AccountViewModels\**" />
+    <None Remove="Models\ManageViewModels\**" />
+    <None Remove="Models\SystemModel\**" />
+    <None Remove="Views\Fasilitas_\**" />
+    <None Remove="Views\Manage\**" />
+    <None Remove="Views\PersonArea_bak\**" />
+    <None Remove="Views\Person_bak\**" />
+    <None Remove="Views\RencanaModulTraining\**" />
+    <None Remove="Views\System\**" />
+    <None Remove="wwwroot\vendor\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Areas\Ref\Controllers\TnaActionController.cs" />
+    <Compile Remove="Areas\Ref\Controllers\TnaStatusController.cs" />
+    <Compile Remove="Areas\Ref\Models\TnaActionModel.cs" />
+    <Compile Remove="Areas\Ref\Models\TnaStatusModel.cs" />
+    <Compile Remove="Controllers\PersonAreaController_bak.cs" />
+    <Compile Remove="Controllers\PersonController_bak.cs" />
+    <Compile Remove="Controllers\ReferensiController.cs" />
+    <Compile Remove="Controllers\RencanaModulTrainingController.cs" />
+    <Compile Remove="Controllers\_FasilitasController.cs" />
+    <Compile Remove="Extensions\EmailSenderExtensions.cs" />
+    <Compile Remove="Models\ApplicationUser.cs" />
+    <Compile Remove="Models\AtttColumn.cs" />
+    <Compile Remove="Models\ParamGrid.cs" />
+    <Compile Remove="Models\PersonAreaModel_bak.cs" />
+    <Compile Remove="Models\PersonModel_bak.cs" />
+    <Compile Remove="Models\RencanaModulTrainingModel.cs" />
+    <Compile Remove="Models\SynappsModel.cs" />
+    <Compile Remove="Models\_FasilitasModel.cs" />
+    <Compile Remove="Models\_FasSpekForkliftModel.cs" />
+    <Compile Remove="Services\EmailSender.cs" />
+    <Compile Remove="Services\IEmailSender.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Views\Account\ConfirmEmail.cshtml" />
+    <Content Remove="Views\Account\ExternalLogin.cshtml" />
+    <Content Remove="Views\Account\ForgotPassword.cshtml" />
+    <Content Remove="Views\Account\ForgotPasswordConfirmation.cshtml" />
+    <Content Remove="Views\Account\Lockout.cshtml" />
+    <Content Remove="Views\Account\LoginWith2fa.cshtml" />
+    <Content Remove="Views\Account\LoginWithRecoveryCode.cshtml" />
+    <Content Remove="Views\Account\Register.cshtml" />
+    <Content Remove="Views\Account\ResetPassword.cshtml" />
+    <Content Remove="Views\Account\ResetPasswordConfirmation.cshtml" />
+    <Content Remove="Views\Account\SignedOut.cshtml" />
+    <Content Remove="wwwroot\pwa_index.js" />
+    <Content Remove="wwwroot\sw_index.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Models\AccountViewModels\LoginViewModel.cs" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="AntiXSS.NetStandard" Version="0.1.87" />
+    <PackageReference Include="CsvHelper" Version="12.1.2" />
+    <PackageReference Include="DotNetCore.NPOI" Version="1.2.2" />
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Extensions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.AspNetCore.Session" Version="2.2.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.2.6">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.NET.Sdk.Razor" Version="3.1.19" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.4" />
+    <PackageReference Include="System.Drawing.Common" Version="4.7.0" />
+    <PackageReference Include="System.Runtime.Extensions" Version="4.3.1" />
+    <PackageReference Include="TinyCsvParser" Version="2.5.2" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Folder Include="Areas\Ref\Models\" />
+    <Folder Include="Data\" />
+    <Folder Include="Services\" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <None Include="Views\Fasilitas\Fasilitas\Edit.cshtml" />
+    <None Include="Views\Fasilitas\Fasilitas\Index.cshtml" />
+    <None Include="Views\Fasilitas\Fasilitas\View.cshtml" />
+    <None Include="Views\Fasilitas\FasSisolahIpalDomestik\Edit.cshtml" />
+    <None Include="Views\Fasilitas\FasSisolahIpalDomestik\Index.cshtml" />
+    <None Include="Views\Fasilitas\FasSisolahIpalDomestik\View.cshtml" />
+    <None Include="Views\Fasilitas\FasSisolahIpalProduksi\Edit.cshtml" />
+    <None Include="Views\Fasilitas\FasSisolahIpalProduksi\Index.cshtml" />
+    <None Include="Views\Fasilitas\FasSisolahIpalProduksi\View.cshtml" />
+    <None Include="Views\Fasilitas\FasSpekAlarmKebakaran\Edit.cshtml" />
+    <None Include="Views\Fasilitas\FasSpekAlarmKebakaran\Index.cshtml" />
+    <None Include="Views\Fasilitas\FasSpekAlarmKebakaran\View.cshtml" />
+    <None Include="Views\Fasilitas\FasSpekBejanaTekan\Edit.cshtml" />
+    <None Include="Views\Fasilitas\FasSpekBejanaTekan\Index.cshtml" />
+    <None Include="Views\Fasilitas\FasSpekBejanaTekan\View.cshtml" />
+    <None Include="Views\Fasilitas\FasSpekForklift\Edit.cshtml" />
+    <None Include="Views\Fasilitas\FasSpekForklift\Index.cshtml" />
+    <None Include="Views\Fasilitas\FasSpekForklift\View.cshtml" />
+    <None Include="Views\Fasilitas\FasSpekGenset\Edit.cshtml" />
+    <None Include="Views\Fasilitas\FasSpekGenset\Index.cshtml" />
+    <None Include="Views\Fasilitas\FasSpekGenset\View.cshtml" />
+    <None Include="Views\Fasilitas\FasSpekHydrant\Edit.cshtml" />
+    <None Include="Views\Fasilitas\FasSpekHydrant\Index.cshtml" />
+    <None Include="Views\Fasilitas\FasSpekHydrant\View.cshtml" />
+    <None Include="Views\Fasilitas\FasSpekInstalListrik\Edit.cshtml" />
+    <None Include="Views\Fasilitas\FasSpekInstalListrik\Index.cshtml" />
+    <None Include="Views\Fasilitas\FasSpekInstalListrik\View.cshtml" />
+    <None Include="Views\Fasilitas\FasSpekInstalPetir\Edit.cshtml" />
+    <None Include="Views\Fasilitas\FasSpekInstalPetir\Index.cshtml" />
+    <None Include="Views\Fasilitas\FasSpekInstalPetir\View.cshtml" />
+    <None Include="Views\Fasilitas\FasSpekIpalDomestikLayout\Edit.cshtml" />
+    <None Include="Views\Fasilitas\FasSpekIpalDomestikLayout\Index.cshtml" />
+    <None Include="Views\Fasilitas\FasSpekIpalDomestikLayout\View.cshtml" />
+    <None Include="Views\Fasilitas\FasSpekIpalDomestik\Edit.cshtml" />
+    <None Include="Views\Fasilitas\FasSpekIpalDomestik\Index.cshtml" />
+    <None Include="Views\Fasilitas\FasSpekIpalDomestik\View.cshtml" />
+    <None Include="Views\Fasilitas\FasSpekIpalProduksiLayout\Edit.cshtml" />
+    <None Include="Views\Fasilitas\FasSpekIpalProduksiLayout\Index.cshtml" />
+    <None Include="Views\Fasilitas\FasSpekIpalProduksiLayout\View.cshtml" />
+    <None Include="Views\Fasilitas\FasSpekIpalProduksi\Edit.cshtml" />
+    <None Include="Views\Fasilitas\FasSpekIpalProduksi\Index.cshtml" />
+    <None Include="Views\Fasilitas\FasSpekIpalProduksi\View.cshtml" />
+    <None Include="Views\Fasilitas\FasSpekIplcLayout\Edit.cshtml" />
+    <None Include="Views\Fasilitas\FasSpekIplcLayout\Index.cshtml" />
+    <None Include="Views\Fasilitas\FasSpekIplcLayout\View.cshtml" />
+    <None Include="Views\Fasilitas\FasSpekIplc\Edit.cshtml" />
+    <None Include="Views\Fasilitas\FasSpekIplc\Index.cshtml" />
+    <None Include="Views\Fasilitas\FasSpekIplc\View.cshtml" />
+    <None Include="Views\Fasilitas\FasSpekLift\Edit.cshtml" />
+    <None Include="Views\Fasilitas\FasSpekLift\Index.cshtml" />
+    <None Include="Views\Fasilitas\FasSpekLift\View.cshtml" />
+    <None Include="Views\Fasilitas\FasSpekMobilCrane\Edit.cshtml" />
+    <None Include="Views\Fasilitas\FasSpekMobilCrane\Index.cshtml" />
+    <None Include="Views\Fasilitas\FasSpekMobilCrane\View.cshtml" />
+    <None Include="Views\Fasilitas\FasSpekSteadyCrane\Edit.cshtml" />
+    <None Include="Views\Fasilitas\FasSpekSteadyCrane\Index.cshtml" />
+    <None Include="Views\Fasilitas\FasSpekSteadyCrane\View.cshtml" />
+    <None Include="Views\Fasilitas\FasSpekTangkiTimbun\Edit.cshtml" />
+    <None Include="Views\Fasilitas\FasSpekTangkiTimbun\Index.cshtml" />
+    <None Include="Views\Fasilitas\FasSpekTangkiTimbun\View.cshtml" />
+    <None Include="Views\Fasilitas\FasSpekTpsLb3Layout\Edit.cshtml" />
+    <None Include="Views\Fasilitas\FasSpekTpsLb3Layout\Index.cshtml" />
+    <None Include="Views\Fasilitas\FasSpekTpsLb3Layout\View.cshtml" />
+    <None Include="Views\Fasilitas\FasSpekTpsLb3\Edit.cshtml" />
+    <None Include="Views\Fasilitas\FasSpekTpsLb3\Index.cshtml" />
+    <None Include="Views\Fasilitas\FasSpekTpsLb3\View.cshtml" />
+    <None Include="Views\Pages\Chat.cshtml" />
+    <None Include="Views\Pages\Confirmation.cshtml" />
+    <None Include="Views\Pages\Contacts.cshtml" />
+    <None Include="Views\Pages\Error.cshtml" />
+    <None Include="Views\Pages\Error404.cshtml" />
+    <None Include="Views\Pages\ErrorAnnounced.cshtml" />
+    <None Include="Views\Pages\Forget.cshtml" />
+    <None Include="Views\Pages\ForumDiscussion.cshtml" />
+    <None Include="Views\Pages\ForumList.cshtml" />
+    <None Include="Views\Pages\ForumThreads.cshtml" />
+    <None Include="Views\Pages\InboxGeneral.cshtml" />
+    <None Include="Views\Pages\InboxRead.cshtml" />
+    <None Include="Views\Pages\InboxWrite.cshtml" />
+    <None Include="Views\Pages\Invoice.cshtml" />
+    <None Include="Views\Pages\Locked.cshtml" />
+    <None Include="Views\Pages\Login.cshtml" />
+    <None Include="Views\Pages\LoginAlt.cshtml" />
+    <None Include="Views\Pages\Profile.cshtml" />
+    <None Include="Views\Pages\Register.cshtml" />
+    <None Include="Views\Pages\Search.cshtml" />
+    <None Include="Views\PersonArea\Edit.cshtml" />
+    <None Include="Views\PersonArea\Index.cshtml" />
+    <None Include="Views\PersonArea\View.cshtml" />
+    <None Include="Views\Person\Edit.cshtml" />
+    <None Include="Views\Person\Index.cshtml" />
+    <None Include="Views\Person\View.cshtml" />
+    <None Include="Views\Pwa\AccessDenied.cshtml" />
+    <None Include="Views\Pwa\Accident\Edit.cshtml" />
+    <None Include="Views\Pwa\Accident\EditFollowup.cshtml" />
+    <None Include="Views\Pwa\Accident\EditKorban.cshtml" />
+    <None Include="Views\Pwa\Accident\EditPelaku.cshtml" />
+    <None Include="Views\Pwa\Accident\EditSaksi.cshtml" />
+    <None Include="Views\Pwa\Accident\Index.cshtml" />
+    <None Include="Views\Pwa\Accident\IndexAll.cshtml" />
+    <None Include="Views\Pwa\Accident\View.cshtml" />
+    <None Include="wwwroot\css\app.bundle.css.map" />
+    <None Include="wwwroot\css\fa-brands.css.map" />
+    <None Include="wwwroot\css\fa-regular.css.map" />
+    <None Include="wwwroot\css\fa-solid.css.map" />
+    <None Include="wwwroot\css\page-invoice.css.map" />
+    <None Include="wwwroot\css\page-login.css.map" />
+    <None Include="wwwroot\css\theme-demo.css.map" />
+    <None Include="wwwroot\css\themes\cust-theme-1.css.map" />
+    <None Include="wwwroot\css\themes\cust-theme-10.css.map" />
+    <None Include="wwwroot\css\themes\cust-theme-11.css.map" />
+    <None Include="wwwroot\css\themes\cust-theme-12.css.map" />
+    <None Include="wwwroot\css\themes\cust-theme-13.css.map" />
+    <None Include="wwwroot\css\themes\cust-theme-2.css.map" />
+    <None Include="wwwroot\css\themes\cust-theme-3.css.map" />
+    <None Include="wwwroot\css\themes\cust-theme-4.css.map" />
+    <None Include="wwwroot\css\themes\cust-theme-5.css.map" />
+    <None Include="wwwroot\css\themes\cust-theme-6.css.map" />
+    <None Include="wwwroot\css\themes\cust-theme-7.css.map" />
+    <None Include="wwwroot\css\themes\cust-theme-8.css.map" />
+    <None Include="wwwroot\css\themes\cust-theme-9.css.map" />
+    <None Include="wwwroot\css\vendors.bundle.css.map" />
+    <None Include="wwwroot\fontawesome\js\all.js" />
+    <None Include="wwwroot\fontawesome\js\all.min.js" />
+    <None Include="wwwroot\fontawesome\js\brands.js" />
+    <None Include="wwwroot\fontawesome\js\brands.min.js" />
+    <None Include="wwwroot\fontawesome\js\fontawesome.js" />
+    <None Include="wwwroot\fontawesome\js\fontawesome.min.js" />
+    <None Include="wwwroot\fontawesome\js\regular.js" />
+    <None Include="wwwroot\fontawesome\js\regular.min.js" />
+    <None Include="wwwroot\fontawesome\js\solid.js" />
+    <None Include="wwwroot\fontawesome\js\solid.min.js" />
+    <None Include="wwwroot\fontawesome\js\v4-shims.js" />
+    <None Include="wwwroot\fontawesome\js\v4-shims.min.js" />
+    <None Include="wwwroot\fontawesome\webfonts\fa-brands-400.svg" />
+    <None Include="wwwroot\fontawesome\webfonts\fa-brands-400.woff2" />
+    <None Include="wwwroot\fontawesome\webfonts\fa-regular-400.svg" />
+    <None Include="wwwroot\fontawesome\webfonts\fa-regular-400.woff2" />
+    <None Include="wwwroot\fontawesome\webfonts\fa-solid-900.svg" />
+    <None Include="wwwroot\fontawesome\webfonts\fa-solid-900.woff2" />
+    <None Include="wwwroot\img\favicon\safari-pinned-tab.svg" />
+    <None Include="wwwroot\img\favicon\site.webmanifest" />
+    <None Include="wwwroot\img\logo-flat.svg" />
+    <None Include="wwwroot\img\logo-gradient.svg" />
+    <None Include="wwwroot\img\logo.svg" />
+    <None Include="wwwroot\img\svg\pattern-1.svg" />
+    <None Include="wwwroot\img\svg\pattern-2.svg" />
+    <None Include="wwwroot\img\svg\pattern-3.svg" />
+    <None Include="wwwroot\img\svg\pattern-4.svg" />
+    <None Include="wwwroot\img\undraw_posting_photo.svg" />
+    <None Include="wwwroot\js\app.bundle.js" />
+    <None Include="wwwroot\js\holder.js" />
+    <None Include="wwwroot\js\i18n\i18n.js" />
+    <None Include="wwwroot\js\site.js" />
+    <None Include="wwwroot\js\vendors.bundle.js" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.css.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.min.css.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap.css.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap.min.css.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.js" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.js.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.min.js" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.min.js.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.js" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.js.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.min.js" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.min.js.map" />
+    <None Include="wwwroot\lib\jquery\dist\jquery.js" />
+    <None Include="wwwroot\lib\jquery\dist\jquery.min.js" />
+    <None Include="wwwroot\lib\jquery\dist\jquery.min.map" />
+    <None Include="wwwroot\media\sound\bigbox.ogg" />
+    <None Include="wwwroot\media\sound\messagebox.ogg" />
+    <None Include="wwwroot\media\sound\smallbox.ogg" />
+    <None Include="wwwroot\media\sound\voice_alert.ogg" />
+    <None Include="wwwroot\media\sound\voice_off.ogg" />
+    <None Include="wwwroot\media\sound\voice_on.ogg" />
+    <None Include="wwwroot\scss\navs\_global.scss" />
+    <None Include="wwwroot\scss\navs\_sidebar.scss" />
+    <None Include="wwwroot\scss\navs\_topbar.scss" />
+    <None Include="wwwroot\scss\sb-admin-2.scss" />
+    <None Include="wwwroot\scss\utilities\_animation.scss" />
+    <None Include="wwwroot\scss\utilities\_background.scss" />
+    <None Include="wwwroot\scss\utilities\_border.scss" />
+    <None Include="wwwroot\scss\utilities\_display.scss" />
+    <None Include="wwwroot\scss\utilities\_progress.scss" />
+    <None Include="wwwroot\scss\utilities\_rotate.scss" />
+    <None Include="wwwroot\scss\utilities\_text.scss" />
+    <None Include="wwwroot\scss\_buttons.scss" />
+    <None Include="wwwroot\scss\_cards.scss" />
+    <None Include="wwwroot\scss\_charts.scss" />
+    <None Include="wwwroot\scss\_dropdowns.scss" />
+    <None Include="wwwroot\scss\_error.scss" />
+    <None Include="wwwroot\scss\_footer.scss" />
+    <None Include="wwwroot\scss\_global.scss" />
+    <None Include="wwwroot\scss\_login.scss" />
+    <None Include="wwwroot\scss\_mixins.scss" />
+    <None Include="wwwroot\scss\_navs.scss" />
+    <None Include="wwwroot\scss\_utilities.scss" />
+    <None Include="wwwroot\scss\_variables.scss" />
+    <None Include="wwwroot\webfonts\fa-brands-400.svg" />
+    <None Include="wwwroot\webfonts\fa-brands-400.woff2" />
+    <None Include="wwwroot\webfonts\fa-light-300.svg" />
+    <None Include="wwwroot\webfonts\fa-light-300.woff2" />
+    <None Include="wwwroot\webfonts\fa-regular-400.svg" />
+    <None Include="wwwroot\webfonts\fa-regular-400.woff2" />
+    <None Include="wwwroot\webfonts\fa-solid-900.svg" />
+    <None Include="wwwroot\webfonts\fa-solid-900.woff2" />
+    <None Include="wwwroot\webfonts\nextgen-icons.svg" />
+    <None Include="wwwroot\webfonts\nextgen-icons.woff2" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,290 @@
+﻿@using WebApp;
+@using Microsoft.AspNetCore.Http;
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@{
+    ViewData["Title"] = "View";
+    Layout = "~/Views/Shared/_LayoutNoHeader.cshtml";
+    var fieldModel = ViewData["fieldModel"] as WebApp.Areas.Sys.Models.MenusModel.ViewModel;
+    var baseUrl = HttpContextAccessor.HttpContext.Request.Scheme + "://" + HttpContextAccessor.HttpContext.Request.Host + "" + HttpContextAccessor.HttpContext.Request.PathBase;
+}
+
+<form id="form_edit" method="post">
+    <div class="card">
+        <div class="card-header">
+            <div class="title-header">@ViewData["TitleHeader"]</div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-6">
+                    <div id="form_item_id" class="form-item">
+                        <div class="form-item-label">@ResxHelper.GetValue("sys_menus", "id")<span class="required"> *</span></div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_ordinal" class="form-item-field">
+                            <input type="text" id="id" name="id" class="k-textbox" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("sys_menus","id"))" maxlength="50" style="width:350px;" value="@fieldModel.id" />
+                            <span class="k-invalid-msg" data-for="id"></span>
+                            <input type="hidden" id="id_old" name="id_old" value="@fieldModel.id" />
+                        </div>
+                    </div>
+                    <div id="form_item_id" class="form-item">
+                        <div class="form-item-label">@ResxHelper.GetValue("sys_menus", "menu_type_id")<span class="required"> *</span></div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_ordinal" class="form-item-field">
+                            @fieldModel.menu_type_id
+                            <span class="k-invalid-msg" data-for="id"></span>
+                            <input type="hidden" id="menu_type_id" name="menu_type_id" value="@fieldModel.menu_type_id" />
+                        </div>
+                    </div>
+                    <div id="form_item_parent_id" class="form-item">
+                        <div class="form-item-label">@ResxHelper.GetValue("sys_menus", "parent_id")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_parent_id" class="form-item-field">
+                            <input id="parent_id" name="parent_id" style="width:400px;" />
+                            <span class="k-invalid-msg" data-for="parent_id"></span>
+                            <input type="hidden" id="parent_id_old" name="parent_id_old" value="@fieldModel.parent_id" />
+                            <script>
+                                $(document).ready(function () {
+                                    var lookupUrl_parent_id = "@baseUrl/Sys/Menus/LookupTreeData";
+                                    var parent_id_param = { parent: [{field: 'menu_type_id', value: '@fieldModel.menu_type_id'}]};
+                                    var ds_parent_id = new kendo.data.HierarchicalDataSource({ transport: { read: { type: 'POST', url: lookupUrl_parent_id, dataType: "json", data: parent_id_param } }, schema: { model: { id: "value", hasChildren: "has_child", children: "item" } } });
+                                    $("#parent_id").kendoDropDownTree({
+                                        placeholder: "Select ...",
+                                        height: "auto",
+                                        dataSource: ds_parent_id,
+                                        value: '@fieldModel.parent_id',
+                                        change: function(e) {
+                                            reload_ordinal()
+                                        }
+                                    });
+                                });
+                            </script>
+                        </div>
+                    </div>
+                    <div id="form_item_name" class="form-item">
+                        <div class="form-item-label">@ResxHelper.GetValue("sys_menus", "name")<span class="required"> *</span></div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_name" class="form-item-field">
+                            <input type="text" title="@ResxHelper.GetValue("sys_menus", "name") @ResxHelper.GetValue("Message", "IsNotValidCharacter","is not valid character input")." pattern="@ConfigHelper.GetValue("AllowInputCharacters")" id="name" name="name" class="k-textbox" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("sys_menus","name"))" maxlength="50" style="width:400px;" value="@Html.Raw(fieldModel.name)" />
+                            <span class="k-invalid-msg" data-for="name"></span>
+                        </div>
+                    </div>
+                    <div id="form_item_label_id" class="form-item">
+                        <div class="form-item-label">@ResxHelper.GetValue("sys_menus", "label_id")<span class="required"> *</span></div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_label_id" class="form-item-field">
+                            <input type="text" title="@ResxHelper.GetValue("sys_menus", "label_id") @ResxHelper.GetValue("Message", "IsNotValidCharacter","is not valid character input")." pattern="@ConfigHelper.GetValue("AllowInputCharacters")" id="label_id" name="label_id" class="k-textbox" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("sys_menus","label_id"))" maxlength="50" style="width:400px;" value="@Html.Raw(fieldModel.label_id)" />
+                            <span class="k-invalid-msg" data-for="label_id"></span>
+                        </div>
+                    </div>
+                    <div id="form_item_label_en" class="form-item">
+                        <div class="form-item-label">@ResxHelper.GetValue("sys_menus", "label_en")<span class="required"> *</span></div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_label_en" class="form-item-field">
+                            <input type="text" title="@ResxHelper.GetValue("sys_menus", "label_en") @ResxHelper.GetValue("Message", "IsNotValidCharacter","is not valid character input")." pattern="@ConfigHelper.GetValue("AllowInputCharacters")" id="label_en" name="label_en" class="k-textbox" required data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("sys_menus","label_en"))" maxlength="50" style="width:400px;" value="@Html.Raw(fieldModel.label_en)" />
+                            <span class="k-invalid-msg" data-for="label_en"></span>
+                        </div>
+                    </div>
+                    <div id="form_item_link" class="form-item">
+                        <div class="form-item-label">@ResxHelper.GetValue("sys_menus", "link")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_link" class="form-item-field">
+                            <input type="text" title="@ResxHelper.GetValue("sys_menus", "link") @ResxHelper.GetValue("Message", "IsNotValidCharacter","is not valid character input")." pattern="@ConfigHelper.GetValue("AllowInputCharacters")" id="link" name="link" class="k-textbox" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("sys_menus","link"))" maxlength="50" style="width:400px;" value="@Html.Raw(fieldModel.link)" />
+                            <span class="k-invalid-msg" data-for="link"></span>
+                        </div>
+                    </div>
+                    <div id="form_item_icon" class="form-item">
+                        <div class="form-item-label">@ResxHelper.GetValue("sys_menus", "icon")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_icon" class="form-item-field">
+                            <input type="text" title="@ResxHelper.GetValue("sys_menus", "icon") @ResxHelper.GetValue("Message", "IsNotValidCharacter","is not valid character input")." pattern="@ConfigHelper.GetValue("AllowInputCharacters")" id="icon" name="icon" class="k-textbox" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("sys_menus","icon"))" maxlength="50" style="width:400px;" value="@Html.Raw(fieldModel.icon)" />
+                            <span class="k-invalid-msg" data-for="icon"></span>
+                        </div>
+                    </div>
+                    <div id="form_item_imgurl" class="form-item">
+                        <div class="form-item-label">@ResxHelper.GetValue("sys_menus", "imgurl", "image")</div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_imgurl" class="form-item-field">
+                            <input name="file_img" id="file_img" type="file" />
+                            <input name="imgurl" id="imgurl" type="hidden" value="@fieldModel.imgurl" />
+                            <input name="imgurl_file_name" id="imgurl_file_name" type="hidden" />
+                            <input name="imgurl_file_temp" id="imgurl_file_temp" type="hidden" />
+                            <script>
+                                var initialFiles = @Html.Raw(ViewData["initialFiles_imgurl"]);
+                                $("#file_img").kendoUpload({
+                                    async: {
+                                        saveUrl: "@baseUrl/Upload/SaveImg",
+                                        removeUrl: "@baseUrl/Upload/RemoveImg",
+                                        autoUpload: true
+                                    },multiple:false,
+                                    validation: {
+                                        allowedExtensions: [".gif", ".jpg", ".png"]
+                                    },
+                                    files: initialFiles,
+                                    success: onSuccessImg
+                                });
+                                function getFileInfo(e) {
+                                    return $.map(e.files, function(file) {
+                                        var info = file.name;
+                                        if (file.size > 0) {
+                                            info  += " (" + Math.ceil(file.size / 1024) + " KB)";
+                                        }
+                                        return info;
+                                    }).join(", ");
+                                }
+                                function onSuccessImg(e) {
+                                    if (e.files.length > 0) {
+                                        jQuery.each(e.files, function (i, val) {
+                                            if (e.operation == 'upload') {
+                                                $("#imgurl").val(val.name);
+                                            } else if (e.operation == 'remove') {
+                                                $("#imgurl").val('');
+                                            }
+                                        });
+                                    }
+                                }
+                            </script>
+                        </div>
+                    </div>
+                    <div id="form_item_active_id" class="form-item">
+                        <div class="form-item-label">@ResxHelper.GetValue("sys_menus", "active_id")<span class="required"> *</span></div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_active_id" class="form-item-field">
+                            <input type="radio" name="active_id" id="active_id1" class="k-radio" value="1" @fieldModel.active_id1>
+                            <label class="k-radio-label" for="active_id1">@ResxHelper.GetValue("Message", "Yes")</label>
+                            <input type="radio" name="active_id" id="active_id0" class="k-radio" value="0" @fieldModel.active_id0>
+                            <label class="k-radio-label" for="active_id0">@ResxHelper.GetValue("Message", "No")</label>
+                        </div>
+                    </div>
+                    <div id="form_item_ordinal" class="form-item">
+                        <div class="form-item-label">@ResxHelper.GetValue("sys_menus", "ordinal", "Urutan")<span class="required"> *</span></div>
+                        <div class="form-item-separator">:</div>
+                        <div id="field_item_ordinal" class="form-item-field">
+                            <input id="ordinal" name="ordinal" data-required-msg="@ResxHelper.GetValue("Message","RequiredTextFormat").Replace("{0}",@ResxHelper.GetValue("sys_roles","ordinal"))" style="width:300px;" />
+                            <span class="k-invalid-msg" data-for="ordinal"></span>
+                            <script>
+                                var ordinal_param = {parent: [{field:"menu_type_id",value:'@fieldModel.menu_type_id'},{field:"parent_id",value:'@fieldModel.parent_id'}]};
+                                var ordinal_ds = new kendo.data.DataSource({ transport: { read: { url: "@baseUrl/Sys/Menus/LookupOrderByParent", dataType: "json", data: ordinal_param, type: "POST" } } });
+                                var ordinal = $("#ordinal").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", dataSource: ordinal_ds }).data("kendoComboBox");
+                                $(document).ready(function () { $("#ordinal").data("kendoComboBox").value('@fieldModel.ordinal'); });
+                                function onChange_ordinal() {if ($("#ordinal").data("kendoComboBox").value() != '' && $("#ordinal").data("kendoComboBox")._oldIndex == -1) {$("#ordinal").data("kendoComboBox").value('');}}
+                                function reload_ordinal() {
+                                    var parent_id = $("#parent_id").data("kendoDropDownTree").value();
+                                    if (parent_id != '@fieldModel.parent_id') {
+                                        $("#ordinal").data("kendoComboBox").value('');
+                                    }
+                                    var ordinal_param = { parent: [{ field: "parent_id", value: parent_id }] };
+                                    $("#ordinal").data("kendoComboBox").dataSource.read(ordinal_param);
+                                }
+                            </script>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div id="form_item_rule_id" class="form-item">
+                        <div>@ResxHelper.GetValue("sys_role_rule", "rule_id", "Kewenangan")</div>
+                        <div id="rule_id_tv" style="width:400px;height:400px"></div>
+                        <input id="rule_id" name="rule_id" class="k-input k-textbox" type="hidden" value="@fieldModel.rule_id" />
+                        <script>
+                            var rule_id_ds = new kendo.data.HierarchicalDataSource({ transport: { read: { data: { menuid: "@fieldModel.id" }, type: 'POST', url: "@baseUrl/Sys/Menus/getItemRuleTreeCheck", dataType: "json" } }, schema: { model: { id: "id", hasChildren: "has_child", children: "item" ,fields: {checked: {from: "check", type: "boolean"}} } } });
+                            var rule_id_tv = $("#rule_id_tv").kendoTreeView({ autoBind: true, dataSource: rule_id_ds, dataTextField: "text", checkboxes: { checkChildren: true }, check: rule_id_onCheckRules, select: function (e) { e.preventDefault(); var checkbox = $(e.node).find(":checkbox"); var checked = checkbox.prop("checked"); checkbox.prop("checked", !checked); } }).data("kendoTreeView");
+                            function rule_id_checkedNodeIds(nodes, checkedNodes, checkedNodesText) { for (var i = 0; i < nodes.length; i++) {if (nodes[i].checked) { checkedNodes.push(nodes[i].id); checkedNodesText.push(nodes[i].text); } if (nodes[i].hasChildren) { rule_id_checkedNodeIds(nodes[i].children.view(), checkedNodes, checkedNodesText); } } }
+                            function rule_id_onCheckRules() { var checkedNodes = [], checkedNodesText = [], treeView = $("#rule_id_tv").data("kendoTreeView"), messageText, messageId; rule_id_checkedNodeIds(treeView.dataSource.view(), checkedNodes, checkedNodesText); if (checkedNodes.length > 0) { messageId = checkedNodes.join(","); messageText = checkedNodesText.join("<br />"); } else { messageId = ""; messageText = ""; } $("#rule_id").val(messageId); }
+                        </script>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer" style="text-align:center">
+            <a id="cancel" class="k-button k-button-icontext" href="#"><i class="far fa-times-circle"></i>&nbsp;<span id="btnCancelText">@ResxHelper.GetValue("Message", "Cancel", "Batal")</span></a>
+            <a id="save" class="k-button k-button-icontext" href="#"><i class="fas fa-save"></i>&nbsp;<span id="btnSaveText">@ResxHelper.GetValue("Message", "Save", "Simpan")</span></a>
+        </div>
+    </div>
+</form>
+
+<script>
+    var form_type = '@ViewData["form_type"]';
+    function ShowHideColumn(form_type)
+    {
+        if(form_type=='Add')
+        {
+            var hiden_column = ["id","ordinal"];
+            for (i = 0; i < hiden_column.length; i++) {
+                $("#form_item_"+hiden_column[i]).hide();
+            }
+            $("#ordinal").removeProp('required');
+        }
+        else if(form_type=='Edit')
+        {
+            var hiden_column = ["id"];
+            for (i = 0; i < hiden_column.length; i++) {
+                $("#form_item_"+hiden_column[i]).hide();
+            }
+            $("#ordinal").prop('required','required');
+        }
+    }
+    function setReadOnly(form_type,opt)
+    {
+        if(opt==true)
+        {
+            if(form_type=='Add')
+            {
+
+            }
+            else if(form_type=='Edit')
+            {
+
+            }
+        }
+        else
+        {
+            if(form_type=='Add')
+            {
+
+            }
+            else if(form_type=='Edit')
+            {
+
+            }
+        }
+    }
+    $(document).ready(function () {
+        ShowHideColumn(form_type);
+        setReadOnly(form_type, true);
+    });
+
+    var validatable = $("#form_edit").kendoValidator().data("kendoValidator");
+    $("#save").click(function (e) {
+        setReadOnly(form_type,false);
+        if (validatable.validate() === true) {
+            kendo.ui.progress($("#form_edit"), true);
+            $.ajax({
+                url: '@ViewData["UrlAction"]', data: $('#form_edit').serialize(), type: 'POST',
+                success: function (data) {
+                    kendo.ui.progress($("#form_edit"), false);
+                    if (data.status == 1) {
+                        window.parent.notification.show({title: data.title, message: kendo.toString(data.message) }, "success");
+                        if (window.parent.Reload_list_sys_menus) {
+                            window.parent.Reload_list_sys_menus();
+                        }else if (window.parent.reload_sys_menus) {
+                            window.parent.reload_sys_menus(data.pk);
+                        }
+                        close_self();
+                    } else if (data.status == 3) {
+                        window.parent.notification.show({ title: data.title, message: data.message }, "error");
+                        close_self();
+                    } else {
+                        notification.show({ title: data.title, message: data.message }, "error");
+                        setReadOnly(form_type,true);
+                    }
+                }
+            });
+        } else{setReadOnly(form_type,true);}
+
+    });
+    $("#cancel").kendoButton();
+    $("#cancel").click(function (e) {
+        close_self();
+    });
+    function close_self() { if (window.parent.$("#dialog_sys_menus").data("kendoWindow")) { window.parent.$("#dialog_sys_menus").data("kendoWindow").close(); } else { window.parent.$("#dialog").data("kendoWindow").close(); } }
+</script>
+
