@@ -68,6 +68,7 @@ namespace WebApp.Repository
                 importModel.ehs_area_id,
                 importModel.ba_id,
                 importModel.pa_id,
+                importModel.psa_id,
                 importModel.jenis_limbah_dihasilkan_id,
                 importModel.kode_limbah,
                 importModel.sumber_limbah_id,
