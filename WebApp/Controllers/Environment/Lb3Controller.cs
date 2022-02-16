@@ -11,7 +11,15 @@ using Microsoft.AspNetCore.Hosting;
 using WebApp.Models;
 using Newtonsoft.Json;
 using Microsoft.Security.Application;
-
+using System.Text;
+using NPOI.SS.UserModel;
+using NPOI.HSSF.UserModel;
+using NPOI.XSSF.UserModel;
+using System.Linq;
+using System.Data;
+using System.Data.OleDb;
+using System.Configuration;
+using WebApp.Repository;
 
 namespace WebApp.Controllers
 {
@@ -513,6 +521,159 @@ namespace WebApp.Controllers
             DataTable data = Lb3Model.LookupData(param);
             return Json(data);
         }
+        public ActionResult ImportLb3()
+        {
+            IFormFile file = Request.Form.Files[0];
+            string folderName = "Upload";
+            string webrootPath = _hostingEnvironment.WebRootPath;
+            string newPath = Path.Combine(webrootPath, folderName);
+            StringBuilder sb = new StringBuilder();
+            if (!Directory.Exists(newPath))
+                Directory.CreateDirectory(newPath);
+            if (file.Length > 0)
+            {
+                string sFileExtension = Path.GetExtension(file.FileName).ToLower();
+                ISheet sheet;
+                string fullPath = Path.Combine(newPath, file.FileName);
+                using (var stream = new FileStream(fullPath, FileMode.Create))
+                {
+                    file.CopyTo(stream);
+                    stream.Position = 0;
+                    if (sFileExtension == ".xls") //This will read the Excel 97-2000 formats    
+                    {
+                        HSSFWorkbook hssfwb = new HSSFWorkbook(stream);
+                        sheet = hssfwb.GetSheetAt(0);
+                    }
+                    else
+                    {
+                        XSSFWorkbook hssfwb = new XSSFWorkbook(stream);
+                        sheet = hssfwb.GetSheetAt(0);
+                    }
+                    getData(file.FileName);
+                }
+            }
+            return this.Content(sb.ToString());
+        }
+        private void getData(string fileName)
+        {
+            List<Lb3Model> data = new List<Lb3Model>();
+            try
+            {
+               
+                    XSSFWorkbook workbook = new XSSFWorkbook(fileName);
+                    ISheet sheet = workbook.GetSheetAt(0);
+                    //int a = range.RowCount();
+                    for (int i = 1; i < sheet.LastRowNum + 1; i++)
+                    {
+                    IRow row = sheet.GetRow(i);
+                    if(i==1)
+                    {
+                        if (row.GetCell(0).ToString().Trim().ToLower() != "ehs area id")
+                        {
+                            throw new Exception("Template Not Match at Cell A1");
+                        }
+                        if (row.GetCell(1).ToString().Trim().ToLower() != "ba id")
+                        {
+                            throw new Exception("Template Not Match at Cell B1");
+                        }
+                        if (row.GetCell(2).ToString().Trim().ToLower() != "pa id")
+                        {
+                            throw new Exception("Template Not Match at Cell C1");
+                        }
+                        if (row.GetCell(3).ToString().Trim().ToLower() != "jenis limbah dihasilkan id")
+                        {
+                            throw new Exception("Template Not Match at Cell D1");
+                        }
+                        if (row.GetCell(4).ToString().Trim().ToLower() != "kode limbah")
+                        {
+                            throw new Exception("Template Not Match at Cell E1");
+                        }
+                        if (row.GetCell(5).ToString().Trim().ToLower() != "sumber limbah id")
+                        {
+                            throw new Exception("Template Not Match at Cell F1");
+                        }
+                        if (row.GetCell(6).ToString().Trim().ToLower() != "kegiatan id")
+                        {
+                            throw new Exception("Template Not Match at Cell G1");
+                        }
+                        if (row.GetCell(7).ToString().Trim().ToLower() != "tgl dihasilkan")
+                        {
+                            throw new Exception("Template Not Match at Cell H1");
+                        }
+                        if (row.GetCell(8).ToString().Trim().ToLower() != "jenis limbah dihasilkan")
+                        {
+                            throw new Exception("Template Not Match at Cell I1");
+                        }
+                        if (row.GetCell(9).ToString().Trim().ToLower() != "pengelolaan oleh id")
+                        {
+                            throw new Exception("Template Not Match at Cell J1");
+                        }
+                        if (row.GetCell(10).ToString().Trim().ToLower() != "masa simpan limbah id")
+                        {
+                            throw new Exception("Template Not Match at Cell K1");
+                        }
+                        if (row.GetCell(11).ToString().Trim().ToLower() != "tgl dikeluarkan")
+                        {
+                            throw new Exception("Template Not Match at Cell L1");
+                        }
+                        if (row.GetCell(12).ToString().Trim().ToLower() != "jumlah limbah dikelola")
+                        {
+                            throw new Exception("Template Not Match at Cell M1");
+                        }
+                        if (row.GetCell(13).ToString().Trim().ToLower() != "kode manifest")
+                        {
+                            throw new Exception("Template Not Match at Cell N1");
+                        }
+                        if (row.GetCell(14).ToString().Trim().ToLower() != "perusahaan angkut id")
+                        {
+                            throw new Exception("Template Not Match at Cell O1");
+                        }
+                        if (row.GetCell(15).ToString().Trim().ToLower() != "diserahkan ke id")
+                        {
+                            throw new Exception("Template Not Match at Cell P1");
+                        }
+                        if (row.GetCell(16).ToString().Trim().ToLower() != "perusahaan serah id")
+                        {
+                            throw new Exception("Template Not Match at Cell Q1");
+                        }
+                        if (row.GetCell(17).ToString().Trim().ToLower() != "sisa di tps")
+                        {
+                            throw new Exception("Template Not Match at Cell R1");
+                        }
+                    }
 
+                    else
+                    {
+                        ImportModel importModels = new ImportModel();
+                        importModels.ehs_area_id = int.Parse(row.GetCell(0).ToString());
+                        importModels.ba_id = int.Parse(row.GetCell(1).ToString());
+                        importModels.pa_id = int.Parse(row.GetCell(2).ToString());
+                        importModels.jenis_limbah_dihasilkan_id = row.GetCell(3).ToString();
+                        importModels.kode_limbah = row.GetCell(4).ToString();
+                        importModels.sumber_limbah_id = int.Parse(row.GetCell(5).ToString());
+                        importModels.kegiatan_id = int.Parse(row.GetCell(6).ToString());
+                        importModels.tgl_dihasilkan = DateTime.Parse(row.GetCell(7).ToString());
+                        importModels.jenis_limbah_dihasilkan = double.Parse(row.GetCell(8).ToString());
+                        importModels.pengelolaan_oleh_id = int.Parse(row.GetCell(9).ToString());
+                        importModels.masa_simpan_limbah_id = int.Parse(row.GetCell(10).ToString());
+                        importModels.tgl_dikeluarkan = DateTime.Parse(row.GetCell(11).ToString());
+                        importModels.jumlah_limbah_dikelola = double.Parse(row.GetCell(12).ToString());
+                        importModels.kode_manifest = row.GetCell(13).ToString();
+                        importModels.perusahaan_angkut_id = int.Parse(row.GetCell(14).ToString());
+                        importModels.diserahkan_ke_id = int.Parse(row.GetCell(15).ToString());
+                        importModels.perusahaan_serah_id = int.Parse(row.GetCell(16).ToString());
+                        importModels.sisa_di_tps = double.Parse(row.GetCell(17).ToString());
+
+                        Lb3Repository lb3 = new Lb3Repository();
+                        lb3.Import(importModels);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
     }
 }
