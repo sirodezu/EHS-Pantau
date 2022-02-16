@@ -73,10 +73,12 @@
 							<img id="btnShowHideColumn_ta_sda_air" title="@ResxHelper.GetValue("Message","ShowHideColumn")" style="cursor:pointer" src="~/img/show_hide_column.png" width="20">
 							<a id="btnShowHideFilter_ta_sda_air" data-toggle="collapse" href="#collapse_filter_ta_sda_air" style="display:none">@ResxHelper.GetValue("Message", "ShowFilter", "Tampilkan Filter")</a>
 						</td>
-						<td style="float:right">
-							<img id="btnExportExcel_ta_sda_air" title="@ResxHelper.GetValue("Message","ExportToExcel")" style="cursor:pointer" src="~/img/excel.png" width="20" />&nbsp;
-							<a id="btnAdd_ta_sda_air" onclick="AddData_ta_sda_air()" class="k-button" title="@ResxHelper.GetValue("Message","Add")">@ResxHelper.GetValue("Message", "Add", "Tambah")</a>
-						</td>
+                        <td style="float:right">
+                            <img id="btnExportExcel_ta_sda_air" title="@ResxHelper.GetValue("Message","ExportToExcel")" style="cursor:pointer" src="~/img/excel.png" width="20" />&nbsp;
+                            <a id="btnAdd_ta_sda_air" onclick="AddData_ta_sda_air()" class="k-button" title="@ResxHelper.GetValue("Message","Add")">@ResxHelper.GetValue("Message", "Add", "Tambah")</a>
+                            <a id="btnImport_ta_sda_air" class="k-button" title="@ResxHelper.GetValue("Message","Import")">@ResxHelper.GetValue("Message", "Import", "Import")</a>
+                            <input id="formImport_ta_sda_air" type="file" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" hidden />
+                        </td>
 					<tr>
 				</table>
 			</div>
@@ -400,5 +402,10 @@
 			if (param_ta_sda_air.export_exl != 1) { $("#btnExportExcel_ta_sda_air").hide(); }
 			$("#btnShowHideColumn_ta_sda_air").click(function () { var x = $("#btnShowHideColumn_ta_sda_air").offset().left; var y = $("#btnShowHideColumn_ta_sda_air").offset().top; if (!WinShowHideColumn_ta_sda_air) { var WinShowHideColumn_ta_sda_air = $("#WinShowHideColumn_ta_sda_air").kendoWindow({ width: "300px", position: { left: x, top: y }, title: "@ResxHelper.GetValue("Message","ShowHideColumn")", actions: ["Close"] }); } WinShowHideColumn_ta_sda_air.data("kendoWindow").open(); });
 		});
+
+        document.getElementById('btnImport_ta_sda_air').addEventListener('click', openDialog);
+        function openDialog() {
+            document.getElementById('formImport_ta_sda_air').click();
+        }
     </script>
 }

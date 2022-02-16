@@ -68,10 +68,12 @@
 							<img id="btnShowHideColumn_ta_sda_tisu" title="@ResxHelper.GetValue("Message","ShowHideColumn")" style="cursor:pointer" src="~/img/show_hide_column.png" width="20">
 							<a id="btnShowHideFilter_ta_sda_tisu" data-toggle="collapse" href="#collapse_filter_ta_sda_tisu" style="display:none">@ResxHelper.GetValue("Message", "ShowFilter", "Tampilkan Filter")</a>
 						</td>
-						<td style="float:right">
-							<img id="btnExportExcel_ta_sda_tisu" title="@ResxHelper.GetValue("Message","ExportToExcel")" style="cursor:pointer" src="~/img/excel.png" width="20" />&nbsp;
-							<a id="btnAdd_ta_sda_tisu" onclick="AddData_ta_sda_tisu()" class="k-button" title="@ResxHelper.GetValue("Message","Add")">@ResxHelper.GetValue("Message", "Add", "Tambah")</a>
-						</td>
+                        <td style="float:right">
+                            <img id="btnExportExcel_ta_sda_tisu" title="@ResxHelper.GetValue("Message","ExportToExcel")" style="cursor:pointer" src="~/img/excel.png" width="20" />&nbsp;
+                            <a id="btnAdd_ta_sda_tisu" onclick="AddData_ta_sda_tisu()" class="k-button" title="@ResxHelper.GetValue("Message","Add")">@ResxHelper.GetValue("Message", "Add", "Tambah")</a>
+                            <a id="btnImport_ta_sda_tisu" class="k-button" title="@ResxHelper.GetValue("Message","Import")">@ResxHelper.GetValue("Message", "Import", "Import")</a>
+                            <input id="formImport_ta_sda_tisu" type="file" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" hidden />
+                        </td>
 					<tr>
 				</table>
 			</div>
@@ -382,5 +384,10 @@
 			if (param_ta_sda_tisu.export_exl != 1) { $("#btnExportExcel_ta_sda_tisu").hide(); }
 			$("#btnShowHideColumn_ta_sda_tisu").click(function () { var x = $("#btnShowHideColumn_ta_sda_tisu").offset().left; var y = $("#btnShowHideColumn_ta_sda_tisu").offset().top; if (!WinShowHideColumn_ta_sda_tisu) { var WinShowHideColumn_ta_sda_tisu = $("#WinShowHideColumn_ta_sda_tisu").kendoWindow({ width: "300px", position: { left: x, top: y }, title: "@ResxHelper.GetValue("Message","ShowHideColumn")", actions: ["Close"] }); } WinShowHideColumn_ta_sda_tisu.data("kendoWindow").open(); });
 		});
+
+        document.getElementById('btnImport_ta_sda_tisu').addEventListener('click', openDialog);
+        function openDialog() {
+            document.getElementById('formImport_ta_sda_tisu').click();
+        }
     </script>
 }
