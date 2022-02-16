@@ -10,6 +10,7 @@ namespace WebApp.Repository
         public int ehs_area_id { get; set; }
         public int ba_id { get; set; }
         public int pa_id { get; set; }
+        public int psa_id { get; set; }
         public string jenis_limbah_dihasilkan_id { get; set; }
         public string kode_limbah { get; set; }
         public int sumber_limbah_id { get; set; }

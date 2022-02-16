@@ -640,6 +640,10 @@ namespace WebApp.Controllers
                         {
                             throw new Exception("Template Not Match at Cell R1");
                         }
+                        if (row.GetCell(18).ToString().Trim().ToLower() != "psa id")
+                        {
+                            throw new Exception("Template Not Match at Cell S1");
+                        }
                     }
 
                     else
@@ -663,7 +667,7 @@ namespace WebApp.Controllers
                         importModels.diserahkan_ke_id = int.Parse(row.GetCell(15).ToString());
                         importModels.perusahaan_serah_id = int.Parse(row.GetCell(16).ToString());
                         importModels.sisa_di_tps = double.Parse(row.GetCell(17).ToString());
-
+                        importModels.psa_id = int.Parse(row.GetCell(18).ToString());
                         Lb3Repository lb3 = new Lb3Repository();
                         lb3.Import(importModels);
                     }
