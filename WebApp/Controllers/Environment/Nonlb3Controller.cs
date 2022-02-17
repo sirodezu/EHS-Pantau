@@ -11,7 +11,11 @@ using Microsoft.AspNetCore.Hosting;
 using WebApp.Models;
 using Newtonsoft.Json;
 using Microsoft.Security.Application;
-
+using System.Text;
+using NPOI.SS.UserModel;
+using NPOI.HSSF.UserModel;
+using NPOI.XSSF.UserModel;
+using WebApp.Repository;
 
 namespace WebApp.Controllers
 {
@@ -524,6 +528,147 @@ namespace WebApp.Controllers
             }
             return Content("");
         }
+        public ActionResult ImportNonLb3()
+        {
+            IFormFile file = Request.Form.Files[0];
+            string folderName = "Upload";
+            string webrootPath = _hostingEnvironment.WebRootPath;
+            string newPath = Path.Combine(webrootPath, folderName);
+            StringBuilder sb = new StringBuilder();
+            if (!Directory.Exists(newPath))
+                Directory.CreateDirectory(newPath);
+            if (file.Length > 0)
+            {
+                string sFileExtension = Path.GetExtension(file.FileName).ToLower();
+                ISheet sheet;
+                string fullPath = Path.Combine(newPath, file.FileName);
+                using (var stream = new FileStream(fullPath, FileMode.Create))
+                {
+                    file.CopyTo(stream);
+                    stream.Position = 0;
+                    if (sFileExtension == ".xls") //This will read the Excel 97-2000 formats    
+                    {
+                        HSSFWorkbook hssfwb = new HSSFWorkbook(stream);
+                        sheet = hssfwb.GetSheetAt(0);
+                    }
+                    else
+                    {
+                        XSSFWorkbook hssfwb = new XSSFWorkbook(stream);
+                        sheet = hssfwb.GetSheetAt(0);
+                    }
+                    getData(file.FileName);
+                }
+            }
+            return this.Content(sb.ToString());
+        }
 
+        private void getData(string fileName)
+        {
+            List<ImportNonLb3Model> data = new List<ImportNonLb3Model>();
+            try
+            {
+                XSSFWorkbook workbook = new XSSFWorkbook(fileName);
+                ISheet sheet = workbook.GetSheetAt(0);
+                //int a = range.RowCount();
+                for (int i = 1; i < sheet.LastRowNum + 1; i++)
+                {
+                    IRow row = sheet.GetRow(i);
+                    if(i==1)
+                    {
+                        if (row.GetCell(0).ToString().Trim().ToLower() != "ehs area id")
+                        {
+                            throw new Exception("Template Not Match at Cell A1");
+                        }
+                        if (row.GetCell(1).ToString().Trim().ToLower() != "ba id")
+                        {
+                            throw new Exception("Template Not Match at Cell B1");
+                        }
+                        if (row.GetCell(2).ToString().Trim().ToLower() != "pa id")
+                        {
+                            throw new Exception("Template Not Match at Cell C1");
+                        }
+                        if (row.GetCell(3).ToString().Trim().ToLower() != "psa id")
+                        {
+                            throw new Exception("Template Not Match at Cell D1");
+                        }
+                        if (row.GetCell(4).ToString().Trim().ToLower() != "bulan")
+                        {
+                            throw new Exception("Template Not Match at Cell E1");
+                        }
+                        if (row.GetCell(5).ToString().Trim().ToLower() != "tahun")
+                        {
+                            throw new Exception("Template Not Match at Cell F1");
+                        }
+                        if (row.GetCell(6).ToString().Trim().ToLower() != "jenis limbaH id")
+                        {
+                            throw new Exception("Template Not Match at Cell G1");
+                        }
+                        if (row.GetCell(7).ToString().Trim().ToLower() != "timbulan limbah cair")
+                        {
+                            throw new Exception("Template Not Match at Cell H1");
+                        }
+                        if (row.GetCell(8).ToString().Trim().ToLower() != "timbulan limbah padat")
+                        {
+                            throw new Exception("Template Not Match at Cell I1");
+                        }
+                        if (row.GetCell(9).ToString().Trim().ToLower() != "deskripsi limbah")
+                        {
+                            throw new Exception("Template Not Match at Cell J1");
+                        }
+                        if (row.GetCell(10).ToString().Trim().ToLower() != "pengelolaan oleh id")
+                        {
+                            throw new Exception("Template Not Match at Cell K1");
+                        }
+                        if (row.GetCell(11).ToString().Trim().ToLower() != "usaha kurang limbah id")
+                        {
+                            throw new Exception("Template Not Match at Cell L1");
+                        }
+                        if (row.GetCell(12).ToString().Trim().ToLower() != "deskripsi usaha")
+                        {
+                            throw new Exception("Template Not Match at Cell M1");
+                        }
+                        if (row.GetCell(13).ToString().Trim().ToLower() != "deskripsi usaha file path")
+                        {
+                            throw new Exception("Template Not Match at Cell N1");
+                        }
+                        if (row.GetCell(14).ToString().Trim().ToLower() != "usaha kurang limbah m3")
+                        {
+                            throw new Exception("Template Not Match at Cell O1");
+                        }
+                        if (row.GetCell(15).ToString().Trim().ToLower() != "usaha kurang limbah kg")
+                        {
+                            throw new Exception("Template Not Match at Cell P1");
+                        }
+                    }
+                    else
+                    {
+                        ImportNonLb3Model importNonLb3Model = new ImportNonLb3Model();
+                        importNonLb3Model.ehs_area_id = int.Parse(row.GetCell(0).ToString());
+                        importNonLb3Model.ba_id = int.Parse(row.GetCell(1).ToString());
+                        importNonLb3Model.pa_id = int.Parse(row.GetCell(2).ToString());
+                        importNonLb3Model.psa_id = int.Parse(row.GetCell(3).ToString());
+                        importNonLb3Model.bulan = int.Parse(row.GetCell(4).ToString());
+                        importNonLb3Model.tahun = int.Parse(row.GetCell(5).ToString());
+                        importNonLb3Model.jenis_limbah_id = row.GetCell(6).ToString();
+                        importNonLb3Model.timbulan_limbah_cair = double.Parse(row.GetCell(7).ToString());
+                        importNonLb3Model.timbulan_limbah_padat = double.Parse(row.GetCell(8).ToString());
+                        importNonLb3Model.deskripsi_limbah = row.GetCell(9).ToString();
+                        importNonLb3Model.pengelolaan_oleh_id = int.Parse(row.GetCell(10).ToString());
+                        importNonLb3Model.usaha_kurang_limbah_id = int.Parse(row.GetCell(11).ToString());
+                        importNonLb3Model.deskripsi_usaha = row.GetCell(12).ToString();
+                        importNonLb3Model.deskripsi_usaha_file_path = row.GetCell(13).ToString();
+                        importNonLb3Model.usaha_kurang_limbah_m3 = double.Parse(row.GetCell(14).ToString());
+                        importNonLb3Model.usaha_kurang_limbah_kg = double.Parse(row.GetCell(15).ToString());
+                        Lb3Repository lb3 = new Lb3Repository();
+                        lb3.ImportNonLb3(importNonLb3Model);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
     }
 }
