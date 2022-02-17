@@ -2,7 +2,7 @@
 @using Newtonsoft.Json
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
-	var filterColumn = ViewData["filterColumn"] as WebApp.Models.Lb3Model.ViewModel;
+    var filterColumn = ViewData["filterColumn"] as WebApp.Models.Lb3Model.ViewModel;
     ViewData["Title"] = ViewData["TitleHeader"];
     ViewData["PageName"] = "lb3";
     ViewData["Heading"] = ViewData["TitleHeader"];
@@ -11,87 +11,91 @@
 }
 <div class="panel">
     <div class="panel-container">
-		<div class="panel-content">
-			<div id="collapse_filter_ta_lb3" class="panel panel-collapse collapse">
+        <div class="panel-content">
+            <div id="collapse_filter_ta_lb3" class="panel panel-collapse collapse">
                 <div class="panel-heading-filter">
                     @ResxHelper.GetValue("Message", "FilterDataHeader", "Filter Data")
                 </div>
-				<div class="panel-body-filter">
-					<section class="filter_cols">
-						<div id="fiter_ehs_area_id" class="filter_col">
-							<label for="ehs_area_id" class="label-filter">@ResxHelper.GetValue("ta_lb3", "ehs_area_id"): </label>
-							<input id="ehs_area_id" name="ehs_area_id" style="width: 350px;" />
-						</div>
+                <div class="panel-body-filter">
+                    <section class="filter_cols">
+                        <div id="fiter_ehs_area_id" class="filter_col">
+                            <label for="ehs_area_id" class="label-filter">@ResxHelper.GetValue("ta_lb3", "ehs_area_id"): </label>
+                            <input id="ehs_area_id" name="ehs_area_id" style="width: 350px;" />
+                        </div>
 
-						<div id="fiter_ba_id" class="filter_col">
-							<label for="ba_id" class="label-filter">@ResxHelper.GetValue("ta_lb3", "ba_id"): </label>
-							<input id="ba_id" name="ba_id" style="width: 350px;" />
-						</div>
+                        <div id="fiter_ba_id" class="filter_col">
+                            <label for="ba_id" class="label-filter">@ResxHelper.GetValue("ta_lb3", "ba_id"): </label>
+                            <input id="ba_id" name="ba_id" style="width: 350px;" />
+                        </div>
 
-						<div id="fiter_pa_id" class="filter_col">
-							<label for="pa_id" class="label-filter">@ResxHelper.GetValue("ta_lb3", "pa_id"): </label>
-							<input id="pa_id" name="pa_id" style="width: 350px;" />
-						</div>
+                        <div id="fiter_pa_id" class="filter_col">
+                            <label for="pa_id" class="label-filter">@ResxHelper.GetValue("ta_lb3", "pa_id"): </label>
+                            <input id="pa_id" name="pa_id" style="width: 350px;" />
+                        </div>
 
-						<div id="fiter_psa_id" class="filter_col">
-							<label for="psa_id" class="label-filter">@ResxHelper.GetValue("ta_lb3", "psa_id"): </label>
-							<input id="psa_id" name="psa_id" style="width: 350px;" />
-						</div>
+                        <div id="fiter_psa_id" class="filter_col">
+                            <label for="psa_id" class="label-filter">@ResxHelper.GetValue("ta_lb3", "psa_id"): </label>
+                            <input id="psa_id" name="psa_id" style="width: 350px;" />
+                        </div>
 
-						<div id="fiter_jenis_limbah_dihasilkan_id" class="filter_col">
-							<label for="jenis_limbah_dihasilkan_id" class="label-filter">@ResxHelper.GetValue("ta_lb3", "jenis_limbah_dihasilkan_id"): </label>
-							<input id="jenis_limbah_dihasilkan_id" name="jenis_limbah_dihasilkan_id" style="width: 350px;" />
-						</div>
+                        <div id="fiter_jenis_limbah_dihasilkan_id" class="filter_col">
+                            <label for="jenis_limbah_dihasilkan_id" class="label-filter">@ResxHelper.GetValue("ta_lb3", "jenis_limbah_dihasilkan_id"): </label>
+                            <input id="jenis_limbah_dihasilkan_id" name="jenis_limbah_dihasilkan_id" style="width: 350px;" />
+                        </div>
 
-						<div id="fiter_sumber_limbah_id" class="filter_col">
-							<label for="sumber_limbah_id" class="label-filter">@ResxHelper.GetValue("ta_lb3", "sumber_limbah_id"): </label>
-							<input id="sumber_limbah_id" name="sumber_limbah_id" style="width: 350px;" />
-						</div>
+                        <div id="fiter_sumber_limbah_id" class="filter_col">
+                            <label for="sumber_limbah_id" class="label-filter">@ResxHelper.GetValue("ta_lb3", "sumber_limbah_id"): </label>
+                            <input id="sumber_limbah_id" name="sumber_limbah_id" style="width: 350px;" />
+                        </div>
 
-						<div id="fiter_kegiatan_id" class="filter_col">
-							<label for="kegiatan_id" class="label-filter">@ResxHelper.GetValue("ta_lb3", "kegiatan_id"): </label>
-							<input id="kegiatan_id" name="kegiatan_id" style="width: 350px;" />
-						</div>
+                        <div id="fiter_kegiatan_id" class="filter_col">
+                            <label for="kegiatan_id" class="label-filter">@ResxHelper.GetValue("ta_lb3", "kegiatan_id"): </label>
+                            <input id="kegiatan_id" name="kegiatan_id" style="width: 350px;" />
+                        </div>
 
-						<div id="fiter_tgl_dihasilkan" class="filter_col" style="display:none">@***************************************@
-							<label for="tgl_dihasilkan" class="label-filter">@ResxHelper.GetValue("ta_lb3", "tgl_dihasilkan"): </label>
-							<input id="tgl_dihasilkan" name="tgl_dihasilkan" style="width: 130px;" />
-						</div>
+                        <div id="fiter_tgl_dihasilkan" class="filter_col" style="display:none">
+                            @***************************************@
+                            <label for="tgl_dihasilkan" class="label-filter">@ResxHelper.GetValue("ta_lb3", "tgl_dihasilkan"): </label>
+                            <input id="tgl_dihasilkan" name="tgl_dihasilkan" style="width: 130px;" />
+                        </div>
 
-						<div id="fiter_pengelolaan_oleh_id" class="filter_col">
-							<label for="pengelolaan_oleh_id" class="label-filter">@ResxHelper.GetValue("ta_lb3", "pengelolaan_oleh_id"): </label>
-							<input id="pengelolaan_oleh_id" name="pengelolaan_oleh_id" style="width: 350px;" />
-						</div>
+                        <div id="fiter_pengelolaan_oleh_id" class="filter_col">
+                            <label for="pengelolaan_oleh_id" class="label-filter">@ResxHelper.GetValue("ta_lb3", "pengelolaan_oleh_id"): </label>
+                            <input id="pengelolaan_oleh_id" name="pengelolaan_oleh_id" style="width: 350px;" />
+                        </div>
 
-						<div id="fiter_tgl_dikeluarkan" class="filter_col" style="display:none">@***************************************@
-							<label for="tgl_dikeluarkan" class="label-filter">@ResxHelper.GetValue("ta_lb3", "tgl_dikeluarkan"): </label>
-							<input id="tgl_dikeluarkan" name="tgl_dikeluarkan" style="width: 130px;" />
-						</div>
+                        <div id="fiter_tgl_dikeluarkan" class="filter_col" style="display:none">
+                            @***************************************@
+                            <label for="tgl_dikeluarkan" class="label-filter">@ResxHelper.GetValue("ta_lb3", "tgl_dikeluarkan"): </label>
+                            <input id="tgl_dikeluarkan" name="tgl_dikeluarkan" style="width: 130px;" />
+                        </div>
 
-					</section>
-				</div>
-				<div class="panel-footer-filter">
-					<a id="btnResetFilter_ta_lb3" onclick="reset_filter_ta_lb3()" class="k-button" title="Reset Filter">@ResxHelper.GetValue("Message", "ResetFilter", "Reset Filter")</a>
-				</div>
-			</div>
-			<div>
-				<table id="toolbar_panel" style="width:100%;">
-					<tr>
-						<td>
-							<span id="quick_search_template_ta_lb3" class="k-textbox k-space-right"><input id="txtSearch_ta_lb3" placeholder="@ResxHelper.GetValue("Message","QuickSearch")" value="" /><a id="btnSearch_ta_lb3" href="#" class="k-icon k-i-search">&nbsp;</a></span>
-							<img id="btnSearchByColumn_ta_lb3" title="@ResxHelper.GetValue("Message","ShowSearchByColumn")" style="cursor:pointer" src="~/img/search_by_column.png" width="20">
-							<img id="btnShowHideColumn_ta_lb3" title="@ResxHelper.GetValue("Message","ShowHideColumn")" style="cursor:pointer" src="~/img/show_hide_column.png" width="20">
-							<a id="btnShowHideFilter_ta_lb3" data-toggle="collapse" href="#collapse_filter_ta_lb3" style="display:none">@ResxHelper.GetValue("Message", "ShowFilter", "Tampilkan Filter")</a>
-						</td>
-						<td style="float:right">
-							<img id="btnExportExcel_ta_lb3" title="@ResxHelper.GetValue("Message","ExportToExcel")" style="cursor:pointer" src="~/img/excel.png" width="20" />&nbsp;
-							<a id="btnAdd_ta_lb3" onclick="AddData_ta_lb3()" class="k-button" title="@ResxHelper.GetValue("Message","Add")">@ResxHelper.GetValue("Message", "Add", "Tambah")</a>
-						</td>
-					<tr>
-				</table>
-			</div>
-			<div id="grid_ta_lb3"></div>
-		</div>
+                    </section>
+                </div>
+                <div class="panel-footer-filter">
+                    <a id="btnResetFilter_ta_lb3" onclick="reset_filter_ta_lb3()" class="k-button" title="Reset Filter">@ResxHelper.GetValue("Message", "ResetFilter", "Reset Filter")</a>
+                </div>
+            </div>
+            <div>
+                <table id="toolbar_panel" style="width:100%;">
+                    <tr>
+                        <td>
+                            <span id="quick_search_template_ta_lb3" class="k-textbox k-space-right"><input id="txtSearch_ta_lb3" placeholder="@ResxHelper.GetValue("Message","QuickSearch")" value="" /><a id="btnSearch_ta_lb3" href="#" class="k-icon k-i-search">&nbsp;</a></span>
+                            <img id="btnSearchByColumn_ta_lb3" title="@ResxHelper.GetValue("Message","ShowSearchByColumn")" style="cursor:pointer" src="~/img/search_by_column.png" width="20">
+                            <img id="btnShowHideColumn_ta_lb3" title="@ResxHelper.GetValue("Message","ShowHideColumn")" style="cursor:pointer" src="~/img/show_hide_column.png" width="20">
+                            <a id="btnShowHideFilter_ta_lb3" data-toggle="collapse" href="#collapse_filter_ta_lb3" style="display:none">@ResxHelper.GetValue("Message", "ShowFilter", "Tampilkan Filter")</a>
+                        </td>
+                        <td style="float:right">
+                            <img id="btnExportExcel_ta_lb3" title="@ResxHelper.GetValue("Message","ExportToExcel")" style="cursor:pointer" src="~/img/excel.png" width="20" />&nbsp;
+                            <a id="btnAdd_ta_lb3" onclick="AddData_ta_lb3()" class="k-button" title="@ResxHelper.GetValue("Message","Add")">@ResxHelper.GetValue("Message", "Add", "Tambah")</a>
+                            <a id="btnImport_ta_lb3" class="k-button" title="@ResxHelper.GetValue("Message","Import")">@ResxHelper.GetValue("Message", "Import", "Import")</a>
+                            <input id="formImport_ta_lb3" type="file" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" hidden />
+                        </td>
+                    <tr>
+                </table>
+            </div>
+            <div id="grid_ta_lb3"></div>
+        </div>
     </div>
 
 </div>
@@ -150,7 +154,7 @@
 			columns_data[j] = {command: col_command, width: columnActionWidth_ta_lb3, attributes: " style=\"vertical-align:top;\""};
 		}
 		//==============================
-        //=== filter ehs_area_id 
+        //=== filter ehs_area_id
         var ehs_area_id_param = { item: { value: 'id', text: 'kode,nama', distinct: '0' } ,parent:[{field:"obj_data",value:"Environment"}], order:[]};
         var ehs_area_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/EHSArea/LookupDataEA", dataType: "json", data: ehs_area_id_param, type: "POST" } } });
         var ehs_area_id = $("#ehs_area_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", change: onChange_ehs_area_id, dataSource: ehs_area_id_ds }).data("kendoComboBox");
@@ -162,9 +166,9 @@
                                                     reload_psa_id();
             onFilterHeader_ta_lb3();
         }
-        
 
-        //=== filter ba_id 
+
+        //=== filter ba_id
         var ba_id_param = { item: { value: 'id', text: 'kode,nama', distinct: '0' } ,parent:[{ field: 'ehs_area_id',opr:'=', value: '@filterColumn.ehs_area_id' },{field:"obj_data",value:"Environment"}], order:[]};
         var ba_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/BusinessArea/LookupDataBA", dataType: "json", data: ba_id_param, type: "POST" } } });
         var ba_id = $("#ba_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", change: onChange_ba_id, dataSource: ba_id_ds }).data("kendoComboBox");
@@ -175,16 +179,16 @@
                                                     reload_psa_id();
             onFilterHeader_ta_lb3();
         }
-        
-                                                function reload_ba_id(){
-                                                    $("#ba_id").data("kendoComboBox").value('');
-                                                    var ehs_area_id = $("#ehs_area_id").data("kendoComboBox").value();
-                                                    var ba_id_param = { item: { value: 'id', text: 'kode,nama' }, parent: [{ field: 'ehs_area_id',opr:'=', value: ehs_area_id }], order: [] };
-                                                    $("#ba_id").data("kendoComboBox").dataSource.read(ba_id_param);
-                                                }
+
+        function reload_ba_id(){
+            $("#ba_id").data("kendoComboBox").value('');
+            var ehs_area_id = $("#ehs_area_id").data("kendoComboBox").value();
+            var ba_id_param = { item: { value: 'id', text: 'kode,nama' }, parent: [{ field: 'ehs_area_id',opr:'=', value: ehs_area_id }], order: [] };
+            $("#ba_id").data("kendoComboBox").dataSource.read(ba_id_param);
+        }
 
 
-        //=== filter pa_id 
+        //=== filter pa_id
         var pa_id_param = { item: { value: 'id', text: 'kode,nama', distinct: '0' } ,parent:[{ field: 'ehs_area_id',opr:'=', value: '@filterColumn.ehs_area_id' }, { field: 'ba_id',opr:'=', value: '@filterColumn.ba_id' },{field:"obj_data",value:"Environment"}], order:[]};
         var pa_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/PersonalArea/LookupDataPA", dataType: "json", data: pa_id_param, type: "POST" } } });
         var pa_id = $("#pa_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", change: onChange_pa_id, dataSource: pa_id_ds }).data("kendoComboBox");
@@ -194,17 +198,17 @@
                                                     reload_psa_id();
             onFilterHeader_ta_lb3();
         }
-        
-                                                function reload_pa_id(){
-                                                    $("#pa_id").data("kendoComboBox").value('');
-                                                    var ehs_area_id = $("#ehs_area_id").data("kendoComboBox").value();
-                                                    var ba_id = $("#ba_id").data("kendoComboBox").value();
-                                                    var pa_id_param = { item: { value: 'id', text: 'kode,nama' }, parent: [{ field: 'ehs_area_id',opr:'=', value: ehs_area_id }, { field: 'ba_id',opr:'=', value: ba_id }], order: [] };
-                                                    $("#pa_id").data("kendoComboBox").dataSource.read(pa_id_param);
-                                                }
+
+        function reload_pa_id(){
+            $("#pa_id").data("kendoComboBox").value('');
+            var ehs_area_id = $("#ehs_area_id").data("kendoComboBox").value();
+            var ba_id = $("#ba_id").data("kendoComboBox").value();
+            var pa_id_param = { item: { value: 'id', text: 'kode,nama' }, parent: [{ field: 'ehs_area_id',opr:'=', value: ehs_area_id }, { field: 'ba_id',opr:'=', value: ba_id }], order: [] };
+            $("#pa_id").data("kendoComboBox").dataSource.read(pa_id_param);
+        }
 
 
-        //=== filter psa_id 
+        //=== filter psa_id
         var psa_id_param = { item: { value: 'id', text: 'kode,nama', distinct: '0' } ,parent:[{ field: 'ehs_area_id',opr:'=', value: '@filterColumn.ehs_area_id' }, { field: 'ba_id',opr:'=', value: '@filterColumn.ba_id' }, { field: 'pa_id',opr:'=', value: '@filterColumn.pa_id' },{field:"obj_data",value:"Environment"}], order:[]};
         var psa_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/PersonalSubArea/LookupDataPSA", dataType: "json", data: psa_id_param, type: "POST" } } });
         var psa_id = $("#psa_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", change: onChange_psa_id, dataSource: psa_id_ds }).data("kendoComboBox");
@@ -213,18 +217,18 @@
             if ($("#psa_id").data("kendoComboBox").value() != '' && $("#psa_id").data("kendoComboBox")._oldIndex == -1) { $("#psa_id").data("kendoComboBox").value(''); }
             onFilterHeader_ta_lb3();
         }
-        
-                                                function reload_psa_id(){
-                                                    $("#psa_id").data("kendoComboBox").value('');
-                                                    var ehs_area_id = $("#ehs_area_id").data("kendoComboBox").value();
-                                                    var ba_id = $("#ba_id").data("kendoComboBox").value();
-                                                    var pa_id = $("#pa_id").data("kendoComboBox").value();
-                                                    var psa_id_param = { item: { value: 'id', text: 'kode,nama' }, parent: [{ field: 'ehs_area_id',opr:'=', value: ehs_area_id }, { field: 'ba_id',opr:'=', value: ba_id }, { field: 'pa_id',opr:'=', value: pa_id }], order: [] };
-                                                    $("#psa_id").data("kendoComboBox").dataSource.read(psa_id_param);
-                                                }
+
+        function reload_psa_id(){
+            $("#psa_id").data("kendoComboBox").value('');
+            var ehs_area_id = $("#ehs_area_id").data("kendoComboBox").value();
+            var ba_id = $("#ba_id").data("kendoComboBox").value();
+            var pa_id = $("#pa_id").data("kendoComboBox").value();
+            var psa_id_param = { item: { value: 'id', text: 'kode,nama' }, parent: [{ field: 'ehs_area_id',opr:'=', value: ehs_area_id }, { field: 'ba_id',opr:'=', value: ba_id }, { field: 'pa_id',opr:'=', value: pa_id }], order: [] };
+            $("#psa_id").data("kendoComboBox").dataSource.read(psa_id_param);
+        }
 
 
-        //=== filter jenis_limbah_dihasilkan_id 
+        //=== filter jenis_limbah_dihasilkan_id
         var jenis_limbah_dihasilkan_id_param = { item: { value: 'id', text: 'nama', attribute: ['satuan'], distinct: '0' } ,parent:[{ field: 'cat_id',opr:'=', value: '90' }], order:[]};
         var jenis_limbah_dihasilkan_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: jenis_limbah_dihasilkan_id_param, type: "POST" } } });
         var jenis_limbah_dihasilkan_id = $("#jenis_limbah_dihasilkan_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", change: onChange_jenis_limbah_dihasilkan_id, dataSource: jenis_limbah_dihasilkan_id_ds }).data("kendoComboBox");
@@ -233,9 +237,9 @@
             if ($("#jenis_limbah_dihasilkan_id").data("kendoComboBox").value() != '' && $("#jenis_limbah_dihasilkan_id").data("kendoComboBox")._oldIndex == -1) { $("#jenis_limbah_dihasilkan_id").data("kendoComboBox").value(''); }
             onFilterHeader_ta_lb3();
         }
-        
 
-        //=== filter sumber_limbah_id 
+
+        //=== filter sumber_limbah_id
         var sumber_limbah_id_param = { item: { value: 'id', text: 'nama', distinct: '0' } ,parent:[{ field: 'cat_id',opr:'=', value: '97' }], order:[]};
         var sumber_limbah_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: sumber_limbah_id_param, type: "POST" } } });
         var sumber_limbah_id = $("#sumber_limbah_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", change: onChange_sumber_limbah_id, dataSource: sumber_limbah_id_ds }).data("kendoComboBox");
@@ -244,9 +248,9 @@
             if ($("#sumber_limbah_id").data("kendoComboBox").value() != '' && $("#sumber_limbah_id").data("kendoComboBox")._oldIndex == -1) { $("#sumber_limbah_id").data("kendoComboBox").value(''); }
             onFilterHeader_ta_lb3();
         }
-        
 
-        //=== filter kegiatan_id 
+
+        //=== filter kegiatan_id
         var kegiatan_id_param = { item: { value: 'id', text: 'nama', distinct: '0' } ,parent:[{ field: 'cat_id',opr:'=', value: '91' }], order:[]};
         var kegiatan_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: kegiatan_id_param, type: "POST" } } });
         var kegiatan_id = $("#kegiatan_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", change: onChange_kegiatan_id, dataSource: kegiatan_id_ds }).data("kendoComboBox");
@@ -255,9 +259,9 @@
             if ($("#kegiatan_id").data("kendoComboBox").value() != '' && $("#kegiatan_id").data("kendoComboBox")._oldIndex == -1) { $("#kegiatan_id").data("kendoComboBox").value(''); }
             onFilterHeader_ta_lb3();
         }
-        
 
-        //=== filter tgl_dihasilkan 
+
+        //=== filter tgl_dihasilkan
         var tgl_dihasilkan_param = { item: { value: 'tgl_dihasilkan', text: 'tgl_dihasilkan', distinct: '1' } ,parent:[], order:[{ field: 'tgl_dihasilkan', dir: 'asc' }]};
         var tgl_dihasilkan_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Lb3/LookupData", dataType: "json", data: tgl_dihasilkan_param, type: "POST" } } });
         var tgl_dihasilkan = $("#tgl_dihasilkan").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", change: onChange_tgl_dihasilkan, dataSource: tgl_dihasilkan_ds }).data("kendoComboBox");
@@ -266,9 +270,9 @@
             if ($("#tgl_dihasilkan").data("kendoComboBox").value() != '' && $("#tgl_dihasilkan").data("kendoComboBox")._oldIndex == -1) { $("#tgl_dihasilkan").data("kendoComboBox").value(''); }
             onFilterHeader_ta_lb3();
         }
-        
 
-        //=== filter pengelolaan_oleh_id 
+
+        //=== filter pengelolaan_oleh_id
         var pengelolaan_oleh_id_param = { item: { value: 'id', text: 'nama', distinct: '0' } ,parent:[{ field: 'cat_id',opr:'=', value: '93' }], order:[]};
         var pengelolaan_oleh_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: pengelolaan_oleh_id_param, type: "POST" } } });
         var pengelolaan_oleh_id = $("#pengelolaan_oleh_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", change: onChange_pengelolaan_oleh_id, dataSource: pengelolaan_oleh_id_ds }).data("kendoComboBox");
@@ -277,9 +281,9 @@
             if ($("#pengelolaan_oleh_id").data("kendoComboBox").value() != '' && $("#pengelolaan_oleh_id").data("kendoComboBox")._oldIndex == -1) { $("#pengelolaan_oleh_id").data("kendoComboBox").value(''); }
             onFilterHeader_ta_lb3();
         }
-        
 
-        //=== filter tgl_dikeluarkan 
+
+        //=== filter tgl_dikeluarkan
         var tgl_dikeluarkan_param = { item: { value: 'tgl_dikeluarkan', text: 'tgl_dikeluarkan', distinct: '1' } ,parent:[], order:[{ field: 'tgl_dikeluarkan', dir: 'asc' }]};
         var tgl_dikeluarkan_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Lb3/LookupData", dataType: "json", data: tgl_dikeluarkan_param, type: "POST" } } });
         var tgl_dikeluarkan = $("#tgl_dikeluarkan").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", change: onChange_tgl_dikeluarkan, dataSource: tgl_dikeluarkan_ds }).data("kendoComboBox");
@@ -288,7 +292,7 @@
             if ($("#tgl_dikeluarkan").data("kendoComboBox").value() != '' && $("#tgl_dikeluarkan").data("kendoComboBox")._oldIndex == -1) { $("#tgl_dikeluarkan").data("kendoComboBox").value(''); }
             onFilterHeader_ta_lb3();
         }
-        
+
 
 		//==============================
 		$("#collapse_filter_ta_lb3").on('shown.bs.collapse', function () {
@@ -323,15 +327,15 @@
 		}
 		function reset_filter_ta_lb3() {
 	        $("#ehs_area_id").data("kendoComboBox").value('');
-        $("#ba_id").data("kendoComboBox").value('');
-        $("#pa_id").data("kendoComboBox").value('');
-        $("#psa_id").data("kendoComboBox").value('');
-        $("#jenis_limbah_dihasilkan_id").data("kendoComboBox").value('');
-        $("#sumber_limbah_id").data("kendoComboBox").value('');
-        $("#kegiatan_id").data("kendoComboBox").value('');
-        $("#tgl_dihasilkan").data("kendoComboBox").value('');
-        $("#pengelolaan_oleh_id").data("kendoComboBox").value('');
-        $("#tgl_dikeluarkan").data("kendoComboBox").value('');
+			$("#ba_id").data("kendoComboBox").value('');
+			$("#pa_id").data("kendoComboBox").value('');
+			$("#psa_id").data("kendoComboBox").value('');
+			$("#jenis_limbah_dihasilkan_id").data("kendoComboBox").value('');
+			$("#sumber_limbah_id").data("kendoComboBox").value('');
+			$("#kegiatan_id").data("kendoComboBox").value('');
+			$("#tgl_dihasilkan").data("kendoComboBox").value('');
+			$("#pengelolaan_oleh_id").data("kendoComboBox").value('');
+			$("#tgl_dikeluarkan").data("kendoComboBox").value('');
 			onFilterHeader_ta_lb3();
 		}
 		function onFilterHeader_ta_lb3() {
@@ -349,7 +353,7 @@
 		function QuickSearch_ta_lb3() {
 			$filter = new Array();
 			$x = $("#txtSearch_ta_lb3").val();
-			if ($x) {jQuery.each(j_data_ta_lb3, function (i, val) {if (val.display && val.qsearch && val.type =='string') {$filter.push({ name: val.name, opr: "contains", value: $x });}});} 
+			if ($x) {jQuery.each(j_data_ta_lb3, function (i, val) {if (val.display && val.qsearch && val.type =='string') {$filter.push({ name: val.name, opr: "contains", value: $x });}});}
 			if ($filter.length > 0) {list_ta_lb3.data("kendoGrid").dataSource.filter({ logic: "or", filters: $filter });}else {list_ta_lb3.data("kendoGrid").dataSource.filter([]);}
 		}
 		function Reload_list_ta_lb3() { list_ta_lb3.data('kendoGrid').dataSource.read(); list_ta_lb3.data('kendoGrid').refresh(); }
@@ -385,7 +389,17 @@
 				}
 			}
 		}
-		function AddData_ta_lb3() {var contentUrl = '@ViewBag.BaseUrl/Lb3/Add'; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog, }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: param_ta_lb3.btn_add_modal_width, height: param_ta_lb3.btn_add_modal_height, minHeight: 300, });if(param_ta_lb3.btn_add_modal_width == 0) {form_edit.data("kendoWindow").center().open().maximize()} else {form_edit.data("kendoWindow").center().open();}}
+		function AddData_ta_lb3() {
+			var contentUrl = '@ViewBag.BaseUrl/Lb3/Add';
+			var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog, });
+				form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: param_ta_lb3.btn_add_modal_width, height: param_ta_lb3.btn_add_modal_height, minHeight: 300, });
+				if (param_ta_lb3.btn_add_modal_width == 0)
+				{
+					form_edit.data("kendoWindow").center().open().maximize()
+				} else {
+					form_edit.data("kendoWindow").center().open();
+				}
+		}
 		function ViewItem_ta_lb3(data) { var qs = '';jQuery.each(pkKey_ta_lb3, function (i, val) {qs += qs != "" ? "&" : "";qs += val+'=' + data[val];});var contentUrl = '@ViewBag.BaseUrl/Lb3/ViewItem?' + qs; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: param_ta_lb3.btn_view_modal_width, height: param_ta_lb3.btn_view_modal_height, minHeight: 300, }); if (param_ta_lb3.btn_view_modal_width == 0) { form_edit.data("kendoWindow").center().open().maximize() } else { form_edit.data("kendoWindow").center().open(); }}
 		function EditData_ta_lb3(data) { var qs = '';jQuery.each(pkKey_ta_lb3, function (i, val) {qs += qs != "" ? "&" : "";qs += val+'=' + data[val];}); var contentUrl = '@ViewBag.BaseUrl/Lb3/Edit?' + qs; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: param_ta_lb3.btn_edit_modal_width, height: param_ta_lb3.btn_edit_modal_height, minHeight: 300, }); if(param_ta_lb3.btn_edit_modal_width == 0) {form_edit.data("kendoWindow").center().open().maximize()} else {form_edit.data("kendoWindow").center().open();} }
 		function CopyData_ta_lb3(data) { var qs = '';jQuery.each(pkKey_ta_lb3, function (i, val) {qs += qs != "" ? "&" : "";qs += val+'=' + data[val];}); var contentUrl = '@ViewBag.BaseUrl/Lb3/Copy?' + qs; var form_edit = $("#dialog").kendoWindow({ iframe: true, content: { url: contentUrl }, actions: ["Minimize", "Maximize", "Close"], close: onCloseDialog }); form_edit.data("kendoWindow").setOptions({ title: "", modal: true, resizable: true, width: param_ta_lb3.btn_edit_modal_width, height: param_ta_lb3.btn_edit_modal_height, minHeight: 300, }); if(param_ta_lb3.btn_edit_modal_width == 0) {form_edit.data("kendoWindow").center().open().maximize()} else {form_edit.data("kendoWindow").center().open();} }
@@ -436,5 +450,41 @@
 			if (param_ta_lb3.export_exl != 1) { $("#btnExportExcel_ta_lb3").hide(); }
 			$("#btnShowHideColumn_ta_lb3").click(function () { var x = $("#btnShowHideColumn_ta_lb3").offset().left; var y = $("#btnShowHideColumn_ta_lb3").offset().top; if (!WinShowHideColumn_ta_lb3) { var WinShowHideColumn_ta_lb3 = $("#WinShowHideColumn_ta_lb3").kendoWindow({ width: "300px", position: { left: x, top: y }, title: "@ResxHelper.GetValue("Message","ShowHideColumn")", actions: ["Close"] }); } WinShowHideColumn_ta_lb3.data("kendoWindow").open(); });
 		});
+
+        document.getElementById('btnImport_ta_lb3').addEventListener('click', openDialog);
+        function openDialog() {
+            document.getElementById('formImport_ta_lb3').click();
+		}
+        $(document).ready(function () {
+			$("#formImport_ta_lb3").kendoUpload({
+                multiple: false,
+				template: "",
+                async: {
+                    autoUpload: false,
+                    saveUrl: "@ViewBag.BaseUrl/Lb3/ImportLb3",
+                    withCredentials: false
+                },
+                select: function (e) {
+                    var file = e.files[0];
+                    var upload = e.sender;
+                    // Biar muncul confirm dialog
+                    kendo.confirm("File name:" +
+                        "<br/>" +
+                        file.name +
+                        "<br/>" +
+                        "Are you sure that you want to upload this file?")
+                        .then(function () {
+                            upload.upload();
+                        }, function () {
+                            upload.clearAllFiles();
+                        });
+                }
+            });
+        });
     </script>
 }
+<style>
+    .k-widget.k-upload.k-header.k-upload-sync {
+        display: none !important;
+    }
+</style>
