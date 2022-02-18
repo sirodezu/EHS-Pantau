@@ -126,7 +126,11 @@ namespace WebApp.Repository
                               ,[deskripsi_usaha]
                               ,[deskripsi_usaha_file_path]
                               ,[usaha_kurang_limbah_m3]
-                              ,[usaha_kurang_limbah_kg])
+                              ,[usaha_kurang_limbah_kg]
+                              ,[insert_by]
+                              ,[insert_at]
+                              ,[update_by]
+                              ,[update_at])
                         Values
                             (@id
                               ,@ehs_area_id
@@ -144,7 +148,11 @@ namespace WebApp.Repository
                               ,@deskripsi_usaha
                               ,@deskripsi_usaha_file_path
                               ,@usaha_kurang_limbah_m3
-                              ,@usaha_kurang_limbah_kg)";
+                              ,@usaha_kurang_limbah_kg
+                              ,1
+                              ,getdate()
+                              ,1
+                              ,getdate())";
             var parameters = new
             {
                 id = lastId + 1,
