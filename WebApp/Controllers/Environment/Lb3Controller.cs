@@ -531,9 +531,9 @@ namespace WebApp.Controllers
             //var extension = "." + files.FileName.Split('.')[files.FileName.Split('.').Length - 1];
             //string fileName = Guid.NewGuid().ToString() + '.' + extension;
             IFormFile file = Request.Form.Files[0];
-            var pathBuilt = Path.Combine(Directory.GetCurrentDirectory(), "Upload");
+            var pathBuilt = Path.Combine(Directory.GetCurrentDirectory(), "Import");
             var dir = Directory.GetCurrentDirectory();
-            var doc = "\\Upload\\";
+            var doc = "\\Import\\";
             //var fullPath = path + images;
             var path = dir + doc;
             var fileName = DateTime.Now.ToString("yyyyMMddHHmmss") + file.FileName;
