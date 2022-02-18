@@ -40,7 +40,11 @@ namespace WebApp.Repository
                               ,[perusahaan_angkut_id]
                               ,[diserahkan_ke_id]
                               ,[perusahaan_serah_id]
-                              ,[sisa_di_tps])
+                              ,[sisa_di_tps]
+                              ,[insert_by]
+                              ,[insert_at]
+                              ,[update_by]
+                              ,[update_at])
                         Values
                             (@id
                               ,@ehs_area_id
@@ -61,7 +65,11 @@ namespace WebApp.Repository
                               ,@perusahaan_angkut_id
                               ,@diserahkan_ke_id
                               ,@perusahaan_serah_id
-                              ,@sisa_di_tps)";
+                              ,@sisa_di_tps
+                              ,1
+                              ,getdate()
+                              ,1
+                              ,getdate())";
             var parameters = new
             {
                 id = lastId + 1,
