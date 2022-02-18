@@ -457,8 +457,7 @@
 		}
         $(document).ready(function () {
 			$("#formImport_ta_lb3").kendoUpload({
-                multiple: false,
-				template: "",
+                multiple: false, 
                 async: {
                     autoUpload: false,
                     saveUrl: "@ViewBag.BaseUrl/Lb3/ImportLb3",
@@ -472,19 +471,21 @@
                         "<br/>" +
                         file.name +
                         "<br/>" +
-                        "Are you sure that you want to upload this file?")
+                        "Are you sure that you want to import this file?")
                         .then(function () {
                             upload.upload();
                         }, function () {
                             upload.clearAllFiles();
                         });
+                },
+                success: function (e) {
+                    var upload = e.sender;
+                    console.log('upload e.sender', e, upload, e.sender)
+                    Reload_list_ta_lb3();
+                    upload.clearAllFiles();
                 }
             });
+            $("div.k-widget.k-upload.k-header.k-upload-empty").css({ 'display': 'none' });
         });
     </script>
 }
-<style>
-    .k-widget.k-upload.k-header.k-upload-sync {
-        display: none !important;
-    }
-</style>

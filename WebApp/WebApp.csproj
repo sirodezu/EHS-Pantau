@@ -6,6 +6,10 @@
     <!--<AspNetCoreHostingModel>OutOfProcess</AspNetCoreHostingModel>-->
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Remove="Areas\Compliance\**" />
     <Compile Remove="Areas\Pwa\**" />
