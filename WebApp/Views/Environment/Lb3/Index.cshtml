@@ -479,14 +479,15 @@
                         });
                 },
                 success: function (e) {
+                    console.log(e)
                     var file = e.files[0];
                     var upload = e.sender;
-                    if (e.success) {
+                    if (e.files.length == 1) {
                         notification.show({ message: kendo.toString(file.name + ' Imported Successfully!') }, "success");
                         Reload_list_ta_lb3();
                         upload.clearAllFiles();
                     } else {
-                        notification.show({ title: data.title, message: kendo.toString(file.name + ' Import Failed!') }, "error");
+                        notification.show({ title: 'Import Failed!', message: kendo.toString(file.name + ' Import Failed!') }, "error");
                         Reload_list_ta_lb3();
                         upload.clearAllFiles();
                     }
