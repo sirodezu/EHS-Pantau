@@ -479,10 +479,17 @@
                         });
                 },
                 success: function (e) {
+                    var file = e.files[0];
                     var upload = e.sender;
-                    console.log('upload e.sender', e, upload, e.sender)
-                    Reload_list_ta_lb3();
-                    upload.clearAllFiles();
+                    if (e.success) {
+                        notification.show({ message: kendo.toString(file.name + ' Imported Successfully!') }, "success");
+                        Reload_list_ta_lb3();
+                        upload.clearAllFiles();
+                    } else {
+                        notification.show({ title: data.title, message: kendo.toString(file.name + ' Import Failed!') }, "error");
+                        Reload_list_ta_lb3();
+                        upload.clearAllFiles();
+                    }
                 }
             });
             $("div.k-widget.k-upload.k-header.k-upload-empty").css({ 'display': 'none' });
