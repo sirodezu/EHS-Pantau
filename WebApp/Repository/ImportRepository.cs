@@ -9,11 +9,11 @@ using Dapper;
 
 namespace WebApp.Repository
 {
-    public class Lb3Repository
+    public class ImportRepository
     {
         private string ConnStr = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetSection("ConnectionStrings")["MainConnection"];
         private IDbConnection db;
-        public Lb3Repository()
+        public ImportRepository()
         {
             db = new SqlConnection(ConnStr);
         }
@@ -181,6 +181,133 @@ namespace WebApp.Repository
         private int getLastIdNonLb3()
         {
             var query = "select MAX(id) as id from ta_nonlb3";
+            db.Open();
+            var result = db.ExecuteScalar<int>(query);
+            db.Close();
+            return result;
+        }
+        public int ImportSdaAir(ImportSdaAirModel importModel)
+        {
+            var lastId = getLastIdSdaAir();
+            var query = @"INSERT INTO ta_sda_air
+                            ([id]
+                              ,[ehs_area_id]
+                              ,[ba_id]
+                              ,[pa_id]
+                              ,[psa_id]
+                              ,[bulan]
+                              ,[tahun]
+                              ,[sumber_air_id]
+                              ,[no_rek_air]
+                              ,[konsumsi_air]
+                              ,[tagihan_air]
+                              ,[usaha_pengurangan_air_id]
+                              ,[usaha_pengurangan_air_desc]
+                              ,[usaha_pengurangan_air_desc_file_path]
+                              ,[usaha_pengurangan_air_jumlah]
+                              ,[insert_at])
+                        Values
+                            (@id
+                              ,ehs_area_id
+                              ,ba_id
+                              ,pa_id
+                              ,psa_id
+                              ,bulan
+                              ,tahun
+                              ,sumber_air_id
+                              ,no_rek_air
+                              ,konsumsi_air
+                              ,tagihan_air
+                              ,usaha_pengurangan_air_id
+                              ,usaha_pengurangan_air_desc
+                              ,usaha_pengurangan_air_desc_file_path
+                              ,usaha_pengurangan_air_jumlah
+                              ,getdate())";
+            var parameters = new
+            {
+                id = lastId + 1,
+                importModel.ehs_area_id,
+                importModel.ba_id,
+                importModel.pa_id,
+                importModel.psa_id,
+                importModel.bulan,
+                importModel.tahun,
+                importModel.sumber_air_id,
+                importModel.no_rek_air,
+                importModel.konsumsi_air,
+                importModel.tagihan_air,
+                importModel.usaha_pengurangan_air_id,
+                importModel.usaha_pengurangan_air_desc,
+                importModel.usaha_pengurangan_air_desc_file_path,
+                importModel.usaha_pengurangan_air_jumlah,
+            };
+            db.Open();
+            var result = db.Execute(query, parameters);
+            db.Close();
+            return result;
+        }
+        private int getLastIdSdaAir()
+        {
+            var query = "select MAX(id) as id from ta_sda_air";
+            db.Open();
+            var result = db.ExecuteScalar<int>(query);
+            db.Close();
+            return result;
+        }
+        public int ImportSdaKertas(ImportSdaKertasModel importModel)
+        {
+            var lastId = getLastIdSdaKertas();
+            var query = @"INSERT INTO ta_sda_kertas
+                            ([id]
+                              ,[ehs_area_id]
+                              ,[ba_id]
+                              ,[pa_id]
+                              ,[psa_id]
+                              ,[bulan]
+                              ,[tahun]
+                              ,[konsumsi_kertas]
+                              ,[usaha_pengurangan_kertas_id]
+                              ,[usaha_pengurangan_kertas_desc]
+                              ,[usaha_pengurangan_kertas_desc_file_path]
+                              ,[usaha_pengurangan_kertas_jumlah]
+                              ,[insert_at])
+                        Values
+                            (@id
+                              ,ehs_area_id
+                              ,ba_id
+                              ,pa_id
+                              ,psa_id
+                              ,bulan
+                              ,tahun
+                              ,konsumsi_kertas
+                              ,usaha_pengurangan_kertas_id
+                              ,usaha_pengurangan_kertas_desc
+                              ,usaha_pengurangan_kertas_desc_file_path
+                              ,usaha_pengurangan_kertas_jumlah
+                              ,getdate())";
+            var parameters = new
+            {
+                id = lastId + 1,
+                importModel.ehs_area_id,
+                importModel.ba_id,
+                importModel.pa_id,
+                importModel.psa_id,
+                importModel.bulan,
+                importModel.tahun,
+                importModel.konsumsi_kertas,
+                importModel.usaha_pengurangan_kertas_id,
+                importModel.usaha_pengurangan_kertas_desc,
+                importModel.usaha_pengurangan_kertas_desc_file_path,
+                importModel.usaha_pengurangan_kertas_jumlah,
+            };
+            db.Open();
+            var result = db.Execute(query, parameters);
+            db.Close();
+            return result;
+        }
+        private int getLastIdSdaKertas()
+        {
+            var query = "select MAX(id) as id from ta_sda_kertas";
             db.Open();
             var result = db.ExecuteScalar<int>(query);
             db.Close();
