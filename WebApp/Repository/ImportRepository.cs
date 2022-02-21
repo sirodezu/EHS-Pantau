@@ -254,5 +254,64 @@ namespace WebApp.Repository
             db.Close();
             return result;
         }
+        public int ImportSdaKertas(ImportSdaKertasModel importModel)
+        {
+            var lastId = getLastIdSdaKertas();
+            var query = @"INSERT INTO ta_sda_kertas
+                            ([id]
+                              ,[ehs_area_id]
+                              ,[ba_id]
+                              ,[pa_id]
+                              ,[psa_id]
+                              ,[bulan]
+                              ,[tahun]
+                              ,[konsumsi_kertas]
+                              ,[usaha_pengurangan_kertas_id]
+                              ,[usaha_pengurangan_kertas_desc]
+                              ,[usaha_pengurangan_kertas_desc_file_path]
+                              ,[usaha_pengurangan_kertas_jumlah]
+                              ,[insert_at])
+                        Values
+                            (@id
+                              ,ehs_area_id
+                              ,ba_id
+                              ,pa_id
+                              ,psa_id
+                              ,bulan
+                              ,tahun
+                              ,konsumsi_kertas
+                              ,usaha_pengurangan_kertas_id
+                              ,usaha_pengurangan_kertas_desc
+                              ,usaha_pengurangan_kertas_desc_file_path
+                              ,usaha_pengurangan_kertas_jumlah
+                              ,getdate())";
+            var parameters = new
+            {
+                id = lastId + 1,
+                importModel.ehs_area_id,
+                importModel.ba_id,
+                importModel.pa_id,
+                importModel.psa_id,
+                importModel.bulan,
+                importModel.tahun,
+                importModel.konsumsi_kertas,
+                importModel.usaha_pengurangan_kertas_id,
+                importModel.usaha_pengurangan_kertas_desc,
+                importModel.usaha_pengurangan_kertas_desc_file_path,
+                importModel.usaha_pengurangan_kertas_jumlah,
+            };
+            db.Open();
+            var result = db.Execute(query, parameters);
+            db.Close();
+            return result;
+        }
+        private int getLastIdSdaKertas()
+        {
+            var query = "select MAX(id) as id from ta_sda_kertas";
+            db.Open();
+            var result = db.ExecuteScalar<int>(query);
+            db.Close();
+            return result;
+        }
     }
 }
