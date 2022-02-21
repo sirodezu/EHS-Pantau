@@ -137,7 +137,7 @@
 			columns_data[j] = {command: col_command, width: columnActionWidth_ta_sda_kertas, attributes: " style=\"vertical-align:top;\""};
 		}
 		//==============================
-        //=== filter ehs_area_id 
+        //=== filter ehs_area_id
         var ehs_area_id_param = { item: { value: 'id', text: 'kode,nama', distinct: '0' } ,parent:[{field:"obj_data",value:"Environment"}], order:[]};
         var ehs_area_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/EHSArea/LookupDataEA", dataType: "json", data: ehs_area_id_param, type: "POST" } } });
         var ehs_area_id = $("#ehs_area_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", change: onChange_ehs_area_id, dataSource: ehs_area_id_ds }).data("kendoComboBox");
@@ -149,9 +149,9 @@
                                                     reload_psa_id();
             onFilterHeader_ta_sda_kertas();
         }
-        
 
-        //=== filter ba_id 
+
+        //=== filter ba_id
         var ba_id_param = { item: { value: 'id', text: 'kode,nama', distinct: '0' } ,parent:[{ field: 'ehs_area_id',opr:'=', value: '@filterColumn.ehs_area_id' },{field:"obj_data",value:"Environment"}], order:[]};
         var ba_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/BusinessArea/LookupDataBA", dataType: "json", data: ba_id_param, type: "POST" } } });
         var ba_id = $("#ba_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", change: onChange_ba_id, dataSource: ba_id_ds }).data("kendoComboBox");
@@ -162,7 +162,7 @@
                                                     reload_psa_id();
             onFilterHeader_ta_sda_kertas();
         }
-        
+
                                                 function reload_ba_id(){
                                                     $("#ba_id").data("kendoComboBox").value('');
                                                     var ehs_area_id = $("#ehs_area_id").data("kendoComboBox").value();
@@ -171,7 +171,7 @@
                                                 }
 
 
-        //=== filter pa_id 
+        //=== filter pa_id
         var pa_id_param = { item: { value: 'id', text: 'kode,nama', distinct: '0' } ,parent:[{ field: 'ehs_area_id',opr:'=', value: '@filterColumn.ehs_area_id' }, { field: 'ba_id',opr:'=', value: '@filterColumn.ba_id' },{field:"obj_data",value:"Environment"}], order:[]};
         var pa_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/PersonalArea/LookupDataPA", dataType: "json", data: pa_id_param, type: "POST" } } });
         var pa_id = $("#pa_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", change: onChange_pa_id, dataSource: pa_id_ds }).data("kendoComboBox");
@@ -181,7 +181,7 @@
                                                     reload_psa_id();
             onFilterHeader_ta_sda_kertas();
         }
-        
+
                                                 function reload_pa_id(){
                                                     $("#pa_id").data("kendoComboBox").value('');
                                                     var ehs_area_id = $("#ehs_area_id").data("kendoComboBox").value();
@@ -191,7 +191,7 @@
                                                 }
 
 
-        //=== filter psa_id 
+        //=== filter psa_id
         var psa_id_param = { item: { value: 'id', text: 'kode,nama', distinct: '0' } ,parent:[{ field: 'ehs_area_id',opr:'=', value: '@filterColumn.ehs_area_id' }, { field: 'ba_id',opr:'=', value: '@filterColumn.ba_id' }, { field: 'pa_id',opr:'=', value: '@filterColumn.pa_id' },{field:"obj_data",value:"Environment"}], order:[]};
         var psa_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/PersonalSubArea/LookupDataPSA", dataType: "json", data: psa_id_param, type: "POST" } } });
         var psa_id = $("#psa_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", change: onChange_psa_id, dataSource: psa_id_ds }).data("kendoComboBox");
@@ -200,7 +200,7 @@
             if ($("#psa_id").data("kendoComboBox").value() != '' && $("#psa_id").data("kendoComboBox")._oldIndex == -1) { $("#psa_id").data("kendoComboBox").value(''); }
             onFilterHeader_ta_sda_kertas();
         }
-        
+
                                                 function reload_psa_id(){
                                                     $("#psa_id").data("kendoComboBox").value('');
                                                     var ehs_area_id = $("#ehs_area_id").data("kendoComboBox").value();
@@ -211,7 +211,7 @@
                                                 }
 
 
-        //=== filter bulan 
+        //=== filter bulan
         var bulan_param = { item: { value: 'id', text: 'nama', distinct: '0' } ,parent:[{ field: 'cat_id',opr:'=', value: '150' }], order:[{ field: 'ordinal', dir: 'asc' }]};
         var bulan_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: bulan_param, type: "POST" } } });
         var bulan = $("#bulan").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", change: onChange_bulan, dataSource: bulan_ds }).data("kendoComboBox");
@@ -220,9 +220,9 @@
             if ($("#bulan").data("kendoComboBox").value() != '' && $("#bulan").data("kendoComboBox")._oldIndex == -1) { $("#bulan").data("kendoComboBox").value(''); }
             onFilterHeader_ta_sda_kertas();
         }
-        
 
-        //=== filter tahun 
+
+        //=== filter tahun
         var tahun_param = { item: { value: 'id', text: 'nama', distinct: '0' } ,parent:[{ field: 'cat_id',opr:'=', value: '151' }], order:[{ field: 'ordinal', dir: 'asc' }]};
         var tahun_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: tahun_param, type: "POST" } } });
         var tahun = $("#tahun").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", change: onChange_tahun, dataSource: tahun_ds }).data("kendoComboBox");
@@ -231,9 +231,9 @@
             if ($("#tahun").data("kendoComboBox").value() != '' && $("#tahun").data("kendoComboBox")._oldIndex == -1) { $("#tahun").data("kendoComboBox").value(''); }
             onFilterHeader_ta_sda_kertas();
         }
-        
 
-        //=== filter usaha_pengurangan_kertas_id 
+
+        //=== filter usaha_pengurangan_kertas_id
         var usaha_pengurangan_kertas_id_param = { item: { value: 'id', text: 'nama', distinct: '0' } ,parent:[{ field: 'cat_id',opr:'=', value: '128' }], order:[]};
         var usaha_pengurangan_kertas_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: usaha_pengurangan_kertas_id_param, type: "POST" } } });
         var usaha_pengurangan_kertas_id = $("#usaha_pengurangan_kertas_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", change: onChange_usaha_pengurangan_kertas_id, dataSource: usaha_pengurangan_kertas_id_ds }).data("kendoComboBox");
@@ -242,7 +242,7 @@
             if ($("#usaha_pengurangan_kertas_id").data("kendoComboBox").value() != '' && $("#usaha_pengurangan_kertas_id").data("kendoComboBox")._oldIndex == -1) { $("#usaha_pengurangan_kertas_id").data("kendoComboBox").value(''); }
             onFilterHeader_ta_sda_kertas();
         }
-        
+
 
 		//==============================
 		$("#collapse_filter_ta_sda_kertas").on('shown.bs.collapse', function () {
@@ -297,7 +297,7 @@
 		function QuickSearch_ta_sda_kertas() {
 			$filter = new Array();
 			$x = $("#txtSearch_ta_sda_kertas").val();
-			if ($x) {jQuery.each(j_data_ta_sda_kertas, function (i, val) {if (val.display && val.qsearch && val.type =='string') {$filter.push({ name: val.name, opr: "contains", value: $x });}});} 
+			if ($x) {jQuery.each(j_data_ta_sda_kertas, function (i, val) {if (val.display && val.qsearch && val.type =='string') {$filter.push({ name: val.name, opr: "contains", value: $x });}});}
 			if ($filter.length > 0) {list_ta_sda_kertas.data("kendoGrid").dataSource.filter({ logic: "or", filters: $filter });}else {list_ta_sda_kertas.data("kendoGrid").dataSource.filter([]);}
 		}
 		function Reload_list_ta_sda_kertas() { list_ta_sda_kertas.data('kendoGrid').dataSource.read(); list_ta_sda_kertas.data('kendoGrid').refresh(); }
@@ -388,6 +388,46 @@
         document.getElementById('btnImport_ta_sda_kertas').addEventListener('click', openDialog);
         function openDialog() {
             document.getElementById('formImport_ta_sda_kertas').click();
-        }
+		}
+        $(document).ready(function () {
+            $("#formImport_ta_sda_kertas").kendoUpload({
+                multiple: false,
+                async: {
+                    autoUpload: false,
+                    saveUrl: "@ViewBag.BaseUrl/SdaKertas/ImportSdaKertas",
+                    withCredentials: false
+                },
+                select: function (e) {
+                    var file = e.files[0];
+                    var upload = e.sender;
+                    // Biar muncul confirm dialog
+                    kendo.confirm("File name:" +
+                        "<br/>" +
+                        file.name +
+                        "<br/>" +
+                        "Are you sure that you want to import this file?")
+                        .then(function () {
+                            upload.upload();
+                        }, function () {
+                            upload.clearAllFiles();
+                        });
+                },
+                success: function (e) {
+                    console.log(e)
+                    var file = e.files[0];
+                    var upload = e.sender;
+                    if (e.files.length == 1) {
+                        notification.show({ message: kendo.toString(file.name + ' Imported Successfully!') }, "success");
+                        Reload_list_ta_sda_kertas();
+                        upload.clearAllFiles();
+                    } else {
+                        notification.show({ title: 'Import Failed!', message: kendo.toString(file.name + ' Import Failed!') }, "error");
+                        Reload_list_ta_sda_kertas();
+                        upload.clearAllFiles();
+                    }
+                }
+            });
+            $("div.k-widget.k-upload.k-header.k-upload-empty").css({ 'display': 'none' });
+        });
     </script>
 }
