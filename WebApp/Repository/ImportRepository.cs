@@ -208,20 +208,20 @@ namespace WebApp.Repository
                               ,[insert_at])
                         Values
                             (@id
-                              ,ehs_area_id
-                              ,ba_id
-                              ,pa_id
-                              ,psa_id
-                              ,bulan
-                              ,tahun
-                              ,sumber_air_id
-                              ,no_rek_air
-                              ,konsumsi_air
-                              ,tagihan_air
-                              ,usaha_pengurangan_air_id
-                              ,usaha_pengurangan_air_desc
-                              ,usaha_pengurangan_air_desc_file_path
-                              ,usaha_pengurangan_air_jumlah
+                              ,@ehs_area_id
+                              ,@ba_id
+                              ,@pa_id
+                              ,@psa_id
+                              ,@bulan
+                              ,@tahun
+                              ,@sumber_air_id
+                              ,@no_rek_air
+                              ,@konsumsi_air
+                              ,@tagihan_air
+                              ,@usaha_pengurangan_air_id
+                              ,@usaha_pengurangan_air_desc
+                              ,@usaha_pengurangan_air_desc_file_path
+                              ,@usaha_pengurangan_air_jumlah
                               ,getdate())";
             var parameters = new
             {
@@ -273,17 +273,17 @@ namespace WebApp.Repository
                               ,[insert_at])
                         Values
                             (@id
-                              ,ehs_area_id
-                              ,ba_id
-                              ,pa_id
-                              ,psa_id
-                              ,bulan
-                              ,tahun
-                              ,konsumsi_kertas
-                              ,usaha_pengurangan_kertas_id
-                              ,usaha_pengurangan_kertas_desc
-                              ,usaha_pengurangan_kertas_desc_file_path
-                              ,usaha_pengurangan_kertas_jumlah
+                              ,@ehs_area_id
+                              ,@ba_id
+                              ,@pa_id
+                              ,@psa_id
+                              ,@bulan
+                              ,@tahun
+                              ,@konsumsi_kertas
+                              ,@usaha_pengurangan_kertas_id
+                              ,@usaha_pengurangan_kertas_desc
+                              ,@usaha_pengurangan_kertas_desc_file_path
+                              ,@usaha_pengurangan_kertas_jumlah
                               ,getdate())";
             var parameters = new
             {
@@ -308,6 +308,74 @@ namespace WebApp.Repository
         private int getLastIdSdaKertas()
         {
             var query = "select MAX(id) as id from ta_sda_kertas";
+            db.Open();
+            var result = db.ExecuteScalar<int>(query);
+            db.Close();
+            return result;
+        }
+        public int ImportSdaListrik(ImportSdaListrikModel importModel)
+        {
+            var lastId = getLastIdSdaListrik();
+            var query = @"INSERT INTO ta_sda_listrik
+                            ([id]
+                              ,[ehs_area_id]
+                              ,[ba_id]
+                              ,[pa_id]
+                              ,[psa_id]
+                              ,[bulan]
+                              ,[tahun]
+                              ,[sumber_listrik_id]
+                              ,[no_rek_listrik]
+                              ,[konsumsi_listrik]
+                              ,[tagihan_listrik]
+                              ,[usaha_pengurangan_listrik_id]
+                              ,[usaha_pengurangan_listrik_desc]
+                              ,[usaha_pengurangan_listrik_desc_file_path]
+                              ,[usaha_pengurangan_listrik_jumlah]
+                              ,[insert_at])
+                        Values
+                            (@id
+                              ,@ehs_area_id
+                              ,@ba_id
+                              ,@pa_id
+                              ,@psa_id
+                              ,@bulan
+                              ,@tahun
+                              ,@sumber_listrik_id
+                              ,@no_rek_listrik
+                              ,@konsumsi_listrik
+                              ,@tagihan_listrik
+                              ,@usaha_pengurangan_listrik_id
+                              ,@usaha_pengurangan_listrik_desc
+                              ,@usaha_pengurangan_listrik_desc_file_path
+                              ,@usaha_pengurangan_listrik_jumlah
+                              ,getdate())";
+            var parameters = new
+            {
+                id = lastId + 1,
+                importModel.ehs_area_id,
+                importModel.ba_id,
+                importModel.pa_id,
+                importModel.psa_id,
+                importModel.bulan,
+                importModel.tahun,
+                importModel.sumber_listrik_id,
+                importModel.no_rek_listrik,
+                importModel.konsumsi_listrik,
+                importModel.tagihan_listrik,
+                importModel.usaha_pengurangan_listrik_id,
+                importModel.usaha_pengurangan_listrik_desc,
+                importModel.usaha_pengurangan_listrik_desc_file_path,
+                importModel.usaha_pengurangan_listrik_jumlah,
+            };
+            db.Open();
+            var result = db.Execute(query, parameters);
+            db.Close();
+            return result;
+        }
+        private int getLastIdSdaListrik()
+        {
+            var query = "select MAX(id) as id from ta_sda_listrik";
             db.Open();
             var result = db.ExecuteScalar<int>(query);
             db.Close();

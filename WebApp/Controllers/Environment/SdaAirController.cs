@@ -667,7 +667,7 @@ namespace WebApp.Controllers
                     return data;
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
 
                 throw;
