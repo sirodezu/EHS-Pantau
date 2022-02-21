@@ -649,7 +649,7 @@ namespace WebApp.Controllers
                             importNonLb3Model.deskripsi_usaha_file_path = row.Cell(i, 14).Value.ToString();
                             importNonLb3Model.usaha_kurang_limbah_m3 = double.Parse(row.Cell(i, 15).Value.ToString());
                             importNonLb3Model.usaha_kurang_limbah_kg = double.Parse(row.Cell(i, 16).Value.ToString());
-                            Lb3Repository lb3 = new Lb3Repository();
+                            ImportRepository lb3 = new ImportRepository();
                             lb3.ImportNonLb3(importNonLb3Model);
                         }
                     }

@@ -668,7 +668,7 @@ namespace WebApp.Controllers
                             importModels.sisa_di_tps = double.Parse(test.Cell(i, 18).Value.ToString());
                             importModels.psa_id = int.Parse(test.Cell(i, 19).Value.ToString());
 
-                            Lb3Repository lb3 = new Lb3Repository();
+                            ImportRepository lb3 = new ImportRepository();
                             lb3.Import(importModels);
                         }
                     }
