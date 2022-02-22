@@ -22,7 +22,7 @@ namespace WebApp.Repository
             var lastId = getLastId();
             var query = @"INSERT INTO ta_lb3
                             ([id]
-                              ,[ehs_area_id]
+							  ,[ehs_area_id]
                               ,[ba_id]
                               ,[pa_id]
                               ,[psa_id]
@@ -46,25 +46,24 @@ namespace WebApp.Repository
                               ,[update_by]
                               ,[update_at])
                         Values
-                            (@id
-                              ,@ehs_area_id
-                              ,@ba_id
-                              ,@pa_id
-                              ,@psa_id
-                              ,@jenis_limbah_dihasilkan_id
+                            ((select max (id) + 1 from ta_lb3),(select id from ref_ehs_area where nama = @ehs_area_id)
+                              ,(select id from ref_business_area where nama = @ba_id)
+                              ,(select id from ref_personal_area where nama = @pa_id)
+                              ,(select id from ref_personal_sub_area where nama = @psa_id)
+                              ,(select id from ref_literal_data where nama = @jenis_limbah_dihasilkan_id and cat_id = 90)
                               ,@kode_limbah
-                              ,@sumber_limbah_id
-                              ,@kegiatan_id
+                              ,(select id from ref_literal_data where nama = @sumber_limbah_id and cat_id = 97)
+                              ,(select id from ref_literal_data where nama = @kegiatan_id and cat_id = 91)
                               ,@tgl_dihasilkan
                               ,@jenis_limbah_dihasilkan
-                              ,@pengelolaan_oleh_id
-                              ,@masa_simpan_limbah_id
+                              ,(select id from ref_literal_data where nama = @pengelolaan_oleh_id and cat_id = 93)
+                              ,(select id from ref_literal_data where nama = @masa_simpan_limbah_id and cat_id = 92)
                               ,@tgl_dikeluarkan
                               ,@jumlah_limbah_dikelola
                               ,@kode_manifest
-                              ,@perusahaan_angkut_id
-                              ,@diserahkan_ke_id
-                              ,@perusahaan_serah_id
+                              ,(select id from ref_perusahaan where nama_perusahaan = @perusahaan_angkut_id)
+                              ,(select id from ref_lb3_usaha where nama = @diserahkan_ke_id)
+                              ,(select id from ref_perusahaan where nama_perusahaan = @perusahaan_serah_id)
                               ,@sisa_di_tps
                               ,1
                               ,getdate()
