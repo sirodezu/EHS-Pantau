@@ -565,19 +565,19 @@ namespace WebApp.Controllers
                     {
                         if(i == 1)
                         {
-                            if (row.Cell(i, 1).Value.ToString().Trim().ToLower() != "ehs area id")
+                            if (row.Cell(i, 1).Value.ToString().Trim().ToLower() != "area")
                             {
                                 throw new Exception("Template Not Match at Cell A1");
                             }
-                            if (row.Cell(i, 2).Value.ToString().Trim().ToLower() != "ba id")
+                            if (row.Cell(i, 2).Value.ToString().Trim().ToLower() != "business area")
                             {
                                 throw new Exception("Template Not Match at Cell B1");
                             }
-                            if (row.Cell(i, 3).Value.ToString().Trim().ToLower() != "pa id")
+                            if (row.Cell(i, 3).Value.ToString().Trim().ToLower() != "personal area")
                             {
                                 throw new Exception("Template Not Match at Cell C1");
                             }
-                            if (row.Cell(i, 4).Value.ToString().Trim().ToLower() != "psa id")
+                            if (row.Cell(i, 4).Value.ToString().Trim().ToLower() != "personal sub area")
                             {
                                 throw new Exception("Template Not Match at Cell D1");
                             }
@@ -589,66 +589,50 @@ namespace WebApp.Controllers
                             {
                                 throw new Exception("Template Not Match at Cell F1");
                             }
-                            if (row.Cell(i, 7).Value.ToString().Trim().ToLower() != "jenis limbah id")
+                            if (row.Cell(i, 7).Value.ToString().Trim().ToLower() != "jenis limbah")
                             {
                                 throw new Exception("Template Not Match at Cell G1");
                             }
-                            if (row.Cell(i, 8).Value.ToString().Trim().ToLower() != "timbulan limbah cair")
+                            if (row.Cell(i, 8).Value.ToString().Trim().ToLower() != "deskripsi limbah")
                             {
                                 throw new Exception("Template Not Match at Cell H1");
                             }
-                            if (row.Cell(i, 9).Value.ToString().Trim().ToLower() != "timbulan limbah padat")
+                            if (row.Cell(i, 9).Value.ToString().Trim().ToLower() != "pengelolaan oleh")
                             {
                                 throw new Exception("Template Not Match at Cell I1");
                             }
-                            if (row.Cell(i, 10).Value.ToString().Trim().ToLower() != "deskripsi limbah")
+                            if (row.Cell(i, 10).Value.ToString().Trim().ToLower() != "usaha pengurangan limbah")
                             {
                                 throw new Exception("Template Not Match at Cell J1");
                             }
-                            if (row.Cell(i, 11).Value.ToString().Trim().ToLower() != "pengelolaan oleh id")
+                            if (row.Cell(i, 11).Value.ToString().Trim().ToLower() != "deskripsi usaha")
                             {
                                 throw new Exception("Template Not Match at Cell K1");
                             }
-                            if (row.Cell(i, 12).Value.ToString().Trim().ToLower() != "usaha kurang limbah id")
+                            if (row.Cell(i, 12).Value.ToString().Trim().ToLower() != "deskripsi usaha file path")
                             {
                                 throw new Exception("Template Not Match at Cell L1");
-                            }
-                            if (row.Cell(i, 13).Value.ToString().Trim().ToLower() != "deskripsi usaha")
-                            {
-                                throw new Exception("Template Not Match at Cell M1");
-                            }
-                            if (row.Cell(i, 14).Value.ToString().Trim().ToLower() != "deskripsi usaha file path")
-                            {
-                                throw new Exception("Template Not Match at Cell N1");
-                            }
-                            if (row.Cell(i, 15).Value.ToString().Trim().ToLower() != "usaha kurang limbah m3")
-                            {
-                                throw new Exception("Template Not Match at Cell O1");
-                            }
-                            if (row.Cell(i, 16).Value.ToString().Trim().ToLower() != "usaha kurang limbah kg")
-                            {
-                                throw new Exception("Template Not Match at Cell P1");
                             }
                         }
                         else
                         {
                             ImportNonLb3Model importNonLb3Model = new ImportNonLb3Model();
-                            importNonLb3Model.ehs_area_id = int.Parse(row.Cell(i, 1).Value.ToString());
-                            importNonLb3Model.ba_id = int.Parse(row.Cell(i, 2).Value.ToString());
-                            importNonLb3Model.pa_id = int.Parse(row.Cell(i, 3).Value.ToString());
-                            importNonLb3Model.psa_id = int.Parse(row.Cell(i, 4).Value.ToString());
-                            importNonLb3Model.bulan = int.Parse(row.Cell(i, 5).Value.ToString());
+                            importNonLb3Model.ehs_area_id = row.Cell(i, 1).Value.ToString();
+                            importNonLb3Model.ba_id = row.Cell(i, 2).Value.ToString();
+                            importNonLb3Model.pa_id = row.Cell(i, 3).Value.ToString();
+                            importNonLb3Model.psa_id = row.Cell(i, 4).Value.ToString();
+                            importNonLb3Model.bulan = row.Cell(i, 5).Value.ToString();
                             importNonLb3Model.tahun = int.Parse(row.Cell(i, 6).Value.ToString());
                             importNonLb3Model.jenis_limbah_id = row.Cell(i, 7).Value.ToString();
-                            importNonLb3Model.timbulan_limbah_cair = double.Parse(row.Cell(i, 8).Value.ToString());
-                            importNonLb3Model.timbulan_limbah_padat = double.Parse(row.Cell(i, 9).Value.ToString());
-                            importNonLb3Model.deskripsi_limbah = row.Cell(i, 10).Value.ToString();
-                            importNonLb3Model.pengelolaan_oleh_id = int.Parse(row.Cell(i, 11).Value.ToString());
-                            importNonLb3Model.usaha_kurang_limbah_id = int.Parse(row.Cell(i, 12).Value.ToString());
-                            importNonLb3Model.deskripsi_usaha = row.Cell(i, 13).Value.ToString();
-                            importNonLb3Model.deskripsi_usaha_file_path = row.Cell(i, 14).Value.ToString();
-                            importNonLb3Model.usaha_kurang_limbah_m3 = double.Parse(row.Cell(i, 15).Value.ToString());
-                            importNonLb3Model.usaha_kurang_limbah_kg = double.Parse(row.Cell(i, 16).Value.ToString());
+                            //importNonLb3Model.timbulan_limbah_cair = double.Parse(row.Cell(i, 8).Value.ToString());
+                            //importNonLb3Model.timbulan_limbah_padat = double.Parse(row.Cell(i, 9).Value.ToString());
+                            importNonLb3Model.deskripsi_limbah = row.Cell(i, 8).Value.ToString();
+                            importNonLb3Model.pengelolaan_oleh_id = row.Cell(i, 9).Value.ToString();
+                            importNonLb3Model.usaha_kurang_limbah_id = row.Cell(i, 10).Value.ToString();
+                            importNonLb3Model.deskripsi_usaha = row.Cell(i, 11).Value.ToString();
+                            importNonLb3Model.deskripsi_usaha_file_path = row.Cell(i, 12).Value.ToString();
+                            //importNonLb3Model.usaha_kurang_limbah_m3 = double.Parse(row.Cell(i, 15).Value.ToString());
+                            //importNonLb3Model.usaha_kurang_limbah_kg = double.Parse(row.Cell(i, 16).Value.ToString());
                             ImportRepository lb3 = new ImportRepository();
                             lb3.ImportNonLb3(importNonLb3Model);
                         }
@@ -656,7 +640,7 @@ namespace WebApp.Controllers
                     return data;
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
 
                 throw;

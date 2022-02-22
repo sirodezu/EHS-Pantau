@@ -22,7 +22,7 @@ namespace WebApp.Repository
             var lastId = getLastId();
             var query = @"INSERT INTO ta_lb3
                             ([id]
-                              ,[ehs_area_id]
+							  ,[ehs_area_id]
                               ,[ba_id]
                               ,[pa_id]
                               ,[psa_id]
@@ -46,25 +46,24 @@ namespace WebApp.Repository
                               ,[update_by]
                               ,[update_at])
                         Values
-                            (@id
-                              ,@ehs_area_id
-                              ,@ba_id
-                              ,@pa_id
-                              ,@psa_id
-                              ,@jenis_limbah_dihasilkan_id
+                            ((select max (id) + 1 from ta_lb3),(select id from ref_ehs_area where nama = @ehs_area_id)
+                              ,(select id from ref_business_area where nama = @ba_id)
+                              ,(select id from ref_personal_area where nama = @pa_id)
+                              ,(select id from ref_personal_sub_area where nama = @psa_id)
+                              ,(select id from ref_literal_data where nama = @jenis_limbah_dihasilkan_id and cat_id = 90)
                               ,@kode_limbah
-                              ,@sumber_limbah_id
-                              ,@kegiatan_id
+                              ,(select id from ref_literal_data where nama = @sumber_limbah_id and cat_id = 97)
+                              ,(select id from ref_literal_data where nama = @kegiatan_id and cat_id = 91)
                               ,@tgl_dihasilkan
                               ,@jenis_limbah_dihasilkan
-                              ,@pengelolaan_oleh_id
-                              ,@masa_simpan_limbah_id
+                              ,(select id from ref_literal_data where nama = @pengelolaan_oleh_id and cat_id = 93)
+                              ,(select id from ref_literal_data where nama = @masa_simpan_limbah_id and cat_id = 92)
                               ,@tgl_dikeluarkan
                               ,@jumlah_limbah_dikelola
                               ,@kode_manifest
-                              ,@perusahaan_angkut_id
-                              ,@diserahkan_ke_id
-                              ,@perusahaan_serah_id
+                              ,(select id from ref_perusahaan where nama_perusahaan = @perusahaan_angkut_id)
+                              ,(select id from ref_lb3_usaha where nama = @diserahkan_ke_id)
+                              ,(select id from ref_perusahaan where nama_perusahaan = @perusahaan_serah_id)
                               ,@sisa_di_tps
                               ,1
                               ,getdate()
@@ -118,37 +117,36 @@ namespace WebApp.Repository
                               ,[bulan]
                               ,[tahun]
                               ,[jenis_limbah_id]
-                              ,[timbulan_limbah_cair]
-                              ,[timbulan_limbah_padat]
+                              --,[timbulan_limbah_cair]
+                              --,[timbulan_limbah_padat]
                               ,[deskripsi_limbah]
                               ,[pengelolaan_oleh_id]
                               ,[usaha_kurang_limbah_id]
                               ,[deskripsi_usaha]
                               ,[deskripsi_usaha_file_path]
-                              ,[usaha_kurang_limbah_m3]
-                              ,[usaha_kurang_limbah_kg]
+                              --,[usaha_kurang_limbah_m3]
+                             -- ,[usaha_kurang_limbah_kg]
                               ,[insert_by]
                               ,[insert_at]
                               ,[update_by]
                               ,[update_at])
                         Values
-                            (@id
-                              ,@ehs_area_id
-                              ,@ba_id
-                              ,@pa_id
-                              ,@psa_id
-                              ,@bulan
-                              ,@tahun
-                              ,@jenis_limbah_id
-                              ,@timbulan_limbah_cair
-                              ,@timbulan_limbah_padat
+                            ((select max (id) + 1 from ta_nonlb3),(select id from ref_ehs_area where nama = @ehs_area_id)
+                              ,(select id from ref_business_area where nama = @ba_id)
+                              ,(select id from ref_personal_area where nama = @pa_id)
+                              ,(select id from ref_personal_sub_area where nama = @psa_id)
+                              ,(select id from ref_literal_data where cat_id = 150 and nama = @bulan)
+                              ,(select id from ref_literal_data where cat_id = 151 and nama = @tahun)
+                              ,(select id from ref_literal_data where cat_id = 98 and nama = @jenis_limbah_id)
+                              --,@timbulan_limbah_cair
+                              --,@timbulan_limbah_padat
                               ,@deskripsi_limbah
-                              ,@pengelolaan_oleh_id
-                              ,@usaha_kurang_limbah_id
+                              ,(select id from ref_literal_data where cat_id = 99 and nama = @pengelolaan_oleh_id)
+                              ,(select id from ref_literal_data where cat_id = 137 and nama = @usaha_kurang_limbah_id)
                               ,@deskripsi_usaha
                               ,@deskripsi_usaha_file_path
-                              ,@usaha_kurang_limbah_m3
-                              ,@usaha_kurang_limbah_kg
+                              --,@usaha_kurang_limbah_m3
+                              --,@usaha_kurang_limbah_kg
                               ,1
                               ,getdate()
                               ,1
@@ -163,15 +161,15 @@ namespace WebApp.Repository
                 importModel.bulan,
                 importModel.tahun,
                 importModel.jenis_limbah_id,
-                importModel.timbulan_limbah_cair,
-                importModel.timbulan_limbah_padat,
+                //importModel.timbulan_limbah_cair,
+                //importModel.timbulan_limbah_padat,
                 importModel.deskripsi_limbah,
                 importModel.pengelolaan_oleh_id,
                 importModel.usaha_kurang_limbah_id,
                 importModel.deskripsi_usaha,
                 importModel.deskripsi_usaha_file_path,
-                importModel.usaha_kurang_limbah_m3,
-                importModel.usaha_kurang_limbah_kg,
+                //importModel.usaha_kurang_limbah_m3,
+                //importModel.usaha_kurang_limbah_kg,
             };
             db.Open();
             var result = db.Execute(query, parameters);
@@ -207,18 +205,18 @@ namespace WebApp.Repository
                               ,[usaha_pengurangan_air_jumlah]
                               ,[insert_at])
                         Values
-                            (@id
-                              ,@ehs_area_id
-                              ,@ba_id
-                              ,@pa_id
-                              ,@psa_id
-                              ,@bulan
-                              ,@tahun
-                              ,@sumber_air_id
+                            ((select max (id) + 1 from ta_sda_air)
+							  ,(select id from ref_ehs_area where nama = @ehs_area_id)
+                              ,(select id from ref_business_area where nama = @ba_id)
+                              ,(select id from ref_personal_area where nama = @pa_id)
+                              ,(select id from ref_personal_sub_area where nama = @psa_id)
+                              ,(select id from ref_literal_data where cat_id = 150 and nama = @bulan)
+                              ,(select id from ref_literal_data where cat_id = 151 and nama = @tahun)
+                              ,(select id from ref_literal_data where cat_id = 124 and nama = @sumber_air_id)
                               ,@no_rek_air
                               ,@konsumsi_air
                               ,@tagihan_air
-                              ,@usaha_pengurangan_air_id
+                              ,(select id from ref_literal_data where cat_id = 127 and nama = @usaha_pengurangan_air_id)
                               ,@usaha_pengurangan_air_desc
                               ,@usaha_pengurangan_air_desc_file_path
                               ,@usaha_pengurangan_air_jumlah
@@ -334,14 +332,13 @@ namespace WebApp.Repository
                               ,[usaha_pengurangan_listrik_jumlah]
                               ,[insert_at])
                         Values
-                            (@id
-                              ,@ehs_area_id
-                              ,@ba_id
-                              ,@pa_id
-                              ,@psa_id
-                              ,@bulan
-                              ,@tahun
-                              ,@sumber_listrik_id
+                            ((select max (id) + 1 from ta_sda_listrik)
+							  ,(select id from ref_ehs_area where nama = @ehs_area_id)
+                              ,(select id from ref_business_area where nama = @ba_id)
+                              ,(select id from ref_personal_area where nama = @pa_id)
+                              ,(select id from ref_personal_sub_area where nama = @psa_id)
+                              ,(select id from ref_literal_data where cat_id = 150 and nama = @bulan)
+                              ,(select id from ref_literal_data where cat_id = 151 and nama = @tahun)
                               ,@no_rek_listrik
                               ,@konsumsi_listrik
                               ,@tagihan_listrik
