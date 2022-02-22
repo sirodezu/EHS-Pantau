@@ -205,18 +205,18 @@ namespace WebApp.Repository
                               ,[usaha_pengurangan_air_jumlah]
                               ,[insert_at])
                         Values
-                            (@id
-                              ,@ehs_area_id
-                              ,@ba_id
-                              ,@pa_id
-                              ,@psa_id
-                              ,@bulan
-                              ,@tahun
-                              ,@sumber_air_id
+                            ((select max (id) + 1 from ta_sda_air)
+							  ,(select id from ref_ehs_area where nama = @ehs_area_id)
+                              ,(select id from ref_business_area where nama = @ba_id)
+                              ,(select id from ref_personal_area where nama = @pa_id)
+                              ,(select id from ref_personal_sub_area where nama = @psa_id)
+                              ,(select id from ref_literal_data where cat_id = 150 and nama = @bulan)
+                              ,(select id from ref_literal_data where cat_id = 151 and nama = @tahun)
+                              ,(select id from ref_literal_data where cat_id = 124 and nama = @sumber_air_id)
                               ,@no_rek_air
                               ,@konsumsi_air
                               ,@tagihan_air
-                              ,@usaha_pengurangan_air_id
+                              ,(select id from ref_literal_data where cat_id = 127 and nama = @usaha_pengurangan_air_id)
                               ,@usaha_pengurangan_air_desc
                               ,@usaha_pengurangan_air_desc_file_path
                               ,@usaha_pengurangan_air_jumlah
@@ -332,14 +332,13 @@ namespace WebApp.Repository
                               ,[usaha_pengurangan_listrik_jumlah]
                               ,[insert_at])
                         Values
-                            (@id
-                              ,@ehs_area_id
-                              ,@ba_id
-                              ,@pa_id
-                              ,@psa_id
-                              ,@bulan
-                              ,@tahun
-                              ,@sumber_listrik_id
+                            ((select max (id) + 1 from ta_sda_listrik)
+							  ,(select id from ref_ehs_area where nama = @ehs_area_id)
+                              ,(select id from ref_business_area where nama = @ba_id)
+                              ,(select id from ref_personal_area where nama = @pa_id)
+                              ,(select id from ref_personal_sub_area where nama = @psa_id)
+                              ,(select id from ref_literal_data where cat_id = 150 and nama = @bulan)
+                              ,(select id from ref_literal_data where cat_id = 151 and nama = @tahun)
                               ,@no_rek_listrik
                               ,@konsumsi_listrik
                               ,@tagihan_listrik
