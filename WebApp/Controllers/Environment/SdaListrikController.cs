@@ -551,7 +551,7 @@ namespace WebApp.Controllers
             return Content("");
         }
         [HttpPost]
-        public async Task<IActionResult> ImportSdaAir()
+        public async Task<IActionResult> ImportSdaListrik()
         {
             IFormFile file = Request.Form.Files[0];
             var pathBuilt = Path.Combine(Directory.GetCurrentDirectory(), "Import");

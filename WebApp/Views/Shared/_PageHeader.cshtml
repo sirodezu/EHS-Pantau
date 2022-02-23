@@ -1,4 +1,4 @@
-@if (ViewBag.AppHeader?.Length > 0)
+@*@if (ViewBag.AppHeader?.Length > 0)
 {
     <header class="page-header" role="banner">
         <partial name="_Logo" />
@@ -26,7 +26,7 @@
             <a href="#" class="header-btn btn press-scale-down" data-action="toggle" data-class="mobile-nav-on">
                 <i class="ni ni-menu"></i>
             </a>
-        </div>
+        </div>*@
         @*<div class="search">
             <form class="app-forms hidden-xs-down" role="search" action="page_search.html" autocomplete="off">
                 <input type="text" id="search-field" placeholder="Search for anything" class="form-control" tabindex="1">
@@ -35,7 +35,7 @@
                 </a>
             </form>
         </div>*@
-        <div class="ml-auto d-flex">
+        @*<div class="ml-auto d-flex">*@
             @*<div class="hidden-sm-up">
                 <a href="#" class="header-icon" data-action="toggle" data-class="mobile-search-on" data-focus="search-field" title="Search">
                     <i class="fal fa-search"></i>
@@ -73,7 +73,7 @@
                     <partial name="_DropdownNotification"/>
                 </div>
             </div>*@
-            <div>
+            @*<div>
                 <a href="#" data-toggle="dropdown" title="@ViewBag.Fullname" class="header-icon d-flex align-items-center justify-content-center ml-2">
                     <img src="~/img/user_menu.png" class="profile-image rounded-circle" alt="@ViewBag.User">
                     @ViewBag.Fullname
@@ -84,4 +84,4 @@
             </div>
         </div>
     </header>
-}
+}*@
