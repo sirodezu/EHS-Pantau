@@ -270,15 +270,15 @@ namespace WebApp.Repository
                               ,[usaha_pengurangan_kertas_jumlah]
                               ,[insert_at])
                         Values
-                            (@id
-                              ,@ehs_area_id
-                              ,@ba_id
-                              ,@pa_id
-                              ,@psa_id
-                              ,@bulan
-                              ,@tahun
+                            ((select max (id) + 1 from ta_sda_kertas)
+							  ,(select id from ref_ehs_area where nama = @ehs_area_id)
+                              ,(select id from ref_business_area where nama = @ba_id)
+                              ,(select id from ref_personal_area where nama = @pa_id)
+                              ,(select id from ref_personal_sub_area where nama = @psa_id)
+                              ,(select id from ref_literal_data where cat_id = 150 and nama = @bulan)
+                              ,(select id from ref_literal_data where cat_id = 151 and nama = @tahun)
                               ,@konsumsi_kertas
-                              ,@usaha_pengurangan_kertas_id
+                              ,(select id from ref_literal_data where cat_id = 128 and nama = @usaha_pengurangan_kertas_id)
                               ,@usaha_pengurangan_kertas_desc
                               ,@usaha_pengurangan_kertas_desc_file_path
                               ,@usaha_pengurangan_kertas_jumlah
