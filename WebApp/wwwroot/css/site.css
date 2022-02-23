@@ -772,7 +772,7 @@ a.v-common:focus {
 .k-grid tr td {
     border-width: 0 0 1px 1px;
     vertical-align: top;
-    padding: 1px 2px;
+    /*padding: 1px 2px;*/
 }
 
 .k-grid-header .k-header {
