@@ -378,5 +378,76 @@ namespace WebApp.Repository
             db.Close();
             return result;
         }
+        public int ImportSdaSolar(ImportSdaSolarModel importModel)
+        {
+            var lastId = getLastIdSdaSolar();
+            var query = @"INSERT INTO ta_sda_solar
+                        ([id]
+                              ,[ehs_area_id]
+                              ,[ba_id]
+                              ,[pa_id]
+                              ,[psa_id]
+                              ,[bulan]
+                              ,[tahun]
+                              ,[jenis_bahan_bakar_id]
+                              ,[peruntukan_solar_id]
+                              ,[sumber_solar_id]
+                              ,[konsumsi_solar]
+                              ,[tagihan_solar]
+                              ,[usaha_pengurangan_solar_id]
+                              ,[usaha_pengurangan_solar_desc]
+                              ,[usaha_pengurangan_solar_desc_file_path]
+                              ,[usaha_pengurangan_solar_jumlah]
+                              ,[insert_at])
+	                           VALUES
+	                          ((select max (id) + 1 from ta_sda_kertas)
+							  ,(select id from ref_ehs_area where nama = @ehs_area_id)
+                              ,(select id from ref_business_area where nama = @ba_id)
+                              ,(select id from ref_personal_area where nama = @pa_id)
+                              ,(select id from ref_personal_sub_area where nama = @psa_id)
+                              ,(select id from ref_literal_data where cat_id = 150 and nama = @bulan)
+                              ,(select id from ref_literal_data where cat_id = 151 and nama = @tahun)
+                              ,(select id from ref_literal_data where cat_id = 168 and nama = @jenis_bahan_bakar_id)
+                              ,(select id from ref_literal_data where cat_id = 123 and nama = @peruntukan_solar_id)
+                              ,(select id from ref_literal_data where cat_id = 126 and nama = @sumber_solar_id)
+							  ,@konsumsi_solar
+							  ,@tagihan_solar
+                              ,(select id from ref_literal_data where cat_id = 131 and nama = @usaha_pengurangan_solar_id)
+							  ,@usaha_pengurangan_solar_desc
+							  ,@usaha_pengurangan_solar_desc_file_path
+							  ,@usaha_pengurangan_solar_jumlah
+							  ,GETDATE())";
+            var parameters = new
+            {
+                id = lastId + 1,
+                importModel.ehs_area_id,
+                importModel.ba_id,
+                importModel.pa_id,
+                importModel.psa_id,
+                importModel.bulan,
+                importModel.tahun,
+                importModel.jenis_bahan_bakar_id,
+                importModel.peruntukan_solar_id,
+                importModel.sumber_solar_id,
+                importModel.konsumsi_solar,
+                importModel.tagihan_solar,
+                importModel.usaha_pengurangan_solar_id,
+                importModel.usaha_pengurangan_solar_desc,
+                importModel.usaha_pengurangan_solar_desc_file_path,
+                importModel.usaha_pengurangan_solar_jumlah,
+            };
+            db.Open();
+            var result = db.Execute(query, parameters);
+            db.Close();
+            return result;
+        }
+        private int getLastIdSdaSolar()
+        {
+            var query = "select MAX(id) as id from ta_sda_solar";
+            db.Open();
+            var result = db.ExecuteScalar<int>(query);
+            db.Close();
+            return result;
+        }
     }
 }
