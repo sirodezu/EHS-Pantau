@@ -568,79 +568,79 @@ namespace WebApp.Controllers
                         if(i == 1)
                         {
                             //var testt = test.Cell(i, 1).ToString();
-                            if (test.Cell(i, 1).Value.ToString().Trim().ToLower() != "ehs area id")
+                            if (test.Cell(i, 1).Value.ToString().Trim().ToLower() != "area")
                             {
                                 throw new Exception("Template Not Match at Cell A1");
                             }
-                            if (test.Cell(i, 2).Value.ToString().Trim().ToLower() != "ba id")
+                            if (test.Cell(i, 2).Value.ToString().Trim().ToLower() != "business area")
                             {
                                 throw new Exception("Template Not Match at Cell B1");
                             }
-                            if (test.Cell(i, 3).Value.ToString().Trim().ToLower() != "pa id")
+                            if (test.Cell(i, 3).Value.ToString().Trim().ToLower() != "personal area")
                             {
                                 throw new Exception("Template Not Match at Cell C1");
                             }
-                            if (test.Cell(i, 4).Value.ToString().Trim().ToLower() != "jenis limbah dihasilkan id")
+                            if (test.Cell(i, 4).Value.ToString().Trim().ToLower() != "personal sub area")
                             {
                                 throw new Exception("Template Not Match at Cell D1");
                             }
-                            if (test.Cell(i, 5).Value.ToString().Trim().ToLower() != "kode limbah")
+                            if (test.Cell(i, 5).Value.ToString().Trim().ToLower() != "jenis limbah yang dihasilkan/terima")
                             {
                                 throw new Exception("Template Not Match at Cell E1");
                             }
-                            if (test.Cell(i, 6).Value.ToString().Trim().ToLower() != "sumber limbah id")
+                            if (test.Cell(i, 6).Value.ToString().Trim().ToLower() != "kode limbah")
                             {
                                 throw new Exception("Template Not Match at Cell F1");
                             }
-                            if (test.Cell(i, 7).Value.ToString().Trim().ToLower() != "kegiatan id")
+                            if (test.Cell(i, 7).Value.ToString().Trim().ToLower() != "sumber limbah")
                             {
                                 throw new Exception("Template Not Match at Cell G1");
                             }
-                            if (test.Cell(i, 8).Value.ToString().Trim().ToLower() != "tgl dihasilkan")
+                            if (test.Cell(i, 8).Value.ToString().Trim().ToLower() != "kegiatan")
                             {
                                 throw new Exception("Template Not Match at Cell H1");
                             }
-                            if (test.Cell(i, 9).Value.ToString().Trim().ToLower() != "jenis limbah dihasilkan")
+                            if (test.Cell(i, 9).Value.ToString().Trim().ToLower() != "tanggal dihasilkan")
                             {
                                 throw new Exception("Template Not Match at Cell I1");
                             }
-                            if (test.Cell(i, 10).Value.ToString().Trim().ToLower() != "pengelolaan oleh id")
+                            if (test.Cell(i, 10).Value.ToString().Trim().ToLower() != "jumlah limbah yang dihasilkan/terima (ton)")
                             {
                                 throw new Exception("Template Not Match at Cell J1");
                             }
-                            if (test.Cell(i, 11).Value.ToString().Trim().ToLower() != "masa simpan limbah id")
+                            if (test.Cell(i, 11).Value.ToString().Trim().ToLower() != "pengelolaan oleh")   
                             {
                                 throw new Exception("Template Not Match at Cell K1");
                             }
-                            if (test.Cell( i, 12).Value.ToString().Trim().ToLower() != "tgl dikeluarkan")
+                            if (test.Cell(i, 12).Value.ToString().Trim().ToLower() != "masa simpan limbah")
                             {
                                 throw new Exception("Template Not Match at Cell L1");
                             }
-                            if (test.Cell( i, 13).Value.ToString().Trim().ToLower() != "jumlah limbah dikelola")
+                            if (test.Cell( i, 13).Value.ToString().Trim().ToLower() != "tanggal dikeluarkan")
                             {
                                 throw new Exception("Template Not Match at Cell M1");
                             }
-                            if (test.Cell( i, 14).Value.ToString().Trim().ToLower() != "kode manifest")
+                            if (test.Cell( i, 14).Value.ToString().Trim().ToLower() != "jumlah limbah yang dikelola/keluar (ton)")
                             {
                                 throw new Exception("Template Not Match at Cell N1");
                             }
-                            if (test.Cell( i, 15).Value.ToString().Trim().ToLower() != "perusahaan angkut id")
+                            if (test.Cell( i, 15).Value.ToString().Trim().ToLower() != "kode manifest")
                             {
                                 throw new Exception("Template Not Match at Cell O1");
                             }
-                            if (test.Cell( i, 16).Value.ToString().Trim().ToLower() != "diserahkan ke id")
+                            if (test.Cell( i, 16).Value.ToString().Trim().ToLower() != "perusahaan pengangkut")
                             {
                                 throw new Exception("Template Not Match at Cell P1");
                             }
-                            if (test.Cell( i, 17).Value.ToString().Trim().ToLower() != "perusahaan serah id")
+                            if (test.Cell( i, 17).Value.ToString().Trim().ToLower() != "diserahkan ke")
                             {
                                 throw new Exception("Template Not Match at Cell Q1");
                             }
-                            if (test.Cell( i, 18).Value.ToString().Trim().ToLower() != "sisa di tps")
+                            if (test.Cell( i, 18).Value.ToString().Trim().ToLower() != "nama perusahaan penerima")
                             {
                                 throw new Exception("Template Not Match at Cell R1");
                             }
-                            if (test.Cell( i, 19).Value.ToString().Trim().ToLower() != "psa id")
+                            if (test.Cell( i, 19).Value.ToString().Trim().ToLower() != "sisa di tps (ton)")
                             {
                                 throw new Exception("Template Not Match at Cell S1");
                             }
@@ -648,25 +648,46 @@ namespace WebApp.Controllers
                         else
                         {
                             ImportModel importModels = new ImportModel();
-                            importModels.ehs_area_id = int.Parse(test.Cell(i, 1).Value.ToString());
-                            importModels.ba_id = int.Parse(test.Cell(i, 2).Value.ToString());
-                            importModels.pa_id = int.Parse(test.Cell(i, 3).Value.ToString());
-                            importModels.jenis_limbah_dihasilkan_id = test.Cell(i, 4).Value.ToString();
-                            importModels.kode_limbah = test.Cell(i, 5).Value.ToString();
-                            importModels.sumber_limbah_id = int.Parse(test.Cell(i, 6).Value.ToString());
-                            importModels.kegiatan_id = int.Parse(test.Cell(i, 7).Value.ToString());
-                            importModels.tgl_dihasilkan = DateTime.Parse(test.Cell(i, 8).Value.ToString());
-                            importModels.jenis_limbah_dihasilkan = double.Parse(test.Cell(i, 9).Value.ToString());
-                            importModels.pengelolaan_oleh_id = int.Parse(test.Cell(i, 10).Value.ToString());
-                            importModels.masa_simpan_limbah_id = int.Parse(test.Cell(i, 11).Value.ToString());
-                            importModels.tgl_dikeluarkan = DateTime.Parse(test.Cell(i, 12).Value.ToString());
-                            importModels.jumlah_limbah_dikelola = double.Parse(test.Cell(i, 13).Value.ToString());
-                            importModels.kode_manifest = test.Cell(i, 14).Value.ToString();
-                            importModels.perusahaan_angkut_id = int.Parse(test.Cell(i, 15).Value.ToString());
-                            importModels.diserahkan_ke_id = int.Parse(test.Cell(i, 16).Value.ToString());
-                            importModels.perusahaan_serah_id = int.Parse(test.Cell(i, 17).Value.ToString());
-                            importModels.sisa_di_tps = double.Parse(test.Cell(i, 18).Value.ToString());
-                            importModels.psa_id = int.Parse(test.Cell(i, 19).Value.ToString());
+                            //importModels.ehs_area_id = int.Parse(test.Cell(i, 1).Value.ToString());
+                            //importModels.ba_id = int.Parse(test.Cell(i, 2).Value.ToString());
+                            //importModels.pa_id = int.Parse(test.Cell(i, 3).Value.ToString());
+                            //importModels.psa_id = int.Parse(test.Cell(i, 4).Value.ToString());
+                            //importModels.jenis_limbah_dihasilkan_id = test.Cell(i, 5).Value.ToString();
+                            //importModels.kode_limbah = test.Cell(i, 6).Value.ToString();
+                            //importModels.sumber_limbah_id = int.Parse(test.Cell(i, 7).Value.ToString());
+                            //importModels.kegiatan_id = int.Parse(test.Cell(i, 8).Value.ToString());
+                            //importModels.tgl_dihasilkan = DateTime.Parse(test.Cell(i, 9).Value.ToString());
+                            //importModels.jenis_limbah_dihasilkan = double.Parse(test.Cell(i, 10).Value.ToString());
+                            //importModels.pengelolaan_oleh_id = int.Parse(test.Cell(i, 11).Value.ToString());
+                            //importModels.masa_simpan_limbah_id = int.Parse(test.Cell(i, 12).Value.ToString());
+                            //importModels.tgl_dikeluarkan = DateTime.Parse(test.Cell(i, 13).Value.ToString());
+                            //importModels.jumlah_limbah_dikelola = double.Parse(test.Cell(i, 14).Value.ToString());
+                            //importModels.kode_manifest = test.Cell(i, 15).Value.ToString();
+                            //importModels.perusahaan_angkut_id = int.Parse(test.Cell(i, 16).Value.ToString());
+                            //importModels.diserahkan_ke_id = int.Parse(test.Cell(i, 17).Value.ToString());
+                            //importModels.perusahaan_serah_id = int.Parse(test.Cell(i, 18).Value.ToString());
+                            //importModels.sisa_di_tps = double.Parse(test.Cell(i, 19).Value.ToString());
+
+
+                            importModels.ehs_area_id = test.Cell(i, 1).Value.ToString();
+                            importModels.ba_id = test.Cell(i, 2).Value.ToString();
+                            importModels.pa_id = test.Cell(i, 3).Value.ToString();
+                            importModels.psa_id = test.Cell(i, 4).Value.ToString();
+                            importModels.jenis_limbah_dihasilkan_id = test.Cell(i, 5).Value.ToString();
+                            importModels.kode_limbah = test.Cell(i, 6).Value.ToString();
+                            importModels.sumber_limbah_id = test.Cell(i, 7).Value.ToString();
+                            importModels.kegiatan_id = test.Cell(i, 8).Value.ToString();
+                            importModels.tgl_dihasilkan = DateTime.Parse(test.Cell(i, 9).Value.ToString());
+                            importModels.jenis_limbah_dihasilkan = test.Cell(i, 10).Value.ToString();
+                            importModels.pengelolaan_oleh_id = test.Cell(i, 11).Value.ToString();
+                            importModels.masa_simpan_limbah_id = test.Cell(i, 12).Value.ToString();
+                            importModels.tgl_dikeluarkan = DateTime.Parse(test.Cell(i, 13).Value.ToString());
+                            importModels.jumlah_limbah_dikelola = test.Cell(i, 14).Value.ToString();
+                            importModels.kode_manifest = test.Cell(i, 15).Value.ToString();
+                            importModels.perusahaan_angkut_id = test.Cell(i, 16).Value.ToString();
+                            importModels.diserahkan_ke_id = test.Cell(i, 17).Value.ToString();
+                            importModels.perusahaan_serah_id = test.Cell(i, 18).Value.ToString();
+                            importModels.sisa_di_tps = test.Cell(i, 19).Value.ToString();
 
                             ImportRepository lb3 = new ImportRepository();
                             lb3.Import(importModels);

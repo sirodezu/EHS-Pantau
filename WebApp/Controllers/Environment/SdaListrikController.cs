@@ -583,19 +583,19 @@ namespace WebApp.Controllers
                     {
                         if (i == 1)
                         {
-                            if (row.Cell(i, 1).Value.ToString().Trim().ToLower() != "ehs area id")
+                            if (row.Cell(i, 1).Value.ToString().Trim().ToLower() != "area")
                             {
                                 throw new Exception("Template Not Match at Cell A1");
                             }
-                            if (row.Cell(i, 2).Value.ToString().Trim().ToLower() != "ba id")
+                            if (row.Cell(i, 2).Value.ToString().Trim().ToLower() != "business area")
                             {
                                 throw new Exception("Template Not Match at Cell B1");
                             }
-                            if (row.Cell(i, 3).Value.ToString().Trim().ToLower() != "pa id")
+                            if (row.Cell(i, 3).Value.ToString().Trim().ToLower() != "personal area")
                             {
                                 throw new Exception("Template Not Match at Cell C1");
                             }
-                            if (row.Cell(i, 4).Value.ToString().Trim().ToLower() != "psa id")
+                            if (row.Cell(i, 4).Value.ToString().Trim().ToLower() != "personal sub area")
                             {
                                 throw new Exception("Template Not Match at Cell D1");
                             }
@@ -607,7 +607,7 @@ namespace WebApp.Controllers
                             {
                                 throw new Exception("Template Not Match at Cell F1");
                             }
-                            if (row.Cell(i, 7).Value.ToString().Trim().ToLower() != "sumber listrik id")
+                            if (row.Cell(i, 7).Value.ToString().Trim().ToLower() != "sumber listrik")
                             {
                                 throw new Exception("Template Not Match at Cell G1");
                             }
@@ -623,19 +623,19 @@ namespace WebApp.Controllers
                             {
                                 throw new Exception("Template Not Match at Cell J1");
                             }
-                            if (row.Cell(i, 11).Value.ToString().Trim().ToLower() != "usaha pengurangan listrik id")
+                            if (row.Cell(i, 11).Value.ToString().Trim().ToLower() != "usaha pengurangan energi")
                             {
                                 throw new Exception("Template Not Match at Cell K1");
                             }
-                            if (row.Cell(i, 12).Value.ToString().Trim().ToLower() != "usaha pengurangan listrik desc")
+                            if (row.Cell(i, 12).Value.ToString().Trim().ToLower() != "deskripsi usaha pengurangan")
                             {
                                 throw new Exception("Template Not Match at Cell L1");
                             }
-                            if (row.Cell(i, 13).Value.ToString().Trim().ToLower() != "usaha pengurangan listrik desc file path")
+                            if (row.Cell(i, 13).Value.ToString().Trim().ToLower() != "dokumen deskripsi usaha pengurangan")
                             {
                                 throw new Exception("Template Not Match at Cell M1");
                             }
-                            if (row.Cell(i, 14).Value.ToString().Trim().ToLower() != "usaha pengurangan listrik jumlah")
+                            if (row.Cell(i, 14).Value.ToString().Trim().ToLower() != "jumlah pengurangan")
                             {
                                 throw new Exception("Template Not Match at Cell N1");
                             }
@@ -643,13 +643,13 @@ namespace WebApp.Controllers
                         else
                         {
                             ImportSdaListrikModel sda = new ImportSdaListrikModel();
-                            sda.ehs_area_id = int.Parse(row.Cell(i, 1).Value.ToString());
-                            sda.ba_id = int.Parse(row.Cell(i, 2).Value.ToString());
-                            sda.pa_id = int.Parse(row.Cell(i, 3).Value.ToString());
-                            sda.psa_id = int.Parse(row.Cell(i, 4).Value.ToString());
-                            sda.bulan = int.Parse(row.Cell(i, 5).Value.ToString());
+                            sda.ehs_area_id = row.Cell(i, 1).Value.ToString();
+                            sda.ba_id = row.Cell(i, 2).Value.ToString();
+                            sda.pa_id = row.Cell(i, 3).Value.ToString();
+                            sda.psa_id = row.Cell(i, 4).Value.ToString();
+                            sda.bulan = row.Cell(i, 5).Value.ToString();
                             sda.tahun = int.Parse(row.Cell(i, 6).Value.ToString());
-                            sda.sumber_listrik_id = int.Parse(row.Cell(i, 7).Value.ToString());
+                            sda.sumber_listrik_id = row.Cell(i, 7).Value.ToString();
                             sda.no_rek_listrik = row.Cell(i, 8).Value.ToString();
                             sda.konsumsi_listrik = double.Parse(row.Cell(i, 9).Value.ToString());
                             sda.tagihan_listrik = row.Cell(i, 10).Value.ToString();
