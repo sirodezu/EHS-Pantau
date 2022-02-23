@@ -400,7 +400,7 @@ namespace WebApp.Repository
                               ,[usaha_pengurangan_solar_jumlah]
                               ,[insert_at])
 	                           VALUES
-	                          ((select max (id) + 1 from ta_sda_kertas)
+	                          ((select max (id) + 1 from ta_sda_solar)
 							  ,(select id from ref_ehs_area where nama = @ehs_area_id)
                               ,(select id from ref_business_area where nama = @ba_id)
                               ,(select id from ref_personal_area where nama = @pa_id)
@@ -444,6 +444,65 @@ namespace WebApp.Repository
         private int getLastIdSdaSolar()
         {
             var query = "select MAX(id) as id from ta_sda_solar";
+            db.Open();
+            var result = db.ExecuteScalar<int>(query);
+            db.Close();
+            return result;
+        }
+        public int ImportSdaTisu(ImportSdaTisuModel importModel)
+        {
+            var lastId = getLastIdSdaTisu();
+            var query = @"INSERT INTO ta_sda_tisu
+                        ([id]
+                              ,[ehs_area_id]
+                              ,[ba_id]
+                              ,[pa_id]
+                              ,[psa_id]
+                              ,[bulan]
+                              ,[tahun]
+                              ,[konsumsi_tisu]
+                              ,[usaha_pengurangan_tisu_id]
+                              ,[usaha_pengurangan_tisu_desc]
+                              ,[usaha_pengurangan_tisu_desc_file_path]
+                              ,[usaha_pengurangan_tisu_jumlah]
+                              ,[insert_by])
+	                           VALUES 
+	                          ((select max (id) + 1 from ta_sda_tisu)
+							  ,(select id from ref_ehs_area where nama = @ehs_area_id)
+                              ,(select id from ref_business_area where nama = @ba_id)
+                              ,(select id from ref_personal_area where nama = @pa_id)
+                              ,(select id from ref_personal_sub_area where nama = @psa_id)
+                              ,(select id from ref_literal_data where cat_id = 150 and nama = @bulan)
+                              ,(select id from ref_literal_data where cat_id = 151 and nama = @tahun)
+							  ,@konsumsi_tisu
+                              ,(select id from ref_literal_data where cat_id = 129 and nama = @usaha_pengurangan_tisu_id)
+							  ,@usaha_pengurangan_tisu_desc
+							  ,@usaha_pengurangan_tisu_desc_file_path
+							  ,@usaha_pengurangan_tisu_jumlah
+							  ,GETDATE())";
+            var parameters = new
+            {
+                id = lastId + 1,
+                importModel.ehs_area_id,
+                importModel.ba_id,
+                importModel.pa_id,
+                importModel.psa_id,
+                importModel.bulan,
+                importModel.tahun,
+                importModel.konsumsi_tisu,
+                importModel.usaha_pengurangan_tisu_id,
+                importModel.usaha_pengurangan_tisu_desc,
+                importModel.usaha_pengurangan_tisu_desc_file_path,
+                importModel.usaha_pengurangan_tisu_jumlah,
+            };
+            db.Open();
+            var result = db.Execute(query, parameters);
+            db.Close();
+            return result;
+        }
+        private int getLastIdSdaTisu()
+        {
+            var query = "select MAX(id) as id from ta_sda_tisu";
             db.Open();
             var result = db.ExecuteScalar<int>(query);
             db.Close();
