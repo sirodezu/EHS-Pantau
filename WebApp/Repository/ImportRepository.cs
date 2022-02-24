@@ -339,6 +339,7 @@ namespace WebApp.Repository
                               ,(select id from ref_personal_sub_area where nama = @psa_id)
                               ,(select id from ref_literal_data where cat_id = 150 and nama = @bulan)
                               ,(select id from ref_literal_data where cat_id = 151 and nama = @tahun)
+                              ,(select id from ref_literal_data where cat_id = 125 and nama = @sumber_listrik_id)
                               ,@no_rek_listrik
                               ,@konsumsi_listrik
                               ,@tagihan_listrik
@@ -503,6 +504,74 @@ namespace WebApp.Repository
         private int getLastIdSdaTisu()
         {
             var query = "select MAX(id) as id from ta_sda_tisu";
+            db.Open();
+            var result = db.ExecuteScalar<int>(query);
+            db.Close();
+            return result;
+        }
+        public int ImportMeasurement(ImportMeasurementModel importModel)
+        {
+            var lastId = getLastIdMeasurement();
+            var query = @"INSERT INTO ta_pengukuran
+                        ([id]
+                              ,[ehs_area_id]
+                              ,[ba_id]
+                              ,[pa_id]
+                              ,[psa_id]
+                              ,[jenis_pemeriksaan_pengujian_id]
+                              ,[keterangan_series_kode]
+                              ,[jumlah_titik_penaatan]
+                              ,[periode_pemeriksaan_pengujian_id]
+                              ,[status_penaatan_id]
+                              ,[hasil_pengukuran]
+                              ,[tanggal_pengujian]
+                              ,[file_path_hasil_uji]
+                              ,[file_path_baku_mutu]
+                              ,[keterangan_uji]
+                              ,[insert_by])
+	                           VALUES
+	                          ((select max (id) + 1 from ta_pengukuran)
+							  ,(select id from ref_ehs_area where nama = @ehs_area_id)
+                              ,(select id from ref_business_area where nama = @ba_id)
+                              ,(select id from ref_personal_area where nama = @pa_id)
+                              ,(select id from ref_personal_sub_area where nama = @psa_id)
+                              ,(select id from ref_literal_data where cat_id = 102  and nama = @jenis_pemeriksaan_pengujian_id)
+							  ,@keterangan_series_kode
+							  ,@jumlah_titik_penaatan
+                              ,(select id from ref_literal_data where cat_id = 106  and nama = @periode_pemeriksaan_pengujian_id)
+                              ,(select id from ref_literal_data where cat_id = 109  and nama = @status_penaatan_id)
+							  ,@hasil_pengukuran
+							  ,@tanggal_pengujian
+							  ,@file_path_hasil_uji
+							  ,@file_path_baku_mutu
+							  ,@keterangan_uji
+							  ,GETDATE())";
+            var parameters = new
+            {
+                id = lastId + 1,
+                importModel.ehs_area_id,
+                importModel.ba_id,
+                importModel.pa_id,
+                importModel.psa_id,
+                importModel.jenis_pemeriksaan_pengujian_id,
+                importModel.keterangan_series_kode,
+                importModel.jumlah_titik_penaatan,
+                importModel.periode_pemeriksaan_pengujian_id,
+                importModel.status_penaatan_id,
+                importModel.hasil_pengukuran,
+                importModel.tanggal_pengujian,
+                importModel.file_path_hasil_uji,
+                importModel.file_path_baku_mutu,
+                importModel.keterangan_uji
+            };
+            db.Open();
+            var result = db.Execute(query, parameters);
+            db.Close();
+            return result;
+        }
+        private int getLastIdMeasurement()
+        {
+            var query = "select MAX(id) as id from ta_pengukuran";
             db.Open();
             var result = db.ExecuteScalar<int>(query);
             db.Close();
