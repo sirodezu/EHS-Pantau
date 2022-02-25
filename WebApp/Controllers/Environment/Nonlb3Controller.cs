@@ -17,12 +17,16 @@ using NPOI.HSSF.UserModel;
 using NPOI.XSSF.UserModel;
 using WebApp.Repository;
 using ClosedXML.Excel;
+using Microsoft.Extensions.Configuration;
+using System.Configuration;
+using System.Data.SqlClient;
 
 namespace WebApp.Controllers
 {
     
     public class Nonlb3Controller : Controller
     {
+        private string ConnStr = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetSection("ConnectionStrings")["MainConnection"];
         private string _rule_view = "EnvironmentView";
         private string _rule_add = "EnvironmentAdd";
         private string _rule_edit = "EnvironmentEdit";
@@ -645,6 +649,81 @@ namespace WebApp.Controllers
 
                 throw;
             }
+        }
+        [HttpGet]
+        public ActionResult TemplateNonLb3()
+        {
+            try
+            {
+                string fileName = "Lb3Template.xlsx";
+                string path = Path.Combine(ConfigurationManager.AppSettings["filePath"].Replace(@"\\", "/").ToString() + fileName);
+                
+                using(var wb = new XLWorkbook())
+                {
+                    var lb3 = wb.Worksheets.Add("Sheet1");
+
+                    var currentRow = 1;
+                    lb3.Cell(currentRow, 1).Value = "Area";
+                    lb3.Cell(currentRow, 2).Value = "Business Area";
+                    lb3.Cell(currentRow, 3).Value = "Personal Area";
+                    lb3.Cell(currentRow, 4).Value = "Personal Sub Area";
+                    lb3.Cell(currentRow, 5).Value = "Bulan";
+                    lb3.Cell(currentRow, 6).Value = "Tahun";
+                    lb3.Cell(currentRow, 7).Value = "Jenis Limbah";
+                    lb3.Cell(currentRow, 8).Value = "deskripsi limbah";
+                    lb3.Cell(currentRow, 9).Value = "Pengelolaan Oleh";
+                    lb3.Cell(currentRow, 10).Value = "Usaha Pengurangan Limbah";
+                    lb3.Cell(currentRow, 11).Value = "Deskripsi Usaha";
+                    lb3.Cell(currentRow, 12).Value = "Deskripsi Usaha File Path";
+
+                    lb3.Columns().AdjustToContents();
+
+                    var lookuplb3 = wb.Worksheets.Add("lookup");
+
+                    var dataArea = GetArea();
+                    int a = 1;
+
+                    foreach (string data in dataArea)
+                    {
+                        lookuplb3.Cell(a, 1).Value = data;
+                        a++;
+                    }
+
+                    //add lookup
+                    lb3.Column("A").SetDataValidation().List(lookuplb3.Range("A1:A" + a), true);
+                    //lb3.Column("B").SetDataValidation().List("=INDIRECT(\"named_field\"&SUBSTITUTE(A1,\" \",\"_\"))", true);
+                    lb3.Columns().AdjustToContents();
+
+                    wb.SaveAs(path);
+                    FileStream stream = new FileStream(path, FileMode.Open, FileAccess.Read);
+                    return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                }
+            }
+            catch (Exception e)
+            {
+
+                throw;
+            }
+        }
+
+        private List<string> GetArea()
+        {
+            var result = new List<string>();
+            var query = @"select distinct nama as area from ref_ehs_area";
+            using (var con = new SqlConnection(ConnStr))
+            {
+                using (var cmd = new SqlCommand(query, con))
+                {
+                    con.Open();
+                    var data = cmd.ExecuteReader();
+                    while (data.Read())
+                    {
+                        result.Add(data["area"].ToString());
+                    }
+                    con.Close();
+                }
+            }
+            return result;
         }
     }
 }
