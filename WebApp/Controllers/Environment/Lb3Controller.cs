@@ -21,12 +21,15 @@ using System.Data.OleDb;
 using System.Configuration;
 using WebApp.Repository;
 using ClosedXML.Excel;
+using System.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
 
 namespace WebApp.Controllers
 {
     
     public class Lb3Controller : Controller
     {
+        private string ConnStr = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetSection("ConnectionStrings")["MainConnection"];
         private string _rule_view = "EnvironmentView";
         private string _rule_add = "EnvironmentAdd";
         private string _rule_edit = "EnvironmentEdit";
@@ -701,6 +704,97 @@ namespace WebApp.Controllers
 
                 throw;
             }
+        }
+        [HttpGet]
+        public ActionResult TemplateLb3()
+        {
+            try
+            {
+                string fileName = "Lb3Template.xlsx";
+                string path = Path.Combine(ConfigurationManager.AppSettings["filePath"].Replace(@"\\", "/").ToString() + fileName);
+
+                using (var wb = new XLWorkbook())
+                {
+                    var lb3 = wb.Worksheets.Add("Sheet1");
+
+                    var currentRow = 1;
+                    lb3.Cell(currentRow, 1).Value = "Area";
+                    lb3.Cell(currentRow, 2).Value = "Business Area";
+                    lb3.Cell(currentRow, 3).Value = "Personal Area";
+                    lb3.Cell(currentRow, 4).Value = "Personal Sub Area";
+                    lb3.Cell(currentRow, 5).Value = "Jenis Limbah yang Dihasilkan/Terima";
+                    lb3.Cell(currentRow, 6).Value = "Kode Limbah";
+                    lb3.Cell(currentRow, 7).Value = "Sumber Limbah";
+                    lb3.Cell(currentRow, 8).Value = "Kegiatan";
+                    lb3.Cell(currentRow, 9).Value = "Tanggal Dihasilkan";
+                    lb3.Cell(currentRow, 10).Value = "Jumlah Limbah yang Dihasilkan/Terima (ton)";
+                    lb3.Cell(currentRow, 11).Value = "Pengelolaan Oleh";
+                    lb3.Cell(currentRow, 12).Value = "Masa Simpan Limbah";
+                    lb3.Cell(currentRow, 13).Value = "Tanggal Dikeluarkan";
+                    lb3.Cell(currentRow, 14).Value = "Jumlah Limbah yang Dikelola/Keluar (ton)";
+                    lb3.Cell(currentRow, 15).Value = "Kode Manifest";
+                    lb3.Cell(currentRow, 16).Value = "Perusahaan Pengangkut";
+                    lb3.Cell(currentRow, 17).Value = "Diserahkan Ke";
+                    lb3.Cell(currentRow, 18).Value = "Nama Perusahaan Penerima";
+                    lb3.Cell(currentRow, 19).Value = "Sisa di Tps (ton)";
+
+                    lb3.Columns().AdjustToContents();
+
+                    var lookuplb3 = wb.Worksheets.Add("Sheet2").Hide();
+
+                    var dataArea = GetArea();
+                    int a = 1;
+
+                    foreach (string data in dataArea)
+                    {
+                        lookuplb3.Cell(a, 1).Value = data;
+                        a++;
+                    }
+
+                    //add lookup
+                    lb3.Column("A").SetDataValidation().List(lookuplb3.Range("A1:A" + a), true);
+                    lb3.Column("B").SetDataValidation().List("=INDIRECT(\"named_field\"&SUBSTITUTE(A1,\" \",\"_\"))", true);
+                    lb3.Columns().AdjustToContents();
+                    //lb3.Column("A").SetDataValidation().List(lookuplb3.Range("A1:A" + a), true);
+                    //lb3.Column("A").SetDataValidation().List(lookuplb3.Range("A1:A" + a), true);
+                    //lb3.Column("A").SetDataValidation().List(lookuplb3.Range("A1:A" + a), true);
+                    //lb3.Column("A").SetDataValidation().List(lookuplb3.Range("A1:A" + a), true);
+                    //lb3.Column("A").SetDataValidation().List(lookuplb3.Range("A1:A" + a), true);
+                    //lb3.Column("A").SetDataValidation().List(lookuplb3.Range("A1:A" + a), true);
+                    //lb3.Column("A").SetDataValidation().List(lookuplb3.Range("A1:A" + a), true);
+                    //lb3.Column("A").SetDataValidation().List(lookuplb3.Range("A1:A" + a), true);
+                    //lb3.Column("A").SetDataValidation().List(lookuplb3.Range("A1:A" + a), true);
+                    //lb3.Column("A").SetDataValidation().List(lookuplb3.Range("A1:A" + a), true);
+
+                    wb.SaveAs(path);
+                    FileStream stream = new FileStream(path, FileMode.Open, FileAccess.Read);
+                    return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        private List<string> GetArea()
+        {
+            var result = new List<string>();
+            var query = @"select distinct nama as area from ref_ehs_area";
+            using(var con = new SqlConnection(ConnStr))
+            {
+                using(var cmd = new SqlCommand(query, con))
+                {
+                    con.Open();
+                    var data = cmd.ExecuteReader();
+                    while(data.Read())
+                    {
+                        result.Add(data["area"].ToString());
+                    }
+                    con.Close();
+                }
+            }
+            return result;
         }
     }
 }
