@@ -420,10 +420,6 @@
 			if (param_ta_nonlb3.export_exl != 1) { $("#btnExportExcel_ta_nonlb3").hide(); }
 			$("#btnShowHideColumn_ta_nonlb3").click(function () { var x = $("#btnShowHideColumn_ta_nonlb3").offset().left; var y = $("#btnShowHideColumn_ta_nonlb3").offset().top; if (!WinShowHideColumn_ta_nonlb3) { var WinShowHideColumn_ta_nonlb3 = $("#WinShowHideColumn_ta_nonlb3").kendoWindow({ width: "300px", position: { left: x, top: y }, title: "@ResxHelper.GetValue("Message","ShowHideColumn")", actions: ["Close"] }); } WinShowHideColumn_ta_nonlb3.data("kendoWindow").open(); });
 		});
-        document.getElementById('btnImport_ta_nonlb3').addEventListener('click', openDialog);
-        function openDialog() {
-            document.getElementById('formImport_ta_nonlb3').click();
-		}
 
 		document.getElementById('btnImport_ta_nonlb3').addEventListener('click', openDialog);
         function openDialog() {

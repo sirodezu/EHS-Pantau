@@ -615,7 +615,7 @@ namespace WebApp.Controllers
                             {
                                 throw new Exception("Template Not Match at Cell H1");
                             }
-                            if (row.Cell(i, 9).Value.ToString().Trim().ToLower() != "konsumsi listrik")
+                            if (row.Cell(i, 9).Value.ToString().Trim().ToLower() != "konsumsi listrik (kwh)")
                             {
                                 throw new Exception("Template Not Match at Cell I1");
                             }
@@ -664,7 +664,7 @@ namespace WebApp.Controllers
                     return data;
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
 
                 throw;
