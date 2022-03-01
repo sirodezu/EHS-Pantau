@@ -740,7 +740,27 @@ namespace WebApp.Controllers
 
                     lb3.Columns().AdjustToContents();
 
-                    var lookuplb3 = wb.Worksheets.Add("Sheet2").Hide();
+                    var lookuplb3 = wb.Worksheets.Add("lookup");
+
+                    lookuplb3.Cell(currentRow, 1).Value = "Area List";
+
+                    lookuplb3.Cell(currentRow, 3).Value = "Business List";
+
+                    lookuplb3.Cell(currentRow, 5).Value = "Personal List";
+
+                    lookuplb3.Cell(currentRow, 7).Value = "Sub List";
+
+                    lookuplb3.Cell(currentRow, 9).Value = "Jenis List";
+
+                    lookuplb3.Cell(currentRow, 11).Value = "Sumber Limbah List";
+
+                    lookuplb3.Cell(currentRow, 13).Value = "Kegiatan List";
+
+                    lookuplb3.Cell(currentRow, 15).Value = "Pengelolaan List";
+
+                    lookuplb3.Cell(currentRow, 17).Value = "Masa Simpan List";
+
+
 
                     var dataArea = GetArea();
                     int a = 1;
@@ -750,10 +770,95 @@ namespace WebApp.Controllers
                         lookuplb3.Cell(a, 1).Value = data;
                         a++;
                     }
+                    int b = 2;
+                    var dataBusiness = GetBusinnessArea();
+                    //if (dataBusiness.Count() != 0)
+                    //{
+                    //    string range = $"C{firstWellIndex}:C{lastWellIndex - 1}";
+                    //    firstWellIndex = lastWellIndex;
+                    //    lookuplb3.Range(range).AddToNamed(String.Concat("named_field", dataBusiness));
+                    //    fieldNamedRangeList.AddRange(dataBusiness);
+                    //}
+                    foreach (string data in dataBusiness)
+                    {
+                        lookuplb3.Cell(b, 3).Value = data;
+                        b++;
+                    }
 
+                    int c = 2;
+                    var dataPersonal = GetPersonalArea();
+                    //if(dataPersonal.Count() != 0)
+                    //{
+                    //    string range = $"E{firstWellIndex}:E{lastWellIndex - 1}"; 
+                    //    firstWellIndex = lastWellIndex;
+                    //    lookuplb3.Range(range).AddToNamed(String.Concat("named_", dataPersonal));
+                    //    fieldNamedRangeList.AddRange(dataPersonal);
+
+                    //}
+                    foreach (string data in dataPersonal)
+                    {
+                        lookuplb3.Cell(c, 5).Value = data;
+                        c++;
+                    }
+
+                    int d = 2;
+                    var dataSub = GetSubArea();
+                    foreach (string data in dataSub)
+                    {
+                        lookuplb3.Cell(d, 7).Value = data;
+                        d++;
+                    }
+
+                    int e = 2;
+                    var dataJenis = GetJenisLimbah();
+                    foreach (string data in dataJenis)
+                    {
+                        lookuplb3.Cell(e, 9).Value = data;
+                        e++;
+                    }
+
+                    int f = 2;
+                    var datasumber = GetSumberLimbah();
+                    foreach (string data in datasumber)
+                    {
+                        lookuplb3.Cell(f, 11).Value = data;
+                        f++;
+                    }
+
+                    int g = 2;
+                    var datakegiatan = GetKegiatan();
+                    foreach (string data in datakegiatan)
+                    {
+                        lookuplb3.Cell(g, 13).Value = data;
+                        g++;
+                    }
+
+                    int h = 2;
+                    var datapengelolaan = GetPengelolaan();
+                    foreach (string data in datapengelolaan)
+                    {
+                        lookuplb3.Cell(h, 15).Value = data;
+                        h++;
+                    }
+
+                    int i = 2;
+                    var datasimpan = GetSimpanLimbah();
+                    foreach (string data in datasimpan)
+                    {
+                        lookuplb3.Cell(i, 17).Value = data;
+                        i++;
+                    }
                     //add lookup
-                    lb3.Column("A").SetDataValidation().List(lookuplb3.Range("A1:A" + a), true);
-                    lb3.Column("B").SetDataValidation().List("=INDIRECT(\"named_field\"&SUBSTITUTE(A1,\" \",\"_\"))", true);
+                    lb3.Column("A").SetDataValidation().List(lookuplb3.Range("A2:A" + a), true);
+                    lb3.Column("B").SetDataValidation().List(lookuplb3.Range("C2:C" + b), true);
+                    lb3.Column("C").SetDataValidation().List(lookuplb3.Range("E2:E" + c), true);
+                    lb3.Column("D").SetDataValidation().List(lookuplb3.Range("G2:G" + d), true);
+                    lb3.Column("E").SetDataValidation().List(lookuplb3.Range("I2:I" + e), true);
+                    lb3.Column("G").SetDataValidation().List(lookuplb3.Range("K2:K" + f), true);
+                    lb3.Column("H").SetDataValidation().List(lookuplb3.Range("M2:M" + g), true);
+                    lb3.Column("K").SetDataValidation().List(lookuplb3.Range("O2:O" + h), true);
+                    lb3.Column("L").SetDataValidation().List(lookuplb3.Range("Q2:Q" + i), true);
+                    //lb3.Column("B").SetDataValidation().List("=INDIRECT(\"named_field\"&SUBSTITUTE(A1,\" \",\"_\"))", true);
                     lb3.Columns().AdjustToContents();
                     //lb3.Column("A").SetDataValidation().List(lookuplb3.Range("A1:A" + a), true);
                     //lb3.Column("A").SetDataValidation().List(lookuplb3.Range("A1:A" + a), true);
@@ -790,6 +895,167 @@ namespace WebApp.Controllers
                     while(data.Read())
                     {
                         result.Add(data["area"].ToString());
+                    }
+                    con.Close();
+                }
+            }
+            return result;
+        }
+
+        private List<string> GetBusinnessArea()
+        {
+            var result = new List<string>();
+            var query = $@"select ba.nama as business_area from ref_ehs_area as area
+                        inner join ref_business_area as ba on ba.ehs_area_id = area.id";
+            using (var con = new SqlConnection(ConnStr))
+            {
+                using (var cmd = new SqlCommand(query, con))
+                {
+                    con.Open();
+                    var data = cmd.ExecuteReader();
+                    while (data.Read())
+                    {
+                        result.Add(data["business_area"].ToString());
+                    }
+                    con.Close();
+                }
+            }
+            return result;
+        }
+        private List<string> GetPersonalArea()
+        {
+            var result = new List<string>();
+            var query = $@"select pa.nama as personal_area from ref_business_area as ba 
+                        inner join ref_personal_area as pa on pa.ba_id = ba.id";
+            using (var con = new SqlConnection(ConnStr))
+            {
+                using (var cmd = new SqlCommand(query, con))
+                {
+                    con.Open();
+                    var data = cmd.ExecuteReader();
+                    while (data.Read())
+                    {
+                        result.Add(data["personal_area"].ToString());
+                    }
+                    con.Close();
+                }
+            }
+            return result;
+        }
+        private List<string> GetSubArea()
+        {
+            var result = new List<string>();
+            var query = $@"select ba.nama as sub_area from ref_ehs_area as area
+                        inner join ref_personal_sub_area as ba on ba.ehs_area_id = area.id";
+            using (var con = new SqlConnection(ConnStr))
+            {
+                using (var cmd = new SqlCommand(query, con))
+                {
+                    con.Open();
+                    var data = cmd.ExecuteReader();
+                    while (data.Read())
+                    {
+                        result.Add(data["sub_area"].ToString());
+                    }
+                    con.Close();
+                }
+            }
+            return result;
+        }
+        private List<string> GetJenisLimbah()
+        {
+            var result = new List<string>();
+            var query = $@" select nama as jenis_limbah from ref_literal_data
+                            where cat_id = 90";
+            using (var con = new SqlConnection(ConnStr))
+            {
+                using (var cmd = new SqlCommand(query, con))
+                {
+                    con.Open();
+                    var data = cmd.ExecuteReader();
+                    while (data.Read())
+                    {
+                        result.Add(data["jenis_limbah"].ToString());
+                    }
+                    con.Close();
+                }
+            }
+            return result;
+        }
+        private List<string> GetSumberLimbah()
+        {
+            var result = new List<string>();
+            var query = $@" select nama as sumber_limbah from ref_literal_data
+                            where cat_id = 97";
+            using (var con = new SqlConnection(ConnStr))
+            {
+                using (var cmd = new SqlCommand(query, con))
+                {
+                    con.Open();
+                    var data = cmd.ExecuteReader();
+                    while (data.Read())
+                    {
+                        result.Add(data["sumber_limbah"].ToString());
+                    }
+                    con.Close();
+                }
+            }
+            return result;
+        }
+        private List<string> GetKegiatan()
+        {
+            var result = new List<string>();
+            var query = $@" select nama as kegiatan from ref_literal_data
+                            where cat_id = 91";
+            using (var con = new SqlConnection(ConnStr))
+            {
+                using (var cmd = new SqlCommand(query, con))
+                {
+                    con.Open();
+                    var data = cmd.ExecuteReader();
+                    while (data.Read())
+                    {
+                        result.Add(data["kegiatan"].ToString());
+                    }
+                    con.Close();
+                }
+            }
+            return result;
+        }
+        private List<string> GetPengelolaan()
+        {
+            var result = new List<string>();
+            var query = $@" select nama as pengelolaan from ref_literal_data
+                            where cat_id = 93";
+            using (var con = new SqlConnection(ConnStr))
+            {
+                using (var cmd = new SqlCommand(query, con))
+                {
+                    con.Open();
+                    var data = cmd.ExecuteReader();
+                    while (data.Read())
+                    {
+                        result.Add(data["pengelolaan"].ToString());
+                    }
+                    con.Close();
+                }
+            }
+            return result;
+        }
+        private List<string> GetSimpanLimbah()
+        {
+            var result = new List<string>();
+            var query = $@" select nama as simpan_limbah from ref_literal_data
+                            where cat_id = 92";
+            using (var con = new SqlConnection(ConnStr))
+            {
+                using (var cmd = new SqlCommand(query, con))
+                {
+                    con.Open();
+                    var data = cmd.ExecuteReader();
+                    while (data.Read())
+                    {
+                        result.Add(data["simpan_limbah"].ToString());
                     }
                     con.Close();
                 }
