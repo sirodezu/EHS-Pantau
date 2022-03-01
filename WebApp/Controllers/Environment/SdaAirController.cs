@@ -13,12 +13,16 @@ using Newtonsoft.Json;
 using Microsoft.Security.Application;
 using WebApp.Repository;
 using ClosedXML.Excel;
+using Microsoft.Extensions.Configuration;
+using System.Configuration;
+using System.Data.SqlClient;
 
 namespace WebApp.Controllers
 {
     
     public class SdaAirController : Controller
     {
+        private string ConnStr = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetSection("ConnectionStrings")["MainConnection"];
         private string _rule_view = "EnvironmentView";
         private string _rule_add = "EnvironmentAdd";
         private string _rule_edit = "EnvironmentEdit";
@@ -672,6 +676,81 @@ namespace WebApp.Controllers
 
                 throw;
             }
+        }
+        [HttpGet]
+        public ActionResult TemplateNonLb3()
+        {
+            try
+            {
+                string fileName = "Lb3Template.xlsx";
+                string path = Path.Combine(ConfigurationManager.AppSettings["filePath"].Replace(@"\\", "/").ToString() + fileName);
+
+                using (var wb = new XLWorkbook())
+                {
+                    var sda = wb.Worksheets.Add("Sheet1");
+                    var currentRow = 1;
+                    sda.Cell(currentRow, 1).Value = "Area";
+                    sda.Cell(currentRow, 2).Value = "Business Area";
+                    sda.Cell(currentRow, 3).Value = "Personal Area";
+                    sda.Cell(currentRow, 4).Value = "Personal Sub Area";
+                    sda.Cell(currentRow, 5).Value = "Bulan";
+                    sda.Cell(currentRow, 6).Value = "Tahun";
+                    sda.Cell(currentRow, 7).Value = "Sumber Air";
+                    sda.Cell(currentRow, 8).Value = "No Rek Air";
+                    sda.Cell(currentRow, 9).Value = "Konsumsi Air";
+                    sda.Cell(currentRow, 10).Value = "Tagihan Air";
+                    sda.Cell(currentRow, 11).Value = "Usaha Pengurangan Air";
+                    sda.Cell(currentRow, 12).Value = "Usaha Pengurangan Air Desc";
+                    sda.Cell(currentRow, 13).Value = "Usaha Pengurangan Air Desc File Path";
+                    sda.Cell(currentRow, 14).Value = "Usaha Pengurangan Air Jumlah";
+
+                    sda.Columns().AdjustToContents();
+                    var lookup = wb.Worksheets.Add("lookup").Hide();
+                    var dataArea = GetArea();
+                    int a = 1;
+
+                    foreach (string data in dataArea)
+                    {
+                        lookup.Cell(a, 1).Value = data;
+                        a++;
+                    }
+
+                    //add lookup
+                    sda.Column("A").SetDataValidation().List(lookup.Range("A1:A" + a), true);
+                    //lb3.Column("B").SetDataValidation().List("=INDIRECT(\"named_field\"&SUBSTITUTE(A1,\" \",\"_\"))", true);
+                    sda.Columns().AdjustToContents();
+
+                    wb.SaveAs(path);
+                    FileStream stream = new FileStream(path, FileMode.Open, FileAccess.Read);
+                    return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+
+                }
+            }
+            catch (Exception e)
+            {
+
+                throw;
+            }
+        }
+
+        private List<string> GetArea()
+        {
+            var result = new List<string>();
+            var query = @"select distinct nama as area from ref_ehs_area";
+            using (var con = new SqlConnection(ConnStr))
+            {
+                using (var cmd = new SqlCommand(query, con))
+                {
+                    con.Open();
+                    var data = cmd.ExecuteReader();
+                    while (data.Read())
+                    {
+                        result.Add(data["area"].ToString());
+                    }
+                    con.Close();
+                }
+            }
+            return result;
         }
     }
 }
