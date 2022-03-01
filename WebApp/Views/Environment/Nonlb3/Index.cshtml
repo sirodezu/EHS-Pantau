@@ -83,6 +83,7 @@
                             <a id="btnAdd_ta_nonlb3" onclick="AddData_ta_nonlb3()" class="k-button" title="@ResxHelper.GetValue("Message","Add")">@ResxHelper.GetValue("Message", "Add", "Tambah")</a>
                             <a id="btnImport_ta_nonlb3" class="k-button" title="@ResxHelper.GetValue("Message","Import")">@ResxHelper.GetValue("Message", "Import", "Import")</a>
                             <input id="formImport_ta_nonlb3" type="file" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" hidden />
+                            <a id="btnDownloadTemplate_ta_nonlb3" class="k-button" title="@ResxHelper.GetValue("Message","Download Template")">@ResxHelper.GetValue("Message", "Download Template", "Download Template")</a>
                         </td>
 					<tr>
 				</table>
@@ -464,6 +465,16 @@
                 }
             });
             $("div.k-widget.k-upload.k-header.k-upload-empty").css({ 'display': 'none' });
-        });
+		});
+
+        $("#btnDownloadTemplate_ta_nonlb3").click(function () {
+				$.ajax({
+					url: '@ViewBag.BaseUrl/NonLb3/TemplateNonLb3', type: 'POST'
+					, success: function () {
+						alert('test');
+						console.log('test')
+					}
+				});
+			});
     </script>
 }
