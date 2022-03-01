@@ -20,6 +20,7 @@ using ClosedXML.Excel;
 using Microsoft.Extensions.Configuration;
 using System.Configuration;
 using System.Data.SqlClient;
+using System.Linq;
 
 namespace WebApp.Controllers
 {
@@ -656,9 +657,9 @@ namespace WebApp.Controllers
             try
             {
                 string fileName = "Lb3Template.xlsx";
-                string path = Path.Combine(ConfigurationManager.AppSettings["filePath"].Replace(@"\\", "/").ToString() + fileName);
-                
-                using(var wb = new XLWorkbook())
+                //string path = Path.Combine(ConfigurationManager.AppSettings["filePath"].Replace(@"\\", "/").ToString() + fileName);
+                var fileFormat = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                using (var wb = new XLWorkbook())
                 {
                     var lb3 = wb.Worksheets.Add("Sheet1");
 
@@ -680,8 +681,16 @@ namespace WebApp.Controllers
 
                     var lookuplb3 = wb.Worksheets.Add("lookup");
 
+                    lookuplb3.Cell(currentRow, 1).Value = "AP List";
+
+                    lookuplb3.Cell(currentRow, 3).Value = "Field List";
+
+                    lookuplb3.Cell(currentRow, 5).Value = "Well List";
+                    int firstWellIndex = 2;
+                    int lastWellIndex = 2;
+                    List<string> fieldNamedRangeList = new List<string>();
                     var dataArea = GetArea();
-                    int a = 1;
+                    int a = 2;
 
                     foreach (string data in dataArea)
                     {
@@ -689,14 +698,54 @@ namespace WebApp.Controllers
                         a++;
                     }
 
+                    int b = 2;
+                    var dataBusiness = GetBusinnessArea(); 
+                    if (dataBusiness.Count() != 0)
+                    {
+                        string range = $"C{firstWellIndex}:C{lastWellIndex - 1}";
+                        firstWellIndex = lastWellIndex;
+                        lookuplb3.Range(range).AddToNamed(String.Concat("named_field", dataBusiness));
+                        fieldNamedRangeList.AddRange(dataBusiness);
+                    }
+                    foreach (string data in dataBusiness)
+                    {
+                        lookuplb3.Cell(b, 3).Value = data;
+                        b++;
+                    }
+
+                    int c = 2;
+                    var dataPersonal = GetPersonalArea();
+                    if(dataPersonal.Count() != 0)
+                    {
+                        string range = $"E{firstWellIndex}:E{lastWellIndex - 1}"; 
+                        firstWellIndex = lastWellIndex;
+                        lookuplb3.Range(range).AddToNamed(String.Concat("named_", dataPersonal));
+                        fieldNamedRangeList.AddRange(dataPersonal);
+
+                    }
+                    foreach (string data in dataBusiness)
+                    {
+                        lookuplb3.Cell(c, 5).Value = data;
+                        c++;
+                    }
+
                     //add lookup
-                    lb3.Column("A").SetDataValidation().List(lookuplb3.Range("A1:A" + a), true);
-                    //lb3.Column("B").SetDataValidation().List("=INDIRECT(\"named_field\"&SUBSTITUTE(A1,\" \",\"_\"))", true);
+                    lb3.Column("A").SetDataValidation().List(lookuplb3.Range("A2:A" + a), true);
+                    //lb3.Column("B").SetDataValidation().List(lookuplb3.Range("C2:C" + b), true);
+                    //lb3.Column("C").SetDataValidation().List(lookuplb3.Range("E2:E" + c), true);
+
+                    lb3.Column("B").SetDataValidation().List("=INDIRECT(\"named_field\"&SUBSTITUTE(A1,\" \",\"_\"))", true);
+                    lb3.Column("C").SetDataValidation().List("=INDIRECT(\"named_\"&SUBSTITUTE(SUBSTITUTE(SUBSTITUTE(B1,\"&\",\"dan\"),\"-\",\"min\"),\" \",\"_\"))", true);
                     lb3.Columns().AdjustToContents();
 
-                    wb.SaveAs(path);
-                    FileStream stream = new FileStream(path, FileMode.Open, FileAccess.Read);
-                    return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                    //wb.SaveAs(path);
+                    //FileStream stream = new FileStream(path, FileMode.Open, FileAccess.Read);
+                    var stream = new MemoryStream();
+                    wb.SaveAs(stream);
+                    var content = stream.ToArray();
+
+                    return File(content, fileFormat, fileName);
+                    //return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
                 }
             }
             catch (Exception e)
@@ -719,6 +768,46 @@ namespace WebApp.Controllers
                     while (data.Read())
                     {
                         result.Add(data["area"].ToString());
+                    }
+                    con.Close();
+                }
+            }
+            return result;
+        }
+        private List<string> GetBusinnessArea()
+        {
+            var result = new List<string>();
+            var query = $@"select ba.nama as business_area from ref_ehs_area as area
+                        inner join ref_business_area as ba on ba.ehs_area_id = area.id";
+            using (var con = new SqlConnection(ConnStr))
+            {
+                using (var cmd = new SqlCommand(query, con))
+                {
+                    con.Open();
+                    var data = cmd.ExecuteReader();
+                    while (data.Read())
+                    {
+                        result.Add(data["business_area"].ToString());
+                    }
+                    con.Close();
+                }
+            }
+            return result;
+        }
+        private List<string> GetPersonalArea()
+        {
+            var result = new List<string>();
+            var query = $@"select pa.nama as personal_area from ref_business_area as ba 
+                        inner join ref_personal_area as pa on pa.ba_id = ba.id";
+            using (var con = new SqlConnection(ConnStr))
+            {
+                using (var cmd = new SqlCommand(query, con))
+                {
+                    con.Open();
+                    var data = cmd.ExecuteReader();
+                    while (data.Read())
+                    {
+                        result.Add(data["personal_area"].ToString());
                     }
                     con.Close();
                 }
