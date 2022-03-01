@@ -469,11 +469,14 @@
 
         $("#btnDownloadTemplate_ta_nonlb3").click(function () {
 				$.ajax({
-					url: '@ViewBag.BaseUrl/NonLb3/TemplateNonLb3', type: 'POST'
+                    data: {}, url: '@ViewBag.BaseUrl/NonLb3/TemplateNonLb3', type: 'GET'
 					, success: function () {
 						alert('test');
 						console.log('test')
-					}
+					},
+					error: function (error) {
+						alert(error);
+                    }
 				});
 			});
     </script>
