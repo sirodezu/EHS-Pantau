@@ -30,7 +30,7 @@ namespace WebApp
             int SessionTimeOut = int.Parse(ConfigHelper.GetValue("SessionTimeOut"));
             services.AddSession(options =>
             {
-                options.CookieName = Settings.GetAppSetting("AppCode");
+                options.Cookie.Name = Settings.GetAppSetting("AppCode");
                 options.IdleTimeout = TimeSpan.FromMinutes(SessionTimeOut);
                 options.Cookie.HttpOnly = true;
                 options.Cookie.SameSite = SameSiteMode.Strict;

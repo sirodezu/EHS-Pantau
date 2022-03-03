@@ -13,7 +13,7 @@ services:
 
     db:
       container_name: ehs-db
-      image: "microsoft/mssql-server-linux"
+      image: "mcr.microsoft.com/mssql/server"
       expose:
         - "1433"
       environment:
