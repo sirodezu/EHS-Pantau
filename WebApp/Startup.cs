@@ -36,6 +36,7 @@ namespace WebApp
                 options.Cookie.SameSite = SameSiteMode.Strict;
                 options.Cookie.IsEssential = true;
             });
+            services.AddMvc(option => option.EnableEndpointRouting = false);
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
             services.AddHttpContextAccessor();
             services.ConfigureApplicationCookie(options =>
