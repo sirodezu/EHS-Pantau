@@ -4,7 +4,7 @@ services:
       #image: webmvc:v1
       container_name: ehs-pantau
       build: 
-        dockerfile: dummy/Dockerfile
+        dockerfile: Dockerfile
         context: .
       ports:
         - "80:80"
