@@ -7,5 +7,6 @@ by editing this MSBuild file. In order to learn more about this please visit htt
   <PropertyGroup>
     <TimeStampOfAssociatedLegacyPublishXmlFile />
     <_PublishTargetUrl>D:\Projects\2019\UT\EHS\Deploy</_PublishTargetUrl>
+    <History>False|2022-03-03T21:34:13.5202814Z;</History>
   </PropertyGroup>
 </Project>
