@@ -6,7 +6,7 @@
   "compilationOptions": {
     "defines": [
       "TRACE",
-      "DEBUG",
+      "RELEASE",
       "NETCOREAPP",
       "NETCOREAPP3_1",
       "NETCOREAPP1_0_OR_GREATER",
@@ -21,7 +21,7 @@
     "platform": "",
     "allowUnsafe": false,
     "warningsAsErrors": false,
-    "optimize": false,
+    "optimize": true,
     "keyFile": "",
     "emitEntryPoint": true,
     "xmlDoc": false,
@@ -632,22 +632,8 @@
           "System.Text.Encodings.Web": "4.5.0"
         }
       },
-      "Microsoft.Bcl.AsyncInterfaces/1.1.1": {
-        "runtime": {
-          "lib/netstandard2.1/Microsoft.Bcl.AsyncInterfaces.dll": {
-            "assemblyVersion": "1.0.0.0",
-            "fileVersion": "4.700.20.21406"
-          }
-        }
-      },
-      "Microsoft.Bcl.HashCode/1.1.1": {
-        "runtime": {
-          "lib/netcoreapp2.1/Microsoft.Bcl.HashCode.dll": {
-            "assemblyVersion": "1.0.0.0",
-            "fileVersion": "4.700.20.56604"
-          }
-        }
-      },
+      "Microsoft.Bcl.AsyncInterfaces/1.1.1": {},
+      "Microsoft.Bcl.HashCode/1.1.1": {},
       "Microsoft.CodeAnalysis.Analyzers/2.9.4": {},
       "Microsoft.CodeAnalysis.Common/3.3.1": {
         "dependencies": {
@@ -907,44 +893,19 @@
           "System.Collections.Immutable": "1.7.1",
           "System.ComponentModel.Annotations": "4.7.0",
           "System.Diagnostics.DiagnosticSource": "4.7.1"
-        },
-        "runtime": {
-          "lib/netstandard2.0/Microsoft.EntityFrameworkCore.dll": {
-            "assemblyVersion": "3.1.22.0",
-            "fileVersion": "3.100.2221.57106"
-          }
         }
       },
-      "Microsoft.EntityFrameworkCore.Abstractions/3.1.22": {
-        "runtime": {
-          "lib/netstandard2.0/Microsoft.EntityFrameworkCore.Abstractions.dll": {
-            "assemblyVersion": "3.1.22.0",
-            "fileVersion": "3.100.2221.57106"
-          }
-        }
-      },
+      "Microsoft.EntityFrameworkCore.Abstractions/3.1.22": {},
       "Microsoft.EntityFrameworkCore.Analyzers/3.1.22": {},
       "Microsoft.EntityFrameworkCore.Design/3.1.22": {
         "dependencies": {
           "Microsoft.CSharp": "4.7.0",
           "Microsoft.EntityFrameworkCore.Relational": "3.1.22"
-        },
-        "runtime": {
-          "lib/netstandard2.0/Microsoft.EntityFrameworkCore.Design.dll": {
-            "assemblyVersion": "3.1.22.0",
-            "fileVersion": "3.100.2221.57106"
-          }
         }
       },
       "Microsoft.EntityFrameworkCore.Relational/3.1.22": {
         "dependencies": {
           "Microsoft.EntityFrameworkCore": "3.1.22"
-        },
-        "runtime": {
-          "lib/netstandard2.0/Microsoft.EntityFrameworkCore.Relational.dll": {
-            "assemblyVersion": "3.1.22.0",
-            "fileVersion": "3.100.2221.57106"
-          }
         }
       },
       "Microsoft.EntityFrameworkCore.Tools/3.1.22": {
@@ -972,23 +933,11 @@
           "Microsoft.Extensions.DependencyInjection.Abstractions": "3.1.22",
           "Microsoft.Extensions.Logging.Abstractions": "3.1.22",
           "Microsoft.Extensions.Options": "3.1.22"
-        },
-        "runtime": {
-          "lib/netcoreapp3.1/Microsoft.Extensions.Caching.Memory.dll": {
-            "assemblyVersion": "3.1.22.0",
-            "fileVersion": "3.100.2221.57103"
-          }
         }
       },
       "Microsoft.Extensions.Configuration/3.1.22": {
         "dependencies": {
           "Microsoft.Extensions.Configuration.Abstractions": "3.1.22"
-        },
-        "runtime": {
-          "lib/netcoreapp3.1/Microsoft.Extensions.Configuration.dll": {
-            "assemblyVersion": "3.1.22.0",
-            "fileVersion": "3.100.2221.57103"
-          }
         }
       },
       "Microsoft.Extensions.Configuration.Abstractions/3.1.22": {
@@ -1008,12 +957,6 @@
       "Microsoft.Extensions.Configuration.Binder/3.1.22": {
         "dependencies": {
           "Microsoft.Extensions.Configuration": "3.1.22"
-        },
-        "runtime": {
-          "lib/netcoreapp3.1/Microsoft.Extensions.Configuration.Binder.dll": {
-            "assemblyVersion": "3.1.22.0",
-            "fileVersion": "3.100.2221.57103"
-          }
         }
       },
       "Microsoft.Extensions.DependencyInjection/3.1.22": {
@@ -1060,12 +1003,6 @@
           "Microsoft.Extensions.DependencyInjection": "3.1.22",
           "Microsoft.Extensions.Logging.Abstractions": "3.1.22",
           "Microsoft.Extensions.Options": "3.1.22"
-        },
-        "runtime": {
-          "lib/netcoreapp3.1/Microsoft.Extensions.Logging.dll": {
-            "assemblyVersion": "3.1.22.0",
-            "fileVersion": "3.100.2221.57103"
-          }
         }
       },
       "Microsoft.Extensions.Logging.Abstractions/3.1.22": {
