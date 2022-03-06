@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using log4net.Config;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -14,6 +15,7 @@ namespace WebApp
     {
         public static void Main(string[] args)
         {
+            XmlConfigurator.Configure();
             CreateWebHostBuilder(args).Build().Run();
         }
 

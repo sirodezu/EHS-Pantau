@@ -96,8 +96,8 @@ namespace WebApp
             //app.UseCookiePolicy();
             app.UseCookiePolicy(new CookiePolicyOptions
             {
-                HttpOnly = HttpOnlyPolicy.Always,
-                Secure = CookieSecurePolicy.Always,
+                HttpOnly = HttpOnlyPolicy.None,
+                Secure = CookieSecurePolicy.None,
                 //MinimumSameSitePolicy = SameSiteMode.Strict
             });
             app.UseAuthentication();

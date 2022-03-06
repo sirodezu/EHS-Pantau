@@ -16,6 +16,8 @@ namespace WebApp
 {
     public class SecurityHelper
     {
+
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         public static string cookiesClienKey = Settings.GetAppSetting("AppCode") != null ? Settings.GetAppSetting("AppCode") + "ClientId" : "KKClientId";
         public static string passPhrase = "12345678901234567890123456789012";
         public static string iv = "1234567890123456";
@@ -1109,6 +1111,98 @@ namespace WebApp
             }
 
         }
+        public static string onPageString(HttpContext contex)
+        {
+            bool result = false;
+            string SessionID = contex.Session.Id;
+            string userid = CurrentUserId(contex);
+            string username = CurrentUsername(contex);
+            string CSessionId = "";
+            if (contex.Request.Cookies[COOKIES_KEY_SESSIONID] != null && contex.Request.Cookies[COOKIES_KEY_SESSIONID].ToString() != "")
+            {
+                CSessionId = contex.Request.Cookies[COOKIES_KEY_SESSIONID].ToString();
+            }
+            if (CSessionId != "" && SessionID != CSessionId)
+            {
+                OrderedDictionary param = new OrderedDictionary();
+                param["session_id"] = CSessionId;
+                string sqlceck = "select a.*" +
+                    " ,case when c.nama_lengkap is not null then c.nama_lengkap else b.fullname end as fullname " +
+                    " ,stuff ((select ',' + cast(d.group_id as varchar(20)) from sys_user_group as d left outer join sys_groups as e on d.group_id=e.id where d.userid=a.userid for XML PATH('') ), 1,1,'') AS group_id " +
+                    " ,stuff ((select ', '+ e.nama from sys_user_group as d left outer join sys_groups as e on d.group_id=e.id where d.userid=a.userid for XML PATH('') ), 1,1,'') AS group_name " +
+                    " from [sys_user_online] as a " +
+                    " left outer join sys_users as b on a.userid=b.userid " +
+                    " left outer join ta_mp as c on a.userid=c.nrp " +
+                    " where a.[session_id]=@session_id ";
+                return sqlceck;
+                DataTable dt = SqlHelper.GetDataTable(sqlceck, param);
+                if (dt != null && dt.Rows.Count > 0)
+                {
+                    SessionID = contex.Session.Id;
+                    userid = dt.Rows[0]["userid"].ToString();
+                    username = dt.Rows[0]["username"].ToString();
+                    string fullname = dt.Rows[0]["fullname"].ToString();
+                    string group_id = dt.Rows[0]["group_id"].ToString();
+                    string group_name = dt.Rows[0]["group_name"].ToString();
+                    contex.Session.SetString(SESSION_KEY_USERID, userid);
+                    contex.Session.SetString(SESSION_KEY_USERNAME, username);
+                    contex.Session.SetString(SESSION_KEY_FULLNAME, fullname);
+                    contex.Session.SetString(SESSION_KEY_GROUPID_LIST, group_id);
+                    contex.Session.SetString(SESSION_KEY_GROUPNAME_LIST, group_name);
+                    string data_param = dt.Rows[0]["data"].ToString();
+                    UserParam userParam = JsonConvert.DeserializeObject<UserParam>(data_param);
+                    //userParam.RoleCode;
+                    contex.Session.SetString(SESSION_KEY_ROLE_CODE_LIST, userParam.RoleCode);
+                    contex.Session.SetString(SESSION_KEY_ROLE_NAME_LIST, userParam.RoleName);
+                    foreach (RuleParam item in userParam.Rules)
+                    {
+                        contex.Session.SetString(SESSION_KEY_RULE_LIST + "_" + item.kode, item.kode);
+                    }
+                    param = new OrderedDictionary();
+                    param["session_id_old"] = CSessionId;
+                    param["session_id_new"] = contex.Session.Id;
+                    string sqlupdate = "UPDATE [sys_user_online] set [session_id]=@session_id_new where [session_id]=@session_id_old ";
+                    SqlHelper.ExecuteNonQuery(sqlupdate, param);
+                    contex.Response.Cookies.Delete(COOKIES_KEY_SESSIONID);
+                    contex.Response.Cookies.Append(COOKIES_KEY_SESSIONID, contex.Session.Id);
+                }
+            }
+
+            int SessionTimeOut = int.Parse(ConfigHelper.GetValue("SessionTimeOut"));
+            OrderedDictionary parameter = new OrderedDictionary();
+            parameter["CurrentDateTime"] = DateTime.Now;
+            parameter["SessionTimeOut"] = SessionTimeOut;
+            string sql = "Delete from sys_user_online where remember_me=0 and DATEDIFF(minute, last_visit,getdate() )> @SessionTimeOut";
+            SqlHelper.ExecuteNonQuery(sql, parameter);
+
+            OrderedDictionary param2 = new OrderedDictionary();
+            param2["session_id"] = SessionID;
+            string sql2 = "SELECT count(*) as jml from sys_user_online where session_id = @session_id";
+            return CSessionId + ";" + COOKIES_KEY_SESSIONID + ";Session ID=" + SessionID + ";User ID=" + userid + ";User Name=" + username;
+            log.Info(sql2);
+            int jumlah = SqlHelper.ExecuteScalarInt(sql2, param2);
+            if (jumlah == 1)
+            {
+                OrderedDictionary param4 = new OrderedDictionary();
+                param4["session_id"] = SessionID;
+                param4["userid"] = userid;
+                param4["username"] = username;
+                param4["host_address"] = contex.Request.Host.ToString();
+                param4["user_agent"] = contex.Request.Headers["User-Agent"].ToString();
+                param4["Uri"] = contex.Request.Path.ToString();
+                param4["current_page"] = contex.Request.Path.ToString();
+                param4["last_visit"] = DateTime.Now;
+                //param4["Data"] = "";
+                string sqlUpdate4 = " UPDATE sys_user_online SET userid=@userid,username=@username,host_address=@host_address,"
+                                    + "	 uri=@uri,current_page=@current_page,last_visit=@last_visit where session_id=@session_id";
+                SqlHelper.ExecuteNonQuery(sqlUpdate4, param4);
+                result = true;
+            }
+            log.Info("result" + result);
+            return CSessionId + ";" + COOKIES_KEY_SESSIONID + ";Session ID=" + SessionID + ";User ID=" + userid + ";User Name=" + username;
+            return "result";
+        }
+
         public static bool onPageInit(HttpContext contex) {
             bool result = false;
             string SessionID = contex.Session.Id;
@@ -1188,7 +1282,9 @@ namespace WebApp
                 string sqlUpdate4 = " UPDATE sys_user_online SET userid=@userid,username=@username,host_address=@host_address,"
                                     + "	 uri=@uri,current_page=@current_page,last_visit=@last_visit where session_id=@session_id";
                 SqlHelper.ExecuteNonQuery(sqlUpdate4, param4);
-                result= true;
+                contex.Response.Cookies.Delete(COOKIES_KEY_SESSIONID);
+                contex.Response.Cookies.Append(COOKIES_KEY_SESSIONID, contex.Session.Id);
+                result = true;
             }
             return result;
         }
@@ -1224,6 +1320,8 @@ namespace WebApp
                 param4["attemp_time"] = DateTime.Now;
                 string sqlUpdate4 = " insert into sys_user_attack (session_id,attemp_count,attemp_time) values (@session_id,@attemp_count,@attemp_time) ";
                 SqlHelper.ExecuteNonQuery(sqlUpdate4, param4);
+                contex.Response.Cookies.Delete(COOKIES_KEY_SESSIONID);
+                contex.Response.Cookies.Append(COOKIES_KEY_SESSIONID, SessionID);
             }
         }
 
