@@ -30,12 +30,13 @@ namespace WebApp
             int SessionTimeOut = int.Parse(ConfigHelper.GetValue("SessionTimeOut"));
             services.AddSession(options =>
             {
-                options.CookieName = Settings.GetAppSetting("AppCode");
+                options.Cookie.Name = Settings.GetAppSetting("AppCode");
                 options.IdleTimeout = TimeSpan.FromMinutes(SessionTimeOut);
                 options.Cookie.HttpOnly = true;
                 options.Cookie.SameSite = SameSiteMode.Strict;
                 options.Cookie.IsEssential = true;
             });
+            services.AddMvc(option => option.EnableEndpointRouting = false);
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
             services.AddHttpContextAccessor();
             services.ConfigureApplicationCookie(options =>
@@ -95,8 +96,8 @@ namespace WebApp
             //app.UseCookiePolicy();
             app.UseCookiePolicy(new CookiePolicyOptions
             {
-                HttpOnly = HttpOnlyPolicy.Always,
-                Secure = CookieSecurePolicy.Always,
+                HttpOnly = HttpOnlyPolicy.None,
+                Secure = CookieSecurePolicy.None,
                 //MinimumSameSitePolicy = SameSiteMode.Strict
             });
             app.UseAuthentication();

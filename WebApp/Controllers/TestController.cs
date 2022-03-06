@@ -30,6 +30,12 @@ namespace WebApp.Controllers
             return Json(obj);
         }
         [HttpGet]
+        public string GetConnstring()
+        {
+            string ConnString = Settings.GetConnectionString("MainConnection").ToString();
+            return ConnString;
+        }
+        [HttpGet]
         public JsonResult GetDataRelation(string obj)
         {
             SAPHelper.GetDataRelation(obj);

@@ -11,7 +11,8 @@ using Microsoft.AspNetCore.Hosting;
 using WebApp.Models;
 using Newtonsoft.Json;
 using Microsoft.Security.Application;
-
+using WebApp.Repository;
+using ClosedXML.Excel;
 
 namespace WebApp.Controllers
 {
@@ -550,6 +551,125 @@ namespace WebApp.Controllers
             }
             return Content("");
         }
+        [HttpPost]
+        public async Task<IActionResult> ImportMeasurement()
+        {
+            IFormFile file = Request.Form.Files[0];
+            var pathBuilt = Path.Combine(Directory.GetCurrentDirectory(), "Import");
+            var dir = Directory.GetCurrentDirectory();
+            var doc = "\\Import\\";
+            var path = dir + doc;
+            var fileName = DateTime.Now.ToString("yyyyMMddHHmmss") + file.FileName;
+            var fullPath = path + fileName;
 
+            using (var fileStream = new FileStream(Path.Combine(path + fileName), FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite))
+            {
+                file.CopyTo(fileStream);
+            }
+            List<ImportMeasurementModel> data = await GetListData(fullPath);
+            return Created(string.Empty, null);
+        }
+
+        private async Task<List<ImportMeasurementModel>> GetListData(string fileName)
+        {
+            List<ImportMeasurementModel> data = new List<ImportMeasurementModel>();
+            try
+            {
+                using (XLWorkbook workBook = new XLWorkbook(fileName))
+                {
+                    IXLWorksheet row = workBook.Worksheet("Sheet1");
+                    IXLRange range = row.RangeUsed();
+                    //int a = range.RowCount();
+                    for (int i = 1; i < range.RowCount() + 1; i++)
+                    {
+                        if(i == 1)
+                        {
+                            if (row.Cell(i, 1).Value.ToString().Trim().ToLower() != "area")
+                            {
+                                throw new Exception("Template Not Match at Cell A1");
+                            }
+                            if (row.Cell(i, 2).Value.ToString().Trim().ToLower() != "business area")
+                            {
+                                throw new Exception("Template Not Match at Cell B1");
+                            }
+                            if (row.Cell(i, 3).Value.ToString().Trim().ToLower() != "personal area")
+                            {
+                                throw new Exception("Template Not Match at Cell C1");
+                            }
+                            if (row.Cell(i, 4).Value.ToString().Trim().ToLower() != "personal sub area")
+                            {
+                                throw new Exception("Template Not Match at Cell D1");
+                            }
+                            if (row.Cell(i, 5).Value.ToString().Trim().ToLower() != "jenis pemeriksaan / pengujian")
+                            {
+                                throw new Exception("Template Not Match at Cell E1");
+                            }
+                            if (row.Cell(i, 6).Value.ToString().Trim().ToLower() != "keterangan (series/kode) ")
+                            {
+                                throw new Exception("Template Not Match at Cell F1");
+                            }
+                            if (row.Cell(i, 7).Value.ToString().Trim().ToLower() != "jumlah titik penaatan")
+                            {
+                                throw new Exception("Template Not Match at Cell G1");
+                            }
+                            if (row.Cell(i, 8).Value.ToString().Trim().ToLower() != "periode pemeriksaan / pengujian")
+                            {
+                                throw new Exception("Template Not Match at Cell H1");
+                            }
+                            if (row.Cell(i, 9).Value.ToString().Trim().ToLower() != "status penataan")
+                            {
+                                throw new Exception("Template Not Match at Cell I1");
+                            }
+                            if (row.Cell(i, 10).Value.ToString().Trim().ToLower() != "hasil pengukuran baku mutu")
+                            {
+                                throw new Exception("Template Not Match at Cell J1");
+                            }
+                            if (row.Cell(i, 11).Value.ToString().Trim().ToLower() != "tanggal pengujian")
+                            {
+                                throw new Exception("Template Not Match at Cell K1");
+                            }
+                            if (row.Cell(i, 12).Value.ToString().Trim().ToLower() != "hasil pengujian")
+                            {
+                                throw new Exception("Template Not Match at Cell L1");
+                            }
+                            if (row.Cell(i, 13).Value.ToString().Trim().ToLower() != "peraturan/baku mutu yang diacu")
+                            {
+                                throw new Exception("Template Not Match at Cell M1");
+                            }
+                            if (row.Cell(i, 14).Value.ToString().Trim().ToLower() != "keterangan uji")
+                            {
+                                throw new Exception("Template Not Match at Cell N1");
+                            }
+                        }
+                        else
+                        {
+                            ImportMeasurementModel sda = new ImportMeasurementModel();
+                            sda.ehs_area_id = row.Cell(i, 1).Value.ToString();
+                            sda.ba_id = row.Cell(i, 2).Value.ToString();
+                            sda.pa_id = row.Cell(i, 3).Value.ToString();
+                            sda.psa_id = row.Cell(i, 4).Value.ToString();
+                            sda.jenis_pemeriksaan_pengujian_id = row.Cell(i, 5).Value.ToString();
+                            sda.keterangan_series_kode = row.Cell(i, 6).Value.ToString();
+                            sda.jumlah_titik_penaatan = int.Parse(row.Cell(i, 7).Value.ToString());
+                            sda.periode_pemeriksaan_pengujian_id = row.Cell(i, 8).Value.ToString();
+                            sda.status_penaatan_id = row.Cell(i, 9).Value.ToString();
+                            sda.hasil_pengukuran = double.Parse(row.Cell(i, 10).Value.ToString());
+                            sda.tanggal_pengujian = DateTime.Parse(row.Cell(i, 11).Value.ToString());
+                            sda.file_path_hasil_uji = row.Cell(i, 12).Value.ToString();
+                            sda.file_path_baku_mutu = row.Cell(i, 13).Value.ToString();
+                            sda.keterangan_uji = row.Cell(i, 14).Value.ToString();
+                            ImportRepository measurement = new ImportRepository();
+                            measurement.ImportMeasurement(sda);
+                        }
+                    }
+                    return data;
+                }
+            }
+            catch (Exception e)
+            {
+
+                throw;
+            }
+        }
     }
 }

@@ -73,10 +73,12 @@
 							<img id="btnShowHideColumn_ta_sda_listrik" title="@ResxHelper.GetValue("Message","ShowHideColumn")" style="cursor:pointer" src="~/img/show_hide_column.png" width="20">
 							<a id="btnShowHideFilter_ta_sda_listrik" data-toggle="collapse" href="#collapse_filter_ta_sda_listrik" style="display:none">@ResxHelper.GetValue("Message", "ShowFilter", "Tampilkan Filter")</a>
 						</td>
-						<td style="float:right">
-							<img id="btnExportExcel_ta_sda_listrik" title="@ResxHelper.GetValue("Message","ExportToExcel")" style="cursor:pointer" src="~/img/excel.png" width="20" />&nbsp;
-							<a id="btnAdd_ta_sda_listrik" onclick="AddData_ta_sda_listrik()" class="k-button" title="@ResxHelper.GetValue("Message","Add")">@ResxHelper.GetValue("Message", "Add", "Tambah")</a>
-						</td>
+                        <td style="float:right">
+                            <img id="btnExportExcel_ta_sda_listrik" title="@ResxHelper.GetValue("Message","ExportToExcel")" style="cursor:pointer" src="~/img/excel.png" width="20" />&nbsp;
+                            <a id="btnAdd_ta_sda_listrik" onclick="AddData_ta_sda_listrik()" class="k-button" title="@ResxHelper.GetValue("Message","Add")">@ResxHelper.GetValue("Message", "Add", "Tambah")</a>
+                            <a id="btnImport_ta_sda_listrik" class="k-button" title="@ResxHelper.GetValue("Message","Import")">@ResxHelper.GetValue("Message", "Import", "Import")</a>
+                            <input id="formImport_ta_sda_listrik" type="file" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" hidden />
+                        </td>
 					<tr>
 				</table>
 			</div>
@@ -140,7 +142,7 @@
 			columns_data[j] = {command: col_command, width: columnActionWidth_ta_sda_listrik, attributes: " style=\"vertical-align:top;\""};
 		}
 		//==============================
-        //=== filter ehs_area_id 
+        //=== filter ehs_area_id
         var ehs_area_id_param = { item: { value: 'id', text: 'kode,nama', distinct: '0' } ,parent:[{field:"obj_data",value:"Environment"}], order:[]};
         var ehs_area_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/EHSArea/LookupDataEA", dataType: "json", data: ehs_area_id_param, type: "POST" } } });
         var ehs_area_id = $("#ehs_area_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", change: onChange_ehs_area_id, dataSource: ehs_area_id_ds }).data("kendoComboBox");
@@ -152,9 +154,9 @@
                                                     reload_psa_id();
             onFilterHeader_ta_sda_listrik();
         }
-        
 
-        //=== filter ba_id 
+
+        //=== filter ba_id
         var ba_id_param = { item: { value: 'id', text: 'kode,nama', distinct: '0' } ,parent:[{ field: 'ehs_area_id',opr:'=', value: '@filterColumn.ehs_area_id' },{field:"obj_data",value:"Environment"}], order:[]};
         var ba_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/BusinessArea/LookupDataBA", dataType: "json", data: ba_id_param, type: "POST" } } });
         var ba_id = $("#ba_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", change: onChange_ba_id, dataSource: ba_id_ds }).data("kendoComboBox");
@@ -165,7 +167,7 @@
                                                     reload_psa_id();
             onFilterHeader_ta_sda_listrik();
         }
-        
+
                                                 function reload_ba_id(){
                                                     $("#ba_id").data("kendoComboBox").value('');
                                                     var ehs_area_id = $("#ehs_area_id").data("kendoComboBox").value();
@@ -174,7 +176,7 @@
                                                 }
 
 
-        //=== filter pa_id 
+        //=== filter pa_id
         var pa_id_param = { item: { value: 'id', text: 'kode,nama', distinct: '0' } ,parent:[{ field: 'ehs_area_id',opr:'=', value: '@filterColumn.ehs_area_id' }, { field: 'ba_id',opr:'=', value: '@filterColumn.ba_id' },{field:"obj_data",value:"Environment"}], order:[]};
         var pa_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/PersonalArea/LookupDataPA", dataType: "json", data: pa_id_param, type: "POST" } } });
         var pa_id = $("#pa_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", change: onChange_pa_id, dataSource: pa_id_ds }).data("kendoComboBox");
@@ -184,7 +186,7 @@
                                                     reload_psa_id();
             onFilterHeader_ta_sda_listrik();
         }
-        
+
                                                 function reload_pa_id(){
                                                     $("#pa_id").data("kendoComboBox").value('');
                                                     var ehs_area_id = $("#ehs_area_id").data("kendoComboBox").value();
@@ -194,7 +196,7 @@
                                                 }
 
 
-        //=== filter psa_id 
+        //=== filter psa_id
         var psa_id_param = { item: { value: 'id', text: 'kode,nama', distinct: '0' } ,parent:[{ field: 'ehs_area_id',opr:'=', value: '@filterColumn.ehs_area_id' }, { field: 'ba_id',opr:'=', value: '@filterColumn.ba_id' }, { field: 'pa_id',opr:'=', value: '@filterColumn.pa_id' },{field:"obj_data",value:"Environment"}], order:[]};
         var psa_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/PersonalSubArea/LookupDataPSA", dataType: "json", data: psa_id_param, type: "POST" } } });
         var psa_id = $("#psa_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", change: onChange_psa_id, dataSource: psa_id_ds }).data("kendoComboBox");
@@ -203,7 +205,7 @@
             if ($("#psa_id").data("kendoComboBox").value() != '' && $("#psa_id").data("kendoComboBox")._oldIndex == -1) { $("#psa_id").data("kendoComboBox").value(''); }
             onFilterHeader_ta_sda_listrik();
         }
-        
+
                                                 function reload_psa_id(){
                                                     $("#psa_id").data("kendoComboBox").value('');
                                                     var ehs_area_id = $("#ehs_area_id").data("kendoComboBox").value();
@@ -215,7 +217,7 @@
 
 
 
-        //=== filter bulan 
+        //=== filter bulan
         var bulan_param = { item: { value: 'id', text: 'nama', distinct: '0' } ,parent:[{ field: 'cat_id',opr:'=', value: '150' }], order:[{ field: 'ordinal', dir: 'asc' }]};
         var bulan_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: bulan_param, type: "POST" } } });
         var bulan = $("#bulan").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", change: onChange_bulan, dataSource: bulan_ds }).data("kendoComboBox");
@@ -224,9 +226,9 @@
             if ($("#bulan").data("kendoComboBox").value() != '' && $("#bulan").data("kendoComboBox")._oldIndex == -1) { $("#bulan").data("kendoComboBox").value(''); }
             onFilterHeader_ta_sda_listrik();
         }
-        
 
-        //=== filter tahun 
+
+        //=== filter tahun
         var tahun_param = { item: { value: 'id', text: 'nama', distinct: '0' } ,parent:[{ field: 'cat_id',opr:'=', value: '151' }], order:[{ field: 'ordinal', dir: 'asc' }]};
         var tahun_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: tahun_param, type: "POST" } } });
         var tahun = $("#tahun").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", change: onChange_tahun, dataSource: tahun_ds }).data("kendoComboBox");
@@ -235,9 +237,9 @@
             if ($("#tahun").data("kendoComboBox").value() != '' && $("#tahun").data("kendoComboBox")._oldIndex == -1) { $("#tahun").data("kendoComboBox").value(''); }
             onFilterHeader_ta_sda_listrik();
         }
-        
 
-        //=== filter sumber_listrik_id 
+
+        //=== filter sumber_listrik_id
         var sumber_listrik_id_param = { item: { value: 'id', text: 'nama', distinct: '0' } ,parent:[{ field: 'cat_id',opr:'=', value: '125' }], order:[]};
         var sumber_listrik_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/Ref/LiteralData/LookupData", dataType: "json", data: sumber_listrik_id_param, type: "POST" } } });
         var sumber_listrik_id = $("#sumber_listrik_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", change: onChange_sumber_listrik_id, dataSource: sumber_listrik_id_ds }).data("kendoComboBox");
@@ -246,9 +248,9 @@
             if ($("#sumber_listrik_id").data("kendoComboBox").value() != '' && $("#sumber_listrik_id").data("kendoComboBox")._oldIndex == -1) { $("#sumber_listrik_id").data("kendoComboBox").value(''); }
             onFilterHeader_ta_sda_listrik();
         }
-        
 
-        //=== filter usaha_pengurangan_listrik_id 
+
+        //=== filter usaha_pengurangan_listrik_id
         var usaha_pengurangan_listrik_id_param = { item: { value: 'usaha_pengurangan_listrik_id', text: 'usaha_pengurangan_listrik_id', distinct: '1' } ,parent:[], order:[{ field: 'usaha_pengurangan_listrik_id', dir: 'asc' }]};
         var usaha_pengurangan_listrik_id_ds = new kendo.data.DataSource({ transport: { read: { url: "@ViewBag.BaseUrl/SdaListrik/LookupData", dataType: "json", data: usaha_pengurangan_listrik_id_param, type: "POST" } } });
         var usaha_pengurangan_listrik_id = $("#usaha_pengurangan_listrik_id").kendoComboBox({ filter: "contains", placeholder: "", dataTextField: "text", dataValueField: "value", change: onChange_usaha_pengurangan_listrik_id, dataSource: usaha_pengurangan_listrik_id_ds }).data("kendoComboBox");
@@ -257,7 +259,7 @@
             if ($("#usaha_pengurangan_listrik_id").data("kendoComboBox").value() != '' && $("#usaha_pengurangan_listrik_id").data("kendoComboBox")._oldIndex == -1) { $("#usaha_pengurangan_listrik_id").data("kendoComboBox").value(''); }
             onFilterHeader_ta_sda_listrik();
         }
-        
+
 
 		//==============================
 		$("#collapse_filter_ta_sda_listrik").on('shown.bs.collapse', function () {
@@ -314,7 +316,7 @@
 		function QuickSearch_ta_sda_listrik() {
 			$filter = new Array();
 			$x = $("#txtSearch_ta_sda_listrik").val();
-			if ($x) {jQuery.each(j_data_ta_sda_listrik, function (i, val) {if (val.display && val.qsearch && val.type =='string') {$filter.push({ name: val.name, opr: "contains", value: $x });}});} 
+			if ($x) {jQuery.each(j_data_ta_sda_listrik, function (i, val) {if (val.display && val.qsearch && val.type =='string') {$filter.push({ name: val.name, opr: "contains", value: $x });}});}
 			if ($filter.length > 0) {list_ta_sda_listrik.data("kendoGrid").dataSource.filter({ logic: "or", filters: $filter });}else {list_ta_sda_listrik.data("kendoGrid").dataSource.filter([]);}
 		}
 		function Reload_list_ta_sda_listrik() { list_ta_sda_listrik.data('kendoGrid').dataSource.read(); list_ta_sda_listrik.data('kendoGrid').refresh(); }
@@ -401,5 +403,50 @@
 			if (param_ta_sda_listrik.export_exl != 1) { $("#btnExportExcel_ta_sda_listrik").hide(); }
 			$("#btnShowHideColumn_ta_sda_listrik").click(function () { var x = $("#btnShowHideColumn_ta_sda_listrik").offset().left; var y = $("#btnShowHideColumn_ta_sda_listrik").offset().top; if (!WinShowHideColumn_ta_sda_listrik) { var WinShowHideColumn_ta_sda_listrik = $("#WinShowHideColumn_ta_sda_listrik").kendoWindow({ width: "300px", position: { left: x, top: y }, title: "@ResxHelper.GetValue("Message","ShowHideColumn")", actions: ["Close"] }); } WinShowHideColumn_ta_sda_listrik.data("kendoWindow").open(); });
 		});
+
+        document.getElementById('btnImport_ta_sda_listrik').addEventListener('click', openDialog);
+        function openDialog() {
+            document.getElementById('formImport_ta_sda_listrik').click();
+		}
+        $(document).ready(function () {
+            $("#formImport_ta_sda_listrik").kendoUpload({
+                multiple: false,
+                async: {
+                    autoUpload: false,
+                    saveUrl: "@ViewBag.BaseUrl/SdaListrik/ImportSdaListrik",
+                    withCredentials: false
+                },
+                select: function (e) {
+                    var file = e.files[0];
+                    var upload = e.sender;
+                    // Biar muncul confirm dialog
+                    kendo.confirm("File name:" +
+                        "<br/>" +
+                        file.name +
+                        "<br/>" +
+                        "Are you sure that you want to import this file?")
+                        .then(function () {
+                            upload.upload();
+                        }, function () {
+                            upload.clearAllFiles();
+                        });
+                },
+                success: function (e) {
+                    console.log(e)
+                    var file = e.files[0];
+                    var upload = e.sender;
+                    if (e.files.length == 1) {
+                        notification.show({ message: kendo.toString(file.name + ' Imported Successfully!') }, "success");
+                        Reload_list_ta_sda_listrik();
+                        upload.clearAllFiles();
+                    } else {
+                        notification.show({ title: 'Import Failed!', message: kendo.toString(file.name + ' Import Failed!') }, "error");
+                        Reload_list_ta_sda_listrik();
+                        upload.clearAllFiles();
+                    }
+                }
+            });
+            $("div.k-widget.k-upload.k-header.k-upload-empty").css({ 'display': 'none' });
+        });
     </script>
 }

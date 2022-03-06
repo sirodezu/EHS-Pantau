@@ -28,7 +28,11 @@ namespace WebApp.Controllers
                     break;
                 }
             }
+            //string ConnString = Settings.GetConnectionString("MainConnection").ToString();
+            //return Ok(ConnString);
             //if (isMobile == true && MobileDevice == true)
+            //string query = SecurityHelper.onPageString(HttpContext);
+            //return Ok(query);
             if (isMobile == true)
             {
                 return RedirectToAction("Index", "Pwa");
@@ -45,6 +49,8 @@ namespace WebApp.Controllers
                 }
                 else
                 {
+                    //string query = SecurityHelper.onPageString(HttpContext);
+                    //return Ok(query);
                     return RedirectToAction("Login", "Account");
                 }
             }

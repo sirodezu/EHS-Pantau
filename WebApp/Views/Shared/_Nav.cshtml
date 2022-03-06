@@ -26,10 +26,10 @@
                             group.Route = "javascript:void(0);";
                         }
                         <i class="@group.Icon"></i>
-                        <span class="nav-link-text" data-i18n="@group.I18n">@group.Text</span>
+                        @*<span class="nav-link-text" data-i18n="@group.I18n">@group.Text</span>*@
                         @if (group.Span.HasValue())
                         {
-                            <span class="@group.Span.Class">@group.Span.Text</span>
+                            @*<span class="@group.Span.Class">@group.Span.Text</span>*@
                         }
                     </a>
                     <ul>
@@ -64,10 +64,10 @@
                                         item.Route = "javascript:void(0);";
                                     }
                                     <a href="@item.Route" title="@item.Title" data-filter-tags="@item.Tags">
-                                        <span class="nav-link-text" data-i18n="@item.I18n">@item.Text</span>
+                                        @*<span class="nav-link-text" data-i18n="@item.I18n">@item.Text</span>*@
                                         @if (item.Span.HasValue())
                                         {
-                                            <span class="@item.Span.Class">@item.Span.Text</span>
+                                            @*<span class="@item.Span.Class">@item.Span.Text</span>*@
                                         }
                                     </a>
                                 </text>
@@ -94,7 +94,7 @@
                                     item.Route = "javascript:void(0);";
                                 }
                                 <a href="@subItem.Route" title="@subItem.Title" data-filter-tags="@subItem.Tags">
-                                    <span class="nav-link-text" data-i18n="@subItem.I18n">@subItem.Text</span>
+                                    @*<span class="nav-link-text" data-i18n="@subItem.I18n">@subItem.Text</span>*@
                                 </a>
                             @:</li>
                         }
@@ -119,10 +119,10 @@
                         }
                         <a href="@group.Route" title="@group.Title" data-filter-tags="@group.Tags">
                             <i class="@group.Icon"></i>
-                            <span class="nav-link-text" data-i18n="@group.I18n">@group.Text</span>
+                            @*<span class="nav-link-text" data-i18n="@group.I18n">@group.Text</span>*@
                             @if (group.Span.HasValue())
                             {
-                                <span class="@group.Span.Class">@group.Span.Text</span>
+                                @*<span class="@group.Span.Class">@group.Span.Text</span>*@
                             }
                         </a>
                     </li>
@@ -133,7 +133,7 @@
                         @group.Title
                         @if (group.Span.HasValue())
                         {
-                            <span class="@group.Span.Class">@group.Span.Text</span>
+                            @*<span class="@group.Span.Class">@group.Span.Text</span>*@
                         }
                     </li>
                 }

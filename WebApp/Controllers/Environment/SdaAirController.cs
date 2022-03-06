@@ -11,13 +11,18 @@ using Microsoft.AspNetCore.Hosting;
 using WebApp.Models;
 using Newtonsoft.Json;
 using Microsoft.Security.Application;
-
+using WebApp.Repository;
+using ClosedXML.Excel;
+using Microsoft.Extensions.Configuration;
+using System.Configuration;
+using System.Data.SqlClient;
 
 namespace WebApp.Controllers
 {
     
     public class SdaAirController : Controller
     {
+        private string ConnStr = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetSection("ConnectionStrings")["MainConnection"];
         private string _rule_view = "EnvironmentView";
         private string _rule_add = "EnvironmentAdd";
         private string _rule_edit = "EnvironmentEdit";
@@ -551,6 +556,201 @@ namespace WebApp.Controllers
             }
             return Content("");
         }
+        [HttpPost]
+        public async Task<IActionResult> ImportSdaAir()
+        {
+            IFormFile file = Request.Form.Files[0];
+            var pathBuilt = Path.Combine(Directory.GetCurrentDirectory(), "Import");
+            var dir = Directory.GetCurrentDirectory();
+            var doc = "\\Import\\";
+            var path = dir + doc;
+            var fileName = DateTime.Now.ToString("yyyyMMddHHmmss") + file.FileName;
+            var fullPath = path + fileName;
 
+            using (var fileStream = new FileStream(Path.Combine(path + fileName), FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite))
+            {
+                file.CopyTo(fileStream);
+            }
+            List<ImportSdaAirModel> data = await GetData(fullPath);
+
+            return Created(string.Empty, null);
+        }
+
+        private async Task<List<ImportSdaAirModel>> GetData(string fileName)
+        {
+            List<ImportSdaAirModel> data = new List<ImportSdaAirModel>();
+            try
+            {
+                using (XLWorkbook workBook = new XLWorkbook(fileName))
+                {
+                    IXLWorksheet row = workBook.Worksheet("Sheet1");
+                    IXLRange range = row.RangeUsed();
+                    //int a = range.RowCount();
+                    for (int i = 1; i < range.RowCount() + 1; i++)
+                    {
+                        if(i == 1)
+                        {
+                            if (row.Cell(i, 1).Value.ToString().Trim().ToLower() != "area")
+                            {
+                                throw new Exception("Template Not Match at Cell A1");
+                            }
+                            if (row.Cell(i, 2).Value.ToString().Trim().ToLower() != "business area")
+                            {
+                                throw new Exception("Template Not Match at Cell B1");
+                            }
+                            if (row.Cell(i, 3).Value.ToString().Trim().ToLower() != "personal area")
+                            {
+                                throw new Exception("Template Not Match at Cell C1");
+                            }
+                            if (row.Cell(i, 4).Value.ToString().Trim().ToLower() != "personal sub area")
+                            {
+                                throw new Exception("Template Not Match at Cell D1");
+                            }
+                            if (row.Cell(i, 5).Value.ToString().Trim().ToLower() != "bulan")
+                            {
+                                throw new Exception("Template Not Match at Cell E1");
+                            }
+                            if (row.Cell(i, 6).Value.ToString().Trim().ToLower() != "tahun")
+                            {
+                                throw new Exception("Template Not Match at Cell F1");
+                            }
+                            if (row.Cell(i, 7).Value.ToString().Trim().ToLower() != "sumber air")
+                            {
+                                throw new Exception("Template Not Match at Cell G1");
+                            }
+                            if (row.Cell(i, 8).Value.ToString().Trim().ToLower() != "no rek air")
+                            {
+                                throw new Exception("Template Not Match at Cell H1");
+                            }
+                            if (row.Cell(i, 9).Value.ToString().Trim().ToLower() != "konsumsi air")
+                            {
+                                throw new Exception("Template Not Match at Cell I1");
+                            }
+                            if (row.Cell(i, 10).Value.ToString().Trim().ToLower() != "tagihan air")
+                            {
+                                throw new Exception("Template Not Match at Cell J1");
+                            }
+                            if (row.Cell(i, 11).Value.ToString().Trim().ToLower() != "usaha pengurangan air")
+                            {
+                                throw new Exception("Template Not Match at Cell K1");
+                            }
+                            if (row.Cell(i, 12).Value.ToString().Trim().ToLower() != "usaha pengurangan air desc")
+                            {
+                                throw new Exception("Template Not Match at Cell L1");
+                            }
+                            if (row.Cell(i, 13).Value.ToString().Trim().ToLower() != "usaha pengurangan air desc file path")
+                            {
+                                throw new Exception("Template Not Match at Cell M1");
+                            }
+                            if (row.Cell(i, 14).Value.ToString().Trim().ToLower() != "usaha pengurangan air jumlah")
+                            {
+                                throw new Exception("Template Not Match at Cell N1");
+                            }
+                        }
+                        else
+                        {
+                            ImportSdaAirModel sda = new ImportSdaAirModel();
+                            sda.ehs_area_id = row.Cell(i, 1).Value.ToString();
+                            sda.ba_id = row.Cell(i, 2).Value.ToString();
+                            sda.pa_id = row.Cell(i, 3).Value.ToString();
+                            sda.psa_id = row.Cell(i, 4).Value.ToString();
+                            sda.bulan = row.Cell(i, 5).Value.ToString();
+                            sda.tahun = int.Parse(row.Cell(i, 6).Value.ToString());
+                            sda.sumber_air_id = row.Cell(i, 7).Value.ToString();
+                            sda.no_rek_air = row.Cell(i, 8).Value.ToString();
+                            sda.konsumsi_air = double.Parse(row.Cell(i, 9).Value.ToString());
+                            sda.tagihan_air = row.Cell(i, 10).Value.ToString();
+                            sda.usaha_pengurangan_air_id = row.Cell(i, 11).Value.ToString();
+                            sda.usaha_pengurangan_air_desc = row.Cell(i, 12).Value.ToString();
+                            sda.usaha_pengurangan_air_desc_file_path = row.Cell(i, 13).Value.ToString();
+                            sda.usaha_pengurangan_air_jumlah = double.Parse(row.Cell(i, 14).Value.ToString());
+                            ImportRepository sdaAir = new ImportRepository();
+                            sdaAir.ImportSdaAir(sda);
+                        }
+                    }
+                    return data;
+                }
+            }
+            catch (Exception e)
+            {
+
+                throw;
+            }
+        }
+        [HttpGet]
+        public ActionResult TemplateNonLb3()
+        {
+            try
+            {
+                string fileName = "Lb3Template.xlsx";
+                string path = Path.Combine(ConfigurationManager.AppSettings["filePath"].Replace(@"\\", "/").ToString() + fileName);
+
+                using (var wb = new XLWorkbook())
+                {
+                    var sda = wb.Worksheets.Add("Sheet1");
+                    var currentRow = 1;
+                    sda.Cell(currentRow, 1).Value = "Area";
+                    sda.Cell(currentRow, 2).Value = "Business Area";
+                    sda.Cell(currentRow, 3).Value = "Personal Area";
+                    sda.Cell(currentRow, 4).Value = "Personal Sub Area";
+                    sda.Cell(currentRow, 5).Value = "Bulan";
+                    sda.Cell(currentRow, 6).Value = "Tahun";
+                    sda.Cell(currentRow, 7).Value = "Sumber Air";
+                    sda.Cell(currentRow, 8).Value = "No Rek Air";
+                    sda.Cell(currentRow, 9).Value = "Konsumsi Air";
+                    sda.Cell(currentRow, 10).Value = "Tagihan Air";
+                    sda.Cell(currentRow, 11).Value = "Usaha Pengurangan Air";
+                    sda.Cell(currentRow, 12).Value = "Usaha Pengurangan Air Desc";
+                    sda.Cell(currentRow, 13).Value = "Usaha Pengurangan Air Desc File Path";
+                    sda.Cell(currentRow, 14).Value = "Usaha Pengurangan Air Jumlah";
+
+                    sda.Columns().AdjustToContents();
+                    var lookup = wb.Worksheets.Add("lookup").Hide();
+                    var dataArea = GetArea();
+                    int a = 1;
+
+                    foreach (string data in dataArea)
+                    {
+                        lookup.Cell(a, 1).Value = data;
+                        a++;
+                    }
+
+                    //add lookup
+                    sda.Column("A").SetDataValidation().List(lookup.Range("A1:A" + a), true);
+                    //lb3.Column("B").SetDataValidation().List("=INDIRECT(\"named_field\"&SUBSTITUTE(A1,\" \",\"_\"))", true);
+                    sda.Columns().AdjustToContents();
+
+                    wb.SaveAs(path);
+                    FileStream stream = new FileStream(path, FileMode.Open, FileAccess.Read);
+                    return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+
+                }
+            }
+            catch (Exception e)
+            {
+
+                throw;
+            }
+        }
+
+        private List<string> GetArea()
+        {
+            var result = new List<string>();
+            var query = @"select distinct nama as area from ref_ehs_area";
+            using (var con = new SqlConnection(ConnStr))
+            {
+                using (var cmd = new SqlCommand(query, con))
+                {
+                    con.Open();
+                    var data = cmd.ExecuteReader();
+                    while (data.Read())
+                    {
+                        result.Add(data["area"].ToString());
+                    }
+                    con.Close();
+                }
+            }
+            return result;
+        }
     }
 }

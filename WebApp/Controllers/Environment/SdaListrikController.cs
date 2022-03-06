@@ -11,7 +11,8 @@ using Microsoft.AspNetCore.Hosting;
 using WebApp.Models;
 using Newtonsoft.Json;
 using Microsoft.Security.Application;
-
+using WebApp.Repository;
+using ClosedXML.Excel;
 
 namespace WebApp.Controllers
 {
@@ -549,6 +550,125 @@ namespace WebApp.Controllers
             }
             return Content("");
         }
+        [HttpPost]
+        public async Task<IActionResult> ImportSdaListrik()
+        {
+            IFormFile file = Request.Form.Files[0];
+            var pathBuilt = Path.Combine(Directory.GetCurrentDirectory(), "Import");
+            var dir = Directory.GetCurrentDirectory();
+            var doc = "\\Import\\";
+            var path = dir + doc;
+            var fileName = DateTime.Now.ToString("yyyyMMddHHmmss") + file.FileName;
+            var fullPath = path + fileName;
 
+            using (var fileStream = new FileStream(Path.Combine(path + fileName), FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite))
+            {
+                file.CopyTo(fileStream);
+            }
+            List<ImportSdaListrikModel> data = await GetData(fullPath);
+
+            return Created(string.Empty, null);
+        }
+        private async Task<List<ImportSdaListrikModel>> GetData(string fileName)
+        {
+            List<ImportSdaListrikModel> data = new List<ImportSdaListrikModel>();
+            try
+            {
+                using (XLWorkbook workBook = new XLWorkbook(fileName))
+                {
+                    IXLWorksheet row = workBook.Worksheet("Sheet1");
+                    IXLRange range = row.RangeUsed();
+                    //int a = range.RowCount();
+                    for (int i = 1; i < range.RowCount() + 1; i++)
+                    {
+                        if (i == 1)
+                        {
+                            if (row.Cell(i, 1).Value.ToString().Trim().ToLower() != "area")
+                            {
+                                throw new Exception("Template Not Match at Cell A1");
+                            }
+                            if (row.Cell(i, 2).Value.ToString().Trim().ToLower() != "business area")
+                            {
+                                throw new Exception("Template Not Match at Cell B1");
+                            }
+                            if (row.Cell(i, 3).Value.ToString().Trim().ToLower() != "personal area")
+                            {
+                                throw new Exception("Template Not Match at Cell C1");
+                            }
+                            if (row.Cell(i, 4).Value.ToString().Trim().ToLower() != "personal sub area")
+                            {
+                                throw new Exception("Template Not Match at Cell D1");
+                            }
+                            if (row.Cell(i, 5).Value.ToString().Trim().ToLower() != "bulan")
+                            {
+                                throw new Exception("Template Not Match at Cell E1");
+                            }
+                            if (row.Cell(i, 6).Value.ToString().Trim().ToLower() != "tahun")
+                            {
+                                throw new Exception("Template Not Match at Cell F1");
+                            }
+                            if (row.Cell(i, 7).Value.ToString().Trim().ToLower() != "sumber listrik")
+                            {
+                                throw new Exception("Template Not Match at Cell G1");
+                            }
+                            if (row.Cell(i, 8).Value.ToString().Trim().ToLower() != "no rek listrik")
+                            {
+                                throw new Exception("Template Not Match at Cell H1");
+                            }
+                            if (row.Cell(i, 9).Value.ToString().Trim().ToLower() != "konsumsi listrik (kwh)")
+                            {
+                                throw new Exception("Template Not Match at Cell I1");
+                            }
+                            if (row.Cell(i, 10).Value.ToString().Trim().ToLower() != "tagihan listrik")
+                            {
+                                throw new Exception("Template Not Match at Cell J1");
+                            }
+                            if (row.Cell(i, 11).Value.ToString().Trim().ToLower() != "usaha pengurangan energi")
+                            {
+                                throw new Exception("Template Not Match at Cell K1");
+                            }
+                            if (row.Cell(i, 12).Value.ToString().Trim().ToLower() != "deskripsi usaha pengurangan")
+                            {
+                                throw new Exception("Template Not Match at Cell L1");
+                            }
+                            if (row.Cell(i, 13).Value.ToString().Trim().ToLower() != "dokumen deskripsi usaha pengurangan")
+                            {
+                                throw new Exception("Template Not Match at Cell M1");
+                            }
+                            if (row.Cell(i, 14).Value.ToString().Trim().ToLower() != "jumlah pengurangan")
+                            {
+                                throw new Exception("Template Not Match at Cell N1");
+                            }
+                        }
+                        else
+                        {
+                            ImportSdaListrikModel sda = new ImportSdaListrikModel();
+                            sda.ehs_area_id = row.Cell(i, 1).Value.ToString();
+                            sda.ba_id = row.Cell(i, 2).Value.ToString();
+                            sda.pa_id = row.Cell(i, 3).Value.ToString();
+                            sda.psa_id = row.Cell(i, 4).Value.ToString();
+                            sda.bulan = row.Cell(i, 5).Value.ToString();
+                            sda.tahun = int.Parse(row.Cell(i, 6).Value.ToString());
+                            sda.sumber_listrik_id = row.Cell(i, 7).Value.ToString();
+                            sda.no_rek_listrik = row.Cell(i, 8).Value.ToString();
+                            sda.konsumsi_listrik = double.Parse(row.Cell(i, 9).Value.ToString());
+                            sda.tagihan_listrik = row.Cell(i, 10).Value.ToString();
+                            sda.usaha_pengurangan_listrik_id = int.Parse(row.Cell(i, 11).Value.ToString());
+                            sda.usaha_pengurangan_listrik_desc = row.Cell(i, 12).Value.ToString();
+                            sda.usaha_pengurangan_listrik_desc_file_path = row.Cell(i, 13).Value.ToString();
+                            sda.usaha_pengurangan_listrik_jumlah = double.Parse(row.Cell(i, 14).Value.ToString());
+                            ImportRepository sdaAir = new ImportRepository();
+                            sdaAir.ImportSdaListrik(sda);
+                        }
+                    }
+                    return data;
+                }
+            }
+            catch (Exception e)
+            {
+
+                throw;
+            }
+        }
     }
 }
